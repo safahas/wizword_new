@@ -1,0 +1,152 @@
+Cursor Prompt
+yaml
+Copy
+Edit
+# Cursor Project Creation Prompt
+
+project_name: word_guess_contest_ai
+
+description: >
+  Build a cloud-enabled AI-powered word guessing game where users try to guess a hidden word selected by the Gemini LLM model. The frontend uses Streamlit and runs on any IBM PC or mobile browser. The backend is built in Python and hosted on AWS. Game supports multiple difficulty modes, categories, and tracks users with optional nicknames.
+
+tools:
+  - streamlit
+  - python
+  - aws (Lambda, API Gateway, DynamoDB or S3)
+  - openrouter API (Google Gemini 2.0 Flash Thinking)
+
+---
+
+# Folder Structure:
+
+word_guess_contest_ai/
+│
+├── streamlit_app.py                  # Main UI interface (mobile/PC)
+├── backend/
+│   ├── game_logic.py                 # Game state, AI interaction, scoring
+│   ├── word_selector.py             # Handles prompt + word generation via Gemini
+│   └── session_manager.py           # Local/cloud session state & nickname logic
+│
+├── config/
+│   └── openrouter_config.py         # API keys and headers
+│
+├── assets/
+│   └── share_card_template.png      # Optional image for social sharing
+│
+├── proj.md                          # Full technical and functional documentation
+└── requirements.txt                 # Dependencies
+
+---
+
+# Features to Implement
+
+## 1. Streamlit UI (streamlit_app.py)
+- Word length input (default: 5)
+- Subject dropdown:
+  - General (default)
+  - Animals, Food, Places, Science, History, Tech, Movies, Music, Brands, Random
+- Mode toggle:
+  - Fun Mode (no penalty)
+  - Challenge Mode (10 pts per failed question/guess)
+- Nickname entry (optional)
+- Submit question + submit final guess
+- Scoreboard and gameplay history
+- Game summary screen with:
+  - Word revealed
+  - Score, questions count, guesses
+  - Time taken
+  - Download/share game card
+  - “Play Again” button
+
+---
+
+## 2. Game Logic (backend/game_logic.py)
+- AI prompt template for Gemini model:
+```python
+def build_prompt(word_length, subject):
+    return f"""
+    Choose a {word_length}-letter English word under the subject '{subject}'.
+    Only respond with 'yes' or 'no' to questions about the word. 
+    Mark vague or irrelevant questions as 'no'.
+    Do not reveal the word unless explicitly asked for final verification.
+    """
+Gemini API call (via OpenRouter)
+
+Manage score:
+
++10 for failed question/guess (Challenge Mode only)
+
+Validate yes/no questions vs final guess
+
+Store game state per session
+
+3. Word Selector (backend/word_selector.py)
+Calls Gemini with above prompt
+
+Returns and caches the selected word per session
+
+4. Session Manager (backend/session_manager.py)
+Save game state:
+
+Local storage (for instant play)
+
+AWS DynamoDB or S3 (for cloud storage)
+
+Handle nickname-based leaderboard (optional)
+
+Generate timestamped session keys
+
+Track scores and history
+
+5. Config (config/openrouter_config.py)
+python
+Copy
+Edit
+API_KEY = "your-openrouter-api-key"
+HEADERS = {
+    "Authorization": f"Bearer {API_KEY}",
+    "Content-Type": "application/json"
+}
+BASE_URL = "https://openrouter.ai/api/v1/chat/completions"
+6. Shareable Results (assets/)
+Create share_card_template.png
+
+On game finish, fill word, score, category, mode
+
+Export PNG for user sharing
+
+7. Requirements
+text
+Copy
+Edit
+streamlit
+requests
+boto3  # For AWS session handling
+Pillow  # For image card generation
+Documentation: proj.md (Generated Automatically)
+Must contain:
+
+Project purpose and scope
+
+Setup steps (local and cloud)
+
+API integration guide
+
+Example user session
+
+Future feature ideas
+
+Deployment notes (e.g., Streamlit Share or Docker + AWS Lambda)
+
+Cursor Agent Tasks:
+Scaffold project folder and files
+
+Implement all modules with robust error handling
+
+Add inline docstrings for all functions
+
+Include test game session in proj.md
+
+yaml
+Copy
+Edit

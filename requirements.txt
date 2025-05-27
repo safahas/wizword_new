@@ -1,0 +1,11 @@
+streamlit>=1.32.0
+requests>=2.31.0
+boto3>=1.34.0
+Pillow==10.2.0  # For image processing and share card generation
+python-dotenv>=1.0.0
+openai>=1.12.0  # For OpenRouter API compatibility
+cryptography>=42.0.0  # For word encryption
+qrcode>=7.4.2  # For generating QR codes for share cards
+pandas>=2.2.0  # For data analysis and statistics
+matplotlib>=3.8.0  # For generating graphs
+seaborn>=0.13.0  # For statistical visualizations 

@@ -1,0 +1,7 @@
+boto3>=1.26.0
+awscli>=1.27.0
+python-dotenv>=0.19.0
+requests>=2.28.0
+streamlit>=1.22.0
+pillow>=9.0.0
+openai>=0.27.0 

@@ -1,0 +1,16 @@
+{
+    "cluster": "word-guess-game-cluster",
+    "taskDefinition": "word-guess-game:1",
+    "launchType": "FARGATE",
+    "networkConfiguration": {
+        "awsvpcConfiguration": {
+            "subnets": [
+                "subnet-0c6d87091a3969ae2"
+            ],
+            "securityGroups": [
+                "sg-07e61a28dee49c5e0"
+            ],
+            "assignPublicIp": "ENABLED"
+        }
+    }
+} 

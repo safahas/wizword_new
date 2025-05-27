@@ -1,0 +1,62 @@
+{
+    "family": "word-guess-game",
+    "networkMode": "awsvpc",
+    "requiresCompatibilities": ["FARGATE"],
+    "cpu": "256",
+    "memory": "512",
+    "executionRoleArn": "arn:aws:iam::${AWS_ACCOUNT_ID}:role/ecsTaskExecutionRole",
+    "taskRoleArn": "arn:aws:iam::${AWS_ACCOUNT_ID}:role/word-guess-game-task-role",
+    "containerDefinitions": [
+        {
+            "name": "word-guess-game",
+            "image": "${ECR_REPOSITORY_URI}:latest",
+            "essential": true,
+            "portMappings": [
+                {
+                    "containerPort": 8501,
+                    "protocol": "tcp"
+                }
+            ],
+            "environment": [
+                {
+                    "name": "AWS_DEFAULT_REGION",
+                    "value": "${AWS_REGION}"
+                }
+            ],
+            "secrets": [
+                {
+                    "name": "OPENROUTER_API_KEY",
+                    "valueFrom": "arn:aws:ssm:${AWS_REGION}:${AWS_ACCOUNT_ID}:parameter/word-guess-game/openrouter-api-key"
+                },
+                {
+                    "name": "ADMIN_EMAIL",
+                    "valueFrom": "arn:aws:ssm:${AWS_REGION}:${AWS_ACCOUNT_ID}:parameter/word-guess-game/admin-email"
+                },
+                {
+                    "name": "SMTP_USER",
+                    "valueFrom": "arn:aws:ssm:${AWS_REGION}:${AWS_ACCOUNT_ID}:parameter/word-guess-game/smtp-user"
+                },
+                {
+                    "name": "SMTP_PASS",
+                    "valueFrom": "arn:aws:ssm:${AWS_REGION}:${AWS_ACCOUNT_ID}:parameter/word-guess-game/smtp-pass"
+                }
+            ],
+            "logConfiguration": {
+                "logDriver": "awslogs",
+                "options": {
+                    "awslogs-group": "/ecs/word-guess-game",
+                    "awslogs-region": "${AWS_REGION}",
+                    "awslogs-stream-prefix": "ecs",
+                    "awslogs-create-group": "true"
+                }
+            },
+            "healthCheck": {
+                "command": ["CMD-SHELL", "curl -f http://localhost:8501/_stcore/health || exit 1"],
+                "interval": 30,
+                "timeout": 5,
+                "retries": 3,
+                "startPeriod": 60
+            }
+        }
+    ]
+} 

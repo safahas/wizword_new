@@ -1,0 +1,8 @@
+[Cursor] Archive mobile version changes
+
+- Modified environment configuration
+- Updated game logic
+- Updated API configuration
+- Modified game screen components
+- Updated Streamlit app
+- Modified environment writer script 
