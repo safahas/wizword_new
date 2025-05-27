@@ -1,0 +1,139 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'Word Guess Game Infrastructure Stack (Simple Version)'
+
+Parameters:
+  OpenRouterApiKey:
+    Type: String
+    NoEcho: true
+    Description: API key for OpenRouter service
+
+Resources:
+  # IAM Role
+  EC2Role:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: ec2.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
+      Policies:
+        - PolicyName: EC2Policy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - ssm:GetParameter
+                  - ssm:GetParameters
+                  - ssm:GetParametersByPath
+                Resource: '*'
+
+  EC2InstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Path: /
+      Roles:
+        - !Ref EC2Role
+
+  # Security Group
+  AppSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Security group for Word Guess Game EC2 instances
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 8501
+          ToPort: 8501
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 0.0.0.0/0
+      SecurityGroupEgress:
+        - IpProtocol: -1
+          FromPort: -1
+          ToPort: -1
+          CidrIp: 0.0.0.0/0
+
+  # SSM Parameter for OpenRouter API Key
+  OpenRouterApiKeyParameter:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Name: /word-guess/openrouter-api-key
+      Type: "SecureString"
+      Value: !Ref OpenRouterApiKey
+      Description: OpenRouter API Key for Word Guess Game
+
+  # EC2 Instance
+  EC2Instance:
+    Type: AWS::EC2::Instance
+    DependsOn: OpenRouterApiKeyParameter
+    Properties:
+      ImageId: ami-0c7217cdde317cfec  # Amazon Linux 2023
+      InstanceType: t2.micro
+      SecurityGroupIds: 
+        - !Ref AppSecurityGroup
+      IamInstanceProfile: !Ref EC2InstanceProfile
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash
+          # Update system packages
+          yum update -y
+          yum install -y python3 python3-pip git
+
+          # Install AWS CLI
+          curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+          yum install -y unzip
+          unzip awscliv2.zip
+          ./aws/install
+
+          # Clone repository and setup application
+          cd /home/ec2-user
+          git clone https://github.com/yourusername/word-guess-game.git
+          cd word-guess-game
+
+          # Get OpenRouter API key from Parameter Store
+          OPENROUTER_API_KEY=$(aws ssm get-parameter --name "/word-guess/openrouter-api-key" --with-decryption --query "Parameter.Value" --output text)
+          echo "OPENROUTER_API_KEY=$OPENROUTER_API_KEY" > .env
+
+          # Setup Python environment
+          python3 -m venv venv
+          source venv/bin/activate
+          pip install -r requirements.txt
+
+          # Create systemd service
+          cat > /etc/systemd/system/word-guess.service << 'EOL'
+          [Unit]
+          Description=Word Guess Game
+          After=network.target
+
+          [Service]
+          User=ec2-user
+          WorkingDirectory=/home/ec2-user/word-guess-game
+          Environment=PATH=/home/ec2-user/word-guess-game/venv/bin
+          EnvironmentFile=/home/ec2-user/word-guess-game/.env
+          ExecStart=/home/ec2-user/word-guess-game/venv/bin/streamlit run streamlit_app.py --server.port 8501 --server.address 0.0.0.0
+          Restart=always
+
+          [Install]
+          WantedBy=multi-user.target
+          EOL
+
+          # Set permissions and start service
+          chown -R ec2-user:ec2-user /home/ec2-user/word-guess-game
+          chmod 600 /home/ec2-user/word-guess-game/.env
+          systemctl enable word-guess
+          systemctl start word-guess
+      Tags:
+        - Key: Name
+          Value: word-guess-instance
+
+Outputs:
+  EC2PublicIP:
+    Description: Public IP of the EC2 instance
+    Value: !GetAtt EC2Instance.PublicIp 

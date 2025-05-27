@@ -1,0 +1,145 @@
+{
+    "widgets": [
+        {
+            "type": "metric",
+            "x": 0,
+            "y": 0,
+            "width": 12,
+            "height": 6,
+            "properties": {
+                "metrics": [
+                    ["WordGuessGame/Production", "GameDuration", { "stat": "Average" }],
+                    [".", "GameDuration", { "stat": "p90" }],
+                    [".", "GameDuration", { "stat": "p99" }]
+                ],
+                "view": "timeSeries",
+                "stacked": false,
+                "region": "us-east-1",
+                "title": "Game Duration",
+                "period": 300
+            }
+        },
+        {
+            "type": "metric",
+            "x": 12,
+            "y": 0,
+            "width": 12,
+            "height": 6,
+            "properties": {
+                "metrics": [
+                    ["WordGuessGame/Production", "APILatency", { "stat": "Average" }],
+                    [".", "APILatency", { "stat": "p90" }],
+                    [".", "APILatency", { "stat": "p99" }]
+                ],
+                "view": "timeSeries",
+                "stacked": false,
+                "region": "us-east-1",
+                "title": "API Latency",
+                "period": 60
+            }
+        },
+        {
+            "type": "metric",
+            "x": 0,
+            "y": 6,
+            "width": 12,
+            "height": 6,
+            "properties": {
+                "metrics": [
+                    ["WordGuessGame/Production", "Errors", { "stat": "Sum" }]
+                ],
+                "view": "timeSeries",
+                "stacked": true,
+                "region": "us-east-1",
+                "title": "Error Count",
+                "period": 300
+            }
+        },
+        {
+            "type": "metric",
+            "x": 12,
+            "y": 6,
+            "width": 12,
+            "height": 6,
+            "properties": {
+                "metrics": [
+                    ["WordGuessGame/Production", "APIQuotaRemaining", { "stat": "Minimum" }]
+                ],
+                "view": "timeSeries",
+                "stacked": false,
+                "region": "us-east-1",
+                "title": "API Quota Remaining",
+                "period": 300
+            }
+        },
+        {
+            "type": "metric",
+            "x": 0,
+            "y": 12,
+            "width": 12,
+            "height": 6,
+            "properties": {
+                "metrics": [
+                    ["AWS/ECS", "CPUUtilization", "ServiceName", "word-guess-game-service", "ClusterName", "word-guess-game-cluster", { "stat": "Average" }]
+                ],
+                "view": "timeSeries",
+                "stacked": false,
+                "region": "us-east-1",
+                "title": "CPU Utilization",
+                "period": 300
+            }
+        },
+        {
+            "type": "metric",
+            "x": 12,
+            "y": 12,
+            "width": 12,
+            "height": 6,
+            "properties": {
+                "metrics": [
+                    ["AWS/ECS", "MemoryUtilization", "ServiceName", "word-guess-game-service", "ClusterName", "word-guess-game-cluster", { "stat": "Average" }]
+                ],
+                "view": "timeSeries",
+                "stacked": false,
+                "region": "us-east-1",
+                "title": "Memory Utilization",
+                "period": 300
+            }
+        },
+        {
+            "type": "metric",
+            "x": 0,
+            "y": 18,
+            "width": 12,
+            "height": 6,
+            "properties": {
+                "metrics": [
+                    ["AWS/ApplicationELB", "RequestCount", "LoadBalancer", "word-guess-alb", { "stat": "Sum" }]
+                ],
+                "view": "timeSeries",
+                "stacked": false,
+                "region": "us-east-1",
+                "title": "Request Count",
+                "period": 60
+            }
+        },
+        {
+            "type": "metric",
+            "x": 12,
+            "y": 18,
+            "width": 12,
+            "height": 6,
+            "properties": {
+                "metrics": [
+                    ["AWS/WAF", "BlockedRequests", "WebACL", "word-guess-waf-Production", "Rule", "RateLimitRule", { "stat": "Sum" }],
+                    [".", "BlockedRequests", ".", ".", ".", "BlockSQLInjection", { "stat": "Sum" }]
+                ],
+                "view": "timeSeries",
+                "stacked": true,
+                "region": "us-east-1",
+                "title": "WAF Blocked Requests",
+                "period": 300
+            }
+        }
+    ]
+} 
