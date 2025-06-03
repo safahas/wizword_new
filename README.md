@@ -1,6 +1,6 @@
-# Word Guess Contest AI 🎯
+# WizWord 🎯
 
-An AI-powered word guessing game where players try to guess a hidden word by asking yes/no questions. The game uses Google's Gemini Pro AI model to select words and answer questions intelligently.
+WizWord is an AI-powered word guessing game where players try to guess a hidden word by asking yes/no questions. The game uses advanced AI models to select words and answer questions intelligently.
 
 ## Features
 
@@ -15,8 +15,8 @@ An AI-powered word guessing game where players try to guess a hidden word by ask
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/word_guess_contest_ai.git
-cd word_guess_contest_ai
+git clone https://github.com/yourusername/wizword.git
+cd wizword
 ```
 
 2. Create and activate a virtual environment:
