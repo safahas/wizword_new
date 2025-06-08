@@ -28,10 +28,10 @@ st.set_page_config(
 share_utils = ShareUtils()
 
 # Custom CSS for better UI
-st.markdown("""
+st.markdown(
+    """
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&family=Poppins:wght@700&display=swap" rel="stylesheet">
     <style>
-            
-     /* New styles for the split layout */
     /* New styles for the split layout */
     [data-testid="column"] {
         background: rgba(255, 255, 255, 0.05);
@@ -40,25 +40,18 @@ st.markdown("""
         border: 1px solid rgba(255, 255, 255, 0.1);
         margin: 10px;
     }
-    
-    /* Style for the instructions section */
     [data-testid="column"]:first-child {
         background: rgba(255, 255, 255, 0.08);
     }
-    
-    /* Style for the game settings section */
     [data-testid="column"]:last-child {
         background: rgba(255, 255, 255, 0.12);
     }
-    
-    /* Enhanced text styling for instructions */
     .instructions h1 {
         color: #ffffff;
         font-size: 2em;
         margin-bottom: 1em;
         text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
     }
-    
     .instructions h3 {
         color: #ffffff;
         font-size: 1.3em;
@@ -66,23 +59,19 @@ st.markdown("""
         margin-bottom: 0.8em;
         text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
     }
-    
     .instructions ul {
         margin-left: 1.5em;
         margin-bottom: 1.5em;
     }
-    
     .instructions li {
         margin-bottom: 0.5em;
         color: #ffffff;
     }
-           
     /* Main background with sky gradient */
     .stApp {
         background: linear-gradient(135deg, #B5E3FF 0%, #7CB9E8 100%);
         color: white;
     }
-    
     /* Style for all buttons */
     .stButton>button {
         width: 100%;
@@ -95,7 +84,6 @@ st.markdown("""
         font-weight: bold;
         font-size: 1.1em;
     }
-    
     /* Special styling for Start New Game button */
     .stButton>button:first-child {
         background: linear-gradient(135deg, #6FDFBF 0%, #A8D8F0 100%);
@@ -107,21 +95,18 @@ st.markdown("""
         height: 4em;
         font-size: 1.2em;
     }
-    
     .stButton>button:hover {
         background: rgba(255, 255, 255, 0.3);
         border: 1px solid rgba(255, 255, 255, 0.4);
         transform: translateY(-2px);
         box-shadow: 0 5px 15px rgba(0,0,0,0.2);
     }
-    
     /* Special hover for Start New Game button */
     .stButton>button:first-child:hover {
         background: linear-gradient(135deg, #5ddfb0 0%, #9ed3f0 100%);
         transform: translateY(-2px);
         box-shadow: 0 6px 20px rgba(0,0,0,0.15);
     }
-    
     /* Style for text inputs */
     .stTextInput>div>div>input {
         border-radius: 10px;
@@ -131,43 +116,36 @@ st.markdown("""
         padding: 1em;
         font-weight: 500;
     }
-    
     .stTextInput>div>div>input::placeholder {
         color: rgba(0, 0, 0, 0.5);
     }
-    
     /* Style for alerts and info boxes */
     .stAlert {
         border-radius: 10px;
         background: rgba(255, 255, 255, 0.2);
         border: 1px solid rgba(255, 255, 255, 0.3);
     }
-    
     /* Style for expanders */
     .streamlit-expanderHeader {
         background: rgba(255, 255, 255, 0.1);
         border-radius: 10px;
     }
-    
     /* Style for metrics */
     [data-testid="stMetricValue"] {
         color: #ffffff;
         font-weight: bold;
         text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
     }
-    
     /* Style for headers */
     h1, h2, h3, h4, h5, h6 {
         color: #ffffff;
         margin-bottom: 1em;
         text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
     }
-    
     /* Style for markdown text */
     .stMarkdown {
         color: #ffffff;
     }
-    
     /* Style for forms */
     .stForm {
         background: rgba(255, 255, 255, 0.05);
@@ -175,7 +153,6 @@ st.markdown("""
         border-radius: 10px;
         border: 1px solid rgba(255, 255, 255, 0.1);
     }
-    
     /* Style for selectbox */
     .stSelectbox>div>div {
         background: rgba(255, 255, 255, 0.9) !important;
@@ -183,23 +160,19 @@ st.markdown("""
         border-radius: 10px;
         color: #000000 !important;
     }
-    
     /* Style for selectbox dropdown */
     .stSelectbox>div>div>div {
         background: white !important;
         color: #000000 !important;
     }
-    
     /* Style for selectbox options */
     .stSelectbox>div>div>div>div>div {
         color: #000000 !important;
     }
-    
     /* Style for selectbox label */
     .stSelectbox label {
         color: white !important;
     }
-    
     /* Style for radio buttons */
     .stRadio>div {
         background: rgba(255, 255, 255, 0.05);
@@ -207,7 +180,6 @@ st.markdown("""
         border-radius: 10px;
         border: 1px solid rgba(255, 255, 255, 0.1);
     }
-    
     /* Special styling for hint button */
     .stButton>button[data-testid="hint-button"] {
         background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
@@ -217,13 +189,11 @@ st.markdown("""
         box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         margin-bottom: 10px;
     }
-    
     .stButton>button[data-testid="hint-button"]:hover {
         background: linear-gradient(135deg, #FFE44D 0%, #FFB347 100%);
         transform: translateY(-2px);
         box-shadow: 0 6px 15px rgba(0,0,0,0.15);
     }
-    
     /* Style for hint section */
     [data-testid="hint-section"] {
         background: rgba(255, 255, 255, 0.2);
@@ -232,7 +202,6 @@ st.markdown("""
         border: 1px solid rgba(255, 255, 255, 0.3);
         margin-bottom: 20px;
     }
-    
     /* Style for hint history */
     [data-testid="hint-history"] {
         background: rgba(255, 255, 255, 0.15);
@@ -240,7 +209,6 @@ st.markdown("""
         border-radius: 8px;
         margin-top: 10px;
     }
-    
     /* Style for hint text */
     [data-testid="hint-text"] {
         font-size: 1.1em;
@@ -264,7 +232,6 @@ st.markdown("""
         text-align: center;
         margin: 10px 0;
     }
-    
     /* Progress bar styles */
     .progress-bar {
         width: 100%;
@@ -274,24 +241,20 @@ st.markdown("""
         overflow: hidden;
         margin: 10px 0;
     }
-    
     .progress-bar-fill {
         height: 100%;
         background: linear-gradient(90deg, #6FDFBF 0%, #A8D8F0 100%);
         transition: width 0.3s ease;
     }
-    
     /* Animation for correct answer */
     @keyframes correct-answer {
         0% { transform: scale(1); }
         50% { transform: scale(1.1); }
         100% { transform: scale(1); }
     }
-    
     .correct-answer {
         animation: correct-answer 0.5s ease;
     }
-    
     /* Animation for wrong answer */
     @keyframes wrong-answer {
         0% { transform: translateX(0); }
@@ -299,11 +262,9 @@ st.markdown("""
         75% { transform: translateX(5px); }
         100% { transform: translateX(0); }
     }
-    
     .wrong-answer {
         animation: wrong-answer 0.5s ease;
     }
-    
     /* Difficulty selector styles */
     .difficulty-selector {
         margin: 20px 0;
@@ -311,74 +272,68 @@ st.markdown("""
         background: rgba(255, 255, 255, 0.1);
         border-radius: 10px;
     }
-    
     /* Timer color variations */
     .timer-normal {
         color: #ffffff;
     }
-    
     .timer-warning {
         color: #FFD700;
     }
-    
     .timer-danger {
         color: #FF6B6B;
-    }            
-    
-    /* Add custom title styling */
-    @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
-    
-    .game-title {
-        font-family: 'Press Start 2P', cursive;
-        font-size: 2.8em;
-        font-weight: bold;
-        background: linear-gradient(45deg, #FF6B6B, #4ECDC4);
-        color: white;
-        text-align: center;
-        padding: 30px 60px;
-        margin: 20px auto;
-        text-shadow: 3px 3px 0px rgba(0, 0, 0, 0.2),
-                     6px 6px 0px rgba(0, 0, 0, 0.1);
-        border-radius: 15px;
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1),
-                    inset 0 -8px 0px rgba(0, 0, 0, 0.1),
-                    0 -2px 0px rgba(255, 255, 255, 0.2);
-        position: relative;
-        max-width: 800px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 20px;
     }
-
+    /* Add custom title styling */
+    .game-title {
+        font-family: 'Baloo 2', 'Poppins', 'Arial Black', Arial, sans-serif !important;
+        font-size: 2.7em;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        background: linear-gradient(90deg, #FF6B6B 0%, #FFD93D 50%, #4ECDC4 100%);
+        color: #fff;
+        text-align: center;
+        padding: 28px 48px;
+        margin: 28px auto 20px auto;
+        border-radius: 28px;
+        box-shadow: 0 10px 36px rgba(0, 0, 0, 0.16),
+                    inset 0 -10px 0px rgba(0, 0, 0, 0.10);
+        -webkit-text-stroke: 2px #222;
+        text-stroke: 2px #222;
+        text-shadow: 3px 3px 12px rgba(0,0,0,0.22),
+                     0 3px 12px rgba(0,0,0,0.13);
+        transition: box-shadow 0.2s, background 0.2s;
+    }
+    .game-title:hover {
+        box-shadow: 0 16px 48px rgba(0,0,0,0.22),
+                    0 2px 8px rgba(0,0,0,0.10);
+        background: linear-gradient(90deg, #FFD93D 0%, #FF6B6B 50%, #4ECDC4 100%);
+    }
     .game-title::before {
         content: "⬅️";
         font-size: 0.8em;
         position: static;
         transform: none;
     }
-
     .game-title::after {
         content: "➡️";
         font-size: 0.8em;
         position: static;
         transform: none;
     }
-
     @media (max-width: 768px) {
         .game-title {
             font-size: 2em;
             padding: 20px 30px;
             gap: 10px;
         }
-        
         .game-title::before,
         .game-title::after {
             font-size: 0.6em;
         }
     }
     </style>
-    """, unsafe_allow_html=True)
+    """,
+    unsafe_allow_html=True
+)
 
 # Initialize session state with default values
 if "game_state" not in st.session_state:
@@ -454,7 +409,7 @@ def validate_word_length(length: int) -> tuple[bool, str]:
 def validate_subject(subject: str) -> tuple[bool, str]:
     """Validate the selected subject."""
     valid_categories = ["general", "animals", "food", "places", "science", "tech", "sports",
-                       "movies", "music", "brands", "history", "random"]
+                       "movies", "music", "brands", "history", "random", "4th_grade"]
     subject = subject.lower()  # Convert to lowercase for comparison
     if subject not in valid_categories:
         return False, f"Invalid subject. Must be one of: {', '.join(valid_categories)}"
@@ -536,13 +491,27 @@ def main():
     if st.session_state.get('play_again', False):
         print('[DEBUG] Creating new game for Play Again')
         prev_game = st.session_state.game
+        orig_choice = st.session_state.get('original_word_length_choice', 'any')
+        # If the original choice was 'any', randomize a new length each time
+        if orig_choice == 'any':
+            new_length = random.randint(3, 10)
+        else:
+            new_length = orig_choice
+        print(f'[DEBUG] Play Again: orig_choice={orig_choice}, new_length={new_length}')
+        orig_category = st.session_state.get('original_category_choice', 'any')
+        if orig_category == 'any':
+            new_category = random.choice(["general", "animals", "food", "places", "science", "tech", "sports", "4th_grade"])
+        else:
+            new_category = orig_category
         st.session_state.game = GameLogic(
-            word_length=prev_game.word_length,
-            subject=prev_game.subject,
+            word_length=new_length,
+            subject=new_category,
             mode=prev_game.mode,
             nickname=prev_game.nickname,
             difficulty=prev_game.difficulty
         )
+        if 'game_state' in st.session_state:
+            st.session_state['game_state']['subject'] = new_category
         st.session_state.game_over = False
         st.session_state.game_summary = None
         st.session_state['play_again'] = False
@@ -563,7 +532,7 @@ def main():
 
 def display_welcome():
     """Display the welcome screen and game setup."""
-    st.markdown("<h1 class='game-title'>WizWord 🎯</h1>", unsafe_allow_html=True)
+    st.markdown("<div class='game-title'>WizWord</div>", unsafe_allow_html=True)
     
     # Create two columns
     left_col, right_col = st.columns([1, 1])  # Equal width columns
@@ -663,14 +632,16 @@ def display_welcome():
             with cat_col:
                 subject = st.selectbox(
                     "Category",
-                    options=["any"] + ["general", "animals", "food", "places", "science", "tech", "sports"],
+                    options=["any", "general", "animals", "food", "places", "science", "tech", "sports", "4th_grade"],
                     index=0,  # Default to "any"
                     help="Word category (select 'any' for random category)"
                 )
                 
-                # Convert subject to a random category if "any" is selected
-                if subject == "any":
-                    subject = random.choice(["general", "animals", "food", "places", "science", "tech", "sports"])
+                # Store the user's original selection (could be 'any')
+                st.session_state['original_category_choice'] = subject
+
+                # Resolve 'any' to a random category for this game instance
+                resolved_subject = random.choice(["general", "animals", "food", "places", "science", "tech", "sports", "4th_grade"]) if subject == "any" else subject
             
             # Word length selection
             with len_col:
@@ -680,13 +651,9 @@ def display_welcome():
                     index=0,  # Default to "any"
                     help="Word length (select 'any' for random length)"
                 )
-                
-                # Convert word_length to int if not "any"
-                if word_length != "any":
-                    word_length = int(word_length)
-                else:
-                    # Random length between 3 and 10
-                    word_length = random.randint(3, 10)
+                # Do NOT resolve 'any' to a random int here; pass 'any' to GameLogic
+                # Store the user's original word_length choice (not the resolved value)
+                st.session_state['original_word_length_choice'] = word_length if word_length == 'any' else int(word_length)
             
             st.markdown("---")
             
@@ -715,11 +682,9 @@ def display_welcome():
                 if mode == "Challenge" and not nickname:
                     st.error("Please enter a nickname for Challenge mode!")
                     return
-                    
-                # Create new game instance with difficulty
                 st.session_state.game = GameLogic(
-                    word_length=word_length,
-                    subject=subject,
+                    word_length=word_length,  # Pass 'any' or int
+                    subject=resolved_subject,
                     mode=mode,
                     nickname=nickname,
                     difficulty=difficulty

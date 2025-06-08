@@ -1,0 +1,65 @@
+How to create load balancer :
+
+PS C:\Users\CICD Student\cursor ai agent\game_guess> aws elbv2 create-target-group   --name wizword-game1-tg   --protocol HTTP   --port 8501   --vpc-id vpc-0c86ce65c856773dc   --target-type instance   --health-check-protocol HTTP   --health-check-path /   --health-check-interval-seconds 30  --health-check-timeout-seconds 5   --healthy-threshold-count 2  --unhealthy-threshold-count 2  --query "TargetGroups[0].TargetGroupArn"
+
+"arn:aws:elasticloadbalancing:us-east-1:050451366783:targetgroup/wizword-game1-tg/f1f94a2afa888ed2"
+
+
+PS C:\Users\CICD Student\cursor ai agent\game_guess> aws elbv2 create-load-balancer   --name wizword-game1-alb  --subnets subnet-0f236cb22a5c42851 subnet-0c6d87091a3969ae2  subnet-0f19eb663fe0b0fe4  subnet-03f96110682d589b8  subnet-02f8b7d461a089807 subnet-04c79618d5791bb7b   --security-groups sg-06e6a95728638098d   --scheme internet-facing   --type application   --ip-address-type ipv4  --query "LoadBalancers[0].LoadBalancerArn"
+
+"arn:aws:elasticloadbalancing:us-east-1:050451366783:loadbalancer/app/wizword-game1-alb/b984dddb9d83e0d7"
+
+
+PS C:\Users\CICD Student\cursor ai agent\game_guess> aws elbv2 create-listener   --load-balancer-arn arn:aws:elasticloadbalancing:us-east-1:050451366783:loadbalancer/app/wizword-game1-alb/b984dddb9d83e0d7  --protocol HTTP   --port 80   --default-actions Type=forward,TargetGroupArn=arn:aws:elasticloadbalancing:us-east-1:050451366783:targetgroup/wizword-game1-tg/f1f94a2afa888ed2
+{
+    "Listeners": [
+        {
+            "ListenerArn": "arn:aws:elasticloadbalancing:us-east-1:050451366783:listener/app/wizword-game1-alb/b984dddb9d83e0d7/73b7d407b6021abf",
+            "LoadBalancerArn": "arn:aws:elasticloadbalancing:us-east-1:050451366783:loadbalancer/app/wizword-game1-alb/b984dddb9d83e0d7",
+            "Port": 80,
+            "Protocol": "HTTP",
+            "DefaultActions": [
+                {
+                    "Type": "forward",
+                    "TargetGroupArn": "arn:aws:elasticloadbalancing:us-east-1:050451366783:targetgroup/wizword-game1-tg/f1f94a2afa888ed2",
+                    "ForwardConfig": {
+                        "TargetGroups": [
+                            {
+                                "TargetGroupArn": "arn:aws:elasticloadbalancing:us-east-1:050451366783:targetgroup/wizword-game1-tg/f1f94a2afa888ed2",
+                                "Weight": 1
+                            }
+                        ],
+                        "TargetGroupStickinessConfig": {
+                            "Enabled": false
+                        }
+                    }
+                }
+            ]
+        }
+    ]
+}
+
+
+
+PS C:\Users\CICD Student\cursor ai agent\game_guess> aws elbv2 register-targets  --target-group-arn arn:aws:elasticloadbalancing:us-east-1:050451366783:targetgroup/wizword-game1-tg/f1f94a2afa888ed2  --targets Id=i-017107c75a82b644d,Port=8501
+PS C:\Users\CICD Student\cursor ai agent\game_guess>
+
+
+aws elbv2 describe-target-health --target-group-arn arn:aws:elasticloadbalancing:us-east-1:050451366783:targetgroup/wizword-game1-tg/f1f94a2afa888ed2
+
+aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 050451366783.dkr.ecr.us-east-1.amazonaws.com
+
+docker run -d  -p 8501:8501 \
+  -e AWS_DEFAULT_REGION=us-east-1 \
+  -e OPENROUTER_API_KEY=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 \
+  050451366783.dkr.ecr.us-east-1.amazonaws.com/word-guess-game:latest
+
+
+
+git init
+git add .
+git commit -m "Initial commit - clean build"
+git branch -M main
+git remote add origin https://github.com/safahas/wizword.git
+git push -u origin main
+

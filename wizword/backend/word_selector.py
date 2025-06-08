@@ -9,7 +9,7 @@ from email.mime.text import MIMEText
 from typing import Tuple, Optional, Dict, List
 from pathlib import Path
 from dotenv import load_dotenv
-from .fallback_words import get_fallback_word
+from backend.fallback_words import get_fallback_word
 from .openrouter_monitor import (
     update_quota_from_response,
     check_rate_limits,
@@ -1942,7 +1942,8 @@ class WordSelector:
         "music",
         "brands",
         "history",
-        "random"
+        "random",
+        "4th_grade"
     ]
 
     # Available models in order of preference
@@ -1953,40 +1954,51 @@ class WordSelector:
         "google/gemini-pro"
     ]
 
-    # Class-level set to track recently used words across all instances
-    _recently_used_words = set()
-    _max_recent_words = 25  # Maximum number of words to remember
+    # Change from a single set to a dict of sets for per-category tracking
+    _recently_used_words_by_category = {}
+    _max_recent_words = 25  # Maximum number of words to remember per category
 
-    # Define word hints dictionary
+    def _add_recent_word(self, word: str, category: str):
+        cat = category.lower()
+        if cat not in self._recently_used_words_by_category:
+            self._recently_used_words_by_category[cat] = []
+        recent = self._recently_used_words_by_category[cat]
+        if word in recent:
+            recent.remove(word)
+        recent.insert(0, word)
+        if len(recent) > self._max_recent_words:
+            recent.pop()
+
+    def _is_recent_word(self, word: str, category: str) -> bool:
+        cat = category.lower()
+        return word in self._recently_used_words_by_category.get(cat, [])
+
     def _select_word_from_dictionary(self, word_length: int = 5, subject: str = "general") -> str:
-        """Select a word from the local dictionary."""
+        """Select a word from the local dictionary (words.json) if available, otherwise use fallback_words.py."""
         logger.info(f"Selecting word from dictionary with length {word_length} and subject {subject}")
         try:
-            # Normalize subject
             subject = subject.lower()
             if subject == "tech":
                 subject = "science"
             elif subject in ["movies", "music", "brands", "history"]:
                 subject = "general"
-            
-            # Store the normalized category
-            self.current_category = subject
-            
-            # Use the imported get_fallback_word function
-            selected_word = get_fallback_word(word_length, subject)
-            
-            # Add to recently used words
-            if selected_word:
-                self._recently_used_words.add(selected_word)
-                if len(self._recently_used_words) > self._max_recent_words:
-                    self._recently_used_words.pop()
-                    
-            logger.info(f"Selected word: {selected_word} (from dictionary)")
-            return selected_word
-            
+            # Try words.json first
+            if hasattr(self, "words_data") and self.words_data:
+                words = self.words_data.get(subject, {}).get(str(word_length), [])
+                words = [w for w in words if not self._is_recent_word(w, subject)]
+                if words:
+                    word = random.choice(words)
+                    self._add_recent_word(word, subject)
+                    return word
+            # Fallback
+            word = get_fallback_word(word_length, subject)
+            self._add_recent_word(word, subject)
+            return word
         except Exception as e:
             logger.error(f"Error selecting word from dictionary: {e}")
-            raise
+            word = get_fallback_word(word_length, subject)
+            self._add_recent_word(word, subject)
+            return word
 
     def __init__(self):
         """Initialize the word selector."""
@@ -2326,19 +2338,12 @@ class WordSelector:
             
         return word
 
-    def _answer_question_fallback(self, word: str, question: str, subject: str = "general") -> Tuple[bool, str]:
-        """
-        Fallback question answering system when API is not available.
-        Uses pattern matching and word-specific knowledge to provide answers.
-        """
-        # Normalize question and word
-        question = question.lower().strip()
-        word = word.lower()
-        
-        # Use provided subject if current_category is not set
-        category = getattr(self, 'current_category', subject)
-        
-        # Handle category questions first with more flexible patterns
+    def _answer_question_fallback(self, word: str, question: str, subject: str = "general") -> str:
+        """Generate a fallback answer when API is not available."""
+        import re
+        question = question.lower()
+
+        # Handle category questions
         category_patterns = [
             r"what (?:category|type|kind|group) (?:is|of word is) (?:it|this|the word)",
             r"(?:is|does) (?:it|the word) (?:belong|related) to (?:the )?(\w+) category",
@@ -2349,185 +2354,105 @@ class WordSelector:
             r"which category",
             r"tell me (?:the )?category"
         ]
-        
-        # Check for any category-related question first
         for pattern in category_patterns:
             if re.search(pattern, question):
-                # Check if asking about a specific category
-                specific_category_match = re.search(r"(?:belong|related|from|a|an|in|the) (\w+) (?:category|word)", question)
-                if specific_category_match:
-                    asked_category = specific_category_match.group(1).lower()
-                    # Normalize category names
-                    if asked_category == "tech":
-                        asked_category = "science"
-                    elif asked_category in ["movies", "music", "brands", "history"]:
-                        asked_category = "general"
-                    
-                    if asked_category == category:
-                        return True, f"Yes, this word belongs to the {category} category."
-                    else:
-                        return True, f"No, this word does not belong to the {asked_category} category. It belongs to the {category} category."
-                return True, f"This word belongs to the {category} category."
-        
-        # Check if this is a word guess
-        word_guess_patterns = [
-            r"^is (?:the )?(?:word )?['\"]?(\w+)['\"]?\??$",
-            r"^(?:is it|could it be) ['\"]?(\w+)['\"]?\??$",
-            r"^(?:the )?word is ['\"]?(\w+)['\"]?\??$",
-            r"^(?:does )?it say ['\"]?(\w+)['\"]?\??$",
-            r"^(?:is )?['\"]?(\w+)['\"]? (?:the word|correct)\??$",
-            r"^['\"]?(\w+)['\"]?\??$"  # Just the word itself
-        ]
-        
-        for pattern in word_guess_patterns:
-            match = re.search(pattern, question)
-            if match:
-                return False, "Please use the 'Submit Guess' button to make your final guess."
+                return f"This word belongs to the {subject} category."
 
-        # Handle word length questions
-        length_patterns = [
-            r"how (?:many|much) (?:letters|characters)",
-            r"what(?:'s| is) the (?:length|number of letters)",
-            r"(?:is|does) (?:it|the word) have \d+ letters",
-            r"(?:is|are) there \d+ letters"
-        ]
-        for pattern in length_patterns:
-            if re.search(pattern, question):
-                return True, f"The word has {len(word)} letters."
+        # Check for letter presence
+        letter_match = re.search(r"contain.*letter ['\"]?([a-z])['\"]?", question)
+        if letter_match:
+            letter = letter_match.group(1)
+            return "Yes" if letter in word else "No"
 
-        # Handle explicit 'what is the first/last letter' questions
-        logger.info(f"[DEBUG] Checking for explicit first/last letter question: '{question}'")
-        if re.search(r"what('?s| is) the first letter\??", question):
-            logger.info("[DEBUG] Matched: what is the first letter")
-            return True, f"The first letter is '{word[0]}'"
-        if re.search(r"what('?s| is) the last letter\??", question):
-            logger.info("[DEBUG] Matched: what is the last letter")
-            return True, f"The last letter is '{word[-1]}'"
+        # Check for word length
+        if "how many letters" in question:
+            return f"The word has {len(word)} letters"
 
-        # Handle first letter questions
+        # Robust first letter patterns
         first_letter_patterns = [
             r"(?:is|does|has|contains?).*(?:first|1st|start|begin).*(?:letter|character).*['\"]?(\w)['\"]?",
             r"(?:is|does) (?:it|the word) start (?:with|using) ['\"]?(\w)['\"]?",
             r"(?:does|is) ['\"]?(\w)['\"]? (?:the|its) first letter",
             r"(?:is|does) the first letter ['\"]?(\w)['\"]?",
             r"first letter ['\"]?(\w)['\"]?",
-            r"(?:is|does) ['\"]?(\w)['\"]? (?:the )?first",  # Simpler form
-            r"start with ['\"]?(\w)['\"]?",  # Even simpler form
-            r"begins? with ['\"]?(\w)['\"]?",  # Alternative wording
-            r"^first ['\"]?(\w)['\"]?$"  # Just "first X"
+            r"(?:is|does) ['\"]?(\w)['\"]? (?:the )?first",
+            r"start with ['\"]?(\w)['\"]?",
+            r"begins? with ['\"]?(\w)['\"]?",
+            r"^first ['\"]?(\w)['\"]?$"
         ]
-        
         for pattern in first_letter_patterns:
             match = re.search(pattern, question)
             if match:
                 letter = match.group(1).lower()
-                return True, f"Yes, the first letter is '{word[0]}'" if word[0] == letter else f"No, the first letter is not '{letter}'"
+                return f"Yes, the first letter is '{word[0]}'" if word[0] == letter else f"No, the first letter is not '{letter}'"
+        if "first letter" in question:
+            return f"The first letter is '{word[0]}'"
 
-        # Handle last letter questions
+        # Robust last letter patterns
         last_letter_patterns = [
             r"(?:is|does|has|contains?).*(?:last|final|end).*(?:letter|character).*['\"]?(\w)['\"]?",
             r"(?:is|does) (?:it|the word) end (?:with|in) ['\"]?(\w)['\"]?",
             r"(?:does|is) ['\"]?(\w)['\"]? (?:the|its) last letter",
             r"(?:is|does) the last letter ['\"]?(\w)['\"]?",
             r"last letter ['\"]?(\w)['\"]?",
-            r"(?:is|does) ['\"]?(\w)['\"]? (?:the )?last",  # Simpler form
-            r"end with ['\"]?(\w)['\"]?",  # Even simpler form
-            r"ends? with ['\"]?(\w)['\"]?",  # Alternative wording
-            r"^last ['\"]?(\w)['\"]?$"  # Just "last X"
+            r"(?:is|does) ['\"]?(\w)['\"]? (?:the )?last",
+            r"end with ['\"]?(\w)['\"]?",
+            r"ends? with ['\"]?(\w)['\"]?",
+            r"^last ['\"]?(\w)['\"]?$"
         ]
-        
         for pattern in last_letter_patterns:
             match = re.search(pattern, question)
             if match:
                 letter = match.group(1).lower()
-                return True, f"Yes, the last letter is '{word[-1]}'" if word[-1] == letter else f"No, the last letter is not '{letter}'"
+                return f"Yes, the last letter is '{word[-1]}'" if word[-1] == letter else f"No, the last letter is not '{letter}'"
+        if "last letter" in question:
+            return f"The last letter is '{word[-1]}'"
 
-        # For any other letter position questions, reject them
-        if re.search(r"(?:letter|character|spell)", question):
-            return False, "Only questions about the first and last letters are allowed. Try guessing the word using the 'Submit Guess' button."
+        # Default response
+        return "I can only answer questions about letters and word length in fallback mode"
 
-        # For non-letter questions, give a generic response
-        return False, "Sorry, I didn't understand your question. You can only ask about the word's length, category, first letter, or last letter."
-
-    def get_semantic_hint(self, word: str, subject: str, previous_hints: List[str] = None, max_hints: int = 10) -> str:
-        """Get a semantic hint for the word."""
+    def get_semantic_hint(self, word: str, subject: str, previous_hints: list = None, max_hints: int = 10) -> str:
+        import logging
+        logger = logging.getLogger("backend.word_selector")
         if previous_hints is None:
             previous_hints = []
-            
-        # Stop after max_hints
-        if len(previous_hints) >= max_hints:
-            return None
-            
-        # Try to get hint from predefined templates first
-        if word in category_templates.get(subject, {}):
-            hints = category_templates[subject][word]
-            available_hints = [h for h in hints if h not in previous_hints]
-            if available_hints:
-                return available_hints[0]
-        
-        # Try fallback hints if available
-        if word in WORD_HINTS:
-            available_hints = [h for h in WORD_HINTS[word] if h not in previous_hints]
-            if available_hints:
-                return available_hints[0]
-                
-        # Generate dynamic hints based on word characteristics
-        word_length = len(word)
-        vowel_count = sum(1 for c in word if c in 'aeiou')
-        consonant_count = word_length - vowel_count
-        
-        # List of dynamic hint templates
-        dynamic_hints = [
-            f"This {subject} word has {vowel_count} vowels and {consonant_count} consonants",
-            f"In this {subject} word, {round(vowel_count/word_length * 100)}% of letters are vowels",
-            f"This {subject} word follows a {'-'.join('C' if c not in 'aeiou' else 'V' for c in word)} pattern",
-            f"This {subject} word has {len(set(word))} unique letters",
-            f"This {subject} word has {sum(1 for i, c in enumerate(word[:-1]) if c == word[i+1])} repeated consecutive letters",
-            f"The letters in this {subject} word are {round(len(set(word))/word_length * 100)}% unique"
-        ]
-        
-        # Filter out any hints that are too similar to previous hints
-        available_hints = [h for h in dynamic_hints if h not in previous_hints]
-        if available_hints:
-            return random.choice(available_hints)
-                
-        # Final fallback
-        return self._get_fallback_semantic_hint(word, subject, previous_hints, max_hints)
-
-    def _get_fallback_semantic_hint(self, word: str, subject: str, previous_hints: List[str] = None, max_hints: int = 10) -> str:
-        """Get a fallback semantic hint when API is not available."""
-        if previous_hints is None:
-            previous_hints = []
-            
-        # If we've already given max hints, return None
-        if len(previous_hints) >= max_hints:
-            return None
-            
-        # Try word-specific hints first from WORD_HINTS
-        if word in WORD_HINTS:
-            word_hints = WORD_HINTS[word]
-            available_hints = [hint for hint in word_hints if hint not in previous_hints]
-            if available_hints and len(previous_hints) < max_hints:
-                return random.choice(available_hints)
-                
-        # Normalize subject to match template categories
-        subject = subject.lower()
-        if subject == "tech":
-            subject = "science"
-        elif subject in ["movies", "music", "brands", "history"]:
-            subject = "general"
-            
-        # Try category templates next
-        if subject in category_templates and word in category_templates[subject]:
-            template_hints = category_templates[subject][word]
-            available_hints = [hint for hint in template_hints if hint not in previous_hints]
-            if available_hints and len(previous_hints) < max_hints:
-                return random.choice(available_hints)
-                
-        # If no specific hints are available and we haven't reached max hints, return a simple message
-        if len(previous_hints) < max_hints:
-            return f"This {subject} term has specific characteristics"
-        return None
+        word = word.lower().strip()
+        subject = subject.lower().strip()
+        hints = []
+        # Debug logging for subject and keys
+        logger.info(f"[HINT DEBUG] Requested subject: '{subject}' for word: '{word}'")
+        if hasattr(self, 'hints_data'):
+            logger.info(f"[HINT DEBUG] Top-level keys in hints_data: {list(self.hints_data.keys())}")
+            if 'categories' in self.hints_data:
+                logger.info(f"[HINT DEBUG] Category keys in hints_data['categories']: {list(self.hints_data['categories'].keys())}")
+        # 1. Check top-level subject section FIRST (e.g., 4th_grade)
+        if (
+            hasattr(self, 'hints_data') and
+            subject in self.hints_data and
+            word in self.hints_data[subject]
+        ):
+            hints = self.hints_data[subject][word]
+            logger.info(f"[HINT DEBUG] Found hints for word '{word}' in top-level '{subject}': {hints}")
+            print(f"[HINT DEBUG] Found hints for word '{word}' in top-level '{subject}': {hints}")
+        # 2. If not found, check categories section
+        elif (
+            hasattr(self, 'hints_data') and
+            'categories' in self.hints_data and
+            subject in self.hints_data['categories'] and
+            word in self.hints_data['categories'][subject]
+        ):
+            hints = self.hints_data['categories'][subject][word]
+            logger.info(f"[HINT DEBUG] Found hints for word '{word}' in categories['{subject}']: {hints}")
+            print(f"[HINT DEBUG] Found hints for word '{word}' in categories['{subject}']: {hints}")
+        else:
+            logger.info(f"[HINT DEBUG] No pre-generated hints found for word '{word}' in subject '{subject}'")
+            print(f"[HINT DEBUG] No pre-generated hints found for word '{word}' in subject '{subject}'")
+        # 3. Fallback to dynamic hints if still not found
+        if hints:
+            for hint in hints:
+                if hint not in previous_hints:
+                    return hint
+        return self._generate_dynamic_hint(word, subject, previous_hints)
 
     def verify_guess(self, word: str, guess: str) -> bool:
         """Verify if the guessed word matches the actual word."""
@@ -2562,3 +2487,27 @@ class WordSelector:
         except Exception as e:
             logger.error(f"Failed to get answer from API: {str(e)}")
             return self._answer_question_fallback(word, question, subject)
+
+    def _generate_dynamic_hint(self, word: str, subject: str, previous_hints: list = None, max_hints: int = 10) -> str:
+        """Generate a dynamic fallback hint for the word and subject."""
+        import random
+        if previous_hints is None:
+            previous_hints = []
+        word = word.lower().strip()
+        subject = subject.lower().strip()
+        word_length = len(word)
+        vowel_count = sum(1 for c in word if c in 'aeiou')
+        consonant_count = word_length - vowel_count
+        dynamic_hints = [
+            f"This {subject} word has {vowel_count} vowels and {consonant_count} consonants.",
+            f"In this {subject} word, {round(vowel_count/word_length * 100)}% of letters are vowels.",
+            f"This {subject} word follows a {'-'.join('C' if c not in 'aeiou' else 'V' for c in word)} pattern.",
+            f"This {subject} word has {len(set(word))} unique letters.",
+            f"This {subject} word has {sum(1 for i, c in enumerate(word[:-1]) if c == word[i+1])} repeated consecutive letters.",
+            f"The letters in this {subject} word are {round(len(set(word))/word_length * 100)}% unique."
+        ]
+        available_hints = [h for h in dynamic_hints if h not in previous_hints]
+        if available_hints:
+            return random.choice(available_hints)
+        # Final fallback
+        return f"This is a {word_length}-letter word in the category '{subject}'."

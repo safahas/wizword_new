@@ -7,6 +7,7 @@ import logging
 import json
 import os
 import random
+from backend.fallback_words import get_fallback_word
 
 logger = logging.getLogger(__name__)
 
@@ -24,6 +25,7 @@ class GameLogic:
         if subject == "any":
             subject = random.choice(["general", "animals", "food", "places", "science", "tech", "sports"])
         self.subject = subject
+        self.original_subject = subject  # <-- Store the original subject for the round
         
         self.mode = mode  # "Fun" or "Challenge"
         self.nickname = nickname
@@ -73,7 +75,7 @@ class GameLogic:
         
         # Select word and initialize hints
         try:
-            self.selected_word = self.word_selector.select_word(word_length, subject)
+            self.selected_word = get_fallback_word(word_length, subject)
             if not self.selected_word:
                 raise ValueError("Failed to select a word")
             
@@ -147,7 +149,7 @@ class GameLogic:
         except Exception as e:
             logger.error(f"Error initializing game: {e}")
             # Ensure we have a word even if something fails
-            self.selected_word = self.word_selector.get_fallback_word(word_length, subject)
+            self.selected_word = get_fallback_word(word_length, subject)
             # Generate fallback hints based on difficulty
             self.available_hints = [f"This {subject} term has specific characteristics"] * self.current_settings["max_hints"]
             logger.warning(f"Using {len(self.available_hints)} fallback hints due to initialization error")
@@ -269,12 +271,12 @@ class GameLogic:
         if self.game_over:
             logger.info("[HINT REQUEST] Game is already over, no hint provided")
             return "Game is already over!", 0
-            
+        
         max_hints = self.current_settings["max_hints"]
         if len(self.hints_given) >= max_hints:
             logger.info(f"[HINT REQUEST] Maximum hints ({max_hints}) reached")
             return f"Maximum hints ({max_hints}) reached!", 0
-            
+        
         # Get next available hint
         hint = None
         if self.available_hints:
@@ -286,9 +288,10 @@ class GameLogic:
         # If no pre-generated hints available, get a new one
         if not hint:
             logger.info("[HINT REQUEST] No pre-generated hints available, getting new hint")
+            # Always use the original subject for hint retrieval
             hint = self.word_selector.get_semantic_hint(
                 self.selected_word,
-                self.subject,
+                self.original_subject,
                 self.hints_given,
                 max_hints=self.current_settings["max_hints"]
             )
@@ -300,7 +303,7 @@ class GameLogic:
             self.score += points_deducted
             self.total_points += points_deducted
             logger.info(f"[HINT REQUEST] Applied point deduction: {points_deducted}")
-            
+        
         # Record the hint
         self.hints_given.append(hint)
         logger.info(f"[HINT REQUEST] Total hints given: {len(self.hints_given)}/{max_hints}")
@@ -331,7 +334,8 @@ class GameLogic:
             "duration": duration,
             "time_taken": duration,  # Add time_taken field for compatibility
             "game_over": self.game_over,
-            "nickname": self.nickname
+            "nickname": self.nickname,
+            "difficulty": self.difficulty
         }
 
     def get_recently_used_words(self) -> list:

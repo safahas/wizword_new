@@ -4,7 +4,7 @@ Share card generator for Word Guess Contest game.
 
 import os
 import logging
-from datetime import timedelta
+from datetime import timedelta, datetime
 from PIL import Image, ImageDraw, ImageFont, ImageColor, ImageFilter
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -326,6 +326,7 @@ class ShareCardGenerator:
         mode: str,
         nickname: Optional[str] = None,
         player_stats: Optional[Dict] = None,
+        difficulty: Optional[str] = None,
         output_path: Optional[str] = None
     ) -> str:
         """
@@ -339,6 +340,7 @@ class ShareCardGenerator:
             mode: Game mode (Challenge/Fun)
             nickname: Optional player nickname
             player_stats: Optional player statistics
+            difficulty: Optional difficulty
             output_path: Optional custom output path
             
         Returns:
@@ -357,26 +359,41 @@ class ShareCardGenerator:
             # Load fonts
             fonts = self._load_fonts()
             
-            # Draw title with shadow
+            # Draw WizWord title with shadow
             title_y = self.padding
             shadow_offset = 2
+            wizword_title = "WizWord"
+            date_str = datetime.now().strftime("%Y-%m-%d")
+            user_str = f"Player: {nickname}" if nickname else ""
+            # Title shadow
             draw.text(
                 (self.width//2 + shadow_offset, title_y + shadow_offset),
-                "Word Guess Contest",
+                wizword_title,
                 font=fonts['title'],
                 fill=(0, 0, 0, 100),  # Semi-transparent black
                 anchor="mm"
             )
+            # Title main
             draw.text(
                 (self.width//2, title_y),
-                "Word Guess Contest",
+                wizword_title,
                 font=fonts['title'],
+                fill=self.colors['text'],
+                anchor="mm"
+            )
+            # Date and user (subtitle)
+            subtitle_y = title_y + self.font_sizes['title'] + 10
+            subtitle_text = date_str if not user_str else f"{date_str}   |   {user_str}"
+            draw.text(
+                (self.width//2, subtitle_y),
+                subtitle_text,
+                font=fonts['subtitle'],
                 fill=self.colors['text'],
                 anchor="mm"
             )
             
             # Draw word and category
-            word_y = title_y + 70
+            word_y = subtitle_y + 40
             draw.text(
                 (self.width//2, word_y),
                 f"Word: {word.upper()}",
@@ -392,18 +409,27 @@ class ShareCardGenerator:
                 anchor="mm"
             )
             
-            # Draw score and time with icons
+            # Draw score, time, and difficulty with icons
             score_y = word_y + 120
             score_color = self._get_score_color(score, mode)
+            # Use provided difficulty, or fallback to player_stats or N/A
+            difficulty_label = difficulty or (player_stats.get('difficulty') if player_stats and 'difficulty' in player_stats else 'N/A')
             draw.text(
-                (self.width//3, score_y),
+                (self.width//4, score_y),
                 f"Score: {score}",
                 font=fonts['subtitle'],
                 fill=score_color,
                 anchor="mm"
             )
             draw.text(
-                (2*self.width//3, score_y),
+                (self.width//2, score_y),
+                f"Difficulty: {difficulty_label}",
+                font=fonts['subtitle'],
+                fill=self.colors['accent'],
+                anchor="mm"
+            )
+            draw.text(
+                (3*self.width//4, score_y),
                 f"Time: {self._format_duration(duration)}",
                 font=fonts['subtitle'],
                 fill=self.colors['text'],
@@ -467,6 +493,33 @@ class ShareCardGenerator:
                 qr_code = qr_code.resize((self.qr_size, self.qr_size))
                 image.paste(qr_code, (self.width - self.qr_size - self.padding, qr_y))
             
+            # --- WizWord Official Stamp ---
+            # Stamp properties
+            stamp_radius = 80
+            stamp_center = (self.padding + stamp_radius, self.height - self.padding - stamp_radius)
+            stamp_color = self.colors['accent']
+            stamp_outline = (33, 33, 33)
+            stamp_text = f"Official\nWizWord\n{datetime.now().year}"
+            # Draw circle
+            draw.ellipse([
+                stamp_center[0] - stamp_radius, stamp_center[1] - stamp_radius,
+                stamp_center[0] + stamp_radius, stamp_center[1] + stamp_radius
+            ], fill=stamp_color, outline=stamp_outline, width=4)
+            # Draw text (centered, multiline)
+            try:
+                stamp_font = fonts.get('subtitle', fonts['title'])
+            except Exception:
+                stamp_font = fonts['title']
+            draw.multiline_text(
+                stamp_center,
+                stamp_text,
+                font=stamp_font,
+                fill=(255,255,255),
+                anchor="mm",
+                align="center",
+                spacing=4
+            )
+            
             # Save the image
             image.save(output_path, "PNG")
             logger.info(f"Share card saved to {output_path}")
@@ -494,5 +547,6 @@ def create_share_card(game_summary: Dict) -> str:
         duration=game_summary["time_taken"],
         mode=game_summary["mode"],
         nickname=game_summary.get("nickname"),
-        player_stats=game_summary.get("player_stats")
+        player_stats=game_summary.get("player_stats"),
+        difficulty=game_summary.get("difficulty")
     ) 

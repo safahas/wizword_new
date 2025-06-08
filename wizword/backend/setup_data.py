@@ -7,18 +7,19 @@ from typing import Dict, List
 data_dir = os.path.join(os.path.dirname(__file__), 'data')
 os.makedirs(data_dir, exist_ok=True)
 
-# Load existing words from fallback_words.py
-from fallback_words import FALLBACK_WORDS
+words_json_path = os.path.join(data_dir, 'words.json')
+hints_json_path = os.path.join(data_dir, 'hints.json')
 
-# Create words.json
-words_data = {}
-for category, length_dict in FALLBACK_WORDS.items():
-    words_data[category] = {}
-    for length, words in length_dict.items():
-        words_data[category][str(length)] = words
+# Load words.json
+with open(words_json_path, 'r', encoding='utf-8') as f:
+    words_data = json.load(f)
 
-with open(os.path.join(data_dir, 'words.json'), 'w', encoding='utf-8') as f:
-    json.dump(words_data, f, indent=2)
+# Load existing hints.json if it exists, otherwise start fresh
+if os.path.exists(hints_json_path):
+    with open(hints_json_path, 'r', encoding='utf-8') as f:
+        hints_data = json.load(f)
+else:
+    hints_data = {"templates": {}, "categories": {}}
 
 # Define specific word templates from word_selector.py
 specific_word_templates = {
@@ -43,12 +44,6 @@ specific_word_templates = {
             "Saves approximately $350 billion yearly in military spending"
         ]
     }
-}
-
-# Create hints.json with both generic and specific hints
-hints_data = {
-    "templates": specific_word_templates,  # Add specific word templates
-    "categories": {}  # Will contain generic category hints
 }
 
 def generate_hints(word: str, category: str) -> List[str]:
@@ -207,18 +202,25 @@ def generate_hints(word: str, category: str) -> List[str]:
     
     return hints
 
-# Generate hints for each word
-for category, length_dict in words_data.items():
-    hints_data["categories"][category] = {}
-    for length, words in length_dict.items():
-        hints_data["categories"][category][length] = {}
-        for word in words:
-            hints_data["categories"][category][length][word] = generate_hints(word, category)
+# Ensure templates and categories sections exist
+if "templates" not in hints_data:
+    hints_data["templates"] = {}
+if "categories" not in hints_data:
+    hints_data["categories"] = {}
 
-# Save hints.json
-with open(os.path.join(data_dir, 'hints.json'), 'w', encoding='utf-8') as f:
+# Only add missing hints
+for category, length_dict in words_data.items():
+    if category not in hints_data["categories"]:
+        hints_data["categories"][category] = {}
+    for length, words in length_dict.items():
+        if length not in hints_data["categories"][category]:
+            hints_data["categories"][category][length] = {}
+        for word in words:
+            if word not in hints_data["categories"][category][length]:
+                hints_data["categories"][category][length][word] = generate_hints(word, category)
+
+# Save the updated hints.json
+with open(hints_json_path, 'w', encoding='utf-8') as f:
     json.dump(hints_data, f, indent=2)
 
-print("Data files created successfully:")
-print(f"- {os.path.join(data_dir, 'words.json')}")
-print(f"- {os.path.join(data_dir, 'hints.json')}")
+print("Hints updated: only missing words were added.")
