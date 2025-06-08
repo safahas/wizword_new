@@ -1,0 +1,1 @@
+[Cursor] Fix: Update _answer_question_fallback signature to accept subject argument for fallback mode bug.

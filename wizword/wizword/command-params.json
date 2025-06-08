@@ -1,0 +1,24 @@
+{
+  "commands": [
+    "sudo apt-get update",
+    "sudo apt-get install -y jq",
+    "sudo -u ec2-user mkdir -p /home/ec2-user/.aws",
+    "sudo -u ec2-user bash -c 'echo \"[default]\" > /home/ec2-user/.aws/config'",
+    "sudo -u ec2-user bash -c 'echo \"region = us-east-1\" >> /home/ec2-user/.aws/config'",
+    "sudo -u ec2-user bash -c 'echo \"[default]\" > /home/ec2-user/.aws/credentials'",
+    "sudo -u ec2-user bash -c 'TOKEN=`curl -X PUT \"http://169.254.169.254/latest/api/token\" -H \"X-aws-ec2-metadata-token-ttl-seconds: 21600\"` && ROLE=`curl -H \"X-aws-ec2-metadata-token: $TOKEN\" http://169.254.169.254/latest/meta-data/iam/security-credentials/` && CREDS=`curl -H \"X-aws-ec2-metadata-token: $TOKEN\" http://169.254.169.254/latest/meta-data/iam/security-credentials/$ROLE` && echo \"aws_access_key_id = ASIAQXPZCYN76Q4KZSHK\" >> /home/ec2-user/.aws/credentials && echo \"aws_secret_access_key = kMYEkmOTTYqzMGuRFbJQ+bA6bAXx21mY/4dJyCUI\" >> /home/ec2-user/.aws/credentials && echo \"aws_session_token = IQoJb3JpZ2luX2VjEFEaCXVzLWVhc3QtMSJGMEQCIA30AxPqGu4MgSU80Qtw2ufpeFObNo8U4aZ9fQpU+LEEAiAWLV2l8yothUa7d9cTW1yi3vN0NoUnSaFWS14KGrjETSq8BQgaEAAaDDA1MDQ1MTM2Njc4MyIM7yh2JJsO8FLgV5G+KpkFIud0bKopFqU67EPgc43dPHxMh57f9syntfSorQAnNRsMNWK2ArHg7d7jhnsIRxvPdT/C2DkJwSOuYVLFT2d2Lchay+EeFhWZ0oCdxZVIiKIW7/GH4FuOCRgfkjCddxwBNIssEEsjh/ak9PtSohPpSN55DDI59ECBYGRmMyR7tS4QetfhBQwrWLDkULRTkqRemg4pyfzYQWO0xhwBJRghlMPTwlNxJtTtKCqC0JMowNQxWqjHsL9dKUzD5zYIHrQJFxrVEUwQ75WTNr8qHSQtjLy1IpoXxHyiNRW7xGjZssXYZO/yt5BQp/95U/kEJsbsn1TzbS3v1d+4Fi/njo3LdLklSOvgODnliu//emVwQeOh+avUs5zedWYJj5+vHudZHMwVK/lYfwDeb5luXt+yhh6XNfxPdtSHob2Dq8lmOvT0BCSC6wMyBKjMoi7fqrWZ3lj0qsnGxYBjfrwFgVVpjlpsQwL1ZNydQ+ZdeWfkSRmp4w7v/T/IgxpGvmowbvAhYEEnNdhyIrxo6a8d8Al52F4HkQlGy8YW6f5wI9rr2hoiMcNqz0TNKMA0fBzvgaaiEts6+xYhv72qBWHdD556W9yiCVRbd/8K5dcN3okmzGKri3xHMSgR0TwgnGOx9ao1QMvTKqsxefvHYhFHFos8dq0radI1FyElwUNFB5lSABkuT+16lurG9N/a1r44/u8jNLtJboUckuk3jAZ/PrbbqLm45Xm44JE9cU08O+j06hTuuT9vMwejbbFyuQgxWfj6Vzk++cTjoJ4z87dZ4vL3MMDmb14R7/bbIYmkpl714RVyvNipHfYwlEnrrKeAoLCGcLNLU/PUtis+gDTH/vBwMRx0GqPdXTCo5E2H6fgKPkCS5JQHxyENXkow8uTHwQY6sgG6fNNv+tCx6n4WSFNstTr6EZ+n8ZokGz/bE+I6S5QVeZgfVpniKMfFk6sQwh0/Xh9Y815gbsln+BCeytsAK/NL0vGJI+9IzAaedFlVachWQRrQfhlWMb6/HHM93SiBr5Egjdzzdq2EsD49ZLbhBQmO7OjbGtNzFRA3oRM17oZvvP9P1kCSM6yyCq5wlt338Dtg+FFCsU9pefFRqzg7nRT/4WFgVDHDk/533m/RstT2oV/o\" >> /home/ec2-user/.aws/credentials'",
+    "sudo -u ec2-user mkdir -p /home/ec2-user/word-guess-game",
+    "cd /home/ec2-user/word-guess-game",
+    "sudo -u ec2-user python3 -m venv venv",
+    "sudo -u ec2-user bash -c 'cd /home/ec2-user/word-guess-game && rm -rf * .git .env && git clone git@github.com:cursor-ai-training/word-guess-game.git . && source venv/bin/activate && pip install -r requirements.txt'",
+    "sudo -u ec2-user bash -c 'cd /home/ec2-user/word-guess-game && source venv/bin/activate && aws ssm get-parameter --name /word-guess/openrouter-api-key --with-decryption --query Parameter.Value --output text > .env'",
+    "sudo -u ec2-user bash -c 'cd /home/ec2-user/word-guess-game && echo USE_CLOUD_STORAGE=true >> .env'",
+    "sudo -u ec2-user bash -c 'cd /home/ec2-user/word-guess-game && echo AWS_REGION=us-east-1 >> .env'",
+    "sudo systemctl restart word-guess.service",
+    "ls -la /home/ec2-user/word-guess-game",
+    "cat /home/ec2-user/word-guess-game/.env",
+    "cat /home/ec2-user/.aws/credentials",
+    "cat /home/ec2-user/.aws/config",
+    "cat /etc/systemd/system/word-guess.service"
+  ]
+} 

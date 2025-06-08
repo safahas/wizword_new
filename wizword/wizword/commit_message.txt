@@ -1,0 +1,24 @@
+[Cursor] Improve category question handling in word guessing game
+
+- Enhanced category question detection with more flexible patterns
+- Added support for simple category questions like "what is the category?"
+- Improved category name normalization (tech -> science, etc.)
+- Fixed category response formatting
+- Moved category question handling to top priority
+- Added better handling of category-specific responses
+
+[Cursor] Add debug logging for hint lookup and fallback question handling
+
+- Added detailed debug logging to hint lookup logic in WordSelector
+- Improved traceability for category, word, and fallback triggers
+- Added debug logs for first/last letter question pattern matching
+- Investigated and confirmed issue with 'wolverine' word length in word list
+- No code changes yet for word list correction (pending user approval)
+
+[Cursor] Fix category randomization for 'any' selection and 'Another Word' button
+
+- Preserve the user's original category choice (including 'any') in session state when starting a new game.
+- Only resolve 'any' to a random category for the current game instance, not for session state.
+- Update play again ('Another Word') logic to re-randomize the category if the user started with 'any', or keep the chosen category otherwise.
+- This ensures that each new word after 'Another Word' will use a new random category if 'any' was selected, matching user expectations.
+- Fixes issue where category would get stuck after the first randomization. 

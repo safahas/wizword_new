@@ -1,0 +1,181 @@
+# Lessons
+
+## User Specified Lessons
+
+- Use the Python venv in ./venv
+- Include info useful for debugging in the program output
+- Read files before trying to edit them
+- For git commits, write multiline messages in a file first and use `git commit -F <filename>`, including "[Cursor] " in commit messages and PR titles
+- Use Fernet encryption for sensitive data storage, with key derivation using PBKDF2
+- Implement retry logic with exponential backoff and jitter for API calls
+- Always provide offline fallback options for critical functionality
+- Monitor OpenRouter API quota using x-ratelimit headers:
+  - Track remaining quota and reset time
+  - Set warning threshold at 10% remaining
+  - Set critical threshold at 5% remaining
+  - Implement per-minute and per-hour rate limiting
+  - Send email alerts for critical quota levels
+  - Add quota warnings to API responses
+  - Provide fallback to offline mode when quota is critical
+- Implement rate limiting with cooldown periods to prevent API abuse
+- Send email alerts for critical quota warnings to administrators
+- Use separate monitoring module for better code organization
+
+## Cursor Learned
+
+- For search results, ensure proper handling of different character encodings (UTF-8) for international queries
+- Add debug information to stderr while keeping the main output clean in stdout for better pipeline integration
+- When using seaborn styles in matplotlib, use 'seaborn-v0_8' instead of 'seaborn' as the style name due to recent seaborn version changes
+- Use 'gpt-4o' as the model name for OpenAI's GPT-4 with vision capabilities
+- When searching for recent news, use the current year (2025) instead of previous years, or simply use the "recent" keyword to get the latest information
+- When using FPDF/FPDF2 for PDF generation, handle Unicode characters (like bullet points) by replacing them with standard ASCII characters
+- For PDF generation, add robust error handling for each section to ensure the report is still generated even if one section fails
+- Verify files exist and have content before trying to include them in a PDF document
+- When storing sensitive data, use encryption and only decrypt when necessary
+- Use environment variables for encryption keys with auto-generation fallback
+- Add timeouts to API calls to prevent hanging
+- Use exponential backoff with jitter for retries
+- Provide meaningful fallback behavior for API failures
+- Monitor OpenRouter API quota using x-ratelimit headers for both requests and tokens
+- Implement rate limiting with per-minute and per-hour counters
+- Send email alerts for critical quota warnings with detailed status information
+- Use UTC timestamps for consistent time handling across different timezones
+- For image generation, always provide font fallback options to handle missing system fonts
+- When creating share cards, use gradient backgrounds with rounded corners for modern aesthetics
+- Implement color coding based on game mode and score ranges for better visual feedback
+- Add subtle shadows to text elements for depth and readability
+- Use QR codes for easy game sharing and link access
+- Implement proper image output directory management with error handling
+- Add loading states during image generation to improve user experience
+
+# Scratchpad
+
+## Current Task: Setting up the Word Guess Game
+
+### Analysis
+1. The game requires an OpenRouter API key for optimal functionality
+2. However, it has a robust fallback system:
+   - Local dictionary of words by category and length
+   - Categories: General, Animals, Food, Places, Science
+   - Word lengths: 3-10 letters
+   - Category aliases (Tech -> Science, Movies/Music/Brands/History -> General)
+
+### Next Steps
+1. [X] Identify required environment variables
+2. [X] Create sample configuration file
+3. [X] Verify fallback system functionality
+4. [X] Run the game in fallback mode
+5. [ ] Test basic game functionality
+6. [ ] Add OpenRouter API key if needed
+
+### Required Environment Variables
+1. Essential:
+   - OPENROUTER_API_KEY (can run without it using fallback mode)
+   - USE_CLOUD_STORAGE (set to false for local storage)
+
+2. Optional:
+   - AWS_* (only if USE_CLOUD_STORAGE=true)
+   - SMTP_* (only for email alerts)
+   - WORD_ENCRYPTION_KEY (auto-generated if not set)
+
+### Running in Fallback Mode
+1. The game will automatically use the local word dictionary when:
+   - OpenRouter API key is not set
+   - API calls fail
+   - Rate limits are exceeded
+
+2. Fallback Features:
+   - Random word selection from predefined lists
+   - Support for all game modes and categories
+   - No API dependency
+   - Instant responses
+   - Basic question answering logic:
+     - Letter presence questions
+     - Word length questions
+     - First/last letter questions
+     - Generic "no" for other questions
+
+### Current Status
+The game is now running in fallback mode with local word dictionary. The next step is to test the basic game functionality to ensure everything works correctly.
+
+## Share Card Integration Task
+
+### Current State Analysis
+1. Share Card Generator (backend/share_card.py):
+   [X] Basic implementation with gradient background
+   [X] Font handling with fallback options
+   [X] Score color coding based on game mode
+   [X] Proper error handling and logging
+   [X] Output directory management
+   [X] QR code integration
+   [X] Enhanced layout with QR code
+   [X] Text shadows and visual effects
+   [X] Proper image output handling
+
+2. Streamlit App (streamlit_app.py):
+   [X] Share card module imported
+   [X] Game state management
+   [X] Game over screen implementation
+   [X] Share card UI integration
+   [X] Social media sharing buttons
+   [X] Share URL generation
+   [X] QR code display
+   [X] Loading state handling
+   [X] Error state handling
+
+3. Share Utils (backend/share_utils.py):
+   [X] Share URL generation
+   [X] QR code generation
+   [X] Social share text formatting
+   [X] Unique share ID generation
+   [X] Output directory management
+   [X] Error handling and logging
+
+### Implementation Plan
+
+1. Share Card UI Integration
+   [X] Add share card preview in game over screen
+   [X] Add "Generate Share Card" button
+   [X] Implement loading state during generation
+   [X] Add download button for generated card
+   [X] Add copy to clipboard functionality
+
+2. Social Media Integration
+   [X] Add Twitter/X share button
+   [X] Add Facebook share button
+   [X] Add LinkedIn share button
+   [X] Add direct link copying
+   [X] Implement share URL generation
+
+3. Share Card Enhancements
+   [X] Add QR code for game link
+   [ ] Add game statistics visualization
+   [ ] Improve visual design with animations
+   [ ] Add custom background options
+   [ ] Add share card templates
+
+4. Testing and Optimization
+   [ ] Add unit tests for share card generation
+   [ ] Add integration tests for sharing flow
+   [ ] Optimize image generation performance
+   [ ] Add error recovery mechanisms
+   [ ] Implement caching for generated cards
+
+### Next Steps (Prioritized)
+1. ~~Integrate share card preview in game over screen~~ ✅
+2. ~~Add share card generation button and loading state~~ ✅
+3. ~~Implement basic social media sharing~~ ✅
+4. ~~Add download and clipboard functionality~~ ✅
+5. ~~Implement share URL generation and QR code~~ ✅
+6. Add game statistics visualization
+   - [ ] Design statistics layout
+   - [ ] Add score trend graph
+   - [ ] Add question count visualization
+   - [ ] Add time distribution chart
+7. Enhance visual design with animations
+   - [ ] Add card generation animation
+   - [ ] Add share button hover effects
+   - [ ] Add loading spinners
+
+### Current Focus
+Adding game statistics visualization to the share card, starting with the layout design and score trend graph.
