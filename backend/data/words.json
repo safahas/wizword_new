@@ -2224,6 +2224,30 @@
       "web",
       "zip"
     ],
+    "5": [
+      "apple",
+      "bread",
+      "chair",
+      "dance",
+      "dress",
+      "drink",
+      "eagle",
+      "fruit",
+      "grass",
+      "heart",
+      "laugh",
+      "light",
+      "lunch",
+      "money",
+      "music",
+      "night",
+      "paint",
+      "party",
+      "plant",
+      "smile",
+      "train",
+      "watch"
+    ],
     "4": [
       "ball",
       "bear",
@@ -2250,6 +2274,29 @@
       "star",
       "toys",
       "tree"
+    ],
+    "6": [
+      "animal",
+      "butter",
+      "castle",
+      "circle",
+      "family",
+      "father",
+      "forest",
+      "friend",
+      "garden",
+      "market",
+      "mother",
+      "orange",
+      "picnic",
+      "planet",
+      "rabbit",
+      "school",
+      "season",
+      "silver",
+      "summer",
+      "winter",
+      "yellow"
     ]
   }
 }

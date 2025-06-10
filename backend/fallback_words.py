@@ -128,6 +128,16 @@ FALLBACK_WORDS: Dict[str, Dict[int, List[str]]] = {
         8: ["baseball", "football", "swimming", "athletics", "training", "aerobics", "archery", "athletic", "bowling", "climbing", "coaching", "curling", "exercise", "handball", "olympics", "practice", "skating", "sparring", "spinning", "sprinter", "strength", "throwing", "triathlon", "wrestler", "yoga"],
         9: ["basketball", "gymnastics", "wrestling", "volleyball", "badminton", "athletics", "bicycling", "boxing", "coaching", "cricket", "dodgeball", "exercise", "football", "handball", "hockey", "lacrosse", "olympics", "softball", "swimming", "acrobatic", "endurance", "kickboxer", "marathon", "pentathlon", "taekwondo"],
         10: ["volleyball", "basketball", "gymnastics", "waterpolo", "pickleball", "athletics", "badminton", "bicycling", "cheerleader", "competition", "dodgeball", "exercising", "handball", "pickleball", "powerlifting", "racquetball", "skateboard", "swimming", "taekwondo", "trampoline", "triathlon", "weightlift", "wrestling", "decathlon", "pentathlon"]
+    },
+    "4th_grade": {
+        3: ["cat", "dog", "sun", "box", "bus", "hat", "bat", "fan", "pen", "cup"],
+        4: ["ball", "bear", "bike", "book", "coin", "cook", "desk", "door", "duck", "fish"],
+        5: ["apple", "bread", "chair", "dance", "eagle", "fruit", "grass", "heart", "light", "music"],
+        6: ["animal", "butter", "castle", "circle", "family", "forest", "friend", "garden", "market", "mother"],
+        7: ["flowers", "brother", "teacher", "rainbow", "village", "evening", "kitchen", "holiday", "blanket", "library"],
+        8: ["treasure", "campfire", "umbrella", "question", "opposite", "football", "zucchini", "language", "birthday", "vacation"],
+        9: ["waterfall", "yesterday", "youngster", "jellyfish", "xylophone", "pineapple", "carpet", "zookeeper", "elephant", "mountain"],
+        10: ["animalcare", "babysitter", "basketball", "binoculars", "blackboard", "bookshelf", "chalkboard", "classrooms", "cornfields", "earthquake"]
     }
 }
 

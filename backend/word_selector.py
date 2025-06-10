@@ -1975,6 +1975,7 @@ class WordSelector:
 
     def _select_word_from_dictionary(self, word_length: int = 5, subject: str = "general") -> str:
         """Select a word from the local dictionary (words.json) if available, otherwise use fallback_words.py."""
+        logger.info(f"[DEBUG] Entered _select_word_from_dictionary with subject='{subject}', word_length='{word_length}'")
         logger.info(f"Selecting word from dictionary with length {word_length} and subject {subject}")
         try:
             subject = subject.lower()
@@ -1984,12 +1985,17 @@ class WordSelector:
                 subject = "general"
             # Try words.json first
             if hasattr(self, "words_data") and self.words_data:
-                words = self.words_data.get(subject, {}).get(str(word_length), [])
-                words = [w for w in words if not self._is_recent_word(w, subject)]
+                candidate_words = self.words_data.get(subject, {}).get(str(word_length), [])
+                logger.info(f"[DEBUG] Candidate words for subject '{subject}', length '{word_length}': {candidate_words}")
+                logger.info(f"[DEBUG] Recently used words for subject '{subject}': {self._recently_used_words_by_category.get(subject, [])}")
+                words = [w for w in candidate_words if not self._is_recent_word(w, subject)]
+                logger.info(f"[DEBUG] After filtering recent words: {words}")
                 if words:
                     word = random.choice(words)
                     self._add_recent_word(word, subject)
                     return word
+                else:
+                    logger.warning(f"[DEBUG] Fallback triggered for subject '{subject}', length '{word_length}'. Candidates: {candidate_words}")
             # Fallback
             word = get_fallback_word(word_length, subject)
             self._add_recent_word(word, subject)
@@ -2295,47 +2301,47 @@ class WordSelector:
 
     def select_word(self, word_length: int = 5, subject: str = "general") -> str:
         """Select a word based on length and subject."""
-        # Store the current category
         self.current_category = subject.lower()
-        
+
         # Map tech to science and other categories to general
         if self.current_category == "tech":
             self.current_category = "science"
         elif self.current_category in ["movies", "music", "brands", "history"]:
             self.current_category = "general"
-            
-        # Try to get word from API first
+
+        # Try API first if not in fallback mode
         if not self.use_fallback:
             try:
                 messages = self._build_prompt(word_length, subject)
                 response = self._make_api_request_with_retry(messages)
                 word = response["choices"][0]["message"]["content"].strip().lower()
-                
-                # Validate the word
-                if (len(word) == word_length and 
-                    word.isalpha() and 
-                    word not in self._recently_used_words):
-                    # Add to recently used words
+                if (
+                    len(word) == word_length
+                    and word.isalpha()
+                    and word not in self._recently_used_words
+                ):
                     self._recently_used_words.add(word)
                     if len(self._recently_used_words) > self._max_recent_words:
                         self._recently_used_words.pop()
                     return word
-                    
                 logger.warning(f"API returned invalid word: {word}")
-                
             except Exception as e:
                 logger.error(f"Error getting word from API: {e}")
                 self.use_fallback = True
-                
-        # If API fails or we're in fallback mode, use dictionary
+
+        # Always try dictionary if present, even in fallback mode
         word = self._select_word_from_dictionary(word_length, subject)
-        
-        # Add to recently used words
         if word:
             self._recently_used_words.add(word)
             if len(self._recently_used_words) > self._max_recent_words:
                 self._recently_used_words.pop()
-            
+            return word
+
+        # Only use fallback pool if both API and dictionary fail
+        word = get_fallback_word(word_length, subject)
+        self._recently_used_words.add(word)
+        if len(self._recently_used_words) > self._max_recent_words:
+            self._recently_used_words.pop()
         return word
 
     def _answer_question_fallback(self, word: str, question: str, subject: str = "general") -> str:

@@ -1,0 +1,2 @@
+@echo off
+aws cloudformation create-stack --stack-name word-guess-stack --template-body file://cloudformation/word-guess-stack.yaml --parameters ParameterKey=Environment,ParameterValue=Production ParameterKey=DomainName,ParameterValue=baghdade.com ParameterKey=CertificateArn,ParameterValue=arn:aws:acm:us-east-1:050451366783:certificate/b862533d-a288-4c87-86f4-686c8b0e7224 --capabilities CAPABILITY_IAM CAPABILITY_NAMED_IAM 
