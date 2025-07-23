@@ -7,6 +7,8 @@ Each category has 200 words (25 words per length from 3-10 letters).
 import random
 from typing import Dict, List, Optional
 import logging
+import json
+import os
 
 FALLBACK_WORDS: Dict[str, Dict[int, List[str]]] = {
     "general": {
@@ -151,46 +153,38 @@ CATEGORY_ALIASES = {
 
 def get_fallback_word(word_length: int, subject: str) -> Optional[str]:
     """
-    Get a random word from the fallback dictionary matching the given length and subject.
-    Falls back to "general" category if the subject is not found.
-    Avoids using template words too frequently.
+    Get a random word from hints.json for the given subject/category. If word_length == 'any', ignore word length.
+    Falls back to 'general' if the subject is not found.
     """
     logger = logging.getLogger(__name__)
-    
-    # Normalize subject to lowercase
     subject = subject.lower()
     subject = CATEGORY_ALIASES.get(subject, subject)
-    
-    # Get words matching the length from both the specified subject and general category
-    subject_words = []
-    if subject in FALLBACK_WORDS:
-        subject_words = FALLBACK_WORDS[subject].get(word_length, [])
-    general_words = FALLBACK_WORDS["general"].get(word_length, [])
-    
-    # Define template words to avoid
-    template_words = {"table", "music", "phone", "light"}  # Common template words
-    available_words = []
-    
-    # First try subject-specific words, excluding template words
-    if subject_words:
-        non_template_words = [w for w in subject_words if w not in template_words]
-        if non_template_words:
-            available_words.extend(non_template_words)
-    
-    # If we don't have enough words, add general words (excluding template words)
-    if len(available_words) < 5:
-        non_template_general = [w for w in general_words if w not in template_words]
-        available_words.extend(non_template_general)
-    
-    # Only if we have no other options, include template words
-    if not available_words:
-        logger.warning("No non-template words available, falling back to template words")
-        available_words = subject_words + general_words
-    
-    if not available_words:
-        logger.error(f"No words available for length {word_length} and subject {subject}")
-        return None
-        
-    selected_word = random.choice(available_words)
-    logger.info(f"Selected word: {selected_word} from pool of {len(available_words)} words")
-    return selected_word 
+    hints_file = os.path.join('backend', 'data', 'hints.json')
+    try:
+        with open(hints_file, 'r', encoding='utf-8') as f:
+            hints_data = json.load(f)
+        templates = hints_data.get('templates', {})
+        # Use subject or fallback to general
+        if subject not in templates:
+            logger.warning(f"Subject '{subject}' not found in hints.json, falling back to 'general'")
+            subject = 'general'
+        if word_length == 'any':
+            words = list(templates.get(subject, {}).keys())
+        else:
+            print(f"[DEBUG][get_fallback_word] word_length: {word_length} (type: {type(word_length)})")
+            try:
+                wl = int(word_length)
+            except Exception as e:
+                print(f"[DEBUG][get_fallback_word] Invalid word_length for int(): {word_length} (type: {type(word_length)}), error: {e}")
+                return None
+            words = [w for w in templates.get(subject, {}).keys() if len(w) == wl]
+        if not words:
+            print(f"[DEBUG][get_fallback_word] No words found for subject '{subject}' and word_length {word_length}")
+            logger.error(f"No words found for subject '{subject}' in hints.json")
+            return None
+        selected_word = random.choice(words)
+        logger.info(f"Selected word: {selected_word} from hints.json category '{subject}'")
+        return selected_word
+    except Exception as e:
+        logger.error(f"Error loading hints.json: {e}")
+        return None 

@@ -10,6 +10,7 @@ import urllib.parse
 from typing import Dict, Optional
 from datetime import datetime, timezone
 from PIL.Image import Image
+import hashlib
 
 class ShareUtils:
     def __init__(self):
@@ -19,12 +20,17 @@ class ShareUtils:
     def generate_share_text(self, game_summary: Dict) -> str:
         """Generate text for sharing game results."""
         text = [
-            "🎯 Word Guess Contest",
-            f"Word: {game_summary['word'].upper()}",
-            f"Category: {game_summary['subject']}",
-            f"Score: {game_summary['score']} ({game_summary['mode']} mode)",
-            f"Time: {self._format_duration(game_summary['time_taken'])}"
+            "�� Word Guess Contest"
         ]
+        mode = game_summary.get("mode", "")
+        if mode == "Beat":
+            words_solved = game_summary.get("words_solved", 0)
+            text.append(f"Words Solved: {words_solved}")
+        else:
+            text.append(f"Word: {game_summary['word'].upper()}")
+        text.append(f"Category: {game_summary['subject']}")
+        text.append(f"Score: {game_summary['score']} ({game_summary['mode']} mode)")
+        text.append(f"Time: {self._format_duration(game_summary['time_taken'])}")
         
         # Add player stats if available
         if game_summary.get("player_stats"):

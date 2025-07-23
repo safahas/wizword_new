@@ -12,85 +12,55 @@ from backend.fallback_words import get_fallback_word
 logger = logging.getLogger(__name__)
 
 class GameLogic:
-    def __init__(self, word_length: int, subject: str, mode: str, nickname: str = "", initial_score: int = 0, difficulty: str = "Medium"):
-        self.word_selector = WordSelector()
-        self.stats_manager = GameStats()
-        
-        # Handle word length
-        if word_length == "any":
-            word_length = random.randint(3, 10)
-        self.word_length = word_length
-        
-        # Handle subject/category
+    def __init__(self, word_length: int = None, subject: str = "general", mode: str = "Fun", nickname: str = "", initial_score: int = 0, difficulty: str = "Medium"):
+        print(f"[DEBUG][GameLogic.__init__] word_length: {word_length} (type: {type(word_length)}), subject: {subject} (type: {type(subject)})")
+        # Persist WordSelector across all GameLogic instances
+        if not hasattr(GameLogic, 'word_selector'):
+            GameLogic.word_selector = WordSelector()
+        self.word_selector = GameLogic.word_selector
+        self.stats_manager = GameStats(nickname=nickname)
+        # Ignore word_length for word selection; keep for legacy only
         if subject == "any":
             subject = random.choice(["general", "animals", "food", "places", "science", "tech", "sports"])
         self.subject = subject
-        self.original_subject = subject  # <-- Store the original subject for the round
-        
-        self.mode = mode  # "Fun" or "Challenge"
+        self.original_subject = subject
+        self.mode = mode
         self.nickname = nickname
-        self.score = initial_score  # Initialize with provided score
-        
-        # Set difficulty-based parameters
+        self.score = initial_score
         self.difficulty = difficulty
         self.difficulty_settings = {
-            "Easy": {
-                "max_hints": 10,
-                "hint_interval": 45,
-                "question_penalty": -0.5,
-                "hint_penalty": -5,
-                "guess_penalty": -5,
-                "base_points_multiplier": 25
-            },
-            "Medium": {
-                "max_hints": 7,
-                "hint_interval": 30,
-                "question_penalty": -1,
-                "hint_penalty": -10,
-                "guess_penalty": -10,
-                "base_points_multiplier": 20
-            },
-            "Hard": {
-                "max_hints": 5,
-                "hint_interval": 20,
-                "question_penalty": -2,
-                "hint_penalty": -15,
-                "guess_penalty": -15,
-                "base_points_multiplier": 15
-            }
+            "Easy": {"max_hints": 10, "hint_interval": 45, "question_penalty": -1, "hint_penalty": -5, "guess_penalty": -5, "base_points_multiplier": 25},
+            "Medium": {"max_hints": 7, "hint_interval": 30, "question_penalty": -1, "hint_penalty": -10, "guess_penalty": -10, "base_points_multiplier": 20},
+            "Hard": {"max_hints": 5, "hint_interval": 20, "question_penalty": -2, "hint_penalty": -15, "guess_penalty": -15, "base_points_multiplier": 15}
         }
-        
-        # Get settings for current difficulty
         self.current_settings = self.difficulty_settings[self.difficulty]
-        
-        self.total_points = 0  # Track total points for the game
-        self.questions_asked = []  # Initialize questions list
-        self.hints_given = []  # Track hints given
-        self.available_hints = []  # Store all available hints
+        # For Beat mode, always limit hints to 3
+        if self.mode == "Beat":
+            self.current_settings["max_hints"] = 3
+        self.total_points = 0
+        self.questions_asked = []
+        self.hints_given = []
+        self.available_hints = []
         self.start_time = time.time()
         self.end_time = None
         self.selected_word = None
         self.game_over = False
-        self.guesses_made = 0  # Track number of guesses
-        
-        # Select word and initialize hints
+        self.guesses_made = 0
+        self.show_word_penalty_applied = False
         try:
-            self.selected_word = get_fallback_word(word_length, subject)
+            # Instead of selecting a word without username, always use nickname for recent word tracking
+            username = self.nickname if self.nickname else "global"
+            print(f"[DEBUG][GameLogic.__init__] Calling select_word with word_length={word_length}, subject={subject}, username={username}")
+            self.selected_word = self.word_selector.select_word(word_length, subject, username=username)
+            print(f"[DEBUG] selected_word set to: {repr(self.selected_word)}")
             if not self.selected_word:
                 raise ValueError("Failed to select a word")
-            
-            # Initialize available hints based on difficulty
             all_hints = []
-            
-            # Try to get hints from hints.json first
             try:
                 hints_file = os.path.join('backend', 'data', 'hints.json')
                 logger.info(f"Looking for hints in: {hints_file}")
-                
-                # Map categories to general if needed
                 if subject in ["tech", "movies", "music", "brands", "history"]:
                     subject = "general"
-                
                 with open(hints_file, 'r', encoding='utf-8') as f:
                     hints_data = json.load(f)
                     if "templates" in hints_data and subject in hints_data["templates"] and self.selected_word in hints_data["templates"][subject]:
@@ -105,52 +75,26 @@ class GameLogic:
                 logger.warning("Error decoding hints.json")
             except Exception as e:
                 logger.warning(f"Error reading hints.json: {e}")
-            
-            # If no hints from hints.json, get hints from word_selector
             if not all_hints:
-                all_hints = self.word_selector.generate_all_hints(self.selected_word, subject)
-            
-            logger.info(f"Generated {len(all_hints)} total hints for word '{self.selected_word}'")
-            
-            # Separate static hints (from hints.json or WORD_HINTS) and dynamic hints
-            static_hints = []
-            dynamic_hints = []
-            
-            # Check if hints are from hints.json or WORD_HINTS
-            for hint in all_hints:
-                if hint.startswith("This") and subject.lower() in hint.lower() and "term" in hint:
-                    dynamic_hints.append(hint)
+                # Use API-generated hints if available, otherwise fallback
+                api_hints = self.word_selector.get_api_hints(self.selected_word, subject, n=self.current_settings["max_hints"])
+                if api_hints:
+                    all_hints = api_hints
+                    logger.info(f"[HINT REQUEST] Using {len(all_hints)} API-generated hints for '{self.selected_word}'")
                 else:
-                    static_hints.append(hint)
-            
-            logger.info(f"Found {len(static_hints)} static hints and {len(dynamic_hints)} dynamic hints")
-            
-            # Prioritize static hints, then add dynamic hints if needed
-            max_hints = self.current_settings["max_hints"]
-            if len(static_hints) >= max_hints:
-                self.available_hints = static_hints[:max_hints]
-                logger.info(f"Using {len(self.available_hints)} static hints")
-            else:
-                # Use all static hints and generate additional dynamic hints
-                self.available_hints = static_hints
-                remaining_slots = max_hints - len(static_hints)
-                if remaining_slots > 0:
-                    # Generate new dynamic hints for the remaining slots
-                    for i in range(remaining_slots):
-                        new_hint = self.word_selector.get_semantic_hint(
-                            self.selected_word,
-                            subject,
-                            previous_hints=self.available_hints
-                        )
-                        if new_hint and new_hint not in self.available_hints:
-                            self.available_hints.append(new_hint)
-                logger.info(f"Using {len(static_hints)} static hints and {len(self.available_hints) - len(static_hints)} dynamic hints")
-            
+                    all_hints = [f"This {subject} term has specific characteristics"] * self.current_settings["max_hints"]
+                    logger.warning(f"[HINT REQUEST] Using fallback hints for '{self.selected_word}'")
+            logger.info(f"Generated {len(all_hints)} total hints for word '{self.selected_word}'")
+            # Deduplicate all_hints
+            all_hints = list(dict.fromkeys(all_hints))
+            self.available_hints = all_hints[:self.current_settings["max_hints"]]
+            logger.info(f"Using {len(self.available_hints)} hints for '{self.selected_word}'")
         except Exception as e:
             logger.error(f"Error initializing game: {e}")
-            # Ensure we have a word even if something fails
-            self.selected_word = get_fallback_word(word_length, subject)
-            # Generate fallback hints based on difficulty
+            # Ensure word_length is always an int for fallback
+            fallback_length = word_length if isinstance(word_length, int) and 3 <= word_length <= 10 else 5
+            print(f"[DEBUG][GameLogic.__init__] Fallback: using fallback_length={fallback_length}, subject={subject}")
+            self.selected_word = get_fallback_word(fallback_length, subject)
             self.available_hints = [f"This {subject} term has specific characteristics"] * self.current_settings["max_hints"]
             logger.warning(f"Using {len(self.available_hints)} fallback hints due to initialization error")
 
@@ -158,62 +102,68 @@ class GameLogic:
         """Ask a question about the word."""
         if self.game_over:
             return False, "Game is already over!", 0
-            
+
         if not question.strip():
             return False, "Question cannot be empty!", 0
-            
+
         # Normalize the question by removing punctuation and extra spaces
         normalized_question = re.sub(r'[^\w\s]', '', question.lower()).strip()
         normalized_question = ' '.join(normalized_question.split())
-        
+
         # Extract key terms from the question
         key_terms = set(normalized_question.split())
-        
+
         # Check if this question was already asked
         for q in self.questions_asked:
             normalized_prev = re.sub(r'[^\w\s]', '', q["question"].lower()).strip()
             normalized_prev = ' '.join(normalized_prev.split())
             prev_terms = set(normalized_prev.split())
-            
+
             if normalized_question == normalized_prev:
                 return False, "You already asked this question!", 0
-            
+
             if key_terms == prev_terms:
                 return False, "You already asked this question in a different way!", 0
-            
+
             if key_terms.issubset(prev_terms) or prev_terms.issubset(key_terms):
                 return False, "You already asked a similar question!", 0
-        
+
         # Get answer from word selector
+        print(f"[DEBUG] Passing word to answer_question: {repr(self.selected_word)}")
         answer = self.word_selector.answer_question(self.selected_word, question, self.subject)
-        
+
         points_added = 0
-        if self.mode == "Challenge":
+        if self.mode in ("Wiz", "Beat"):
             points_added = self.current_settings["question_penalty"]
             self.score += points_added
             self.total_points += points_added
-        
+            print(f"[DEBUG] Penalty applied in ask_question: {points_added}, new score: {self.score}")  # <-- Debug print
+
         # Record the question and answer
         self.questions_asked.append({
             "question": question,
             "normalized_question": normalized_question,
             "key_terms": list(key_terms),
             "answer": answer,
-            "points_added": points_added if self.mode == "Challenge" else 0
+            "points_added": points_added if self.mode in ("Wiz", "Beat") else 0
         })
-            
+
         return True, answer, points_added
+
 
     def make_guess(self, guess: str) -> Tuple[bool, str, int]:
         """Make a final guess for the word."""
         if self.game_over:
             return False, "Game is already over!", 0
-            
-        if not guess.strip():
+        
+        # Remove only leading and trailing spaces from the guess for validation
+        guess = guess.strip()
+        
+        if not guess:
             return False, "Guess cannot be empty!", 0
         
         # Use the actual selected word's length for validation
-        expected_length = len(self.selected_word) if self.selected_word else self.word_length
+        expected_length = len(self.selected_word) if self.selected_word else 0
         if len(guess) != expected_length:
             return False, f"Guess must be {expected_length} letters long!", 0
         
@@ -224,10 +174,10 @@ class GameLogic:
         is_correct = self.word_selector.verify_guess(self.selected_word, guess)
         
         points_added = 0
-        if self.mode == "Challenge":
+        if self.mode in ("Wiz", "Beat"):
             if is_correct:
                 # Calculate base points with difficulty multiplier
-                base_points = (self.word_length * self.current_settings["base_points_multiplier"])
+                base_points = (len(self.selected_word) * self.current_settings["base_points_multiplier"])
                 
                 # Add time bonus for Hard mode
                 time_bonus = 0
@@ -247,9 +197,14 @@ class GameLogic:
             self.score += points_added
             self.total_points += points_added
         
+        # Add debug print for wrong/correct guess
+        print(f"[DEBUG] make_guess: is_correct={is_correct}, points_added={points_added}, guess_penalty={self.current_settings['guess_penalty']}")
+        
         self.game_over = is_correct
         if is_correct:
             self.end_time = time.time()
+            # Mark the word as played (update recent list and last word)
+            self.word_selector.mark_word_played(self.selected_word, self.nickname if self.nickname else "global", self.subject)
             self.stats_manager.record_game(self.get_game_summary())
         
         # Update message to show points change
@@ -260,7 +215,7 @@ class GameLogic:
         else:
             point_text = f" (-{abs(points_added)} points)" if points_added < 0 else ""
             message = f"Wrong! Try again. Current score: {self.score}{point_text}"
-            
+        
         return is_correct, message, points_added
 
     def get_hint(self) -> Tuple[str, int]:
@@ -298,12 +253,18 @@ class GameLogic:
             logger.info(f"[HINT REQUEST] Generated new hint: {hint}")
         
         points_deducted = 0
-        if self.mode == "Challenge":
+        if self.mode == "Beat":
+            # First hint is free, 2nd and 3rd cost points
+            if len(self.hints_given) >= 1:
+                points_deducted = self.current_settings["hint_penalty"]
+                self.score += points_deducted
+                self.total_points += points_deducted
+                logger.info(f"[HINT REQUEST] Applied point deduction: {points_deducted}")
+        elif self.mode == "Wiz":
             points_deducted = self.current_settings["hint_penalty"]
             self.score += points_deducted
             self.total_points += points_deducted
             logger.info(f"[HINT REQUEST] Applied point deduction: {points_deducted}")
-        
         # Record the hint
         self.hints_given.append(hint)
         logger.info(f"[HINT REQUEST] Total hints given: {len(self.hints_given)}/{max_hints}")
@@ -315,14 +276,18 @@ class GameLogic:
         # If end_time is not set but we need a summary, use current time
         current_time = time.time()
         end_time = self.end_time if self.end_time is not None else current_time
-        duration = round(end_time - self.start_time)
-        
+        if self.mode == "Beat":
+            beat_mode_time = int(os.getenv("BEAT_MODE_TIME", 300))
+            duration = beat_mode_time  # Use env var for Beat mode round time
+        else:
+            duration = round(end_time - self.start_time)
+        actual_length = len(self.selected_word) if self.selected_word else 0
         return {
             "word": self.selected_word,
             "selected_word": self.selected_word,  # Add selected_word field for compatibility
             "subject": self.subject,
             "mode": self.mode,
-            "word_length": self.word_length,
+            "word_length": actual_length,
             "score": self.score,
             "total_points": self.total_points,
             "questions_asked": self.questions_asked,
@@ -347,12 +312,23 @@ class GameLogic:
         Apply penalty for showing the word.
         Returns: points_deducted
         """
-        if self.mode == "Challenge":
-            points_deducted = -50  # Deduct 50 points for showing word in Challenge mode
-            self.score -= 50  # Subtract from score
-            self.total_points -= 50  # Subtract from total points
-            return points_deducted
-        return 0
+        penalty = 0
+        if self.mode in ("Wiz", "Fun", "Beat"):
+            if self.selected_word:
+                word_len = len(self.selected_word)
+                penalty = -20 * word_len
+            else:
+                penalty = -50  # fallback if word is missing
+            if not getattr(self, 'show_word_penalty_applied', False):
+                self.score += penalty  # penalty is negative
+                self.total_points += penalty
+                self.show_word_penalty_applied = True
+                # Mark the word as played (add to recent list)
+                username = self.nickname if self.nickname else "global"
+                self.word_selector.mark_word_played(self.selected_word, username, self.subject)
+            else:
+                penalty = 0  # No penalty if already applied
+        return penalty
 
     def is_game_over(self) -> bool:
         """Check if the game is over."""
