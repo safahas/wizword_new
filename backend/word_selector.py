@@ -20,7 +20,7 @@ import re
 import base64
 import traceback
 
-# Configure logging
+# Updated 07/25 Configure logging
 log_level = os.getenv('LOG_LEVEL', 'INFO').upper()
 logging.basicConfig(level=getattr(logging, log_level, logging.INFO))
 logger = logging.getLogger(__name__)
