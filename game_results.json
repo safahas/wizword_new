@@ -93,7 +93,7 @@
       "nickname": "safaa",
       "difficulty": "Medium",
       "words_solved": 2,
-      "timestamp": "2025-06-26T18:38:51.516964"
+      "timestamp": "2025-05-26T18:38:51.516964"
     },
     {
       "word": "library",
@@ -112,7 +112,7 @@
       "nickname": "safaa",
       "difficulty": "Medium",
       "words_solved": 4,
-      "timestamp": "2025-07-26T19:12:57.207986"
+      "timestamp": "2025-06-26T19:12:57.207986"
     },
     {
       "word": "tree",
@@ -132,6 +132,25 @@
       "difficulty": "Medium",
       "words_solved": 4,
       "timestamp": "2025-07-26T19:24:39.374826"
+    },
+    {
+      "word": "nose",
+      "selected_word": "nose",
+      "subject": "4th_grade",
+      "mode": "Beat",
+      "word_length": 4,
+      "score": 420,
+      "total_points": 0,
+      "guesses_made": 0,
+      "start_time": 1753558934.0120344,
+      "end_time": 1753558945.6825397,
+      "duration": 60,
+      "time_taken": 60,
+      "game_over": false,
+      "nickname": "safaa",
+      "difficulty": "Medium",
+      "words_solved": 4,
+      "timestamp": "2025-07-26T19:42:25.789580"
     }
   ],
   "safahot": [

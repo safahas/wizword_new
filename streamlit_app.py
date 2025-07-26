@@ -1989,9 +1989,7 @@ def display_game_over(game_summary):
         if last_word:
             st.markdown(f"""
                 <div style='text-align:center; margin:1.5em 0 0.5em 0;'>
-                    <span style="display:inline-block;font-size:2.4em;font-family:'Baloo 2','Poppins','Arial Black',sans-serif;font-weight:900;letter-spacing:0.18em;background:linear-gradient(90deg,#FFD93D 0%,#FF6B6B 50%,#4ECDC4 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-shadow:2px 2px 8px rgba(0,0,0,0.13);padding:0.18em 0.7em;border-radius:0.4em;box-shadow:0 2px 8px rgba(0,0,0,0.10);">
-                        {last_word.upper()}
-                    </span>
+                    <span style="display:inline-block;font-size:2.4em;font-family:'Baloo 2','Poppins','Arial Black',sans-serif;font-weight:900;letter-spacing:0.18em;background:linear-gradient(90deg,#FFD93D 0%,#FF6B6B 50%,#4ECDC4 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-shadow:2px 2px 8px rgba(0,0,0,0.13);padding:0.18em 0.7em;border-radius:0.4em;box-shadow:0 2px 8px rgba(0,0,0,0.10);\">{last_word.upper()}</span>
                 </div>
             """, unsafe_allow_html=True)
     
@@ -2048,13 +2046,24 @@ def display_game_over(game_summary):
                 last_month = pd.Timestamp.now().to_period('M')
                 months = [(last_month - i).strftime('%Y-%m') for i in range(11, -1, -1)]
                 trend = df.groupby('year_month')['score'].mean().reindex(months, fill_value=np.nan)
+                # --- Average time per word per month ---
+                # For Beat: time_taken/words_solved, else time_taken
+                df['words'] = [g.get('words_solved', 1) if g.get('mode') == 'Beat' else 1 for g in user_games if g.get('timestamp')]
+                df['time_taken'] = [g.get('time_taken', g.get('duration', None)) for g in user_games if g.get('timestamp')]
+                df['avg_time_per_word'] = [t/w if t is not None and w > 0 else np.nan for t, w in zip(df['time_taken'], df['words'])]
+                avg_time_trend = df.groupby('year_month')['avg_time_per_word'].mean().reindex(months, fill_value=np.nan)
                 fig, ax = plt.subplots(figsize=(6, 3))
-                ax.plot(months, trend.values, marker='o', linewidth=2, markersize=6)
-                ax.set_title('Score Trend (Last 12 Months)')
+                color1 = 'tab:blue'
+                color2 = 'tab:orange'
+                ax.plot(months, trend.values, marker='o', linewidth=2, markersize=6, color=color1, label='Avg Score')
+                ax.plot(months, avg_time_trend.values, marker='s', linewidth=2, markersize=6, color=color2, label='Avg Time/Word (s)')
                 ax.set_xlabel('Year/Month')
-                ax.set_ylabel('Average Score')
+                ax.set_ylabel('Value')
                 ax.set_xticks(months)
                 ax.set_xticklabels(months, rotation=45, ha='right', fontsize=8)
+                ax.legend(loc='upper left')
+                ax.set_title('Score & Avg Time/Word Trend (Last 12 Months)')
+                fig.tight_layout()
                 st.pyplot(fig)
             # --- Average Time per Word vs. Cumulative Words/Games ---
             # Prepare data
