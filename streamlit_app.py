@@ -841,31 +841,41 @@ def display_login():
     # --- LOGIN FORM ---
     if st.session_state['auth_mode'] == 'login':
         st.markdown("## Login")
-        username = st.text_input("Username", key="login_username")
-        password = st.text_input("Password", type="password", key="login_password")
-        login_btn = st.button("Login", key="login_btn")
-        col1, col2 = st.columns(2)
-        with col1:
-            if st.button("Register", key="show_register_btn"):
-                st.session_state['auth_mode'] = 'register'
-                st.rerun()
-        with col2:
-            if st.button("Forgot Password?", key="show_forgot_btn"):
-                st.session_state['auth_mode'] = 'forgot'
-                st.rerun()
-        if login_btn:
-            users = st.session_state['users']
-            username_lower = username.lower()
-            if username_lower in users and users[username_lower]['password'] == password:
-                # Set the full user profile, including default_category
-                st.session_state.user = dict(users[username_lower])
-                st.session_state.user['username'] = username_lower
-            #   print(f"[DEBUG][login] User profile in session state: {st.session_state.user}")
-                st.session_state.logged_in = True
-                st.success("Login successful!")
-                st.rerun()
-            else:
-                st.error("Invalid username or password.")
+        # Show error if present (ALWAYS before the form)
+        if st.session_state.get('login_error'):
+            st.error(st.session_state['login_error'])
+        with st.form("login_form", clear_on_submit=False):
+            username = st.text_input("Username", key="login_username")
+            password = st.text_input("Password", type="password", key="login_password")
+            login_btn = st.form_submit_button("Login", use_container_width=True)
+            col1, col2 = st.columns(2)
+            with col1:
+                if st.form_submit_button("Register"):
+                    st.session_state['auth_mode'] = 'register'
+                    st.session_state['login_error'] = ""
+                    st.rerun()
+            with col2:
+                if st.form_submit_button("Forgot Password?"):
+                    st.session_state['auth_mode'] = 'forgot'
+                    st.session_state['login_error'] = ""
+                    st.rerun()
+            if login_btn:
+                users = st.session_state['users']
+                username_lower = username.lower()
+                if username_lower in users and users[username_lower]['password'] == password:
+                    st.session_state.user = dict(users[username_lower])
+                    st.session_state.user['username'] = username_lower
+                    st.session_state.logged_in = True
+                    st.session_state['login_error'] = ""
+                    st.success("Login successful!")
+                    st.rerun()
+                else:
+                    st.session_state['login_error'] = "Invalid username or password."
+                    st.session_state['login_failed'] = True
+                    st.rerun()
+            # Reset the login_failed flag after displaying the error
+            if st.session_state.get('login_failed', False):
+                st.session_state['login_failed'] = False
 
     # --- REGISTER FORM ---
     elif st.session_state['auth_mode'] == 'register':
