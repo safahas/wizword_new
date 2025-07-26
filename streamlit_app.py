@@ -2056,8 +2056,31 @@ def display_game_over(game_summary):
                 ax.set_xticks(months)
                 ax.set_xticklabels(months, rotation=45, ha='right', fontsize=8)
                 st.pyplot(fig)
-            else:
-                st.info("No historical game data available for performance graphs.")
+            # --- Average Time per Word vs. Cumulative Words/Games ---
+            # Prepare data
+            avg_times = []
+            cum_words = []
+            total_words = 0
+            for g in user_games:
+                if g.get('mode') == 'Beat':
+                    words = g.get('words_solved', 0) or 1
+                else:
+                    words = 1
+                time_taken = g.get('time_taken', g.get('duration', None))
+                if time_taken is not None and words > 0:
+                    avg_time = time_taken / words
+                    total_words += words
+                    avg_times.append(avg_time)
+                    cum_words.append(total_words)
+            if avg_times and cum_words:
+                fig2, ax2 = plt.subplots(figsize=(6, 3))
+                ax2.plot(cum_words, avg_times, marker='o', linewidth=2, markersize=6)
+                ax2.set_title('Avg Time per Word vs. Cumulative Words/Games')
+                ax2.set_xlabel('Cumulative Words/Games')
+                ax2.set_ylabel('Avg Time per Word (sec)')
+                ax2.set_xticks(cum_words)
+                ax2.set_xticklabels([str(x) for x in cum_words], rotation=45, ha='right', fontsize=8)
+                st.pyplot(fig2)
         # (Removed: recent games/results list from this tab)
     
     with share_tab:

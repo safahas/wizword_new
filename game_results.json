@@ -113,6 +113,25 @@
       "difficulty": "Medium",
       "words_solved": 4,
       "timestamp": "2025-07-26T19:12:57.207986"
+    },
+    {
+      "word": "tree",
+      "selected_word": "tree",
+      "subject": "4th_grade",
+      "mode": "Beat",
+      "word_length": 4,
+      "score": 460,
+      "total_points": 0,
+      "guesses_made": 0,
+      "start_time": 1753557867.0916743,
+      "end_time": 1753557879.2580504,
+      "duration": 60,
+      "time_taken": 60,
+      "game_over": false,
+      "nickname": "safaa",
+      "difficulty": "Medium",
+      "words_solved": 4,
+      "timestamp": "2025-07-26T19:24:39.374826"
     }
   ],
   "safahot": [
