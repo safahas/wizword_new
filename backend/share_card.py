@@ -206,31 +206,49 @@ class ShareCardGenerator:
         return stats_img
 
     def _plot_score_trend(self, ax: plt.Axes, games: List[Dict]):
-        """Plot score trend over recent games."""
-        scores = [game["score"] for game in games]
-        games_x = range(1, len(scores) + 1)
-        
-        # Plot line and points
-        ax.plot(games_x, scores, 
-                color=self._hex_to_rgb(self.colors['graph']['primary']),
-                marker='o', linewidth=2, markersize=6)
-        
-        # Add trend line
-        z = np.polyfit(games_x, scores, 1)
-        p = np.poly1d(z)
-        ax.plot(games_x, p(games_x), 
-                color=self._hex_to_rgb(self.colors['graph']['secondary']),
-                linestyle='--', alpha=0.5)
-        
-        ax.set_title('Score Trend', 
-                    fontsize=self.font_sizes['graph_title'],
-                    color=self._hex_to_rgb(self.colors['text']))
-        ax.set_xlabel('Game Number', 
-                     fontsize=self.font_sizes['graph_label'],
-                     color=self._hex_to_rgb(self.colors['text']))
-        ax.set_ylabel('Score', 
-                     fontsize=self.font_sizes['graph_label'],
-                     color=self._hex_to_rgb(self.colors['text']))
+        """Plot score trend over the last 12 months (year/month x-axis)."""
+        import pandas as pd
+        from datetime import datetime
+        import numpy as np
+        # Prepare DataFrame
+        df = pd.DataFrame([
+            {"score": g.get("score", 0), "timestamp": g.get("timestamp", None)}
+            for g in games if g.get("timestamp")
+        ])
+        if not df.empty:
+            df['timestamp'] = pd.to_datetime(df['timestamp'])
+            df['year_month'] = df['timestamp'].dt.to_period('M').astype(str)
+            last_month = pd.Timestamp.now().to_period('M')
+            months = [(last_month - i).strftime('%Y-%m') for i in range(11, -1, -1)]
+            trend = df.groupby('year_month')['score'].mean().reindex(months, fill_value=np.nan)
+            ax.plot(months, trend.values,
+                    color=self._hex_to_rgb(self.colors['graph']['primary']),
+                    marker='o', linewidth=2, markersize=6)
+            # Add trend line if enough points
+            valid = ~np.isnan(trend.values)
+            if valid.sum() > 1:
+                x = np.arange(len(months))[valid]
+                y = trend.values[valid]
+                z = np.polyfit(x, y, 1)
+                p = np.poly1d(z)
+                ax.plot(np.array(months)[valid], p(x),
+                        color=self._hex_to_rgb(self.colors['graph']['secondary']),
+                        linestyle='--', alpha=0.5)
+            ax.set_title('Score Trend (Last 12 Months)',
+                        fontsize=self.font_sizes['graph_title'],
+                        color=self._hex_to_rgb(self.colors['text']))
+            ax.set_xlabel('Year/Month',
+                        fontsize=self.font_sizes['graph_label'],
+                        color=self._hex_to_rgb(self.colors['text']))
+            ax.set_ylabel('Average Score',
+                        fontsize=self.font_sizes['graph_label'],
+                        color=self._hex_to_rgb(self.colors['text']))
+            ax.set_xticks(months)
+            ax.set_xticklabels(months, rotation=45, ha='right', fontsize=8)
+        else:
+            ax.set_title('Score Trend (No Data)',
+                        fontsize=self.font_sizes['graph_title'],
+                        color=self._hex_to_rgb(self.colors['text']))
 
     def _plot_question_distribution(self, ax: plt.Axes, games: List[Dict]):
         """Plot distribution of questions asked per game."""

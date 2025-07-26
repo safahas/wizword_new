@@ -1,8 +1,8 @@
 from dotenv import load_dotenv
 import os
 
-# Always use the absolute path to your .env
-load_dotenv(dotenv_path="C:/Users/CICD Student/cursor ai agent/game_guess/.env")
+# Always use the absolute path to your .env in the current project directory
+load_dotenv(dotenv_path=os.path.join(os.getcwd(), ".env"))
 import random
 import string
 import streamlit as st
@@ -85,6 +85,7 @@ import streamlit.components.v1 as components
 
 
 BEAT_MODE_TIMEOUT_SECONDS = int(os.getenv("BEAT_MODE_TIME", 300))
+print(f"[DEBUG] BEAT_MODE_TIMEOUT_SECONDS = {BEAT_MODE_TIMEOUT_SECONDS}")
 RECENT_WORDS_LIMIT = 50
 
 
@@ -2023,44 +2024,37 @@ def display_game_over(game_summary):
         # Performance graphs
         st.markdown("### Your Performance")
         username = game_summary.get('nickname', '').lower()
-        users = load_all_users()
-        user_games = users.get(username, {}).get('games', [])
+        all_games = get_all_game_results()
+        user_games = [g for g in all_games if g.get('nickname', '').lower() == username]
         if user_games:
             import matplotlib.pyplot as plt
             import seaborn as sns
             import numpy as np
+            import pandas as pd
+            from datetime import datetime, timedelta
             plt.style.use('seaborn-v0_8')
             sns.set_palette("husl")
-            # Score Trend
-            scores = [g.get('score', 0) for g in user_games]
-            games_x = list(range(1, len(scores) + 1))
-            fig, ax = plt.subplots(figsize=(6, 3))
-            ax.plot(games_x, scores, marker='o', linewidth=2, markersize=6)
-            if len(scores) > 1:
-                z = np.polyfit(games_x, scores, 1)
-                p = np.poly1d(z)
-                ax.plot(games_x, p(games_x), linestyle='--', alpha=0.5)
-            ax.set_title('Score Trend')
-            ax.set_xlabel('Game Number')
-            ax.set_ylabel('Score')
-            st.pyplot(fig)
-            # Category Distribution
-            categories = [g.get('subject', 'unknown') for g in user_games]
-            fig2, ax2 = plt.subplots(figsize=(6, 3))
-            sns.countplot(x=categories, ax=ax2)
-            ax2.set_title('Games by Category')
-            ax2.set_xlabel('Category')
-            ax2.set_ylabel('Count')
-            st.pyplot(fig2)
-            # Time Distribution
-            times = [g.get('time_taken', 0) / 60 for g in user_games]
-            fig3, ax3 = plt.subplots(figsize=(6, 3))
-            sns.violinplot(y=times, ax=ax3)
-            ax3.set_title('Time per Game (minutes)')
-            ax3.set_ylabel('Minutes')
-            st.pyplot(fig3)
-        else:
-            st.info("No historical game data available for performance graphs.")
+            # Score Trend (by year/month, last 12 months)
+            df = pd.DataFrame([
+                {"score": g.get('score', 0), "timestamp": g.get('timestamp', None)}
+                for g in user_games if g.get('timestamp')
+            ])
+            if not df.empty:
+                df['timestamp'] = pd.to_datetime(df['timestamp'])
+                df['year_month'] = df['timestamp'].dt.to_period('M').astype(str)
+                last_month = pd.Timestamp.now().to_period('M')
+                months = [(last_month - i).strftime('%Y-%m') for i in range(11, -1, -1)]
+                trend = df.groupby('year_month')['score'].mean().reindex(months, fill_value=np.nan)
+                fig, ax = plt.subplots(figsize=(6, 3))
+                ax.plot(months, trend.values, marker='o', linewidth=2, markersize=6)
+                ax.set_title('Score Trend (Last 12 Months)')
+                ax.set_xlabel('Year/Month')
+                ax.set_ylabel('Average Score')
+                ax.set_xticks(months)
+                ax.set_xticklabels(months, rotation=45, ha='right', fontsize=8)
+                st.pyplot(fig)
+            else:
+                st.info("No historical game data available for performance graphs.")
         # (Removed: recent games/results list from this tab)
     
     with share_tab:
@@ -2169,25 +2163,35 @@ def display_game_over(game_summary):
     with stats_leader_tab:
         st.markdown("## 📈 My Historical Stats")
         username = game_summary.get('nickname', '').lower()
-        user_stats = get_user_stats(username)
-        if user_stats:
+        all_games = get_all_game_results()
+        user_games = [g for g in all_games if g.get('nickname', '').lower() == username]
+        if user_games:
             col1, col2, col3 = st.columns(3)
+            total_games = len(user_games)
+            best_score = max((g.get('score', 0) for g in user_games), default=0)
+            avg_score = sum(g.get('score', 0) for g in user_games) / total_games if total_games else 0
+            total_time = sum(g.get('time_taken', 0) for g in user_games)
+            favorite_category = max(
+                set(g.get('subject') for g in user_games),
+                key=lambda cat: sum(1 for g in user_games if g.get('subject') == cat),
+                default=None
+            )
             with col1:
-                st.metric("Total Games", user_stats["total_games"])
-                st.metric("Best Score", user_stats["best_score"])
+                st.metric("Total Games", total_games)
+                st.metric("Best Score", best_score)
             with col2:
-                st.metric("Avg Score", round(user_stats["avg_score"], 1))
-                st.metric("Total Time", format_duration(user_stats["total_time"]))
+                st.metric("Avg Score", round(avg_score, 1))
+                st.metric("Total Time", format_duration(total_time))
             with col3:
-                st.metric("Favorite Category", user_stats["favorite_category"] or "-")
+                st.metric("Favorite Category", favorite_category or "-")
             st.markdown("**Recent Games:**")
-            for g in user_stats["recent_games"]:
+            for g in user_games[-5:][::-1]:
                 date_str = g.get('end_time') or g.get('timestamp')
                 if date_str:
                     try:
-                        # If it's a float timestamp, convert to date
                         if isinstance(date_str, (float, int)):
-                            date_str = datetime.datetime.fromtimestamp(date_str).strftime('%Y-%m-%d')
+                            from datetime import datetime
+                            date_str = datetime.fromtimestamp(date_str).strftime('%Y-%m-%d')
                         else:
                             date_str = str(date_str)[:10]
                     except Exception:
@@ -2211,7 +2215,7 @@ def display_game_over(game_summary):
                         try:
                             if isinstance(date_str, (float, int)):
                                 import datetime
-                                date_str = datetime.datetime.fromtimestamp(date_str).strftime('%Y-%m-%d')
+                                date_str = datetime.fromtimestamp(date_str).strftime('%Y-%m-%d')
                             else:
                                 date_str = str(date_str)[:10]
                         except Exception:
@@ -2227,7 +2231,7 @@ def display_game_over(game_summary):
                             try:
                                 if isinstance(date_str, (float, int)):
                                     import datetime
-                                    date_str = datetime.datetime.fromtimestamp(date_str).strftime('%Y-%m-%d')
+                                    date_str = datetime.fromtimestamp(date_str).strftime('%Y-%m-%d')
                                 else:
                                     date_str = str(date_str)[:10]
                             except Exception:
@@ -2472,32 +2476,53 @@ def log_beat_word_count_event(event, value):
         f.write(f"{event}: beat_word_count = {value}\n")
 
 def save_game_to_user_profile(game_summary):
-    users = load_users()
-    username = game_summary.get('nickname')
-    if not username:
-        return
-    username = username.lower()
-    if username not in users:
-        return
-    if 'games' not in users[username]:
-        users[username]['games'] = []
-    # Save a copy to avoid mutating session state
-    users[username]['games'].append(dict(game_summary))
-    save_users(users)
+    import os, json
+    game_file = "game_results.json"
+    # Ensure timestamp exists
+    if 'timestamp' not in game_summary:
+        from datetime import datetime
+        game_summary['timestamp'] = datetime.utcnow().isoformat()
+    # Ensure nickname exists
+    if 'nickname' not in game_summary or not game_summary['nickname']:
+        import streamlit as st
+        game_summary['nickname'] = st.session_state.get('nickname', 'unknown').lower()
+    # Remove hint-related fields
+    for key in ['hints_given', 'max_hints', 'questions_asked', 'available_hints']:
+        if key in game_summary:
+            del game_summary[key]
+    # Load or initialize grouped results
+    if os.path.exists(game_file):
+        with open(game_file, "r", encoding="utf-8") as f:
+            all_games = json.load(f)
+    else:
+        all_games = {}
+    user = game_summary['nickname']
+    if user not in all_games:
+        all_games[user] = []
+    all_games[user].append(dict(game_summary))
+    with open(game_file, "w", encoding="utf-8") as f:
+        json.dump(all_games, f, indent=2)
 
 def load_all_users():
     with open("users.json", "r", encoding="utf-8") as f:
         return json.load(f)
 
 def get_all_game_results():
-    users = load_all_users()
-    all_games = []
-    for user, data in users.items():
-        for game in data.get("games", []):
+    # Load all game results from the new grouped file
+    import os, json
+    game_file = "game_results.json"
+    if not os.path.exists(game_file):
+        return []
+    with open(game_file, "r", encoding="utf-8") as f:
+        all_games = json.load(f)
+    # Flatten to a list of games with user info
+    results = []
+    for user, games in all_games.items():
+        for game in games:
             game = dict(game)
-            game["username"] = user
-            all_games.append(game)
-    return all_games
+            game['nickname'] = user
+            results.append(game)
+    return results
 
 def get_global_leaderboard(top_n=10, mode=None, category=None):
     games = get_all_game_results()
