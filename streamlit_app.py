@@ -85,7 +85,7 @@ import streamlit.components.v1 as components
 
 
 BEAT_MODE_TIMEOUT_SECONDS = int(os.getenv("BEAT_MODE_TIME", 300))
-print(f"[DEBUG] BEAT_MODE_TIMEOUT_SECONDS = {BEAT_MODE_TIMEOUT_SECONDS}")
+# print(f"[DEBUG] BEAT_MODE_TIMEOUT_SECONDS = {BEAT_MODE_TIMEOUT_SECONDS}")
 RECENT_WORDS_LIMIT = 50
 
 
@@ -974,6 +974,7 @@ def main():
         st.session_state.game_summary = None
         st.session_state.beat_word_count = 0
         st.session_state.beat_time_left = 0
+        st.session_state['game_saved'] = False
     # Always go directly to the game page
     display_game()
 
@@ -1896,8 +1897,10 @@ def display_game_over(game_summary):
     # --- FIX: Always inject correct words_solved for Beat mode ---
     if mode == "Beat":
         game_summary["words_solved"] = st.session_state.get("beat_word_count", 0)
-    # --- NEW: Save game result to user profile ---
-    save_game_to_user_profile(game_summary)
+    # --- NEW: Save game result to user profile only once ---
+    if not st.session_state.get('game_saved', False):
+        save_game_to_user_profile(game_summary)
+        st.session_state['game_saved'] = True
     # Add WizWord banner at the top
     stats_html = """
     <div class='wizword-banner'>
