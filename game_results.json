@@ -114,5 +114,64 @@
       "words_solved": 2,
       "timestamp": "2025-07-26T18:38:51.516964"
     }
+  ],
+  "safahot": [
+    {
+      "word": "resilience",
+      "selected_word": "resilience",
+      "subject": "general",
+      "mode": "Beat",
+      "word_length": 10,
+      "score": 550,
+      "total_points": 0,
+      "guesses_made": 0,
+      "start_time": 1753555985.3823116,
+      "end_time": 1753555986.8025985,
+      "duration": 60,
+      "time_taken": 60,
+      "game_over": false,
+      "nickname": "safahot",
+      "difficulty": "Medium",
+      "words_solved": 4,
+      "timestamp": "2025-07-26T18:53:06.918030"
+    },
+    {
+      "word": "resilience",
+      "selected_word": "resilience",
+      "subject": "general",
+      "mode": "Beat",
+      "word_length": 10,
+      "score": 550,
+      "total_points": 0,
+      "guesses_made": 0,
+      "start_time": 1753555985.3823116,
+      "end_time": 1753555986.8025985,
+      "duration": 60,
+      "time_taken": 60,
+      "game_over": false,
+      "nickname": "safahot",
+      "difficulty": "Medium",
+      "words_solved": 4,
+      "timestamp": "2025-07-26T18:53:06.918030"
+    },
+    {
+      "word": "fun",
+      "selected_word": "fun",
+      "subject": "general",
+      "mode": "Beat",
+      "word_length": 3,
+      "score": 280,
+      "total_points": 0,
+      "guesses_made": 0,
+      "start_time": 1753556324.7367146,
+      "end_time": 1753556351.9688025,
+      "duration": 60,
+      "time_taken": 60,
+      "game_over": false,
+      "nickname": "safahot",
+      "difficulty": "Medium",
+      "words_solved": 2,
+      "timestamp": "2025-07-26T18:59:12.059846"
+    }
   ]
 }

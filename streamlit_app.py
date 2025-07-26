@@ -927,7 +927,7 @@ def display_login():
         code_entered = st.text_input("Enter the reset code sent to your email", key="reset_code_input")
         new_password = st.text_input("Enter your new password", type="password", key="new_password_input")
         # Debug print
-        st.write(f"DEBUG: Expected code: {st.session_state.get('reset_code')}, Entered: {code_entered}")
+        # st.write(f"DEBUG: Expected code: {st.session_state.get('reset_code')}, Entered: {code_entered}")
         if st.button("Set New Password", key="set_new_password_btn"):
             user = st.session_state.get('reset_user')
             if code_entered == st.session_state.get('reset_code'):
@@ -2201,46 +2201,43 @@ def display_game_over(game_summary):
             st.info("No games played yet.")
         st.markdown("---")
         st.markdown("## 🏆 Global Leaderboard (Top 10)")
-        if 'game' in st.session_state and st.session_state.game:
-            mode = st.selectbox("Game Mode", ["All", "Fun", "Wiz", "Beat"], key="global_leaderboard_mode")
-            category = st.selectbox("Category", ["All"] + [cat.title() for cat in WordSelector.CATEGORIES], key="global_leaderboard_category")
-            leaderboard = st.session_state.game.get_leaderboard(mode if mode != "All" else None, category if category != "All" else None)
-            if leaderboard:
-                # Banner with top 3 results
-                top3 = leaderboard[:3]
-                banner_html = "<div style='background:linear-gradient(90deg,#FFD93D,#FF6B6B,#4ECDC4);padding:1.2em 1em;border-radius:1.2em;margin-bottom:1em;box-shadow:0 2px 12px rgba(0,0,0,0.10);display:flex;justify-content:center;align-items:center;gap:2em;'>"
-                for i, entry in enumerate(top3, 1):
+        mode = st.selectbox("Game Mode", ["All", "Fun", "Wiz", "Beat"], key="global_leaderboard_mode")
+        category = st.selectbox("Category", ["All"] + [cat.title() for cat in WordSelector.CATEGORIES], key="global_leaderboard_category")
+        leaderboard = get_global_leaderboard(top_n=10, mode=mode if mode != "All" else None, category=category if category != "All" else None)
+        if leaderboard:
+            # Banner with top 3 results
+            top3 = leaderboard[:3]
+            banner_html = "<div style='background:linear-gradient(90deg,#FFD93D,#FF6B6B,#4ECDC4);padding:1.2em 1em;border-radius:1.2em;margin-bottom:1em;box-shadow:0 2px 12px rgba(0,0,0,0.10);display:flex;justify-content:center;align-items:center;gap:2em;'>"
+            for i, entry in enumerate(top3, 1):
+                date_str = entry.get('timestamp')
+                if date_str:
+                    try:
+                        if isinstance(date_str, (float, int)):
+                            from datetime import datetime
+                            date_str = datetime.fromtimestamp(date_str).strftime('%Y-%m-%d')
+                        else:
+                            date_str = str(date_str)[:10]
+                    except Exception:
+                        date_str = str(date_str)[:10]
+                banner_html += f"<span style='font-size:1.2em;font-weight:700;color:#222;'>🏅 {i}. {entry['nickname']} - {entry.get('score',0)} pts | {entry.get('mode','?')} | {entry.get('subject','?').title()} | {date_str}</span>"
+            banner_html += "</div>"
+            st.markdown(banner_html, unsafe_allow_html=True)
+            # Use Streamlit expander for the full leaderboard
+            with st.expander("Show Full Leaderboard"):
+                for i, entry in enumerate(leaderboard, 1):
                     date_str = entry.get('timestamp')
                     if date_str:
                         try:
                             if isinstance(date_str, (float, int)):
-                                import datetime
+                                from datetime import datetime
                                 date_str = datetime.fromtimestamp(date_str).strftime('%Y-%m-%d')
                             else:
                                 date_str = str(date_str)[:10]
                         except Exception:
                             date_str = str(date_str)[:10]
-                    banner_html += f"<span style='font-size:1.2em;font-weight:700;color:#222;'>🏅 {i}. {entry['nickname']} - {entry.get('score',0)} pts | {entry.get('mode','?')} | {entry.get('subject','?').title()} | {date_str}</span>"
-                banner_html += "</div>"
-                st.markdown(banner_html, unsafe_allow_html=True)
-                # Use Streamlit expander for the full leaderboard
-                with st.expander("Show Full Leaderboard"):
-                    for i, entry in enumerate(leaderboard, 1):
-                        date_str = entry.get('timestamp')
-                        if date_str:
-                            try:
-                                if isinstance(date_str, (float, int)):
-                                    import datetime
-                                    date_str = datetime.fromtimestamp(date_str).strftime('%Y-%m-%d')
-                                else:
-                                    date_str = str(date_str)[:10]
-                            except Exception:
-                                date_str = str(date_str)[:10]
-                        st.markdown(f"{i}. **{entry['nickname']}** - {entry.get('score',0)} pts | {entry.get('mode','?')} | {entry.get('subject','?').title()} | {date_str}")
-            else:
-                st.info("No leaderboard data yet.")
+                    st.markdown(f"{i}. {entry['nickname']} - {entry.get('score',0)} pts | {entry.get('mode','?')} | {entry.get('subject','?').title()} | {date_str}")
         else:
-            st.info("No leaderboard data yet.")
+            st.info("No leaderboard data available.")
 
     # After all tabs (summary_tab, stats_tab, share_tab, stats_leader_tab), restore the play again and restart buttons
     col1, col2 = st.columns(2)
