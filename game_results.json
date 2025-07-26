@@ -94,6 +94,25 @@
       "difficulty": "Medium",
       "words_solved": 2,
       "timestamp": "2025-07-26T18:34:53.303051"
+    },
+    {
+      "word": "picture",
+      "selected_word": "picture",
+      "subject": "4th_grade",
+      "mode": "Beat",
+      "word_length": 7,
+      "score": 280,
+      "total_points": 0,
+      "guesses_made": 0,
+      "start_time": 1753555127.7332299,
+      "end_time": 1753555131.4175384,
+      "duration": 60,
+      "time_taken": 60,
+      "game_over": false,
+      "nickname": "safaa",
+      "difficulty": "Medium",
+      "words_solved": 2,
+      "timestamp": "2025-07-26T18:38:51.516964"
     }
   ]
 }
