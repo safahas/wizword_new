@@ -19,6 +19,7 @@ from .openrouter_monitor import (
 import re
 import base64
 import traceback
+from backend.monitoring import logger
 
 # Updated 07/25 Configure logging
 log_level = os.getenv('LOG_LEVEL', 'INFO').upper()
@@ -2559,8 +2560,6 @@ class WordSelector:
                     }
                 ]
                 response = self._make_api_request_with_retry(messages)
-                import logging
-                logger = logging.getLogger("backend.word_selector")
                 logger.debug(f"API response type: {type(response)}, content: {response}")
                 answer = response["choices"][0]["message"]["content"].strip()
                 return answer
@@ -2583,8 +2582,6 @@ class WordSelector:
                 }
             ]
             response = self._make_api_request_with_retry(messages)
-            import logging
-            logger = logging.getLogger("backend.word_selector")
             logger.debug(f"API response type: {type(response)}, content: {response}")
             answer = response["choices"][0]["message"]["content"].strip()
             return answer
@@ -2675,6 +2672,11 @@ class WordSelector:
                 response.raise_for_status()
                 return response.json()
             except Exception as e:
+                # If the first model fails, try openai/gpt-4o once before raising
+                if attempt == 0 and payload["model"] == "mistralai/mistral-small-24b-instruct-2501:free":
+                    logger.warning("Retrying with openai/gpt-4o after failure with mistralai/mistral-small-24b-instruct-2501:free")
+                    payload["model"] = "openai/gpt-4o"
+                    continue
                 wait = min(max_delay, base_delay * (2 ** attempt)) + random.uniform(0, 1)
                 logger.warning(f"API request failed (attempt {attempt+1}/{max_retries}): {e}. Retrying in {wait:.1f}s...")
                 time.sleep(wait)
