@@ -2092,6 +2092,12 @@ class WordSelector:
 
         self._api_hint_cache = {}
 
+        # Read OpenRouter model names from .env
+        self.primary_model = os.getenv("OPENROUTER_MODEL_PRIMARY", "mistralai/mistral-small-24b-instruct-2501:free")
+        self.fallback_model = os.getenv("OPENROUTER_MODEL_FALLBACK", "openai/gpt-4o")
+        # Available models in order of preference (for other uses)
+        self.models = [self.primary_model, self.fallback_model]
+
     def _validate_api_key(self) -> bool:
         """Validate the API key format."""
         if not self.api_key:
@@ -2647,40 +2653,54 @@ class WordSelector:
         """
         url = "https://openrouter.ai/api/v1/chat/completions"
         if isinstance(messages, dict) and "messages" in messages:
-            payload = {"model": self.models[0], "messages": messages["messages"]}
+            payload = {"model": self.primary_model, "messages": messages["messages"]}
         else:
-            payload = {"model": self.models[0], "messages": messages}
+            payload = {"model": self.primary_model, "messages": messages}
         headers = self.headers
         last_warning = None
+        # Try primary model up to max_retries times
         for attempt in range(max_retries):
             try:
                 import requests
                 response = requests.post(url, json=payload, headers=headers, timeout=15)
-                # Update quota info from response headers
                 from .openrouter_monitor import update_quota_from_response, get_quota_warning
                 update_quota_from_response(response.headers)
-                # Check for quota/rate warnings
                 warning = get_quota_warning()
                 if warning:
                     last_warning = warning
                     logger.warning(f"Quota warning: {warning['message']}")
                     if warning['level'] == 'error':
-                        # Critical quota: trigger fallback mode
                         self.use_fallback = True
                         logger.error("Critical quota reached. Switching to fallback mode.")
                         raise RuntimeError(warning['message'])
                 response.raise_for_status()
                 return response.json()
             except Exception as e:
-                # If the first model fails, try openai/gpt-4o once before raising
-                if attempt == 0 and payload["model"] == "mistralai/mistral-small-24b-instruct-2501:free":
-                    logger.warning("Retrying with openai/gpt-4o after failure with mistralai/mistral-small-24b-instruct-2501:free")
-                    payload["model"] = "openai/gpt-4o"
-                    continue
                 wait = min(max_delay, base_delay * (2 ** attempt)) + random.uniform(0, 1)
-                logger.warning(f"API request failed (attempt {attempt+1}/{max_retries}): {e}. Retrying in {wait:.1f}s...")
+                logger.warning(f"API request failed (primary, attempt {attempt+1}/{max_retries}): {e}. Retrying in {wait:.1f}s...")
                 time.sleep(wait)
-        # If we failed due to quota, raise with last warning
+        # If all primary model attempts fail, try fallback model up to max_retries times
+        payload["model"] = self.fallback_model
+        for attempt in range(max_retries):
+            try:
+                import requests
+                response = requests.post(url, json=payload, headers=headers, timeout=15)
+                from .openrouter_monitor import update_quota_from_response, get_quota_warning
+                update_quota_from_response(response.headers)
+                warning = get_quota_warning()
+                if warning:
+                    last_warning = warning
+                    logger.warning(f"Quota warning: {warning['message']}")
+                    if warning['level'] == 'error':
+                        self.use_fallback = True
+                        logger.error("Critical quota reached. Switching to fallback mode.")
+                        raise RuntimeError(warning['message'])
+                response.raise_for_status()
+                return response.json()
+            except Exception as e:
+                wait = min(max_delay, base_delay * (2 ** attempt)) + random.uniform(0, 1)
+                logger.warning(f"API request failed (fallback, attempt {attempt+1}/{max_retries}): {e}. Retrying in {wait:.1f}s...")
+                time.sleep(wait)
         if last_warning:
             raise RuntimeError(last_warning['message'])
         raise RuntimeError("API request failed after multiple retries")
