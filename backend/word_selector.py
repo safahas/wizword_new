@@ -21,11 +21,6 @@ import base64
 import traceback
 from backend.monitoring import logger
 
-# Updated 07/25 Configure logging
-log_level = os.getenv('LOG_LEVEL', 'INFO').upper()
-logging.basicConfig(level=getattr(logging, log_level, logging.INFO))
-logger = logging.getLogger(__name__)
-
 # Load environment variables
 env_path = Path(__file__).parent.parent / '.env'
 logger.info(f"Looking for .env file at: {env_path.absolute()}")
