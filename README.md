@@ -92,6 +92,39 @@ streamlit run streamlit_app.py
      - Correct guesses earn points based on word length and questions asked
      - Try to minimize questions to maximize your score!
 
+## Game Statistics & Performance Graphs
+
+After each game, WizWord provides detailed performance statistics and visualizations:
+
+### 1. Score & Time Trend Graph
+- **Graph Title:** Avg Score/Word & Avg Time/Word Trend (Last 12 Months)
+- **X-Axis:**
+  - Nonlinear: First 11 months are compressed (one point per month, averaged), last month is expanded (each game in the last month is shown as an individual point, labeled by date).
+- **Left Y-Axis:** Average Score per Word (total score divided by number of words for each game)
+- **Right Y-Axis:** Average Time per Word (seconds)
+  - For Beat mode: time for the game divided by number of words solved
+  - For other modes: time for the game
+  - Scale: 0–300 seconds
+- **Legend:** Both lines are shown with different colors and a shared legend.
+- **Details:**
+  - The graph visually emphasizes recent performance by expanding the last month’s results.
+  - Each game in the last month is labeled with its actual date (YYYY-MM-DD).
+
+### 2. Avg Time per Word vs. Cumulative Time
+- **X-Axis:** Cumulative time (seconds) across all games/words played
+- **Y-Axis:** Average time per word (seconds)
+- **Purpose:** Shows how your speed per word changes as you play more games.
+
+### 3. Beat Mode Aggregation
+- In Beat mode, statistics are aggregated for the entire session:
+  - **Total Points:** Sum of all points earned across all words in the session
+  - **Guesses Made:** Total number of guesses across all words in the session
+  - **Words Played:** List of all words solved in the session
+  - **Session Duration:** Total time spent in the session
+
+### 4. Leaderboard & Historical Stats
+- The leaderboard and your historical stats are based on these aggregated and per-game statistics.
+
 ## Cloud Deployment
 
 To enable cloud storage with AWS:
