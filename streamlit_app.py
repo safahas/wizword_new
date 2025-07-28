@@ -1,6 +1,6 @@
 from dotenv import load_dotenv
 import os
-
+# Updated 07/28
 # Always use the absolute path to your .env in the current project directory
 load_dotenv(dotenv_path=os.path.join(os.getcwd(), ".env"))
 import random
