@@ -17,7 +17,7 @@
       "nickname": "safaa",
       "difficulty": "Medium",
       "words_solved": 2,
-      "timestamp": "2025-01-26T03:51:14.295035"
+      "timestamp": "2025-01-02T03:51:14.295035"
     },
     {
       "word": "spaceships",
@@ -36,7 +36,7 @@
       "nickname": "safaa",
       "difficulty": "Medium",
       "words_solved": 1,
-      "timestamp": "2025-02-26T03:59:12.100884"
+      "timestamp": "2025-02-08T03:59:12.100884"
     },
     {
       "word": "garden",
@@ -131,7 +131,7 @@
       "nickname": "safaa",
       "difficulty": "Medium",
       "words_solved": 4,
-      "timestamp": "2025-07-26T19:24:39.374826"
+      "timestamp": "2025-07-02T19:24:39.374826"
     },
     {
       "word": "nose",
@@ -150,7 +150,7 @@
       "nickname": "safaa",
       "difficulty": "Medium",
       "words_solved": 4,
-      "timestamp": "2025-07-26T19:42:25.789580"
+      "timestamp": "2025-07-10T19:42:25.789580"
     },
     {
       "word": "opposite",
@@ -169,7 +169,7 @@
       "nickname": "safaa",
       "difficulty": "Medium",
       "words_solved": 3,
-      "timestamp": "2025-07-26T20:17:03.545042"
+      "timestamp": "2025-07-12T20:17:03.545042"
     },
     {
       "word": "orange",
@@ -188,7 +188,7 @@
       "nickname": "safaa",
       "difficulty": "Medium",
       "words_solved": 4,
-      "timestamp": "2025-07-26T22:21:46.162375"
+      "timestamp": "2025-07-16T22:21:46.162375"
     },
     {
       "word": "jump",
@@ -207,7 +207,7 @@
       "nickname": "safaa",
       "difficulty": "Medium",
       "words_solved": 1,
-      "timestamp": "2025-07-28T17:42:46.444121"
+      "timestamp": "2025-07-22T17:42:46.444121"
     },
     {
       "word": "snowblower",
@@ -226,7 +226,83 @@
       "nickname": "safaa",
       "difficulty": "Medium",
       "words_solved": 4,
-      "timestamp": "2025-07-28T17:46:44.154367"
+      "timestamp": "2025-07-25T17:46:44.154367"
+    },
+    {
+      "word": "summer",
+      "selected_word": "summer",
+      "subject": "4th_grade",
+      "mode": "Beat",
+      "word_length": 6,
+      "score": 720,
+      "total_points": 0,
+      "guesses_made": 0,
+      "start_time": 1753725831.2305882,
+      "end_time": 1753725832.6312957,
+      "duration": 60,
+      "time_taken": 60,
+      "game_over": false,
+      "nickname": "safaa",
+      "difficulty": "Medium",
+      "words_solved": 5,
+      "timestamp": "2025-07-26T18:03:52.727595"
+    },
+    {
+      "word": "motorcycle",
+      "selected_word": "motorcycle",
+      "subject": "4th_grade",
+      "mode": "Beat",
+      "word_length": 10,
+      "score": 60,
+      "total_points": 0,
+      "guesses_made": 0,
+      "start_time": 1753726115.4489026,
+      "end_time": 1753726162.6383295,
+      "duration": 60,
+      "time_taken": 60,
+      "game_over": false,
+      "nickname": "safaa",
+      "difficulty": "Medium",
+      "words_solved": 1,
+      "timestamp": "2025-07-27T18:09:22.819507"
+    },
+    {
+      "word": "earthquake",
+      "selected_word": "earthquake",
+      "subject": "4th_grade",
+      "mode": "Beat",
+      "word_length": 10,
+      "score": 60,
+      "total_points": 0,
+      "guesses_made": 0,
+      "start_time": 1753726429.2357905,
+      "end_time": 1753726474.7464478,
+      "duration": 60,
+      "time_taken": 60,
+      "game_over": false,
+      "nickname": "safaa",
+      "difficulty": "Medium",
+      "words_solved": 1,
+      "timestamp": "2025-07-28T18:14:34.831026"
+    },
+    {
+      "word": "drink",
+      "selected_word": "drink",
+      "subject": "4th_grade",
+      "mode": "Beat",
+      "word_length": 5,
+      "score": 490,
+      "total_points": -10,
+      "guesses_made": 0,
+      "start_time": 1753727214.1239448,
+      "end_time": 1753727225.8733277,
+      "duration": 60,
+      "time_taken": 60,
+      "game_over": false,
+      "nickname": "safaa",
+      "difficulty": "Medium",
+      "words_solved": 5,
+      "timestamp": "2025-07-28T18:27:05.982701"
     }
   ],
   "safahot": [

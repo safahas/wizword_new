@@ -2070,13 +2070,46 @@ def display_game_over(game_summary):
                 fig, ax = plt.subplots(figsize=(6, 3))
                 color1 = 'tab:blue'
                 color2 = 'tab:orange'
-                ax.plot(months, trend.values, marker='o', linewidth=2, markersize=6, color=color1, label='Avg Score/Word')
-                ax.plot(months, avg_time_trend.values, marker='s', linewidth=2, markersize=6, color=color2, label='Avg Time/Word (s)')
+                # Custom nonlinear x-axis: compress first 11 months, expand last month
+                # For first 11 months: average per month; for last month: show each game
+                last_month_str = months[-1]
+                # Get all games in the last month
+                last_month_games = df[df['year_month'] == last_month_str]
+                # For first 11 months, use monthly averages
+                x_positions = np.linspace(0, 0.5, 11).tolist()
+                y_score = trend.values[:-1].tolist()
+                y_time = avg_time_trend.values[:-1].tolist()
+                # For last month, each game is a separate point at x=1.0
+                n_last = len(last_month_games)
+                if n_last > 0:
+                    x_last = [1.0] * n_last
+                    y_score_last = last_month_games['score_per_word'].tolist()
+                    y_time_last = last_month_games['avg_time_per_word'].tolist()
+                    # Use actual dates for each game in the last month
+                    last_month_dates = last_month_games['timestamp'].dt.strftime('%Y-%m-%d').tolist()
+                    # Combine
+                    x_positions += x_last
+                    y_score += y_score_last
+                    y_time += y_time_last
+                    months_labels = months[:-1] + last_month_dates
+                else:
+                    months_labels = months
+                # Plot with custom x positions
+                ax.plot(x_positions, y_score, marker='o', linewidth=2, markersize=6, color=color1, label='Avg Score/Word')
                 ax.set_xlabel('Year/Month')
-                ax.set_ylabel('Avg Score/Word')
-                ax.set_xticks(months)
-                ax.set_xticklabels(months, rotation=45, ha='right', fontsize=8)
-                ax.legend(loc='upper left')
+                ax.set_ylabel('Avg Score/Word', color=color1)
+                ax.set_xticks(x_positions)
+                ax.set_xticklabels(months_labels, rotation=45, ha='right', fontsize=8)
+                ax.tick_params(axis='y', labelcolor=color1)
+                ax2 = ax.twinx()
+                ax2.plot(x_positions, y_time, marker='s', linewidth=2, markersize=6, color=color2, label='Avg Time/Word (s)')
+                ax2.set_ylabel('Avg Time per Word (sec)', color=color2)
+                ax2.set_ylim(0, 300)
+                ax2.tick_params(axis='y', labelcolor=color2)
+                # Add legends for both axes
+                lines, labels = ax.get_legend_handles_labels()
+                lines2, labels2 = ax2.get_legend_handles_labels()
+                ax2.legend(lines + lines2, labels + labels2, loc='upper left')
                 ax.set_title('Avg Score/Word & Avg Time/Word Trend (Last 12 Months)')
                 fig.tight_layout()
                 st.pyplot(fig)
