@@ -2047,7 +2047,11 @@ def display_game_over(game_summary):
             sns.set_palette("husl")
             # Score Trend (by year/month, last 12 months)
             df = pd.DataFrame([
-                {"score": g.get('score', 0), "timestamp": g.get('timestamp', None)}
+                {
+                    "score": g.get('score', 0),
+                    "words": g.get('words_solved', 1) if g.get('mode') == 'Beat' else 1,
+                    "timestamp": g.get('timestamp', None)
+                }
                 for g in user_games if g.get('timestamp')
             ])
             if not df.empty:
@@ -2055,24 +2059,25 @@ def display_game_over(game_summary):
                 df['year_month'] = df['timestamp'].dt.to_period('M').astype(str)
                 last_month = pd.Timestamp.now().to_period('M')
                 months = [(last_month - i).strftime('%Y-%m') for i in range(11, -1, -1)]
-                trend = df.groupby('year_month')['score'].mean().reindex(months, fill_value=np.nan)
+                # Calculate average score per word for each game
+                df['score_per_word'] = df['score'] / df['words']
+                trend = df.groupby('year_month')['score_per_word'].mean().reindex(months, fill_value=np.nan)
                 # --- Average time per word per month ---
                 # For Beat: time_taken/words_solved, else time_taken
-                df['words'] = [g.get('words_solved', 1) if g.get('mode') == 'Beat' else 1 for g in user_games if g.get('timestamp')]
                 df['time_taken'] = [g.get('time_taken', g.get('duration', None)) for g in user_games if g.get('timestamp')]
                 df['avg_time_per_word'] = [t/w if t is not None and w > 0 else np.nan for t, w in zip(df['time_taken'], df['words'])]
                 avg_time_trend = df.groupby('year_month')['avg_time_per_word'].mean().reindex(months, fill_value=np.nan)
                 fig, ax = plt.subplots(figsize=(6, 3))
                 color1 = 'tab:blue'
                 color2 = 'tab:orange'
-                ax.plot(months, trend.values, marker='o', linewidth=2, markersize=6, color=color1, label='Avg Score')
+                ax.plot(months, trend.values, marker='o', linewidth=2, markersize=6, color=color1, label='Avg Score/Word')
                 ax.plot(months, avg_time_trend.values, marker='s', linewidth=2, markersize=6, color=color2, label='Avg Time/Word (s)')
                 ax.set_xlabel('Year/Month')
-                ax.set_ylabel('Value')
+                ax.set_ylabel('Avg Score/Word')
                 ax.set_xticks(months)
                 ax.set_xticklabels(months, rotation=45, ha='right', fontsize=8)
                 ax.legend(loc='upper left')
-                ax.set_title('Score & Avg Time/Word Trend (Last 12 Months)')
+                ax.set_title('Avg Score/Word & Avg Time/Word Trend (Last 12 Months)')
                 fig.tight_layout()
                 st.pyplot(fig)
             # --- Average Time per Word vs. Cumulative Words/Games ---
@@ -2080,6 +2085,8 @@ def display_game_over(game_summary):
             avg_times = []
             cum_words = []
             total_words = 0
+            cum_times = []
+            total_time = 0
             for g in user_games:
                 if g.get('mode') == 'Beat':
                     words = g.get('words_solved', 0) or 1
@@ -2089,16 +2096,18 @@ def display_game_over(game_summary):
                 if time_taken is not None and words > 0:
                     avg_time = time_taken / words
                     total_words += words
+                    total_time += time_taken
                     avg_times.append(avg_time)
                     cum_words.append(total_words)
-            if avg_times and cum_words:
+                    cum_times.append(total_time)
+            if avg_times and cum_times:
                 fig2, ax2 = plt.subplots(figsize=(6, 3))
-                ax2.plot(cum_words, avg_times, marker='o', linewidth=2, markersize=6)
-                ax2.set_title('Avg Time per Word vs. Cumulative Words/Games')
-                ax2.set_xlabel('Cumulative Words/Games')
+                ax2.plot(cum_times, avg_times, marker='o', linewidth=2, markersize=6)
+                ax2.set_title('Avg Time per Word vs. Cumulative Time')
+                ax2.set_xlabel('Cumulative Time (sec)')
                 ax2.set_ylabel('Avg Time per Word (sec)')
-                ax2.set_xticks(cum_words)
-                ax2.set_xticklabels([str(x) for x in cum_words], rotation=45, ha='right', fontsize=8)
+                ax2.set_xticks(cum_times)
+                ax2.set_xticklabels([str(int(x)) for x in cum_times], rotation=45, ha='right', fontsize=8)
                 st.pyplot(fig2)
         # (Removed: recent games/results list from this tab)
     
