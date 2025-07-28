@@ -2076,13 +2076,16 @@ def display_game_over(game_summary):
                 # Get all games in the last month
                 last_month_games = df[df['year_month'] == last_month_str]
                 # For first 11 months, use monthly averages
-                x_positions = np.linspace(0, 0.5, 11).tolist()
+                x_positions = list(range(11))
                 y_score = trend.values[:-1].tolist()
                 y_time = avg_time_trend.values[:-1].tolist()
                 # For last month, each game is a separate point at x=1.0
                 n_last = len(last_month_games)
                 if n_last > 0:
-                    x_last = [1.0] * n_last
+                    if n_last > 1:
+                        x_last = np.linspace(11, 12, n_last).tolist()
+                    else:
+                        x_last = [11]
                     y_score_last = last_month_games['score_per_word'].tolist()
                     y_time_last = last_month_games['avg_time_per_word'].tolist()
                     # Use actual dates for each game in the last month
@@ -2095,6 +2098,7 @@ def display_game_over(game_summary):
                 else:
                     months_labels = months
                 # Plot with custom x positions
+                print('[DEBUG] x-axis labels for trend graph:', months_labels)
                 ax.plot(x_positions, y_score, marker='o', linewidth=2, markersize=6, color=color1, label='Avg Score/Word')
                 ax.set_xlabel('Year/Month')
                 ax.set_ylabel('Avg Score/Word', color=color1)
