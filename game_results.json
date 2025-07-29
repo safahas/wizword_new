@@ -360,6 +360,25 @@
       "difficulty": "Medium",
       "words_solved": 1,
       "timestamp": "2025-07-28T18:49:43.195478"
+    },
+    {
+      "word": "yesterday",
+      "selected_word": "yesterday",
+      "subject": "4th_grade",
+      "mode": "Beat",
+      "word_length": 9,
+      "score": 280,
+      "total_points": 0,
+      "guesses_made": 0,
+      "start_time": 1753828647.2792418,
+      "end_time": 1753828653.06204,
+      "duration": 60,
+      "time_taken": 60,
+      "game_over": false,
+      "nickname": "safaa",
+      "difficulty": "Medium",
+      "words_solved": 2,
+      "timestamp": "2025-07-29T22:37:33.145252"
     }
   ],
   "safahot": [
