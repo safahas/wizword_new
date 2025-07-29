@@ -1197,6 +1197,7 @@ def display_welcome():
 
 def display_game():
     import time
+    from streamlit_app import save_game_to_user_profile
     # Ensure beat_total_points is always initialized for Beat mode
     if 'beat_total_points' not in st.session_state:
         st.session_state['beat_total_points'] = 0
@@ -1696,6 +1697,7 @@ def display_game():
                 st.session_state['last_mode'] = st.session_state.game.mode
                 st.session_state['game_over'] = True
                 st.session_state['game_summary'] = game.get_game_summary()
+                save_game_to_user_profile(st.session_state['game_summary'])
                 st.session_state['clear_guess_field'] = True
                 st.rerun()
         else:
