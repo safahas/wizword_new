@@ -12,6 +12,9 @@ import json
 import os
 import uuid
 import datetime
+import logging
+logging.getLogger('matplotlib.font_manager').setLevel(logging.WARNING)
+logging.getLogger('matplotlib.category').setLevel(logging.WARNING)
 
 USERS_FILE = "users.json"
 
