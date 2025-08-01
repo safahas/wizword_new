@@ -1915,8 +1915,8 @@ def display_game_over(game_summary):
     # --- NEW: Save game result to user profile only once ---
     if not st.session_state.get('game_saved', False):
         save_game_to_user_profile(game_summary)
-        import logging
-        logging.info(f"[PROOF] Beat mode: game_results.json updated for user '{game_summary.get('nickname', '?')}' with game: {game_summary}")
+        # import logging
+        # logging.info(f"[PROOF] Beat mode: game_results.json updated for user '{game_summary.get('nickname', '?')}' with game: {game_summary}")
         st.session_state['game_saved'] = True
     # Add WizWord banner at the top
     stats_html = """
@@ -2542,8 +2542,17 @@ def save_game_to_user_profile(game_summary):
     all_games[user].append(dict(game_summary))
     with open(game_file, "w", encoding="utf-8") as f:
         json.dump(all_games, f, indent=2)
-        import logging
-        logging.info(f"[PROOF] game_results.json updated for user '{user}' with game: {game_summary}")
+        # import logging, os
+        # logging.info(f"[PROOF] game_results.json updated for user '{user}' with game: {game_summary}")
+        abs_path = os.path.abspath(game_file)
+        try:
+            mtime = os.path.getmtime(game_file)
+            import datetime
+            mtime_str = datetime.datetime.fromtimestamp(mtime).isoformat()
+        except Exception as e:
+            mtime_str = f"(could not get mtime: {e})"
+        logging.info(f"[DEBUG] game_results.json path: {abs_path}, last modified: {mtime_str}")
+        print(f"[DEBUG] game_results.json path: {abs_path}, last modified: {mtime_str}")
 
 def load_all_users():
     with open("users.json", "r", encoding="utf-8") as f:
