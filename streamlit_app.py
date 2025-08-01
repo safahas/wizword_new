@@ -1843,7 +1843,7 @@ def display_game():
     if game.mode == 'Beat':
         if st.button('Skip', key='skip_word_btn_main'):
             st.session_state['beat_total_points'] += game.total_points
-            st.session_state.beat_word_count += 1
+            # st.session_state.beat_word_count += 1  # <-- REMOVE THIS LINE
             new_word_length = 5
             new_subject = game.subject
             st.session_state.game = GameLogic(
