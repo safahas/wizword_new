@@ -5527,1458 +5527,901 @@
       ]
     },
     "brands": {
-      "ibm": [
-        "A well-known company, product, or service.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "bmw": [
-        "A well-known company, product, or service.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "kfc": [
-        "A well-known company, product, or service.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "ups": [
-        "Meaning: raise",
-        "Typical context: up the ante",
-        "A type of: increase",
-        "Also known as: up",
-        "A well-known company, product, or service.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "gap": [
-        "Meaning: a conspicuous disparity or difference as between two figures",
-        "Meaning: an open or empty space in or between things",
-        "Meaning: a narrow opening",
-        "Meaning: a pass between mountain peaks",
-        "Meaning: a difference (especially an unfortunate difference) between two opinions or two views or two situations",
-        "Meaning: an act of delaying or interrupting the continuity",
-        "Typical context: the spread between lending and borrowing costs",
-        "Typical context: there was a small opening between the trees",
-        "Typical context: he opened the window a crack",
-        "Typical context: it was presented without commercial breaks"
-      ],
-      "amd": [
-        "Meaning: macular degeneration that is age-related",
-        "A type of: macular degeneration",
-        "Also known as: age-related macular degeneration",
-        "A well-known company, product, or service.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "bic": [
-        "A well-known company, product, or service.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "cvs": [
-        "Meaning: a summary of your academic and work history",
-        "A type of: summary, sum-up",
-        "Also known as: curriculum vitae, CV, resume",
-        "A well-known company, product, or service.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "dhl": [
-        "A well-known company, product, or service.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "ebay": [
-        "A well-known company, product, or service.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "gmc": [
-        "A well-known company, product, or service.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "htc": [
-        "A well-known company, product, or service.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "lg": [
-        "A well-known company, product, or service.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "mac": [
-        "Meaning: a waterproof raincoat made of rubberized fabric",
-        "A type of: raincoat, waterproof",
-        "Examples: oilskin, slicker",
-        "Also known as: macintosh, mackintosh, mack",
-        "A well-known company, product, or service.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "nbc": [
-        "A well-known company, product, or service.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "pbs": [
-        "Meaning: a solution containing a phosphate buffer",
-        "Meaning: a soft heavy toxic malleable metallic element; bluish white when freshly cut but tarnishes readily to dull grey",
-        "Meaning: a unit of information equal to 1000 terabits or 10^15 bits",
-        "Meaning: a unit of information equal to 1000 terabytes or 10^15 bytes",
-        "Meaning: a unit of information equal to 1024 tebibytes or 2^50 bytes",
-        "Typical context: the children were playing with lead soldiers",
-        "A type of: buffer solution",
-        "A type of: metallic element, metal",
-        "A type of: computer memory unit",
-        "Examples: hard lead, antimonial lead"
-      ],
-      "rca": [
-        "A well-known company, product, or service.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "sap": [
-        "Meaning: a watery solution of sugars, salts, and minerals that circulates through the vascular system of a plant",
-        "Meaning: a person who lacks good judgment",
-        "Meaning: a piece of metal covered by leather with a flexible handle; used for hitting people",
-        "A type of: solution",
-        "A type of: simpleton, simple",
-        "A type of: bludgeon",
-        "Examples: manna",
-        "Examples: ass",
-        "Examples: clown, buffoon",
-        "Examples: fathead, goof, goofball, bozo, jackass, goose, cuckoo, twat, zany"
-      ],
-      "tnt": [
-        "Meaning: explosive consisting of a yellow crystalline compound that is a flammable toxic derivative of toluene",
-        "A type of: explosive compound",
-        "Also known as: trinitrotoluene",
-        "A well-known company, product, or service.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "wwe": [
-        "A well-known company, product, or service.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "nike": [
-        "Meaning: (Greek mythology) winged goddess of victory; identified with Roman Victoria",
-        "A well-known company, product, or service.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "ford": [
-        "Meaning: United States film maker (1896-1973)",
-        "Meaning: English writer and editor (1873-1939)",
-        "Meaning: 38th President of the United States; appointed vice president and succeeded Nixon when Nixon resigned (1913-)",
-        "Meaning: United States manufacturer of automobiles who pioneered mass production (1863-1947)",
-        "Meaning: the act of crossing a stream or river by wading or in a car or on a horse",
-        "A type of: body of water, water",
-        "A type of: crossing",
-        "Also known as: John Ford",
-        "Also known as: Henry Ford II",
-        "Also known as: Edsel Bryant Ford"
-      ],
-      "dell": [
-        "Meaning: a small wooded hollow",
-        "A type of: hollow, holler",
-        "Also known as: dingle",
-        "A well-known company, product, or service.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "sony": [
-        "A well-known company, product, or service.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "visa": [
-        "Meaning: an endorsement made in a passport that allows the bearer to enter the country issuing it",
-        "A type of: sanction, countenance, endorsement, indorsement, warrant, imprimatur",
-        "A well-known company, product, or service.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "acer": [
-        "A type of: dicot genus, magnoliopsid genus",
-        "Also known as: genus Acer",
-        "A well-known company, product, or service.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "asus": [
-        "A well-known company, product, or service.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "fila": [
-        "Meaning: a threadlike structure (as a chainlike series of cells)",
-        "A type of: structure, anatomical structure, complex body part, bodily structure, body structure",
-        "Examples: hair, pilus",
-        "Also known as: filament, filum",
-        "A well-known company, product, or service.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "gucci": [
-        "A well-known company, product, or service.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "honda": [
-        "A well-known company, product, or service.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "ikea": [
-        "A well-known company, product, or service.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "jeep": [
-        "Meaning: a car suitable for traveling over rough terrain",
-        "A type of: car, auto, automobile, machine, motorcar",
-        "Also known as: landrover",
-        "A well-known company, product, or service.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "lego": [
-        "Meaning: (trademark) a child's plastic construction set for making mechanical models",
-        "A type of: plaything, toy",
-        "Also known as: Lego set",
-        "A well-known company, product, or service.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "puma": [
-        "Meaning: large American feline resembling a lion",
-        "A type of: wildcat",
-        "Part of: Felis, genus Felis",
-        "Also known as: cougar, catamount, mountain lion",
-        "A well-known company, product, or service.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "rolex": [
-        "A well-known company, product, or service.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "uber": [
-        "A well-known company, product, or service.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "xbox": [
-        "A well-known company, product, or service.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "yahoo": [
-        "Meaning: a person who is not very intelligent or interested in culture",
-        "Meaning: one of a race of brutes resembling men but subject to the Houyhnhnms in a novel by Jonathan Swift",
-        "Meaning: a widely used search engine for the web that finds information, news, images, products, finance",
-        "A type of: rustic",
-        "Also known as: yokel, rube, hick",
-        "A well-known company, product, or service.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "zara": [
-        "A well-known company, product, or service.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "apple": [
-        "Meaning: fruit with red or yellow or green skin and sweet to tart crisp whitish flesh",
-        "Meaning: native Eurasian tree widely cultivated in many varieties for its firm rounded edible fruits",
-        "A type of: edible fruit",
-        "A type of: pome, false fruit",
-        "Part of: Malus, genus Malus",
-        "Also known as: orchard apple tree, Malus pumila",
-        "A well-known company, product, or service.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "adobe": [
-        "Meaning: sun-dried brick; used in hot dry climates",
-        "A type of: clay",
-        "A type of: brick",
-        "Also known as: adobe brick",
-        "A well-known company, product, or service.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "nokia": [
-        "A well-known company, product, or service.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "pepsi": [
-        "A type of: cola, dope",
-        "Also known as: Pepsi Cola",
-        "A well-known company, product, or service.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "xerox": [
-        "Meaning: a copy made by a xerographic printer",
-        "A type of: copy",
-        "A type of: duplicator, copier",
-        "Also known as: xerox copy",
-        "Also known as: xerographic copier, Xerox machine",
-        "A well-known company, product, or service.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "adidas": [
-        "A well-known company, product, or service.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "canon": [
-        "Meaning: a rule or especially body of rules or principles generally established as valid and fundamental in a field or art or philosophy",
-        "Meaning: a priest who is a member of a cathedral chapter",
-        "Meaning: a ravine formed by a river in an area with little rainfall",
-        "Meaning: a contrapuntal piece of music in which a melody in one part is imitated exactly in other parts",
-        "Meaning: a complete list of saints that have been recognized by the Roman Catholic Church",
-        "Meaning: a collection of books accepted as holy scripture especially the books of the Bible recognized by any Christian church as genuine and inspired",
-        "A type of: rule, prescript",
-        "A type of: priest",
-        "A type of: ravine",
-        "A type of: musical composition, opus, composition, piece, piece of music"
-      ],
-      "cisco": [
-        "Meaning: cold-water fish caught in Lake Superior and northward",
-        "Meaning: important food fish of cold deep lakes of North America",
-        "A type of: whitefish",
-        "Part of: Coregonus, genus Coregonus",
-        "Also known as: lake herring",
-        "Also known as: lake herring, Coregonus artedi",
-        "A well-known company, product, or service.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "fedex": [
-        "A well-known company, product, or service.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "google": [
-        "Meaning: a widely used search engine that uses text-matching techniques to find web pages that are important and relevant to a user's search",
-        "A well-known company, product, or service.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "intel": [
-        "A well-known company, product, or service.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "kodak": [
-        "A well-known company, product, or service.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "lexus": [
-        "A well-known company, product, or service.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "shell": [
-        "Meaning: ammunition consisting of a cylindrical metal casing containing an explosive charge and a projectile; fired from a large gun",
-        "Meaning: the material that forms the hard outer covering of many animals",
-        "Meaning: hard outer covering or case of certain organisms such as arthropods and turtles",
-        "Meaning: the hard usually fibrous outer layer of some fruits especially nuts",
-        "Meaning: the exterior covering of a bird's egg",
-        "Meaning: a rigid covering that envelops an object",
-        "Meaning: a very light narrow racing boat",
-        "Meaning: the housing or outer covering of something",
-        "Meaning: a metal sheathing of uniform thickness (such as the shield attached to an artillery piece to protect the gunners)",
-        "Meaning: the hard largely calcareous covering of a mollusc or a brachiopod"
-      ],
-      "tesla": [
-        "Meaning: a unit of magnetic flux density equal to one weber per square meter",
-        "A type of: flux density unit",
-        "Has parts such as: gauss",
-        "Also known as: Nikola Tesla",
-        "A well-known company, product, or service.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "toyota": [
-        "Meaning: an industrial city of Japan in southern Honshu",
-        "A well-known company, product, or service.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "vizio": [
-        "A well-known company, product, or service.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "zeiss": [
-        "A well-known company, product, or service.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "amazon": [
-        "Meaning: a large strong and aggressive woman",
-        "Meaning: (Greek mythology) one of a nation of women warriors of Scythia (who burned off the right breast in order to use a bow and arrow more effectively)",
-        "Meaning: a major South American river; arises in the Andes and flows eastward into the South Atlantic; the world's 2nd longest river (4000 miles)",
-        "Meaning: mainly green tropical American parrots",
-        "A type of: woman, adult female",
-        "A type of: mythical being",
-        "A type of: parrot",
-        "Also known as: virago",
-        "Also known as: Amazon River",
-        "A well-known company, product, or service."
-      ],
-      "oracle": [
-        "Meaning: an authoritative person who divines the future",
-        "Meaning: a prophecy (usually obscure or allegorical) revealed by a priest or priestess; believed to be infallible",
-        "Meaning: a shrine where an oracular god is consulted",
-        "A type of: diviner",
-        "A type of: prophecy, divination",
-        "A type of: shrine",
-        "Examples: augur, auspex",
-        "Examples: prophetess",
-        "Examples: sibyl",
-        "Also known as: prophet, prophesier, seer"
-      ],
-      "paypal": [
-        "A well-known company, product, or service.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "airbnb": [
-        "A well-known company, product, or service.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "burger": [
-        "Meaning: United States jurist appointed chief justice of the United States Supreme Court by Richard Nixon (1907-1995)",
-        "Meaning: a sandwich consisting of a fried cake of minced beef served on a bun, often with other ingredients",
-        "A type of: sandwich",
-        "Also known as: Warren Burger, Warren E. Burger, Warren Earl Burger",
-        "Also known as: hamburger, beefburger",
-        "A well-known company, product, or service.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "chanel": [
-        "A well-known company, product, or service.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "disney": [
-        "Also known as: Walt Disney, Walter Elias Disney",
-        "A well-known company, product, or service.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "hermes": [
-        "Meaning: (Greek mythology) messenger and herald of the gods; god of commerce and cunning and invention and theft; identified with Roman Mercury",
-        "A well-known company, product, or service.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "lenovo": [
-        "A well-known company, product, or service.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "nestle": [
-        "Meaning: a close and affectionate (and often prolonged) embrace",
-        "A type of: embrace, embracing, embracement",
-        "Also known as: cuddle, snuggle",
-        "A well-known company, product, or service.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "prada": [
-        "A well-known company, product, or service.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "subway": [
-        "Meaning: an electric railway operating below the surface of the ground (usually in a city)",
-        "Meaning: an underground tunnel or passage enabling pedestrians to cross a road or railway",
-        "A type of: railway, railroad, railroad line, railway line, railway system",
-        "A type of: tunnel",
-        "Also known as: metro, tube, underground",
-        "Also known as: underpass",
-        "A well-known company, product, or service.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "virgin": [
-        "Meaning: a person who has never had sex",
-        "Meaning: (astrology) a person who is born while the sun is in Virgo",
-        "Meaning: the sixth sign of the zodiac; the sun is in this sign from about August 23 to September 22",
-        "A type of: innocent, inexperienced person",
-        "A type of: person, individual, someone, somebody, mortal, soul",
-        "Also known as: Virgo",
-        "Also known as: Virgo the Virgin",
-        "A well-known company, product, or service.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "walmart": [
-        "A well-known company, product, or service.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "xiaomi": [
-        "A well-known company, product, or service.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "samsung": [
-        "A well-known company, product, or service.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "youtube": [
-        "A well-known company, product, or service.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "twitter": [
-        "Meaning: a series of chirps",
-        "A type of: sound",
-        "Also known as: chirrup",
-        "A well-known company, product, or service.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "spotify": [
-        "A well-known company, product, or service.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "alibaba": [
-        "A well-known company, product, or service.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "android": [
-        "Meaning: an automaton that resembles a human being",
-        "A type of: automaton, robot, golem",
-        "Also known as: humanoid, mechanical man",
-        "A well-known company, product, or service.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "boeing": [
-        "A well-known company, product, or service.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "colgate": [
-        "A well-known company, product, or service.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "comcast": [
-        "A well-known company, product, or service.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "ferrari": [
-        "A well-known company, product, or service.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "gillette": [
-        "Meaning: United States inventor and manufacturer who developed the safety razor (1855-1932)",
-        "Also known as: King Camp Gilette",
-        "A well-known company, product, or service.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "heineken": [
-        "A well-known company, product, or service.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "huawei": [
-        "A well-known company, product, or service.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "linkedin": [
-        "A well-known company, product, or service.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "logitech": [
-        "A well-known company, product, or service.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "netflix": [
-        "A well-known company, product, or service.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "nintendo": [
-        "A well-known company, product, or service.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "zalando": [
-        "A well-known company, product, or service.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "facebook": [
-        "A well-known company, product, or service.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "mercedes": [
-        "A well-known company, product, or service.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "microsoft": [
-        "A well-known company, product, or service.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "starbucks": [
-        "A well-known company, product, or service.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "whatsapp": [
-        "A well-known company, product, or service.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "alphabet": [
-        "Meaning: a character set that includes letters and is used to write a language",
-        "Meaning: the elementary stages of any subject (usually plural)",
-        "Typical context: he mastered only the rudiments of geometry",
-        "A type of: character set",
-        "A type of: script",
-        "A type of: fundamentals, basics, fundamental principle, basic principle, bedrock",
-        "Also known as: rudiment, first rudiment, first principle",
-        "A well-known company, product, or service.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "chrysler": [
-        "A well-known company, product, or service.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "fidelity": [
-        "Meaning: accuracy with which an electronic system reproduces the sound or image of its input signal",
-        "Meaning: the quality of being faithful",
-        "A type of: accuracy, truth",
-        "A type of: quality",
-        "Examples: constancy",
-        "Examples: dedication",
-        "Examples: loyalty, trueness",
-        "Also known as: faithfulness",
-        "Opposite of: unfaithfulness",
-        "A well-known company, product, or service."
-      ],
-      "infiniti": [
-        "A well-known company, product, or service.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "phillips": [
-        "A well-known company, product, or service.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "snapchat": [
-        "A well-known company, product, or service.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "telegram": [
-        "Meaning: a message transmitted by telegraph",
-        "A type of: message",
-        "Examples: night letter",
-        "Also known as: wire",
-        "A well-known company, product, or service.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "instagram": [
-        "A well-known company, product, or service.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "mcdonalds": [
-        "A well-known company, product, or service.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "pinterest": [
-        "A well-known company, product, or service.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "wordpress": [
-        "A well-known company, product, or service.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "accenture": [
-        "A well-known company, product, or service.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "activision": [
-        "A well-known company, product, or service.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "coca-cola": [
-        "A well-known company, product, or service.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "discovery": [
-        "Meaning: the act of discovering something",
-        "Meaning: something that is discovered",
-        "Meaning: a productive insight",
-        "Meaning: (law) compulsory pretrial disclosure of documents relevant to a case; enables one side in a litigation to elicit information from the other side concerning the facts in the case",
-        "A type of: act, deed, human action, human activity",
-        "A type of: disclosure, revelation, revealing",
-        "A type of: insight, brainstorm, brainwave",
-        "Examples: breakthrough",
-        "Examples: detection, catching, espial, spying, spotting",
-        "Examples: determination, finding"
-      ],
-      "dropbox": [
-        "A well-known company, product, or service.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "mastercard": [
-        "A well-known company, product, or service.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "qualcomm": [
-        "A well-known company, product, or service.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "salesforce": [
-        "A well-known company, product, or service.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "zillow": [
-        "A well-known company, product, or service.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "volkswagen": [
-        "A well-known company, product, or service.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "playstation": [
-        "A well-known company, product, or service.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "blackberry": [
-        "Meaning: large sweet black or very dark purple edible aggregate fruit of any of various bushes of the genus Rubus",
-        "Meaning: bramble with sweet edible black or dark purple berries that usually do not separate from the receptacle",
-        "A type of: berry",
-        "A type of: drupelet",
-        "A type of: bramble bush",
-        "Also known as: blackberry bush",
-        "A well-known company, product, or service.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "bloomberg": [
-        "A well-known company, product, or service.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "enterprise": [
-        "Meaning: a purposeful or industrious undertaking (especially one that requires effort or boldness)",
-        "Meaning: an organization created for business ventures",
-        "Meaning: readiness to embark on bold new ventures",
-        "A type of: undertaking, project, task, labor",
-        "A type of: organization, organisation",
-        "A type of: drive",
-        "Examples: business activity, commercial activity",
-        "Examples: forlorn hope",
-        "Examples: business, concern, business concern, business organization, business organisation",
-        "Examples: collective"
-      ],
-      "mitsubishi": [
-        "A well-known company, product, or service.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ]
+      "IBM": [
+        "A historic American technology company known as Big Blue.",
+        "Pioneer in computers and IT services.",
+        "Famous for its mainframes, Watson AI, and consulting."
+      ],
+      "LG": [
+        "A major electronics brand from South Korea.",
+        "Makes TVs, phones, appliances, and displays.",
+        "Their slogan is 'Life’s Good.'"
+      ],
+      "HP": [
+        "A well-known American brand for computers and printers.",
+        "Full name is Hewlett-Packard.",
+        "Also popular for its business servers and laptops."
+      ],
+      "KFC": [
+        "A global fast-food brand famous for fried chicken.",
+        "The mascot is Colonel Sanders.",
+        "Headquartered in Kentucky, USA."
+      ],
+      "BMW": [
+        "A German luxury car and motorcycle manufacturer.",
+        "Name stands for Bayerische Motoren Werke.",
+        "Known for sporty sedans and SUVs."
+      ],
+      "DHL": [
+        "An international logistics and shipping brand.",
+        "Recognizable by its yellow and red logo.",
+        "Operates in over 220 countries and territories."
+      ],
+      "NBC": [
+        "A major American television and media network.",
+        "Logo is a colorful peacock.",
+        "Famous for news, sports, and late-night shows."
+      ],
+      "NBA": [
+        "The world's premier professional basketball league.",
+        "Founded in the United States.",
+        "Hosts teams like the Lakers and Bulls."
+      ],
+      "BBC": [
+        "The national broadcaster of the United Kingdom.",
+        "Known for news, radio, and TV programming.",
+        "Founded in 1922; global reputation for journalism."
+      ],
+      "AMD": [
+        "A leading American chipmaker and rival to Intel.",
+        "Designs CPUs and GPUs for PCs and consoles.",
+        "Popular with gamers for Ryzen and Radeon."
+      ],
+      "Nike": [
+        "The world’s largest athletic footwear and apparel company.",
+        "Known for its 'Swoosh' logo.",
+        "Famous for the slogan 'Just Do It.'"
+      ],
+      "Sony": [
+        "A major Japanese electronics and entertainment brand.",
+        "Makes PlayStation, TVs, and audio products.",
+        "Has a big movie and music division."
+      ],
+      "Puma": [
+        "A German sportswear and sneaker brand.",
+        "Known for shoes, athletic clothing, and gear.",
+        "Recognizable by the leaping puma logo."
+      ],
+      "Ford": [
+        "An iconic American automaker founded in 1903.",
+        "Created the Model T and Mustang.",
+        "Known for trucks and mass production methods."
+      ],
+      "Asus": [
+        "A leading Taiwanese tech brand.",
+        "Produces laptops, motherboards, and gaming gear.",
+        "Popular with PC enthusiasts."
+      ],
+      "Dell": [
+        "A major American computer and IT hardware brand.",
+        "Famous for laptops, desktops, and monitors.",
+        "Also offers business servers and storage."
+      ],
+      "Zara": [
+        "A global Spanish fashion retail brand.",
+        "Famous for fast fashion and frequent new styles.",
+        "Operates in malls and shopping centers worldwide."
+      ],
+      "Pepsi": [
+        "A world-famous carbonated soft drink brand.",
+        "Direct competitor to CocaCola.",
+        "Also produces snacks and other beverages."
+      ],
+      "Lyft": [
+        "A major American ride-hailing app and brand.",
+        "Rival to Uber in North America.",
+        "Its logo is often pink or magenta."
+      ],
+      "Visa": [
+        "A leading global payment technology company.",
+        "Issues credit and debit cards worldwide.",
+        "Recognized by its blue and gold logo."
+      ],
+      "Apple": [
+        "A giant American tech brand founded by Steve Jobs.",
+        "Known for iPhone, Mac, and iPad.",
+        "The logo is an apple with a bite."
+      ],
+      "Canon": [
+        "A Japanese company famous for cameras and printers.",
+        "Produces imaging and optical products.",
+        "Recognized by the red Canon logo."
+      ],
+      "Nokia": [
+        "A Finnish tech brand, famous for early mobile phones.",
+        "Now makes network equipment and 5G tech.",
+        "Once dominated global cellphone sales."
+      ],
+      "Heinz": [
+        "A classic American food brand best known for ketchup.",
+        "Makes sauces, beans, and canned goods.",
+        "Often seen in restaurants worldwide."
+      ],
+      "Prada": [
+        "A luxury Italian fashion house.",
+        "Known for designer handbags, shoes, and clothing.",
+        "Its triangle logo is world famous."
+      ],
+      "Ikea": [
+        "A global Swedish brand for affordable furniture.",
+        "Famous for flat-pack designs and blue stores.",
+        "Known for the meatballs in its cafes."
+      ],
+      "Kraft": [
+        "An American food brand famous for cheese and mac & cheese.",
+        "Part of Kraft Heinz group.",
+        "Makes a variety of snacks and condiments."
+      ],
+      "Lego": [
+        "A Danish company famous for plastic construction bricks.",
+        "Popular with children and adults for building sets.",
+        "The name means 'play well' in Danish."
+      ],
+      "Shell": [
+        "A major global oil and gas company.",
+        "Its logo is a yellow and red seashell.",
+        "Has gas stations worldwide."
+      ],
+      "Lexus": [
+        "The luxury vehicle division of Toyota.",
+        "Known for quality and comfort in cars and SUVs.",
+        "Japanese engineering, global reach."
+      ],
+      "Uber": [
+        "A world-famous ride-sharing and food delivery brand.",
+        "Connects riders and drivers via a mobile app.",
+        "Also runs Uber Eats for food delivery."
+      ],
+      "Gucci": [
+        "A top Italian luxury fashion brand.",
+        "Known for its double-G logo.",
+        "Produces designer bags, shoes, and clothes."
+      ],
+      "Rolex": [
+        "A famous Swiss luxury watch brand.",
+        "Symbol of prestige and high quality.",
+        "Founded in 1905, loved by collectors."
+      ],
+      "Sharp": [
+        "A historic Japanese electronics brand.",
+        "Known for TVs, displays, and home appliances.",
+        "Its name reflects its first product: a mechanical pencil."
+      ],
+      "Oreo": [
+        "A globally popular sandwich cookie brand.",
+        "Known for its black-and-white cookies and cream.",
+        "Often eaten with milk; has many flavor varieties."
+      ],
+      "Bayer": [
+        "A German pharmaceutical and life sciences company.",
+        "Invented aspirin and makes health products.",
+        "Recognized by its green cross logo."
+      ],
+      "Honda": [
+        "A Japanese company famous for cars, motorcycles, and power equipment.",
+        "Known for reliable sedans and bikes.",
+        "Produces the Civic, Accord, and CR-V."
+      ],
+      "Chase": [
+        "A major American financial and banking brand.",
+        "Part of JPMorgan Chase.",
+        "Offers credit cards, mortgages, and online banking."
+      ],
+      "Reebok": [
+        "A British-American sportswear and shoe brand.",
+        "Known for athletic shoes and fitness clothing.",
+        "Now owned by Authentic Brands Group."
+      ],
+      "Google": [
+        "The world's leading internet search engine and tech brand.",
+        "Makes Android, Chrome, and Pixel phones.",
+        "Parent company is Alphabet Inc."
+      ],
+      "Amazon": [
+        "A global e-commerce and cloud computing company.",
+        "Famous for fast shipping and Prime video.",
+        "Founded by Jeff Bezos in 1994."
+      ],
+      "Huawei": [
+        "A top Chinese telecommunications and smartphone brand.",
+        "Known for advanced mobile tech and 5G.",
+        "Supplies network gear worldwide."
+      ],
+      "Pfizer": [
+        "A major American pharmaceutical company.",
+        "Famous for vaccines and medicines.",
+        "Produced a leading COVID-19 vaccine."
+      ],
+      "Toyota": [
+        "The world's largest carmaker from Japan.",
+        "Makes Corolla, Camry, Prius, and trucks.",
+        "Known for quality and innovation."
+      ],
+      "Disney": [
+        "A global entertainment company from the US.",
+        "Famous for cartoons, movies, and theme parks.",
+        "Owns Marvel, Pixar, and Star Wars."
+      ],
+      "Nestle": [
+        "A massive Swiss food and beverage brand.",
+        "Makes chocolate, coffee, baby food, and more.",
+        "Products include KitKat, Nescafé, and Maggi."
+      ],
+      "Sprite": [
+        "A lemon-lime flavored soda brand from CocaCola.",
+        "Known for its green bottle and crisp taste.",
+        "Popular mixer and soft drink worldwide."
+      ],
+      "Nissan": [
+        "A Japanese automotive manufacturer.",
+        "Famous for the Altima, Leaf EV, and Z sports cars.",
+        "Exports vehicles globally."
+      ],
+      "Yamaha": [
+        "A Japanese brand famous for motorcycles and musical instruments.",
+        "Makes pianos, guitars, and audio gear.",
+        "Logo shows three tuning forks."
+      ],
+      "Kellog": [
+        "A global food company known for breakfast cereals.",
+        "Brands include Corn Flakes and Special K.",
+        "Founded by Will Kellogg in Michigan."
+      ],
+      "Dorito": [
+        "A world-famous brand of flavored tortilla chips.",
+        "Known for its triangular shape.",
+        "Produced by Frito-Lay, a division of PepsiCo."
+      ],
+      "Corona": [
+        "A popular Mexican beer brand.",
+        "Served with a lime in the bottle neck.",
+        "Also means 'crown' in Spanish."
+      ],
+      "Colgate": [
+        "A leading global toothpaste and oral care brand.",
+        "Also makes toothbrushes and mouthwash.",
+        "Recognized by its red and white logo."
+      ],
+      "PayPal": [
+        "A major online payments and money transfer service.",
+        "Used for shopping, business, and donations.",
+        "Founded by Elon Musk and Peter Thiel."
+      ],
+      "Mazda": [
+        "A Japanese automaker known for sporty cars.",
+        "Famous for the MX-5 Miata.",
+        "Innovator in rotary engine technology."
+      ],
+      "KitKat": [
+        "A chocolate-covered wafer bar from Nestlé.",
+        "Famous for its 'Have a break' slogan.",
+        "Has many regional flavors worldwide."
+      ],
+      "Nivea": [
+        "A classic German skincare and beauty brand.",
+        "Famous for creams, lotions, and lip balms.",
+        "Blue tins are its iconic product."
+      ],
+      "Tobler": [
+        "Short for Toblerone, a Swiss chocolate brand.",
+        "Famous for its triangular-shaped bars.",
+        "Invented in Bern, Switzerland."
+      ],
+      "Mentos": [
+        "A chewy mint candy brand from the Netherlands.",
+        "Known for mints, gum, and fizzy soda reactions.",
+        "Often featured in science experiments."
+      ],
+      "Samsung": [
+        "South Korea's largest electronics and phone brand.",
+        "Makes Galaxy smartphones, TVs, and appliances.",
+        "Its name means 'three stars' in Korean."
+      ],
+      "Siemens": [
+        "A German multinational in electronics and engineering.",
+        "Works in healthcare, industry, and transport.",
+        "Famous for medical imaging and automation tech."
+      ],
+      "Twitter": [
+        "A global social media platform for short messages.",
+        "The bird logo is called 'Larry.'",
+        "Known for hashtags, trending topics, and tweets."
+      ],
+      "Johnson": [
+        "Short for Johnson & Johnson, a major US healthcare brand.",
+        "Makes Band-Aids, Tylenol, and baby products.",
+        "Founded in 1886 in New Jersey."
+      ],
+      "Lenovo": [
+        "A Chinese tech brand known for computers and smartphones.",
+        "Makes ThinkPad and Yoga laptops.",
+        "World’s largest PC vendor for years."
+      ],
+      "Adidas": [
+        "A major German athletic and sportswear brand.",
+        "Three stripes are its trademark.",
+        "Makes shoes, apparel, and sports gear."
+      ],
+      "Hyundai": [
+        "A major South Korean car manufacturer.",
+        "Known for sedans, SUVs, and hybrids.",
+        "Parent company of Kia Motors."
+      ],
+      "RedBull": [
+        "A world-famous energy drink brand from Austria.",
+        "Known for sponsoring extreme sports.",
+        "Slogan: 'Gives You Wings.'"
+      ],
+      "Gillette": [
+      "A leading brand of razors and personal care products.",
+      "Known for shaving innovation and marketing.",
+      "Famous slogan: 'The Best a Man Can Get.'"
+      ],
+      "Pampers": [
+        "A global brand of disposable diapers.",
+        "Owned by Procter & Gamble.",
+        "Known for baby care and wipes."
+      ],
+      "Olay": [
+        "A popular skincare brand known for beauty creams.",
+        "Offers moisturizers, serums, and anti-aging products.",
+        "Owned by Procter & Gamble."
+      ],
+      "Fanta": [
+        "A fruit-flavored soft drink brand owned by CocaCola.",
+        "Known for its orange variety.",
+        "Popular in over 180 countries."
+      ],
+      "Febreze": [
+        "A brand of air freshener products.",
+        "Neutralizes odors in homes and cars.",
+        "Part of Procter & Gamble’s product line."
+      ],
+      "General": [
+        "Part of General Electric, a historic American conglomerate.",
+        "Works in energy, healthcare, and aviation.",
+        "Often associated with GE appliances and lighting."
+      ],
+      "Skechers": [
+        "An American footwear company known for comfort.",
+        "Popular for casual and athletic shoes.",
+        "Offers Go Walk and D’Lites lines."
+      ],
+      "Nutella": [
+        "A famous hazelnut chocolate spread brand.",
+        "Created by Ferrero in Italy.",
+        "Often eaten on bread or pancakes."
+      ],
+      "Unilever": [
+        "A global consumer goods company from the UK.",
+        "Makes Dove, Lipton, and many foods.",
+        "One of the world’s largest advertisers."
+      ],
+      "Ferrari": [
+        "A legendary Italian sports car manufacturer.",
+        "Known for racing and luxury vehicles.",
+        "Iconic prancing horse logo."
+      ],
+      "Kellogg": [
+        "A leading cereal and snack foods brand.",
+        "Products include Corn Flakes and Rice Krispies.",
+        "Founded in Battle Creek, Michigan."
+      ],
+      "Starbucks": [
+        "The world’s largest coffeehouse chain.",
+        "Famous for espresso drinks and green logo.",
+        "Founded in Seattle in 1971."
+      ],
+      "Facebook": [
+        "A global social media and tech company.",
+        "Allows people to share updates and photos.",
+        "Now part of Meta Platforms."
+      ],
+      "Hersheys": [
+        "A classic American chocolate and candy brand.",
+        "Makes bars, Kisses, and Reese’s.",
+        "Headquartered in Pennsylvania."
+      ],
+      "Powerade": [
+        "A sports drink brand owned by CocaCola.",
+        "Competes with Gatorade worldwide.",
+        "Known for its blue and red flavors."
+      ],
+      "Activia": [
+        "A global yogurt brand.",
+        "Promoted for digestive health benefits.",
+        "Owned by Danone, a French food giant."
+      ],
+      "Benetton": [
+        "A popular Italian clothing brand.",
+        "Known for colorful sweaters and global ad campaigns.",
+        "United Colors of Benetton is its full name."
+      ],
+      "Allstate": [
+        "A major American insurance company.",
+        "Famous for the slogan 'You’re in Good Hands.'",
+        "Offers auto, home, and life insurance."
+      ],
+      "CloroxCo": [
+        "A global brand in cleaning and disinfecting products.",
+        "Known for bleach and wipes.",
+        "Headquartered in California."
+      ],
+      "Snapchat": [
+        "A multimedia messaging social app.",
+        "Known for disappearing photos and filters.",
+        "Symbolized by a white ghost logo."
+      ],
+      "Monopoly": [
+        "A classic board game by Hasbro.",
+        "Known for buying properties and passing Go.",
+        "Features a mustached mascot, Mr. Monopoly."
+      ],
+      "Playmobil": [
+        "A German toy brand for playsets and figures.",
+        "Popular with children for creative play.",
+        "Similar to Lego but with detailed characters."
+      ],
+      "CrestPro": [
+        "A sub-brand of Crest for oral care.",
+        "Makes toothpastes for sensitive teeth.",
+        "Part of Procter & Gamble."
+      ],
+      "PowerBar": [
+        "A sports nutrition brand for energy bars.",
+        "Popular with athletes and fitness fans.",
+        "Founded in California, USA."
+      ],
+      "DiGiorno": [
+        "A frozen pizza brand sold in supermarkets.",
+        "Famous for the tagline 'It’s not delivery.'",
+        "Owned by Nestlé."
+      ],
+      "UnderArm": [
+        "A top sportswear brand (Under Armour).",
+        "Known for performance clothing and shoes.",
+        "Founded by Kevin Plank in 1996."
+      ],
+      "Pringles": [
+        "A global potato chip brand with a unique tube can.",
+        "Famous for its saddle-shaped crisps.",
+        "Owned by Kellogg Company."
+      ],
+      "Whoppers": [
+        "A malted milk ball candy brand.",
+        "Produced by Hershey Company.",
+        "Comes in a distinctive yellow box."
+      ],
+      "Microsoft": [
+        "A global software, hardware, and cloud tech brand.",
+        "Makes Windows, Office, and Xbox.",
+        "Founded by Bill Gates and Paul Allen."
+      ],
+      "McDonalds": [
+        "The world's largest fast-food restaurant chain.",
+        "Famous for the Big Mac and golden arches.",
+        "Founded in the US in 1940."
+      ],
+      "Instagram": [
+        "A popular photo and video sharing social app.",
+        "Famous for stories and filters.",
+        "Acquired by Facebook in 2012."
+      ],
+      "Mastercard": [
+        "A global financial services and payments brand.",
+        "Its logo features two overlapping circles.",
+        "Enables credit and debit transactions worldwide."
+      ],
+      "Whirlpool": [
+        "A leading American appliance brand.",
+        "Known for washers, dryers, and fridges.",
+        "Headquartered in Michigan, USA."
+      ],
+      "BodyArmor": [
+        "A sports drink brand targeting athletes.",
+        "Known for coconut water blends.",
+        "Kobe Bryant was an early investor."
+      ],
+      "KraftHeinz": [
+        "A major US food conglomerate.",
+        "Brands include Kraft cheese and Heinz ketchup.",
+        "Formed by a merger in 2015."
+      ],
+      "Sharpie": [
+        "A brand of permanent markers and pens.",
+        "Popular for art, office, and crafts.",
+        "Owned by Newell Brands."
+      ],
+      "TicTacToe": [
+        "A simple paper-and-pencil game.",
+        "Also called Noughts and Crosses.",
+        "Won by getting three in a row."
+      ],
+      "BayerCorp": [
+        "The US subsidiary of Bayer, a global pharma giant.",
+        "Makes aspirin, Aleve, and health products.",
+        "Headquartered in New Jersey."
+      ],
+      "UberEats": [
+        "A food delivery service from Uber.",
+        "Connects restaurants and customers via app.",
+        "Operates in many countries."
+      ],
+      "Novartis": [
+        "A Swiss pharmaceutical company.",
+        "Known for cancer and heart medicines.",
+        "Resulted from the merger of Ciba-Geigy and Sandoz."
+      ],
+      "Starbucks": [
+        "A global coffeehouse chain.",
+        "Famous for specialty coffee and green logo.",
+        "Based in Seattle, USA."
+      ],
+      "Waterpik": [
+        "A brand of oral irrigators for dental care.",
+        "Helps clean between teeth using water.",
+        "Popular with dentists and orthodontists."
+      ],
+      "VicksVapo": [
+        "A Vicks brand for vapor rub and inhalers.",
+        "Famous for soothing cough and cold symptoms.",
+        "Distinct menthol scent."
+      ],
+      "CocaCola": [
+        "A legendary global soft drink brand.",
+        "Famous for its red label and secret recipe.",
+        "Originated in Atlanta, Georgia in 1886."
+      ],
+      "Heineken": [
+        "A famous Dutch brewing company.",
+        "Known for its green bottle and red star.",
+        "One of the world’s top-selling beers."
+      ],
+      "Chevrolet": [
+        "An iconic American automobile brand.",
+        "Famous for cars, trucks, and the Corvette.",
+        "Nickname: Chevy."
+      ],
+      "Honeywell": [
+        "A global conglomerate in tech and manufacturing.",
+        "Works in aerospace, building, and safety products.",
+        "Known for thermostats and controls."
+      ],
+      "Volkswagon": [
+        "A leading German carmaker.",
+        "Famous for Beetle and Golf models.",
+        "VW stands for 'people’s car.'"
+      ],
+      "LouisViton": [
+        "A luxury French fashion brand.",
+        "Known for handbags, luggage, and LV monogram.",
+        "Part of LVMH group."
+      ],
+      "Allergan": [
+        "A global pharmaceutical company.",
+        "Known for Botox and eye care products.",
+        "Headquartered in Dublin, Ireland."
+      ],
+      "PerrierUS": [
+        "A French sparkling mineral water brand.",
+        "Comes in iconic green bottles.",
+        "Popular as a mixer or refreshment."
+      ],
+      "RedBullUS": [
+        "The American arm of Red Bull, energy drinks.",
+        "Sponsors extreme sports and F1 racing.",
+        "Slogan: 'Gives You Wings.'"
+      ],
+      "Patagonia": [
+        "A popular outdoor clothing and gear brand.",
+        "Known for environmental activism.",
+        "Based in Ventura, California."
+      ],
+      "PizzaHutUS": [
+        "An American pizza restaurant chain.",
+        "Famous for pan pizzas and delivery.",
+        "Founded in 1958, Kansas."
+      ],
+      "GuinnessUS": [
+        "US operations of Guinness, an Irish stout beer.",
+        "Famous for its creamy head.",
+        "Brewed since 1759 in Dublin."
+      ],
+      "QuickStep": [
+        "A flooring and laminate brand.",
+        "Known for DIY installation.",
+        "Popular in home improvement stores."
+      ],
+      "Salesforce": [
+        "A leading American cloud software company.",
+        "Famous for CRM and business tools.",
+        "Based in San Francisco."
+      ],
+      "QuakerOats": [
+        "A classic American food brand.",
+        "Known for oatmeal and cereals.",
+        "Famous Quaker man logo."
+      ],
+      "TidePodsUS": [
+        "A US sub-brand of Tide for laundry pods.",
+        "Colorful capsules for washing clothes.",
+        "Famous for internet challenges."
+      ],
+      "JohnsonUS": [
+        "US operations of Johnson & Johnson.",
+        "Produces health care and hygiene products.",
+        "Founded in 1886."
+      ],
+      "DoorDashUS": [
+        "US arm of DoorDash, food delivery service.",
+        "Delivers meals from local restaurants.",
+        "Founded in 2013."
+      ],
+      "DunkinDon": [
+        "Short for Dunkin Donuts, an American coffee and donut chain.",
+        "Known for iced coffee and Munchkins.",
+        "Founded in Massachusetts in 1950."
+      ],
+      "SamsungUS": [
+        "The US operations of Samsung.",
+        "Sells electronics, phones, and appliances.",
+        "South Korean multinational."
+      ],
+    "Ferrero": [
+        "An Italian confectionery and chocolate company.",
+        "Known for Nutella, Ferrero Rocher, and Kinder.",
+        "Founded in Alba, Italy in 1946."
+      ],
+      "Barilla": [
+        "An Italian multinational food company.",
+        "Famous for pasta and sauces.",
+        "Recognized by its blue box packaging."
+      ],
+      "Unicef": [
+        "The United Nations Children’s Fund.",
+        "Works for children's health, education, and welfare.",
+        "Symbolized by a blue globe and mother-child icon."
+      ],
+      "NestleSA": [
+        "The parent company of Nestle, Swiss food giant.",
+        "Makes chocolate, coffee, water, and more.",
+        "World's largest food and beverage company."
+      ],
+      "ToyotaUS": [
+        "The US arm of Toyota, global automaker.",
+        "Sells Camry, Corolla, and Tacoma trucks.",
+        "Known for reliability and innovation."
+      ],
+      "Smeg": [
+        "An Italian manufacturer of home appliances.",
+        "Famous for retro fridges and colorful designs.",
+        "Name is an acronym for 'Smalterie Metallurgiche Emiliane Guastalla.'"
+      ],
+      "Kleenex": [
+        "A brand of facial tissues owned by Kimberly-Clark.",
+        "Name is often used for any tissue.",
+        "Iconic soft white packaging."
+      ],
+      "KitKats": [
+        "Chocolate-covered wafer bars from Nestle.",
+        "Known for 'Have a break' ads.",
+        "Popular worldwide with many unique flavors."
+      ],
+      "Ovaltine": [
+        "A brand of milk flavoring mix.",
+        "Popular as a breakfast or night drink.",
+        "Founded in Switzerland in 1904."
+      ],
+      "Layton": [
+        "A consumer brand (Professor Layton is a puzzle video game).",
+        "Known for logic puzzles and storytelling.",
+        "Popular on Nintendo platforms."
+      ],
+      "Brita": [
+        "A German company making water filtration products.",
+        "Known for filter pitchers and tap attachments.",
+        "Aims to improve drinking water quality."
+      ],
+      "Arla": [
+        "A large Danish-Swedish dairy brand.",
+        "Makes milk, cheese, and yogurt.",
+        "Cooperative owned by dairy farmers."
+      ],
+      "Crayola": [
+        "A famous American brand of art supplies.",
+        "Known for crayons, markers, and colored pencils.",
+        "Beloved by children and teachers."
+      ],
+      "Crest": [
+        "A major American toothpaste and oral care brand.",
+        "Products include whitening strips and mouthwash.",
+        "Owned by Procter & Gamble."
+      ],
+      "ClifBar": [
+        "A brand of organic energy bars.",
+        "Popular with athletes and outdoor enthusiasts.",
+        "Known for natural ingredients and bold flavors."
+      ],
+      "Twix": [
+        "A chocolate-covered caramel biscuit bar.",
+        "Produced by Mars, Inc.",
+        "Comes in twin sticks in one package."
+      ],
+      "SpriteGo": [
+        "A marketing name for Sprite, the soda brand.",
+        "Associated with active and on-the-go lifestyles.",
+        "Often featured in sports promotions."
+      ],
+      "Subway": [
+        "A global fast food sandwich restaurant chain.",
+        "Famous for footlong subs and customization.",
+        "Slogan: 'Eat Fresh.'"
+      ],
+      "OreoMini": [
+        "Miniature version of Oreo sandwich cookies.",
+        "Sold in snack packs and resealable bags.",
+        "Popular as a quick treat."
+      ],
+      "Huggies": [
+        "A leading disposable diaper and baby care brand.",
+        "Owned by Kimberly-Clark.",
+        "Known for Little Snugglers and Pull-Ups."
+      ],
+      "Bic": [
+        "A French brand known for pens and lighters.",
+        "Famous for disposable ballpoint pens.",
+        "Logo features a stylized human figure."
+      ],
+      "Vaseline": [
+        "A petroleum jelly brand used for skin care.",
+        "Popular for healing dry skin and lips.",
+        "Owned by Unilever."
+      ],
+      "Cuisinart": [
+        "An American home appliance brand.",
+        "Known for food processors and kitchen gadgets.",
+        "Favored by chefs and home cooks."
+      ],
+      "Clorox": [
+        "A leading brand for bleach and cleaning products.",
+        "Famous for disinfecting wipes.",
+        "Used in homes, hospitals, and offices."
+      ],
+      "Mazola": [
+        "A brand of corn oil and margarine.",
+        "Promoted for heart-healthy cooking.",
+        "Owned by ACH Food Companies."
+      ],
+      "Vizio": [
+        "An American electronics company.",
+        "Best known for affordable smart TVs.",
+        "Founded in California in 2002."
+      ],
+      "Nestle": [
+        "A major Swiss food and beverage brand.",
+        "Produces chocolate, water, and coffee.",
+        "Owner of brands like KitKat and Nescafe."
+      ],
+      "VisaPay": [
+        "A payment technology by Visa.",
+        "Used for contactless and online purchases.",
+        "Recognized by millions of merchants globally."
+      ],
+      "Varta": [
+        "A German battery manufacturer.",
+        "Makes batteries for cars, devices, and industry.",
+        "Founded in 1887 in Germany."
+      ],
+      "Epson": [
+        "A Japanese electronics company.",
+        "Famous for printers and projectors.",
+        "Part of the Seiko Group."
+      ],
+      "Qantas": [
+        "Australia’s national airline.",
+        "Known for the kangaroo logo.",
+        "One of the world’s oldest airlines."
+      ],
+      "Canon": [
+        "A major Japanese imaging and optical brand.",
+        "Famous for cameras, copiers, and printers.",
+        "Recognized by red Canon logo."
+      ],
+      "Fossil": [
+        "An American watch and lifestyle brand.",
+        "Makes smartwatches, leather goods, and bags.",
+        "Founded in Texas in 1984."
+      ],
+      "Sprite": [
+        "A lemon-lime soft drink by CocaCola.",
+        "Known for clear color and crisp flavor.",
+        "Popular worldwide for decades."
+      ],
+      "Roku": [
+        "A streaming media player company.",
+        "Connects TVs to online content and channels.",
+        "Founded in California in 2002."
+      ],
+      "Sharpie": [
+        "A permanent marker brand owned by Newell.",
+        "Used for labeling, art, and crafts.",
+        "Known for strong, bold ink."
+      ],
+      "Coke": [
+        "Short for CocaCola, a famous soft drink.",
+        "Recognizable red label and sweet taste.",
+        "Sold in nearly every country."
+      ],
+      "Lays": [
+        "A global potato chip brand.",
+        "Owned by PepsiCo.",
+        "Known for classic yellow bags."
+      ],
+      "Pepsi": [
+        "A leading cola soft drink brand.",
+        "Rival to CocaCola worldwide.",
+        "Also produces snacks and juices."
+      ],
+      "Sprite": [
+        "A lemon-lime soft drink brand.",
+        "Clear soda from CocaCola.",
+        "Recognizable green label."
+      ],
+      "Gatorade": [
+        "A sports drink brand developed for athletes.",
+        "Known for orange, lemon-lime, and other flavors.",
+        "Owned by PepsiCo."
+      ],
+      "Evian": [
+        "A premium bottled water brand from France.",
+        "Drawn from springs in the Alps.",
+        "Recognizable pale blue label."
+      ],
+      "Dasani": [
+        "A bottled water brand by CocaCola.",
+        "Filtered and enhanced with minerals.",
+        "Popular in the US and worldwide."
+      ],
+      "Sony": [
+        "A major Japanese electronics brand.",
+        "Makes PlayStation, TVs, cameras, and audio.",
+        "Also involved in movies and music."
+      ],
+      "Philips": [
+        "A Dutch multinational electronics company.",
+        "Known for lighting, health tech, and consumer products.",
+        "Founded in Eindhoven in 1891."
+      ],
+      "Oreo": [
+        "A famous sandwich cookie brand.",
+        "Known for black and white cookies with cream.",
+        "Popular with milk and as a dessert ingredient."
+      ],
+      "Asics": [
+        "A Japanese athletic shoe and sportswear company.",
+        "Famous for running shoes.",
+        "Name is an acronym for a Latin phrase about healthy minds."
+      ],
+      "Acuvue": [
+        "A brand of contact lenses from Johnson & Johnson.",
+        "Popular for comfort and daily disposable options.",
+        "Used for vision correction worldwide."
+      ],
+      "Duracell": [
+        "A global battery manufacturer.",
+        "Known for copper top batteries.",
+        "Owned by Berkshire Hathaway."
+      ]          
     },
     "history": {
       "war": [

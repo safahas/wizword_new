@@ -2218,8 +2218,8 @@ class WordSelector:
         # Map tech to science and other categories to general
       #  if self.current_category == "tech":
       #      self.current_category = "science"
-        if self.current_category in ["movies", "music", "brands", "history"]:
-            self.current_category = "general"
+      #  if self.current_category in ["movies", "music", "brands", "history"]:
+    #     self.current_category = "general"
 
         def is_valid_word(word: str) -> bool:
             """Validate if a word meets all criteria."""
