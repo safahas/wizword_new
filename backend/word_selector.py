@@ -2216,9 +2216,9 @@ class WordSelector:
         self.current_category = subject.lower()
 
         # Map tech to science and other categories to general
-        if self.current_category == "tech":
-            self.current_category = "science"
-        elif self.current_category in ["movies", "music", "brands", "history"]:
+      #  if self.current_category == "tech":
+      #      self.current_category = "science"
+        if self.current_category in ["movies", "music", "brands", "history"]:
             self.current_category = "general"
 
         def is_valid_word(word: str) -> bool:

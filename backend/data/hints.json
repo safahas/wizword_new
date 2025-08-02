@@ -1550,16 +1550,16 @@
         "Mentioned in poetry and songs."
       ],
       "discovery": [
-        "Finding something new or unknown.",
-        "Important in science and exploration.",
-        "Phrase: 'age of ___.'",
-        "Can happen accidentally or through research.",
-        "Leads to inventions and progress.",
-        "Columbus is famous for one of these.",
+        "Finding something new, unknown, or important.",
+        "Central to science, exploration, and history.",
+        "Phrase: 'age of ___.''",
         "Brings excitement and curiosity.",
-        "Patents protect these in technology.",
-        "Changes how people view the world.",
-        "Museums display artifacts from these events."
+        "Often leads to new inventions.",
+        "Famous examples include gravity and electricity.",
+        "Archaeologists make these with ancient artifacts.",
+        "Scientists announce these in journals.",
+        "May happen by accident or careful research.",
+        "Changes our understanding of the world."
       ],
       "emphasis": [
         "Special attention or importance given to something.",
@@ -1827,27 +1827,15 @@
       ],
       "confidence": [
         "Belief in your own abilities or skills.",
-        "Important for public speaking and exams.",
         "Helps you try new things without fear.",
+        "Often displayed by standing tall and speaking clearly.",
         "Phrase: 'boost your ___.''",
-        "Often built through practice and success.",
-        "People with this stand tall and speak clearly.",
-        "Can be fragile or grow over time.",
-        "Influences how others see and trust you.",
-        "Needed for leadership and teamwork.",
-        "Linked with self-esteem and positivity."
-      ],
-      "discovery": [
-        "Finding something new, unknown, or important.",
-        "Central to science, exploration, and history.",
-        "Phrase: 'age of ___.''",
-        "Brings excitement and curiosity.",
-        "Often leads to new inventions.",
-        "Famous examples include gravity and electricity.",
-        "Archaeologists make these with ancient artifacts.",
-        "Scientists announce these in journals.",
-        "May happen by accident or careful research.",
-        "Changes our understanding of the world."
+        "Built through practice and experience.",
+        "Essential for public speaking and interviews.",
+        "Linked to self-esteem and trust.",
+        "Can inspire others to follow your lead.",
+        "Sometimes wavers in challenging situations.",
+        "Valued in leadership and teamwork."
       ],
       "enrichment": [
         "Making something more meaningful or valuable.",
@@ -1992,18 +1980,6 @@
         "Opposite of quitting or giving up.",
         "Built on trust and reliability.",
         "Central to marriage and agreements."
-      ],
-      "confidence": [
-        "Belief in your own abilities or skills.",
-        "Helps you try new things without fear.",
-        "Often displayed by standing tall and speaking clearly.",
-        "Phrase: 'boost your ___.''",
-        "Built through practice and experience.",
-        "Essential for public speaking and interviews.",
-        "Linked to self-esteem and trust.",
-        "Can inspire others to follow your lead.",
-        "Sometimes wavers in challenging situations.",
-        "Valued in leadership and teamwork."
       ],
       "creativity": [
         "Ability to think of new and original ideas.",
@@ -10422,7 +10398,6 @@
         "A type of: phalanger, opossum, possum",
         "Also known as: koala bear, kangaroo bear, native bear",
         "A living creature, often found in the natural world.",
-        
         "No further clues available.",
         "No further clues available.",
         "No further clues available.",
@@ -17134,1564 +17109,779 @@
     },
     "tech": {
       "app": [
-        "Used in technology or engineering.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
+        "A software program designed to perform specific tasks on a device.",
+        "You can download this from an online store to your phone.",
+        "There are types for games, productivity, and communication."
+      ],
+      "bot": [
+        "A computer program that performs automated tasks.",
+        "Often used in chat, games, or web crawling.",
+        "Can act like a human to answer questions or perform actions."
+      ],
+      "bug": [
+        "An error or flaw in a computer program that causes it to act unexpectedly.",
+        "Developers work to find and fix these during testing.",
+        "The term once referred to an actual insect found in early hardware."
       ],
       "cpu": [
-        "Meaning: (computer science) the part of a computer (a microprocessor chip) that does most of the data processing",
-        "A type of: electronic equipment",
-        "A type of: hardware, computer hardware",
-        "Also known as: central processing unit, C.P.U., central processor",
-        "Used in technology or engineering.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
+        "The main processing unit in a computer that carries out instructions.",
+        "Known as the 'brain' of the computer.",
+        "Its speed is measured in gigahertz (GHz)."
       ],
-      "usb": [
-        "Used in technology or engineering.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
+      "ram": [
+        "Temporary computer memory that stores data for active tasks.",
+        "Helps programs run faster by keeping information handy.",
+        "Loses all data when the computer is turned off."
       ],
-      "lan": [
-        "Meaning: a local computer network for communication between computers; especially a network connecting computers and word processors and other electronic office equipment to create a communication system between offices",
-        "A type of: computer network",
-        "Examples: ethernet",
-        "Has parts such as: busbar, bus",
-        "Also known as: local area network",
-        "Used in technology or engineering.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "api": [
-        "Used in technology or engineering.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "css": [
-        "Meaning: a soft silver-white ductile metallic element (liquid at normal temperatures); the most electropositive and alkaline metal",
-        "A type of: metallic element, metal",
-        "Examples: cesium 137",
-        "Also known as: cesium, caesium, Cs",
-        "Used in technology or engineering.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "dev": [
-        "Used in technology or engineering.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "dns": [
-        "Used in technology or engineering.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "ftp": [
-        "Meaning: protocol that allows users to copy files between their local system and any system they can reach on the network",
-        "A type of: protocol, communications protocol",
-        "Also known as: file transfer protocol",
-        "Used in technology or engineering.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "git": [
-        "Meaning: a person who is deemed to be despicable or contemptible",
-        "Typical context: only a rotter would do that",
-        "Typical context: kill the rat",
-        "Typical context: throw the bum out",
-        "Typical context: you cowardly little pukes!",
-        "A type of: unpleasant person, disagreeable person",
-        "Also known as: rotter, dirty dog, rat",
-        "Used in technology or engineering.",
-        "No further clues available.",
-        "No further clues available."
+      "rom": [
+        "A type of computer memory that holds data permanently.",
+        "Stores instructions for starting up a device.",
+        "Its contents can't be changed or erased easily."
       ],
       "gui": [
-        "Meaning: a user interface based on graphics (icons and pictures and menus) instead of text; uses a mouse as well as a keyboard as an input device",
-        "A type of: interface, user interface",
-        "Has parts such as: dialog box, panel",
-        "Has parts such as: icon",
-        "Also known as: graphical user interface",
-        "Used in technology or engineering.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "ide": [
-        "Used in technology or engineering.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "ios": [
-        "Meaning: (Greek mythology) a maiden seduced by Zeus; when Hera was about to discover them together Zeus turned her into a white heifer",
-        "Meaning: the closest of Jupiter's moons; has active volcanoes",
-        "Also known as: Io",
-        "Used in technology or engineering.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "net": [
-        "Meaning: the excess of revenues over outlays in a given period of time (including depreciation and other non-cash expenses)",
-        "Meaning: an open fabric of string or rope or wire woven together at regular intervals",
-        "A type of: trap",
-        "A type of: income",
-        "A type of: goal",
-        "A type of: game equipment",
-        "A type of: fabric, cloth, material, textile",
-        "Examples: brail",
-        "Examples: accumulation",
-        "Examples: dividend"
-      ],
-      "php": [
-        "Used in technology or engineering.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "sql": [
-        "Used in technology or engineering.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
+        "Graphical User Interface; allows users to interact with software visually.",
+        "Uses icons, windows, and menus instead of text commands.",
+        "Found in operating systems like Windows and macOS."
       ],
       "tag": [
-        "Meaning: a label written or printed on paper, cardboard, or plastic that is attached to something to indicate its owner, nature, price, etc.",
-        "Meaning: a label associated with something for the purpose of identification",
-        "Meaning: a small piece of cloth or paper",
-        "Meaning: a game in which one child chases the others; the one who is caught becomes the next chaser",
-        "Meaning: (sports) the act of touching a player in a game (which changes their status in the game)",
-        "A type of: label",
-        "A type of: piece of cloth, piece of material",
-        "A type of: child's game",
-        "A type of: touch, touching",
-        "Examples: pine-tar rag"
+        "A keyword or label used to categorize and identify information.",
+        "Common in social media posts and web pages.",
+        "Helps users search or filter content easily."
       ],
-      "xml": [
-        "Used in technology or engineering.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
+      "key": [
+        "A device or code used to gain access or encrypt data.",
+        "Found on keyboards and used for typing.",
+        "In security, it's crucial for unlocking accounts or files."
+      ],
+      "vpn": [
+        "A service that creates a secure, private connection over the internet.",
+        "Helps protect your online privacy and data.",
+        "Often used to access restricted sites or work remotely."
       ],
       "code": [
-        "Meaning: a set of rules or principles or laws (especially written ones)",
-        "Meaning: a coding system used for transmitting messages requiring brevity or secrecy",
-        "Meaning: (computer science) the symbolic arrangement of data or instructions in a computer program or the set of such instructions",
-        "A type of: written communication, written language, black and white",
-        "A type of: coding system",
-        "Examples: Bushido",
-        "Examples: omerta",
-        "Examples: address, computer address, reference",
-        "Examples: instruction, command, statement, program line",
-        "Examples: software, software program, computer software, software system, software package, package"
+        "A set of instructions written in a programming language.",
+        "Developers use this to build software and apps.",
+        "Can be simple scripts or large complex systems."
       ],
-      "wifi": [
-        "Meaning: a local area network that uses high frequency radio signals to transmit and receive data over distances of a few hundred feet; uses ethernet protocol",
-        "A type of: local area network, LAN",
-        "Also known as: wireless local area network, WLAN, wireless fidelity",
-        "Used in technology or engineering.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "byte": [
-        "Meaning: a sequence of 8 bits (enough to represent one character of alphanumeric data) processed as a single unit of information",
-        "A type of: computer memory unit",
-        "Has parts such as: bit",
-        "Has parts such as: nybble, nibble",
-        "Used in technology or engineering.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "html": [
-        "Meaning: a set of tags and rules (conforming to SGML) for using them in developing hypertext documents",
-        "A type of: markup language",
-        "Also known as: hypertext markup language, hypertext mark-up language",
-        "Used in technology or engineering.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "ajax": [
-        "Meaning: a mythical Greek hero; a warrior who fought against Troy in the Iliad",
-        "Used in technology or engineering.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "bash": [
-        "Meaning: a vigorous blow",
-        "Meaning: an uproarious party",
-        "Typical context: the sudden knock floored him",
-        "Typical context: he got a bang on the head",
-        "A type of: blow, bump",
-        "A type of: party",
-        "Also known as: knock, bang, smash",
-        "Also known as: do, brawl",
-        "Used in technology or engineering.",
-        "No further clues available."
-      ],
-      "beta": [
-        "Meaning: the 2nd letter of the Greek alphabet",
-        "Meaning: beets",
-        "A type of: letter, letter of the alphabet, alphabetic character",
-        "A type of: caryophylloid dicot genus",
-        "A type of: Chenopodiaceae, family Chenopodiaceae, goosefoot family",
-        "Part of: Greek alphabet",
-        "Also known as: genus Beta",
-        "Used in technology or engineering.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "blog": [
-        "Meaning: a shared on-line journal where people can post diary entries about their personal experiences and hobbies",
-        "A type of: diary, journal",
-        "Also known as: web log",
-        "Used in technology or engineering.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "boot": [
-        "Meaning: footwear that covers the whole foot and lower leg",
-        "Meaning: British term for the luggage compartment in a car",
-        "Meaning: the swift release of a store of affective force",
-        "Meaning: protective casing for something that resembles a leg",
-        "Meaning: an instrument of torture that is used to heat or crush the foot and leg",
-        "Meaning: a form of foot torture in which the feet are encased in iron and slowly crushed",
-        "Meaning: the act of delivering a blow with the foot",
-        "Typical context: they got a great bang out of it",
-        "Typical context: he got a quick rush from injecting heroin",
-        "Typical context: he does it for kicks"
-      ],
-      "chat": [
-        "Meaning: an informal conversation",
-        "A type of: conversation",
-        "A type of: New World warbler, wood warbler",
-        "A type of: thrush",
-        "Part of: Icteria, genus Icteria",
-        "Part of: Saxicola, genus Saxicola",
-        "Also known as: confab, confabulation, schmooze",
-        "Also known as: New World chat",
-        "Also known as: Old World chat",
-        "Used in technology or engineering."
+      "data": [
+        "Information that is collected, stored, or processed by computers.",
+        "May include numbers, text, images, or audio.",
+        "Analyzed to find patterns or make decisions."
       ],
       "chip": [
-        "Meaning: a small fragment of something broken off from the whole",
-        "Meaning: a triangular wooden float attached to the end of a log line",
-        "Meaning: a piece of dried bovine dung",
-        "Meaning: a thin crisp slice of potato fried in deep fat",
-        "Meaning: a mark left after a small piece has been chopped or broken off of something",
-        "Meaning: a small disk-shaped counter used to represent money when gambling",
-        "Meaning: electronic equipment consisting of a small crystal of a silicon semiconductor fabricated to carry out a number of electronic functions in an integrated circuit",
-        "Meaning: (golf) a low running approach shot",
-        "Typical context: a bit of rock caught him in the eye",
-        "A type of: fragment"
-      ],
-      "disk": [
-        "Meaning: something with a round shape resembling a flat circular plate",
-        "Meaning: a flat circular plate",
-        "A type of: round shape",
-        "A type of: circle, round",
-        "A type of: plate",
-        "A type of: sound recording, audio recording, audio",
-        "A type of: memory device, storage device",
-        "Examples: point, dot",
-        "Examples: deadeye",
-        "Examples: diaphragm"
+        "A small piece of silicon with electronic circuits, found in devices.",
+        "Essential for processing and storing data.",
+        "Also known as a microprocessor or integrated circuit."
       ],
       "file": [
-        "Meaning: a set of related records (either written or electronic) kept together",
-        "Meaning: a line of persons or things ranged one behind the other",
-        "Meaning: office furniture consisting of a container for keeping papers in order",
-        "Meaning: a steel hand tool with small sharp teeth on some or all of its surfaces; used for smoothing wood or metal",
-        "A type of: record",
-        "A type of: line",
-        "A type of: office furniture",
-        "A type of: hand tool",
-        "Examples: column",
-        "Examples: snake dance"
+        "A collection of data stored as a single unit on a computer.",
+        "Examples include documents, photos, and videos.",
+        "Recognized by its extension, like .txt or .jpg."
       ],
-      "font": [
-        "Meaning: a specific size and style of type within a type family",
-        "Meaning: bowl for baptismal water",
-        "A type of: type",
-        "A type of: basin",
-        "Examples: bicameral script",
-        "Examples: boldface, bold face, bold",
-        "Examples: Gothic, black letter",
-        "Examples: italic",
-        "Examples: sans serif, Helvetica",
-        "Examples: unicameral script"
+      "node": [
+        "A connection point in a network or a linked data structure.",
+        "Can be a computer, router, or other device in a system.",
+        "Used in blockchain, graphs, and internet setups."
       ],
-      "host": [
-        "Meaning: a person who invites guests to a social event (such as a party in his or her own home) and who is responsible for them while they are there",
-        "Meaning: a vast multitude",
-        "Meaning: an animal or plant that nourishes and supports a parasite; it does not benefit and is often harmed by the association",
-        "Meaning: archaic terms for army",
-        "Meaning: any organization that provides resources and facilities for a function or event",
-        "Meaning: (medicine) recipient of transplanted tissue or organ from a donor",
-        "Meaning: the owner or manager of an inn",
-        "Meaning: a technical name for the bread used in the service of Mass or Holy Communion",
-        "Meaning: (computer science) a computer that provides client stations with access to files and printers as shared resources to a computer network",
-        "A type of: adult, grownup"
+      "disk": [
+        "A storage device that saves data magnetically or optically.",
+        "Examples include hard drives and DVDs.",
+        "Round and flat, spins to read or write information."
       ],
-      "java": [
-        "Meaning: an island in Indonesia to the south of Borneo; one of the world's most densely populated regions",
-        "Meaning: a beverage consisting of an infusion of ground coffee beans",
-        "Meaning: a platform-independent object-oriented programming language",
-        "Typical context: he ordered a cup of coffee",
-        "A type of: beverage, drink, drinkable, potable",
-        "A type of: object-oriented programming language, object-oriented programing language",
-        "Examples: cafe au lait",
-        "Examples: cafe noir, demitasse",
-        "Examples: cafe royale, coffee royal",
-        "Examples: cappuccino, cappuccino coffee, coffee cappuccino"
+      "hash": [
+        "A function that converts data into a fixed-size string of characters.",
+        "Used for password security and data verification.",
+        "Blockchain transactions rely on this for integrity."
       ],
       "link": [
-        "Meaning: a fastener that serves to join or connect",
-        "Meaning: the state of being connected",
-        "Meaning: a connecting shape",
-        "Meaning: a unit of length equal to 1/100 of a chain",
-        "Meaning: (computing) an instruction that connects one part of a program or an element on a list to another program or list",
-        "Meaning: a channel for communication between groups",
-        "Meaning: a two-way radio communication system (usually microwave); part of a more extensive telecommunication network",
-        "Meaning: an interconnecting circuit between two or more locations for the purpose of transmitting and receiving data",
-        "Typical context: the connection between church and state is inescapable",
-        "Typical context: he provided a liaison with the guerrillas"
+        "A connection or reference from one place to another, often on the web.",
+        "Clicking this takes you to a different page or resource.",
+        "Also refers to connections in computer networks."
       ],
-      "mail": [
-        "Meaning: the bags of letters and packages that are transported by the postal service",
-        "Meaning: the system whereby messages are transmitted via the post office",
-        "Meaning: a conveyance that transports the letters and packages that are conveyed by the postal system",
-        "Meaning: any particular collection of letters or packages that is delivered",
-        "Meaning: (Middle Ages) flexible armor made of interlinked metal rings",
-        "Typical context: is there any post for me?",
-        "Typical context: she was opening her post",
-        "A type of: message",
-        "A type of: communication, communicating",
-        "A type of: conveyance, transport"
+      "spam": [
+        "Unwanted or junk messages sent over email or online platforms.",
+        "Often used for advertising or scams.",
+        "Filters are used to block these from your inbox."
       ],
-      "ruby": [
-        "Meaning: a transparent deep red variety of corundum; used as a gemstone and in lasers",
-        "Meaning: a deep and vivid red color",
-        "A type of: jewel, gem, precious stone",
-        "A type of: corundom, corundum",
-        "A type of: transparent gem",
-        "A type of: red, redness",
-        "Also known as: crimson, deep red",
-        "Used in technology or engineering.",
-        "No further clues available.",
-        "No further clues available."
+      "wiki": [
+        "A website or database that allows collaborative editing by users.",
+        "Wikipedia is the most famous example.",
+        "Content can be created, edited, and linked by anyone."
       ],
-      "linux": [
-        "Meaning: an open-source version of the UNIX operating system",
-        "Used in technology or engineering.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
+      "cloud": [
+        "Internet-based services for storing and accessing data remotely.",
+        "Lets you save photos and files without using your device’s storage.",
+        "Services like Google Drive and Dropbox are examples."
       ],
-      "pixel": [
-        "Meaning: (computer science) the smallest discrete component of an image or picture on a CRT screen (usually a colored dot)",
-        "A type of: component, constituent, element",
-        "Also known as: pel, picture element",
-        "Used in technology or engineering.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
+      "input": [
+        "Data or signals sent to a computer or device for processing.",
+        "Can come from a keyboard, mouse, or touchscreen.",
+        "The opposite of output; what you provide to start a process."
+      ],
+      "mouse": [
+        "A handheld device used to control a computer’s pointer or cursor.",
+        "Often features left and right buttons for clicking.",
+        "Essential for selecting, dragging, and dropping items on screen."
+      ],
+      "bytes": [
+        "Units of digital information, typically consisting of eight bits.",
+        "File sizes and computer memory are measured with this unit.",
+        "Larger groupings include kilobytes, megabytes, and gigabytes."
       ],
       "cache": [
-        "Meaning: a hidden storage space (for money or provisions or weapons)",
-        "Meaning: a secret store of valuables or money",
-        "Meaning: (computer science) RAM memory that is set aside as a specialized buffer storage that is continually updated; used to optimize data transfers between system elements with different characteristics",
-        "A type of: storage space",
-        "A type of: store, stock, fund",
-        "A type of: buffer, buffer storage, buffer store",
-        "Also known as: hoard, stash",
-        "Also known as: memory cache",
-        "Used in technology or engineering.",
-        "No further clues available."
-      ],
-      "robot": [
-        "Meaning: a mechanism that can move automatically",
-        "A type of: mechanism",
-        "Examples: android, humanoid, mechanical man",
-        "Also known as: automaton, golem",
-        "Used in technology or engineering.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "admin": [
-        "Used in technology or engineering.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "array": [
-        "Meaning: an orderly arrangement",
-        "Meaning: an impressive display",
-        "Meaning: especially fine or decorative clothing",
-        "Meaning: an arrangement of aerials spaced to give desired directional characteristics",
-        "A type of: arrangement",
-        "A type of: display",
-        "A type of: clothing, article of clothing, vesture, wear, wearable, habiliment",
-        "A type of: directional antenna",
-        "Examples: bank",
-        "Examples: column"
-      ],
-      "batch": [
-        "Meaning: all the loaves of bread baked at the same time",
-        "Meaning: (often followed by `of') a large number or amount or extent",
-        "Meaning: a collection of things or persons to be handled together",
-        "Typical context: a deal of trouble",
-        "Typical context: a lot of money",
-        "Typical context: he made a mint on the stock market",
-        "Typical context: see the rest of the winners in our huge passel of photos",
-        "Typical context: it must have cost plenty",
-        "Typical context: a slew of journalists",
-        "Typical context: a wad of money"
-      ],
-      "class": [
-        "Meaning: a collection of things sharing a common attribute",
-        "Meaning: a body of students who are taught together",
-        "Meaning: people having the same social, economic, or educational status",
-        "Meaning: education imparted in a series of lessons or meetings",
-        "Meaning: a league ranked by quality",
-        "Meaning: a body of students who graduate together",
-        "Meaning: (biology) a taxonomic group containing one or more orders",
-        "Meaning: elegance in dress or behavior",
-        "Typical context: he took a course in basket weaving",
-        "Typical context: Princeton is in the NCAA Division 1-AA"
-      ],
-      "codec": [
-        "Used in technology or engineering.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "debug": [
-        "Meaning: locate and correct errors in a computer program code",
-        "A type of: correct, rectify, right",
-        "Used in technology or engineering.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
+        "A temporary storage area for frequently accessed data.",
+        "Helps speed up computers and web browsers.",
+        "Can be cleared to fix loading or performance issues."
       ],
       "email": [
-        "Meaning: (computer science) a system of world-wide electronic communication in which a computer user can compose a message at one terminal that can be regenerated at the recipient's terminal when the recipient logs in",
-        "Typical context: you cannot send packages by electronic mail",
-        "A type of: electronic communication",
-        "Examples: spam, junk e-mail",
-        "Also known as: electronic mail, e-mail",
-        "Opposite of: snail mail",
-        "Used in technology or engineering.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
+        "A method for sending digital messages over the internet.",
+        "Requires an address ending with @ and a domain.",
+        "Can include attachments like documents and images."
       ],
-      "index": [
-        "Meaning: a numerical scale used to compare variables with one another or with some reference number",
-        "Meaning: a number or ratio (a value on a scale of measurement) derived from a series of observed facts; can reveal relative changes as a function of time",
-        "Meaning: a mathematical notation indicating the number of times a quantity is multiplied by itself",
-        "Meaning: an alphabetical listing of names and topics along with page numbers where they are discussed",
-        "Meaning: the finger next to the thumb",
-        "A type of: scale, scale of measurement, graduated table, ordered series",
-        "A type of: fact",
-        "A type of: mathematical notation",
-        "A type of: list, listing",
-        "A type of: finger"
+      "block": [
+        "A section of data or code grouped together in computing.",
+        "Used in blockchain technology as part of a chain.",
+        "Also a command to stop unwanted contacts or messages."
       ],
-      "macro": [
-        "Meaning: a single computer instruction that results in a series of instructions in machine language",
-        "A type of: instruction, command, statement, program line",
-        "Also known as: macro instruction",
-        "Used in technology or engineering.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
+      "login": [
+        "The process of entering credentials to access a system or account.",
+        "Usually requires a username and password.",
+        "Helps protect your data from unauthorized users."
       ],
-      "mysql": [
-        "Used in technology or engineering.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
+      "stack": [
+        "A data structure that operates on a last-in, first-out basis.",
+        "Used in programming for managing function calls.",
+        "Also refers to layers of technology in software development."
       ],
       "query": [
-        "Meaning: an instance of questioning",
-        "Typical context: there was a question about my training",
-        "Typical context: we made inquiries of all those who were present",
-        "A type of: questioning, inquiring",
-        "Also known as: question, inquiry, enquiry",
-        "Opposite of: answer",
-        "Used in technology or engineering.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
+        "A request for information from a database or search engine.",
+        "In SQL, this term means asking for specific data.",
+        "Typing words into Google is making one of these."
       ],
-      "server": [
-        "Meaning: a person whose occupation is to serve at table (as in a restaurant)",
-        "Meaning: (court games) the player who serves to start a point",
-        "Meaning: (computer science) a computer that provides client stations with access to files and printers as shared resources to a computer network",
-        "Meaning: utensil used in serving food or drink",
-        "A type of: dining-room attendant, restaurant attendant",
-        "A type of: player, participant",
-        "A type of: computer, computing machine, computing device, data processor, electronic computer, information processing system",
-        "A type of: utensil",
-        "Examples: carhop",
-        "Examples: counterperson, counterwoman, counterman"
-      ],
-      "docker": [
-        "Meaning: a laborer who loads and unloads vessels in a port",
-        "A type of: laborer, manual laborer, labourer, jack",
-        "Also known as: stevedore, loader, longshoreman",
-        "Used in technology or engineering.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "github": [
-        "Used in technology or engineering.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "nodejs": [
-        "Used in technology or engineering.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "apache": [
-        "Meaning: any member of Athapaskan tribes that migrated to the southwestern desert (from Arizona to Texas and south into Mexico); fought a losing battle from 1861 to 1886 with the United States and were resettled in Oklahoma",
-        "Meaning: a Parisian gangster",
-        "A type of: Athapaskan, Athapascan, Athabaskan, Athabascan",
-        "A type of: gangster, mobster",
-        "A type of: Athapaskan, Athapascan, Athabaskan, Athabascan, Athapaskan language",
-        "Used in technology or engineering.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "buffer": [
-        "Meaning: (chemistry) an ionic compound that resists changes in its pH",
-        "Meaning: a neutral zone between two rival powers that is created in order to diminish the danger of conflict",
-        "Meaning: an inclined metal frame at the front of a locomotive to clear the track",
-        "Meaning: (computer science) a part of RAM used for temporary storage of data that is waiting to be sent to a device; used to compensate for differences in the rate of flow of data between components of a computer system",
-        "Meaning: a power tool used to buff surfaces",
-        "Meaning: a cushion-like device that reduces shock due to an impact",
-        "Meaning: an implement consisting of soft material mounted on a block; used for polishing (as in manicuring)",
-        "A type of: compound, chemical compound",
-        "A type of: zone",
-        "A type of: framework"
-      ],
-      "client": [
-        "Meaning: a person who seeks the advice of a lawyer",
-        "Meaning: someone who pays for goods or services",
-        "Meaning: (computer science) any computer that is hooked up to a computer network",
-        "A type of: case",
-        "A type of: consumer",
-        "A type of: computer, computing machine, computing device, data processor, electronic computer, information processing system",
-        "Examples: buyer, purchaser, emptor, vendee",
-        "Examples: guest",
-        "Examples: patron, frequenter",
-        "Examples: policyholder"
-      ],
-      "cursor": [
-        "Meaning: (computer science) indicator consisting of a movable spot of light (an icon) on a visual display; moving it allows the user to point to commands or screen positions",
-        "A type of: indicator",
-        "Also known as: pointer",
-        "Used in technology or engineering.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "debian": [
-        "Used in technology or engineering.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
+      "backup": [
+        "A copy of data stored separately for safety and recovery.",
+        "Helps protect your files in case of device failure or loss.",
+        "Many people use external drives or cloud services for this."
       ],
       "domain": [
-        "Meaning: a particular environment or walk of life",
-        "Meaning: territory over which rule or control is exercised",
-        "Meaning: (mathematics) the set of values of the independent variable for which a function is defined",
-        "Meaning: people in general; especially a distinctive group of people with some shared interest",
-        "Meaning: the content of a particular field of knowledge",
-        "Typical context: his social sphere is limited",
-        "Typical context: it was a closed area of employment",
-        "Typical context: he's out of my orbit",
-        "Typical context: he made it the law of the land",
-        "Typical context: the Western world"
+        "A unique name that identifies a website on the internet.",
+        "Ends with extensions like .com, .org, or .net.",
+        "You type this into a browser to visit a specific site."
       ],
-      "driver": [
-        "Meaning: the operator of a motor vehicle",
-        "Meaning: someone who drives animals that pull a vehicle",
-        "Meaning: (computer science) a program that determines how a computer will communicate with a peripheral device",
-        "Meaning: a golf club (a wood) with a near vertical face that is used for hitting long shots from the tee",
-        "A type of: operator, manipulator",
-        "A type of: worker",
-        "A type of: golfer, golf player, linksman",
-        "A type of: utility program, utility, service program",
-        "A type of: wood",
-        "Examples: chauffeur"
+      "export": [
+        "To send data or files out from one system to another.",
+        "Used to save documents in different formats.",
+        "The opposite of import in software and databases."
       ],
-      "filter": [
-        "Meaning: device that removes something from whatever passes through it",
-        "Meaning: an electrical device that alters the frequency spectrum of signals passing through it",
-        "A type of: device",
-        "A type of: electrical device",
-        "Examples: bacteria bed",
-        "Examples: diatomaceous earth, diatomite, kieselguhr",
-        "Examples: drain basket",
-        "Examples: glass wool",
-        "Examples: strainer",
-        "Used in technology or engineering."
-      ],
-      "folder": [
-        "Meaning: a small book usually having a paper cover",
-        "Meaning: covering that is folded over to protect the contents",
-        "A type of: book",
-        "A type of: covering",
-        "Examples: blue book",
-        "Examples: ticket book",
-        "Examples: matchbook",
-        "Also known as: booklet, brochure, leaflet",
-        "Used in technology or engineering.",
-        "No further clues available."
-      ],
-      "format": [
-        "Meaning: the general appearance of a publication",
-        "A type of: appearance, visual aspect",
-        "Also known as: formatting, data format, data formatting",
-        "Used in technology or engineering.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "kernel": [
-        "Meaning: the inner and usually edible part of a seed or grain or nut or fruit stone",
-        "Meaning: a single whole grain of a cereal",
-        "Meaning: the choicest or most essential or most vital part of some idea or experience",
-        "Typical context: the gist of the prosecutor's argument",
-        "Typical context: the heart and soul of the Republican Party",
-        "Typical context: the nub of the story",
-        "A type of: plant part, plant structure",
-        "A type of: grain, caryopsis",
-        "A type of: content, cognitive content, mental object",
-        "Examples: corn"
-      ],
-      "layout": [
-        "Meaning: a plan or design of something that is laid out",
-        "Meaning: the act of laying out (as by making plans for something)",
-        "A type of: design, plan",
-        "A type of: order, ordering",
-        "Used in technology or engineering.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "method": [
-        "Meaning: a way of doing something, especially a systematic way; implies an orderly logical arrangement (usually in steps)",
-        "Meaning: an acting technique introduced by Stanislavsky in which the actor recalls emotions or reactions from his or her own life and uses them to identify with the character being portrayed",
-        "A type of: know-how",
-        "A type of: acting, playing, playacting, performing",
-        "Examples: mnemonics",
-        "Examples: solution",
-        "Examples: system, system of rules",
-        "Examples: technicolor",
-        "Examples: technique",
-        "Examples: wrinkle"
+      "import": [
+        "To bring data or files into a program or system.",
+        "Allows you to transfer information from other sources.",
+        "Common in spreadsheets, databases, and programming."
       ],
       "module": [
-        "Meaning: one of the inherent cognitive or perceptual powers of the mind",
-        "Meaning: detachable compartment of a spacecraft",
-        "Meaning: computer circuit consisting of an assembly of electronic components (as of computer hardware)",
-        "Meaning: a self-contained component (unit or item) that is used in combination with other components",
-        "A type of: ability, power",
-        "A type of: compartment",
-        "A type of: computer circuit",
-        "A type of: component, constituent, element",
-        "Examples: attention",
-        "Examples: language, speech"
+        "A self-contained unit of code or functionality in a program.",
+        "Makes software easier to build and maintain.",
+        "In Python, these can be imported for extra features."
       ],
-      "network": [
-        "Meaning: an interconnected system of things or people",
-        "Meaning: (broadcasting) a communication system consisting of a group of broadcasting stations that all transmit the same programs",
-        "Meaning: an open fabric of string or rope or wire woven together at regular intervals",
-        "Meaning: a system of intersecting lines or channels",
-        "Meaning: (electronics) a system of interconnected electronic components or circuits",
-        "Typical context: tangled in a web of cloth",
-        "A type of: system, scheme",
-        "A type of: communication system, communication equipment",
-        "A type of: fabric, cloth, material, textile",
-        "A type of: system"
+      "packet": [
+        "A small chunk of data sent over a network.",
+        "Internet traffic travels in these units.",
+        "Routers direct these to their destination."
       ],
-      "bitcoin": [
-        "Used in technology or engineering.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
+      "script": [
+        "A simple program or set of instructions for automating tasks.",
+        "Often used for system admin, web, or data processing.",
+        "Can be written in languages like Python, Bash, or JavaScript."
       ],
-      "mongodb": [
-        "Used in technology or engineering.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
+      "search": [
+        "To look for information in a database or on the web.",
+        "Google and Bing are popular services for this.",
+        "Often involves typing keywords and reviewing results."
       ],
-      "devops": [
-        "Used in technology or engineering.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
+      "server": [
+        "A computer that provides data or services to other computers.",
+        "Websites and email depend on these machines.",
+        "May be located in data centers or run at home."
       ],
-      "adapter": [
-        "Meaning: a musician who adapts a composition for particular voices or instruments or for another style of performance",
-        "Meaning: device that enables something to be used in a way different from that for which it was intended or makes different pieces of apparatus compatible",
-        "A type of: musician",
-        "A type of: device",
-        "Examples: orchestrator",
-        "Also known as: arranger, transcriber",
-        "Also known as: adaptor",
-        "Used in technology or engineering.",
-        "No further clues available.",
-        "No further clues available."
+      "thread": [
+        "A sequence of programmed instructions that can run independently.",
+        "Used to perform multiple tasks at once in computing.",
+        "Forums and emails also use this term for message chains."
       ],
-      "backend": [
-        "Used in technology or engineering.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
+      "upload": [
+        "To send files or data from your device to the internet or a server.",
+        "You do this when you add photos to social media.",
+        "The opposite of downloading."
+      ],
+      "buffer": [
+        "A temporary storage area that holds data while it’s being moved.",
+        "Helps videos stream smoothly without pauses.",
+        "In programming, prevents data loss during processing."
+      ],
+      "cursor": [
+        "A movable indicator on a computer screen, often as a blinking line or arrow.",
+        "Shows where your typing or clicking will happen.",
+        "Can also refer to a pointer in a database."
+      ],
+      "widget": [
+        "A small application or tool that performs a specific function on a device.",
+        "You see these for weather, clock, or news on your home screen.",
+        "Common in both desktop and mobile environments."
+      ],
+      "plugin": [
+        "An add-on that adds new features to a software program.",
+        "Web browsers use these for things like playing videos.",
+        "Often used to extend functionality in apps and websites."
+      ],
+      "retina": [
+        "A brand name for high-resolution screens by Apple.",
+        "Displays sharper images and text on devices like iPhones.",
+        "The term is inspired by the eye’s light-sensitive layer."
+      ],
+      "serial": [
+        "A communication method that sends data one bit at a time.",
+        "Common in ports for connecting older devices.",
+        "Also means something that happens in sequence."
+      ],
+      "subnet": [
+        "A segmented part of a larger computer network.",
+        "Helps organize and manage network traffic efficiently.",
+        "Defined by a range of IP addresses."
+      ],
+      "unzip": [
+        "To extract files from a compressed format, like ZIP.",
+        "Used to access the contents of downloaded archives.",
+        "The opposite of compressing files."
       ],
       "browser": [
-        "Meaning: a viewer who looks around casually without seeking anything in particular",
-        "Meaning: a program used to view HTML documents",
-        "A type of: spectator, witness, viewer, watcher, looker",
-        "A type of: application, application program, applications programme",
-        "Also known as: web browser",
-        "Used in technology or engineering.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
+        "A software program used to access and view websites on the internet.",
+        "Popular examples include Chrome, Firefox, and Safari.",
+        "Lets you open multiple tabs and bookmark pages."
       ],
-      "compile": [
-        "Meaning: get or gather together",
-        "Meaning: put together out of existing material",
-        "Meaning: use a computer program to translate source code written in a particular programming language into computer-readable machine code that can be executed",
-        "Typical context: I am accumulating evidence for the man's unfaithfulness to his wife",
-        "Typical context: She is amassing a lot of data for her thesis",
-        "Typical context: She rolled up a small fortune",
-        "A type of: store, hive away, lay in, put in, salt away, stack away, stash away",
-        "A type of: make",
-        "Examples: bale",
-        "Examples: catch"
-      ],
-      "console": [
-        "Meaning: a small table fixed to a wall or designed to stand against a wall",
-        "Meaning: a scientific instrument consisting of displays and an input device that an operator can use to monitor and control a system (especially a computer system)",
-        "Meaning: an ornamental scroll-shaped bracket (especially one used to support a wall fixture)",
-        "Meaning: housing for electronic instruments, as radio or television",
-        "A type of: table",
-        "A type of: scientific instrument",
-        "A type of: bracket, wall bracket",
-        "A type of: housing",
-        "Also known as: console table",
-        "Also known as: cabinet"
-      ],
-      "control": [
-        "Meaning: power to direct or determine",
-        "Meaning: a relation of constraint of one entity (thing or person or group) by another",
-        "Meaning: (physiology) regulation or maintenance of a function or action or reflex etc",
-        "Meaning: a standard against which other conditions can be compared in a scientific experiment",
-        "Meaning: the state that exists when one person or group has power over another",
-        "Meaning: discipline in personal and social activities",
-        "Meaning: great skillfulness and knowledge of some subject or activity",
-        "Meaning: a spiritual agency that is assumed to assist the medium during a seance",
-        "Typical context: her apparent dominance of her husband was really her attempt to make him pay attention to her",
-        "Typical context: he was a model of polite restraint"
-      ],
-      "desktop": [
-        "Meaning: the top of a desk",
-        "Meaning: (computer science) the area of the screen in graphical user interfaces against which icons and windows appear",
-        "A type of: top, top side, upper side, upside",
-        "A type of: screen, CRT screen",
-        "Also known as: background, screen background",
-        "Used in technology or engineering.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "display": [
-        "Meaning: something intended to communicate a particular impression",
-        "Meaning: something shown to the public",
-        "Meaning: a visual representation of something",
-        "Meaning: behavior that makes your feelings public",
-        "Meaning: exhibiting openly in public view",
-        "Meaning: an electronic device that represents information in visual form",
-        "Typical context: a show of impatience",
-        "Typical context: a good show of looking interested",
-        "Typical context: the museum had many exhibits of oriental art",
-        "A type of: demonstration, demo"
-      ],
-      "encrypt": [
-        "Meaning: convert ordinary language into code",
-        "Typical context: We should encode the message for security reasons",
-        "A type of: encode",
-        "Also known as: code, encipher, cipher",
-        "Used in technology or engineering.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
+      "channel": [
+        "A path or medium for communication or data transfer.",
+        "On platforms like Slack or Discord, these organize conversations.",
+        "Used in TV, radio, and digital streaming."
       ],
       "firewall": [
-        "Meaning: (colloquial) the application of maximum thrust",
-        "Meaning: (computing) a security system consisting of a combination of hardware and software that limits the exposure of a computer or computer network to attack from crackers; commonly used on local area networks that are connected to the internet",
-        "Meaning: a fireproof (or fire-resistant) wall designed to prevent the spread of fire through a building or a vehicle",
-        "A type of: drive, thrust, driving force",
-        "A type of: security system",
-        "A type of: wall",
-        "Used in technology or engineering.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
+        "A security system that blocks unauthorized access to or from a network.",
+        "Protects computers from hackers and malware.",
+        "Can be hardware or software based."
       ],
       "gateway": [
-        "Meaning: an entrance that can be closed by a gate",
-        "A type of: entrance, entranceway, entryway, entry, entree",
-        "Used in technology or engineering.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
+        "A device that connects different networks and directs data traffic.",
+        "Acts as a bridge between home networks and the internet.",
+        "Needed for accessing online services from local devices."
       ],
-      "hosting": [
-        "Meaning: be the host of or for",
-        "Typical context: We hosted 4 couples last night",
-        "A type of: entertain",
-        "Examples: do the honors",
-        "Examples: emcee, compere",
-        "Examples: feast, banquet, junket",
-        "Examples: wine and dine",
-        "Also known as: host",
-        "Used in technology or engineering.",
-        "No further clues available."
-      ],
-      "package": [
-        "Meaning: a collection of things wrapped or boxed together",
-        "Meaning: a wrapped container",
-        "Meaning: (computer science) written programs or procedures or rules and associated documentation pertaining to the operation of a computer system and that are stored in read/write memory",
-        "Typical context: the market for software is expected to expand",
-        "A type of: collection, aggregation, accumulation, assemblage",
-        "A type of: container",
-        "A type of: code, computer code",
-        "Examples: wisp",
-        "Examples: bundle, sheaf",
-        "Examples: pack"
-      ],
-      "program": [
-        "Meaning: a series of steps to be carried out or goals to be accomplished",
-        "Meaning: a system of projects or services intended to meet a public need",
-        "Meaning: a radio or television show",
-        "Meaning: a document stating the aims and principles of a political party",
-        "Meaning: an announcement of the events that will occur as part of a theatrical or sporting event",
-        "Meaning: an integrated course of academic studies",
-        "Meaning: (computer science) a sequence of instructions that a computer can interpret and execute",
-        "Meaning: a performance (or series of performances) at a public presentation",
-        "Typical context: they drew up a six-step plan",
-        "Typical context: they discussed plans for a new bond issue"
-      ],
-      "routing": [
-        "Meaning: send documents or materials to appropriate destinations",
-        "Meaning: send via a specific route",
-        "Meaning: divert in a specified direction",
-        "Meaning: cause to flee",
-        "Meaning: dig with the snout",
-        "Meaning: make a groove in",
-        "Meaning: defeat disastrously",
-        "Typical context: divert the low voltage to the engine cylinders",
-        "Typical context: rout out the fighters from their caves",
-        "Typical context: the pig was rooting for truffles"
-      ],
-      "database": [
-        "Meaning: an organized body of related information",
-        "A type of: information, info",
-        "Examples: list, listing",
-        "Examples: subdata base",
-        "Used in technology or engineering.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "software": [
-        "Meaning: (computer science) written programs or procedures or rules and associated documentation pertaining to the operation of a computer system and that are stored in read/write memory",
-        "A type of: code, computer code",
-        "Examples: authoring language",
-        "Examples: computer-aided design, CAD",
-        "Examples: database management system, DBMS",
-        "Examples: freeware",
-        "Examples: groupware",
-        "Examples: operating system, OS",
-        "Examples: program, programme, computer program, computer programme",
-        "Examples: routine, subroutine, subprogram, procedure, function"
-      ],
-      "ethernet": [
-        "Meaning: a type of network technology for local area networks; coaxial cable carries radio frequency signals between computers at a rate of 10 megabits per second",
-        "A type of: local area network, LAN",
-        "Used in technology or engineering.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "protocol": [
-        "Meaning: (computer science) rules determining the format and transmission of data",
-        "Meaning: forms of ceremony and etiquette observed by diplomats and heads of state",
-        "Meaning: code of correct conduct",
-        "A type of: rule, prescript",
-        "A type of: etiquette",
-        "A type of: code of conduct, code of behavior",
-        "Examples: musical instrument digital interface, MIDI",
-        "Also known as: communications protocol",
-        "Used in technology or engineering.",
-        "No further clues available."
-      ],
-      "frontend": [
-        "Used in technology or engineering.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "abstract": [
-        "Meaning: a concept or idea not associated with any specific instance",
-        "Meaning: a sketchy summary of the main points of an argument or theory",
-        "A type of: concept, conception, construct",
-        "A type of: summary, sum-up",
-        "Examples: absolute",
-        "Examples: right",
-        "Examples: teacher",
-        "Examples: thing",
-        "Examples: apercu",
-        "Examples: brief"
-      ],
-      "assembly": [
-        "Meaning: a group of machine parts that fit together to form a self-contained unit",
-        "Meaning: the act of constructing something (as a piece of machinery)",
-        "Meaning: a public facility to meet for open discussion",
-        "Meaning: a group of persons who are gathered together for a common purpose",
-        "Meaning: a unit consisting of components that have been fitted together",
-        "Meaning: the social act of assembling",
-        "A type of: machine",
-        "A type of: construction, building",
-        "A type of: facility, installation",
-        "A type of: gathering, assemblage"
-      ],
-      "backbone": [
-        "Meaning: a central cohesive source of support and stability",
-        "Meaning: fortitude and determination",
-        "Meaning: the series of vertebrae forming the axis of the skeleton and protecting the spinal cord",
-        "Meaning: the part of a book's cover that encloses the inner side of the book's pages and that faces outward when the book is shelved",
-        "Meaning: the part of a network that connects other networks together",
-        "Typical context: faith is his anchor",
-        "Typical context: the keystone of campaign reform was the ban on soft money",
-        "Typical context: he is the linchpin of this firm",
-        "Typical context: he didn't have the guts to try it",
-        "Typical context: the fall broke his back"
-      ],
-      "compiler": [
-        "Meaning: a person who compiles information (as for reference purposes)",
-        "Meaning: (computer science) a program that decodes instructions written in a higher order language and produces an assembly language program",
-        "A type of: writer, author",
-        "A type of: program, programme, computer program, computer programme",
-        "Examples: encyclopedist, encyclopaedist",
-        "Examples: lexicographer, lexicologist",
-        "Has parts such as: parser",
-        "Also known as: compiling program",
-        "Used in technology or engineering.",
-        "No further clues available."
-      ],
-      "computer": [
-        "Meaning: a machine for performing calculations automatically",
-        "Meaning: an expert at calculation (or at operating calculating machines)",
-        "A type of: machine",
-        "A type of: expert",
-        "Examples: node, client, guest",
-        "Examples: number cruncher",
-        "Examples: pari-mutuel machine, totalizer, totaliser, totalizator, totalisator",
-        "Examples: predictor",
-        "Examples: server, host",
-        "Examples: Turing machine"
-      ],
-      "hardware": [
-        "Meaning: major items of military weaponry (as tanks or missile)",
-        "Meaning: instrumentalities (tools or implements) made of metal",
-        "Meaning: (computer science) the mechanical, magnetic, electronic, and electrical components making up a computer system",
-        "A type of: weaponry, arms, implements of war, weapons system, munition",
-        "A type of: instrumentality, instrumentation",
-        "A type of: component, constituent, element",
-        "Examples: central processing unit, CPU, C.P.U., central processor, processor, mainframe",
-        "Examples: memory, computer memory, storage, computer storage, store, memory board",
-        "Examples: scheduler",
-        "Examples: sequencer"
-      ],
-      "internet": [
-        "Meaning: a computer network consisting of a worldwide network of computer networks that use the TCP/IP network protocols to facilitate data transmission and exchange",
-        "A type of: computer network",
-        "Also known as: net, cyberspace",
-        "Used in technology or engineering.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
-      ],
-      "malware": [
-        "Used in technology or engineering.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
+      "network": [
+        "A group of computers or devices connected to share information.",
+        "Wi-Fi is a common way to create one at home.",
+        "The internet is the largest example of this."
       ],
       "monitor": [
-        "Meaning: someone who supervises (an examination)",
-        "Meaning: someone who gives a warning so that a mistake can be avoided",
-        "Meaning: an ironclad vessel built by Federal forces to do battle with the Merrimac",
-        "Meaning: electronic equipment that is used to check the quality or content of electronic transmissions",
-        "Meaning: a piece of electronic equipment that keeps track of the operation of a system continuously and warns of trouble",
-        "Meaning: any of various large tropical carnivorous lizards of Africa and Asia and Australia; fabled to warn of crocodiles",
-        "A type of: supervisor",
-        "A type of: defender, guardian, protector, shielder",
-        "A type of: display, video display",
-        "A type of: electronic equipment"
+        "A screen that displays images and text from a computer.",
+        "Comes in various sizes and resolutions.",
+        "Can refer to software that checks system health."
       ],
-      "platform": [
-        "Meaning: a raised horizontal surface",
-        "Meaning: a document stating the aims and principles of a political party",
-        "Meaning: the combination of a particular computer and a particular operating system",
-        "Meaning: any military structure or vehicle bearing weapons",
-        "Meaning: a woman's shoe with a very high thick sole",
-        "Typical context: they won the election even though they offered no positive program",
-        "A type of: horizontal surface, level",
-        "A type of: document, written document, papers",
-        "A type of: computer system, computing system, automatic data processing system, ADP system, ADPS",
-        "A type of: structure, construction"
+      "offline": [
+        "A state when a device is not connected to the internet or a network.",
+        "You can still work on some apps in this mode.",
+        "The opposite of being online."
+      ],
+      "reboot": [
+        "To restart a computer or device to refresh its system.",
+        "Fixes many common technical problems.",
+        "May also refer to starting a series or franchise over."
+      ],
+      "recycle": [
+        "To process old electronic devices or materials for reuse.",
+        "Computers have bins or folders with this name for deleted files.",
+        "Good for the environment and data security."
+      ],
+      "scanner": [
+        "A device that copies images or documents into a digital format.",
+        "Used for digitizing photos or paperwork.",
+        "Also refers to software that checks for viruses."
+      ],
+      "storage": [
+        "The part of a device where data, files, and programs are kept.",
+        "Includes hard drives, SSDs, and cloud solutions.",
+        "Needed for saving documents, apps, and media."
+      ],
+      "virtual": [
+        "Describes something that exists in a digital or simulated form.",
+        "Virtual reality creates immersive computer-generated worlds.",
+        "Virtual meetings are held online instead of in person."
+      ],
+      "account": [
+        "A user profile that gives access to a system, website, or app.",
+        "Usually protected by a password and sometimes 2FA.",
+        "Needed to send email, shop online, or play games."
+      ],
+      "digital": [
+        "Relating to technology that uses computer code or binary data.",
+        "Digital photos, music, and videos are stored electronically.",
+        "The opposite of analog."
+      ],
+      "encoder": [
+        "A device or program that converts information into a coded format.",
+        "Used to compress audio and video files.",
+        "Important in streaming and broadcasting technologies."
+      ],
+      "malware": [
+        "Malicious software designed to harm or exploit computers.",
+        "Includes viruses, worms, and ransomware.",
+        "Often spreads through email or infected websites."
+      ],
+      "manager": [
+        "A person or tool that organizes or oversees operations.",
+        "Software can manage files, passwords, or devices.",
+        "In IT, this can refer to project or system management."
+      ],
+      "restore": [
+        "To bring back data or settings from a backup.",
+        "Used when files are lost or a system needs repair.",
+        "Helps recover after a crash or accidental deletion."
+      ],
+      "session": [
+        "A period during which a user is actively using a system.",
+        "Websites track these to remember your activity.",
+        "Can also mean a time slot in conferences or meetings."
+      ],
+      "database": [
+        "An organized collection of structured information stored electronically.",
+        "Used by apps and websites to save user data and records.",
+        "Examples include MySQL, PostgreSQL, and MongoDB."
+      ],
+      "download": [
+        "To transfer files or data from the internet to your device.",
+        "You do this when you save songs or documents from a website.",
+        "The opposite of upload."
+      ],
+      "ethernet": [
+        "A common wired technology for connecting devices in a local network.",
+        "Uses cables to provide fast and stable internet.",
+        "Often found in offices and desktops for reliable connections."
+      ],
+      "function": [
+        "A named block of code that performs a specific task in programming.",
+        "Called by its name to run the same steps many times.",
+        "Math uses this term for relationships between inputs and outputs."
+      ],
+      "hardware": [
+        "The physical parts of a computer or electronic device.",
+        "Includes keyboards, monitors, chips, and drives.",
+        "The opposite of software."
+      ],
+      "keyboard": [
+        "A device with buttons used to input letters, numbers, and symbols.",
+        "Essential for typing on computers and tablets.",
+        "Has special keys for functions like Enter or Ctrl."
+      ],
+      "protocol": [
+        "A set of rules for how data is sent and received over networks.",
+        "HTTP and FTP are examples used for web and file transfers.",
+        "Ensures computers can communicate effectively."
+      ],
+      "software": [
+        "Programs and applications that run on computers and devices.",
+        "Includes operating systems, games, and office suites.",
+        "Downloaded, installed, and updated by users."
+      ],
+      "wireless": [
+        "Describes technology that transmits data without cables.",
+        "Wi-Fi and Bluetooth are common types.",
+        "Makes connecting devices convenient and mobile."
+      ],
+      "compress": [
+        "To reduce the size of files by encoding data more efficiently.",
+        "Makes storage and sharing faster and easier.",
+        "ZIP and RAR are common formats for this process."
+      ],
+      "computer": [
+        "An electronic device that processes data and performs calculations.",
+        "Used for work, gaming, internet browsing, and more.",
+        "Laptops, desktops, and servers are all types of this."
       ],
       "terminal": [
-        "Meaning: station where transport vehicles load or unload passengers or goods",
-        "Meaning: a contact on an electrical device (such as a battery) at which electric current enters or leaves",
-        "Meaning: either extremity of something that has length",
-        "Meaning: electronic equipment consisting of a device providing access to a computer; has a keyboard and display",
-        "Typical context: the end of the pier",
-        "Typical context: she knotted the end of the thread",
-        "Typical context: they rode to the end of the line",
-        "A type of: station",
-        "A type of: contact, tangency",
-        "A type of: extremity"
+        "A device or program for entering and displaying computer data.",
+        "In Linux or macOS, it’s a command-line interface.",
+        "Also refers to screens at airports or train stations."
       ],
-      "framework": [
-        "Meaning: a hypothetical description of a complex entity or process",
-        "Meaning: the underlying structure",
-        "Meaning: a structure supporting or containing something",
-        "Typical context: the computer program was based on a model of the circulatory and respiratory systems",
-        "Typical context: it is part of the fabric of society",
-        "A type of: hypothesis, possibility, theory",
-        "A type of: structure",
-        "A type of: supporting structure",
-        "Examples: Copernican system",
-        "Examples: M-theory"
+      "operator": [
+        "A symbol or function that performs actions in math or code.",
+        "Plus (+) and minus (−) are common examples.",
+        "Can also mean a person who controls a system."
       ],
-      "interface": [
-        "Meaning: (chemistry) a surface forming a common boundary between two things (two objects or liquids or chemical phases)",
-        "Meaning: (computer science) a program that controls a display for the user (usually on a computer monitor) and that allows the user to interact with the system",
-        "Meaning: the overlap where two theories or phenomena affect each other or have links with each other",
-        "Meaning: (computer science) computer circuit consisting of the hardware and associated circuitry that links one device with another (especially a computer and a hard disk drive or other peripherals)",
-        "A type of: surface",
-        "A type of: program, programme, computer program, computer programme",
-        "A type of: overlap, convergence, intersection",
-        "A type of: computer circuit",
-        "Examples: serial port",
-        "Also known as: user interface"
+      "security": [
+        "Protection of data, devices, and networks from threats.",
+        "Involves passwords, encryption, and firewalls.",
+        "Important for safe online banking and communication."
       ],
-      "container": [
-        "Meaning: any object that can be used to hold things (especially a large metal boxlike object of standardized dimensions that can be loaded from one form of transport to another)",
-        "A type of: instrumentality, instrumentation",
-        "Examples: bag",
-        "Examples: bag, handbag, pocketbook, purse",
-        "Examples: basket, handbasket",
-        "Examples: bin",
-        "Examples: bowl, pipe bowl",
-        "Examples: box",
-        "Examples: bread-bin, breadbox",
-        "Examples: bunker"
+      "registry": [
+        "A system database in Windows for storing settings and options.",
+        "Advanced users edit this to fix or customize their computers.",
+        "Can also mean an official record of information."
       ],
-      "analytics": [
-        "Used in technology or engineering.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
+      "solution": [
+        "An answer to a problem, especially in tech or math.",
+        "Software that helps businesses manage tasks is called this.",
+        "Can also refer to a liquid mixture in chemistry."
       ],
-      "antivirus": [
-        "Used in technology or engineering.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
+      "snapshot": [
+        "A saved image or state of a system at a specific time.",
+        "Used for backups or to restore settings.",
+        "Can also mean a quick photo with a camera."
       ],
-      "bandwidth": [
-        "Meaning: a data transmission rate; the maximum amount of information (bits/second) that can be transmitted along a channel",
-        "A type of: information measure",
-        "Used in technology or engineering.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
+      "tracking": [
+        "Monitoring the movement or progress of something.",
+        "Websites do this to follow user behavior.",
+        "Packages in delivery services use this for updates."
       ],
-      "bootstrap": [
-        "Meaning: a strap that is looped and sewn to the top of a boot for pulling it on",
-        "A type of: strap",
-        "Used in technology or engineering.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
+      "username": [
+        "A unique name chosen by a user to log into a system or app.",
+        "Paired with a password for account access.",
+        "Can be your email or a nickname online."
       ],
-      "broadband": [
-        "Meaning: of or relating to or being a communications network in which the bandwidth can be divided and shared by multiple simultaneous signals (as for voice or data or video)",
-        "Meaning: responding to or operating at a wide band of frequencies",
-        "Also known as: wideband",
-        "Used in technology or engineering.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
+      "variable": [
+        "A named symbol in programming that stores data values.",
+        "Its value can change as the program runs.",
+        "Used in math, science, and statistics too."
       ],
-      "component": [
-        "Meaning: an abstract part of something",
-        "Meaning: something determined in relation to something that includes it",
-        "Meaning: an artifact that is one of the individual parts of which a composite entity is made up; especially a part that can be separated from or attached to a system",
-        "Typical context: two constituents of a musical composition are melody and harmony",
-        "Typical context: the grammatical elements of a sentence",
-        "Typical context: a key factor in her success",
-        "Typical context: humor: an effective ingredient of a speech",
-        "Typical context: he wanted to feel a part of something bigger than himself",
-        "Typical context: I read a portion of the manuscript",
-        "Typical context: the animal constituent of plankton"
+      "algorithm": [
+        "A step-by-step procedure or formula for solving a problem.",
+        "Search engines use these to rank web pages.",
+        "Foundational in programming, math, and machine learning."
       ],
-      "developer": [
-        "Meaning: someone who develops real estate (especially someone who prepares a site for residential or commercial use)",
-        "Meaning: photographic equipment consisting of a chemical solution for developing film",
-        "A type of: creator",
-        "A type of: photographic equipment",
-        "Examples: stop bath, short-stop, short-stop bath",
-        "Used in technology or engineering.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
+      "bluetooth": [
+        "A wireless technology for exchanging data over short distances.",
+        "Commonly used to connect headphones, speakers, or keyboards.",
+        "Named after a Viking king known for uniting people."
+      ],
+      "cartridge": [
+        "A removable container holding ink, toner, or data.",
+        "Printers use these for color or black-and-white printing.",
+        "Classic video game consoles used these for games."
       ],
       "directory": [
-        "Meaning: an alphabetical list of names and addresses",
-        "Meaning: (computer science) a listing of the files stored in memory (usually on a hard disk)",
-        "A type of: reference book, reference, reference work, book of facts",
-        "A type of: list, listing",
-        "Examples: blue book",
-        "Used in technology or engineering.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
+        "A folder or location for organizing files on a computer.",
+        "Part of a file path in operating systems.",
+        "Also refers to a list of names or contacts."
       ],
-      "extension": [
-        "Meaning: a mutually agreed delay in the date set for the completion of a job or payment of a debt",
-        "Meaning: act of expanding in scope; making more widely available",
-        "Meaning: the spreading of something (a belief or practice) into new regions",
-        "Meaning: an educational opportunity provided by colleges and universities to people who are not enrolled as regular students",
-        "Meaning: act of stretching or straightening out a flexed limb",
-        "Meaning: a string of characters beginning with a period and followed by one or more letters; the optional second part of a PC computer filename",
-        "Meaning: the most direct or specific meaning of a word or expression; the class of objects that an expression refers to",
-        "Meaning: the ability to raise the working leg high in the air",
-        "Meaning: amount or degree or range to which something extends",
-        "Meaning: an additional telephone set that is connected to the same telephone line"
+      "emulation": [
+        "The process of imitating hardware or software on another system.",
+        "Lets old games run on modern computers.",
+        "Often used to test programs in a different environment."
       ],
-      "localhost": [
-        "Used in technology or engineering.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
+      "framework": [
+        "A structure of code providing reusable components for developers.",
+        "Examples include Django, React, and Angular.",
+        "Helps speed up and organize software development."
+      ],
+      "interface": [
+        "A point where two systems meet and interact, like hardware and software.",
+        "Graphical ones (GUIs) use windows and icons.",
+        "APIs let programs communicate with each other."
       ],
       "mainframe": [
-        "Meaning: a large digital computer serving 100-400 users and occupying a special air-conditioned room",
-        "Meaning: (computer science) the part of a computer (a microprocessor chip) that does most of the data processing",
-        "Typical context: the CPU and the memory form the central part of a computer to which the peripherals are attached",
-        "A type of: digital computer",
-        "A type of: electronic equipment",
-        "A type of: hardware, computer hardware",
-        "Examples: supercomputer",
-        "Has parts such as: CPU board, mother board",
-        "Also known as: mainframe computer",
-        "Also known as: central processing unit, CPU, C.P.U."
+        "A powerful, large computer used for critical business applications.",
+        "Common in banks, governments, and big organizations.",
+        "Known for handling massive amounts of data and users."
+      ],
+      "multicast": [
+        "Sending data from one sender to multiple specific receivers at once.",
+        "Used in streaming media and online gaming.",
+        "More efficient than sending separate copies to each device."
       ],
       "processor": [
-        "Meaning: a business engaged in processing agricultural products and preparing them for market",
-        "Meaning: someone who processes things (foods or photographs or applicants etc.)",
-        "Typical context: the CPU and the memory form the central part of a computer to which the peripherals are attached",
-        "A type of: business, concern, business concern, business organization, business organisation",
-        "A type of: worker",
-        "A type of: electronic equipment",
-        "A type of: hardware, computer hardware",
-        "Has parts such as: CPU board, mother board",
-        "Also known as: central processing unit, CPU, C.P.U.",
-        "Used in technology or engineering."
+        "The component in a computer that performs calculations and tasks.",
+        "Also called the CPU, it’s measured in GHz.",
+        "Responsible for running software and operating systems."
       ],
-      "javascript": [
-        "Used in technology or engineering.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
+      "screenshot": [
+        "An image capture of what’s displayed on a computer or device screen.",
+        "Useful for sharing what you see with others or for tech support.",
+        "On Windows, press Print Screen; on Mac, use Command + Shift + 4."
       ],
-      "kubernetes": [
-        "Used in technology or engineering.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
+      "signature": [
+        "A unique mark or code that verifies identity or authenticity.",
+        "Email messages often include one at the end.",
+        "Digital versions can be used for security and legal approval."
       ],
-      "blockchain": [
-        "Used in technology or engineering.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
+      "styluspen": [
+        "A pen-shaped tool used to write or draw on touchscreens.",
+        "Tablets and graphic designers often rely on this.",
+        "Offers more precision than using a finger."
       ],
-      "middleware": [
-        "Used in technology or engineering.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
+      "timestamp": [
+        "A record of the exact date and time an event occurred.",
+        "Found in logs, messages, and file histories.",
+        "Used to track changes and order events."
+      ],
+      "trending": [
+        "Describes topics or hashtags currently popular online.",
+        "Social media platforms show these to highlight hot topics.",
+        "Can refer to rising interests in technology or news."
+      ],
+      "universal": [
+        "Something that applies everywhere or to all devices.",
+        "USB stands for this Serial Bus, a common connector.",
+        "Describes compatibility across platforms or regions."
+      ],
+      "utilities": [
+        "Software tools designed to maintain or optimize computers.",
+        "Disk cleanup and antivirus are common examples.",
+        "Often come pre-installed or are available as downloads."
+      ],
+      "whitelist": [
+        "A list of trusted emails, apps, or addresses allowed by a system.",
+        "Lets approved items bypass security filters.",
+        "The opposite of blacklist."
+      ],
+      "blacklist": [
+        "A list of blocked or banned items in software or security settings.",
+        "Prevents certain emails or programs from running.",
+        "Often used for spam control and safety."
       ],
       "encryption": [
-        "Meaning: the activity of converting data or information into code",
-        "A type of: cryptography, coding, secret writing, steganography",
-        "Examples: compression",
-        "Also known as: encoding",
-        "Used in technology or engineering.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
+        "The process of converting data into a secure, unreadable format.",
+        "Protects information from unauthorized access.",
+        "Used in messaging, banking, and online shopping."
       ],
-      "artificial": [
-        "Meaning: contrived by art rather than nature",
-        "Meaning: not arising from natural growth or characterized by vital processes",
-        "Typical context: contrived coyness",
-        "Typical context: a stilted letter of acknowledgment",
-        "Typical context: when people try to correct their speech they develop a stilted pronunciation",
-        "Also known as: unreal",
-        "Also known as: contrived, hokey, stilted",
-        "Opposite of: natural",
-        "Used in technology or engineering.",
-        "No further clues available."
+      "application": [
+        "A software program designed to perform specific tasks for users.",
+        "Word processors and games are examples of this.",
+        "Also called 'apps' on mobile devices."
+      ],
+      "automation": [
+        "The use of technology to perform tasks with little or no human input.",
+        "Common in manufacturing, IT, and home devices.",
+        "Helps improve efficiency and reduce manual work."
+      ],
+      "clipboard": [
+        "A temporary space for storing copied or cut data on a computer.",
+        "Used when you copy and paste text, images, or files.",
+        "Cleared when you shut down or restart your device."
       ],
       "controller": [
-        "Meaning: someone who maintains and audits business accounts",
-        "Meaning: a person who directs and restrains",
-        "Meaning: a mechanism that controls the operation of a machine",
-        "Typical context: I turned the controls over to her",
-        "A type of: businessperson, bourgeois",
-        "A type of: person, individual, someone, somebody, mortal, soul",
-        "A type of: mechanism",
-        "Examples: auditor",
-        "Examples: bean counter",
-        "Examples: bookkeeper"
+        "A device or program that manages other hardware or software.",
+        "Game consoles use these for player input.",
+        "Also found in robotics and network management."
+      ],
+      "definition": [
+        "A statement that explains the meaning of a term or concept.",
+        "In programming, it specifies what a function or variable is.",
+        "Helps users understand technical language."
+      ],
+      "generation": [
+        "A group or stage in the development of technology.",
+        "Newer versions of phones or processors are called this.",
+        "Can also refer to producing data or electricity."
+      ],
+      "navigation": [
+        "The process of finding your way in digital interfaces or on the web.",
+        "Menus and buttons help users do this.",
+        "GPS devices and apps provide this in the real world."
+      ],
+      "resolution": [
+        "The amount of detail an image or display can show.",
+        "Measured in pixels, like 1920x1080.",
+        "Higher values mean sharper, clearer screens."
+      ],
+      "simulation": [
+        "A virtual model that mimics real-world processes or systems.",
+        "Used in training, education, and video games.",
+        "Lets users test scenarios safely and cheaply."
+      ],
+      "technology": [
+        "The application of scientific knowledge for practical purposes.",
+        "Includes computers, phones, and the internet.",
+        "Advances in this field change how we live and work."
+      ],
+      "transcript": [
+        "A written or printed version of spoken words or audio.",
+        "Used for meeting notes, interviews, or video captions.",
+        "Helps make content accessible and searchable."
+      ],
+      "validation": [
+        "The process of checking if something is correct or meets requirements.",
+        "Common in forms to ensure data is entered properly.",
+        "Prevents errors and improves data quality in databases."
+      ],
+      "attachment": [
+        "A file sent along with an email message.",
+        "Can be a document, photo, or any type of data.",
+        "Should be scanned for viruses before opening."
+      ],
+      "executable": [
+        "A file that can be run as a program by a computer.",
+        "On Windows, these often have a .exe extension.",
+        "Can install or launch software when opened."
+      ],
+      "permission": [
+        "Authorization to do something, such as access files or features.",
+        "Apps ask for this to use your camera or contacts.",
+        "Controls what users can and can't do on a system."
+      ],
+      "repository": [
+        "A central place where code, files, or data are stored and managed.",
+        "Used with version control tools like Git.",
+        "Enables collaboration among developers."
+      ],
+      "smartphone": [
+        "A mobile phone with advanced computing features and internet access.",
+        "Can run apps, browse the web, and take photos.",
+        "Combines a phone, camera, and computer in your pocket."
+      ],
+      "supervisor": [
+        "A person or system that oversees processes or workers.",
+        "In tech, may refer to a program managing others.",
+        "Ensures everything runs smoothly and efficiently."
+      ],
+      "translator": [
+        "A person or program that changes words from one language to another.",
+        "Online tools can do this instantly for websites or documents.",
+        "Helps people communicate across language barriers."
+      ],
+      "underlying": [
+        "Describes something fundamental that supports other things.",
+        "An operating system is this for apps.",
+        "Hidden layers or processes in tech systems."
+      ],
+      "authentication": [
+        "The process of verifying a user's identity before granting access.",
+        "Often requires a password, code, or biometric check.",
+        "Critical for online security and privacy."
+      ],
+      "background": [
+        "The part of a display behind the main content or windows.",
+        "You can change this image or color on your computer or phone.",
+        "In apps, refers to processes running invisibly."
+      ],
+      "compression": [
+        "Reducing the size of files to save space or speed up transfers.",
+        "ZIP and RAR are common methods.",
+        "Helps with sending files over email or the web."
+      ],
+      "connection": [
+        "A link between devices or systems allowing communication.",
+        "Wi-Fi and Bluetooth are types of these.",
+        "Needed for internet access and data sharing."
+      ],
+      "conversion": [
+        "Changing data from one format or type to another.",
+        "Audio and video files are often changed this way.",
+        "Can be manual or automated in software."
+      ],
+      "dashboard": [
+        "A user interface that displays key information at a glance.",
+        "Found in cars, business apps, and websites.",
+        "Shows metrics, stats, and controls in one place."
       ],
       "deployment": [
-        "Meaning: the distribution of forces in preparation for battle or work",
-        "A type of: preparation, readying",
-        "Used in technology or engineering.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
+        "The process of putting software or hardware into use.",
+        "DevOps teams automate this for faster releases.",
+        "Includes steps like testing and monitoring."
       ],
-      "networking": [
-        "Meaning: communicate with and within a group",
-        "Typical context: You have to network if you want to get a good job",
-        "A type of: communicate, intercommunicate",
-        "Also known as: network",
-        "Used in technology or engineering.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
+      "diagnostic": [
+        "A tool or process for identifying problems or errors.",
+        "Computers run these to find hardware or software issues.",
+        "Also used in medicine and vehicles."
+      ],
+      "distribute": [
+        "To deliver or spread software, data, or updates to many users.",
+        "App stores help with this process.",
+        "Content delivery networks do this for web media."
+      ],
+      "enforcement": [
+        "Making sure rules or security policies are followed.",
+        "Firewalls and antivirus help with this in IT.",
+        "Important for compliance in regulated industries."
+      ],
+      "enhancement": [
+        "An improvement or upgrade to software, hardware, or systems.",
+        "New features and better performance come from this.",
+        "Can also mean updates in user experience design."
+      ],
+      "integration": [
+        "Combining different systems or tools so they work together.",
+        "APIs help with this in modern software.",
+        "Makes workflows smoother and automates tasks."
+      ],
+      "maintenance": [
+        "Routine actions to keep systems running smoothly.",
+        "Includes updates, cleaning, and fixing problems.",
+        "Helps prevent unexpected breakdowns or outages."
+      ],
+      "multimedia": [
+        "Content that uses a mix of text, images, sound, and video.",
+        "Websites and apps often feature this for engagement.",
+        "Slideshows and games are good examples."
+      ],
+      "notification": [
+        "A message or alert about updates, messages, or events.",
+        "Apps use these to get your attention.",
+        "Can appear as banners, sounds, or vibrations."
+      ],
+      "optimization": [
+        "The process of making systems or code more efficient.",
+        "Improves speed, reduces errors, or saves resources.",
+        "Websites use this for faster loading times."
+      ],
+      "performance": [
+        "A measure of how well a system or device operates.",
+        "Speed and reliability are key factors.",
+        "Regular testing and tuning can improve this."
+      ],
+      "presentation": [
+        "A display or delivery of information, often as slides.",
+        "Used in meetings and conferences.",
+        "PowerPoint and Google Slides are popular tools."
       ],
       "processing": [
-        "Meaning: preparing or putting through a prescribed procedure",
-        "A type of: process, physical process",
-        "Examples: blowing",
-        "Examples: development, developing",
-        "Examples: refining, refinement, purification",
-        "Examples: vulcanization, vulcanisation",
-        "Used in technology or engineering.",
-        "No further clues available.",
-        "No further clues available.",
-        "No further clues available."
+        "The action of carrying out instructions or handling data.",
+        "CPUs and GPUs are responsible for this in computers.",
+        "Can be real-time, batch, or background."
+      ],
+      "protection": [
+        "Actions or tools that keep data and devices safe.",
+        "Antivirus and encryption help provide this.",
+        "Physical locks can also play a role."
+      ],
+      "restriction": [
+        "A rule or setting that limits access or actions.",
+        "Parental controls use these for content.",
+        "Firewalls restrict certain traffic."
+      ],
+      "submission": [
+        "The act of sending data, files, or forms for review or processing.",
+        "Online applications and homework use this.",
+        "Receipts or confirmations often follow."
+      ],
+      "translation": [
+        "Converting text or speech from one language to another.",
+        "Online tools and apps make this easy.",
+        "Essential for global communication."
+      ],
+      "understand": [
+        "To grasp the meaning or workings of something.",
+        "Helps users operate devices or fix problems.",
+        "Good documentation supports this."
+      ],
+      "verification": [
+        "Proving that something is true or correct.",
+        "Two-factor authentication is an example.",
+        "Used for accounts, payments, and documents."
+      ],
+      "visualization": [
+        "Turning data into charts, graphs, or images for easier understanding.",
+        "Used in dashboards and analytics tools.",
+        "Helps spot patterns and trends quickly."
+      ],
+      "vulnerability": [
+        "A weakness that could be exploited by threats or hackers.",
+        "Security scans help find these.",
+        "Patching fixes these in software."
       ]
     },
     "sports": {
@@ -21625,90 +20815,6 @@
         "It's not formal; it's more of a casual or friendly term.",
         "The opposite would be an old-timer for an elderly person (just for comparison of language style)."
       ],
-     "bookshelf": [
-        "Furniture with flat surfaces for storing books.",
-        "You find many of these in a library full of books.",
-        "It stands upright against a wall and has shelves.",
-        "People use it to organize their books at home or school.",
-        "It can be made of wood, metal, or other sturdy materials.",
-        "Sometimes toys, frames, or decorations are also placed on this along with books.",
-        "You might need a ladder to reach the top of a tall one of these.",
-        "Some are small for kids' rooms, and others cover entire walls.",
-        "You arrange books by genre or size on this piece of furniture.",
-        "If it's completely filled, it means you have a lot of books!"
-      ],
-      "jellyfish": [
-        "A sea creature with a soft, jelly-like body and tentacles.",
-        "It often looks like a translucent umbrella floating in water.",
-        "Some of these can sting you if you touch their tentacles.",
-        "They have no bones, heart, or brain, but they are alive.",
-        "Many are clear, but some can be colorful or glow in the dark underwater.",
-        "Turtles like to eat these, confusing them sometimes with plastic bags which is a problem.",
-        "They drift with ocean currents and can be seen near beaches sometimes.",
-        "One type is called a Man-o'-War, which has a powerful sting.",
-        "In Spongebob Squarepants, catching these is like a sport.",
-        "The collective group of them in a bloom can make the ocean look full of jiggly blobs."
-      ],
-      "pineapple": [
-        "A tropical fruit with a spiky tough skin and sweet yellow inside.",
-        "It has a tuft of green leaves on top like a little crown.",
-        "SpongeBob SquarePants lives in one of these under the sea (in the cartoon).",
-        "People often eat it in slices or chunks, and it can be put on pizza (though some debate that!).",
-        "It grows on a plant close to the ground, not on a tree.",
-        "The outside skin is rough and brownish with scale-like sections.",
-        "This fruit can be made into juice that's very refreshing.",
-        "If it's ripe, it's very sweet and juicy, but if not, it can taste sour.",
-        "Hawaii is famous for growing these fruits.",
-        "You have to cut off the prickly skin and core to eat the flesh of this fruit."
-      ],
-      "waterfall": [
-        "A place where a river or stream falls from a higher point to a lower point.",
-        "It looks like a curtain of water dropping over a cliff.",
-        "Niagara Falls is a famous one between the US and Canada.",
-        "They often form where rivers flow over different layers of rock.",
-        "The sound of one is a loud rushing noise due to falling water.",
-        "Rainbows can appear in the mist around these on sunny days.",
-        "They create pools at the bottom where the water lands.",
-        "Some people enjoy standing under small ones like a natural shower.",
-        "Tourists often visit these natural wonders for their beauty and power.",
-        "A small one of these might be called a cascade."
-      ],
-      "xylophone": [
-        "A musical instrument with wooden bars that you hit with mallets.",
-        "Each bar produces a different musical note when struck.",
-        "It's often one of the first instruments kids play with (a toy version of it).",
-        "It starts with an X but sounds like it starts with a Z.",
-        "The bars are usually arranged like a keyboard from low to high pitch.",
-        "It's similar to a marimba or glockenspiel, but specifically with wooden bars.",
-        "In an orchestra, this instrument adds a bright, clinky sound.",
-        "The word contains 'phone' which hints it's about sound (as in telephone, phonics).",
-        "Colorful ones are popular in preschools to teach simple tunes.",
-        "Playing this involves striking the bars in the right order to make melodies."
-      ],
-      "yesterday": [
-        "The day before today.",
-        "If today is Wednesday, this word refers to Tuesday.",
-        "People use it when talking about something that happened one day ago.",
-        "It's a time in the recent past, just one day earlier.",
-        "There is a famous Beatles song with this as its title.",
-        "This word starts with 'yes' but it's about the past, not saying yes to something.",
-        "After today passes, we will call it this when referring to it tomorrow.",
-        "It's shorter than saying \"the previous day\".",
-        "You might start a story with, \"____, I went to the park.\" (fill in the blank).",
-        "Everyone has one of these every time a new day comes."
-      ],
-      "youngster": [
-        "Another word for a child or young person.",
-        "It refers to someone who is not yet an adult.",
-        "A toddler, kid, or teen could all be called this (especially kids).",
-        "The word contains 'young' which gives a clue to its meaning.",
-        "Sometimes grandparents affectionately call kids this.",
-        "It implies youth and energy, often someone who might be playful or inexperienced.",
-        "This term might be used by an older person to refer to kids in general.",
-        "A coach might say, \"Alright, ____s, listen up!\" (fill in the blank) when talking to a team of kids.",
-        "It's not formal; it's more of a casual or friendly term.",
-        "The opposite would be an old-timer for an elderly person (just for comparison of language style)."
-      ],
       "animalcare": [
         "The act of looking after and tending to animals' needs.",
         "People who do this might feed, groom, and play with pets or farm creatures.",
@@ -21972,7 +21078,7 @@
         "It helps keep your mouth healthy and your breath fresh.",
         "Floss and this item make a great team for dental care.",
         "Don't forget to pack this when you go on vacation!"
-      ],                              
+      ],
       "apple": [
         "This fruit can be red, green, or yellow.",
         "It grows on trees.",
@@ -22237,7 +21343,6 @@
         "Some are fancy with gold.",
         "You look at it for the hour."
       ],
-
       "animal": [
         "It is a living creature.",
         "Dogs and cats are this.",
