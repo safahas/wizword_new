@@ -1076,12 +1076,12 @@ def display_welcome():
             with cols[1]:
                 subject = st.selectbox(
                     "Category",
-                    options=["any", "4th_grade", "general", "animals", "food", "places", "science", "tech", "sports", "brands"],
+                    options=["any", "4th_grade", "general", "animals", "food", "places", "science", "tech", "sports", "brands", "cities"],
                     index=2,  # Set default to 'general'
                     help="Word category (select 'any' for random category)"
                 )
                 st.session_state['original_category_choice'] = subject
-                resolved_subject = random.choice(["general", "animals", "food", "places", "science", "tech", "sports", "brands", "4th_grade"]) if subject == "any" else subject
+                resolved_subject = random.choice(["general", "animals", "food", "places", "science", "tech", "sports", "brands", "4th_grade", "cities"]) if subject == "any" else subject
             word_length = "any"
             st.session_state['original_word_length_choice'] = word_length
             if start_pressed:
@@ -1314,7 +1314,7 @@ def display_game():
 
     # Handle change category
     if st.session_state.get('change_category', False):
-        categories = ["any", "general", "animals", "food", "places", "science", "tech", "sports", "brands", "4th_grade"]
+        categories = ["any", "general", "animals", "food", "places", "science", "tech", "sports", "brands", "cities", "4th_grade"]
         new_category = st.selectbox("Select a new category:", categories, format_func=lambda x: x.replace('_', ' ').title() if x != 'any' else 'Any', key='category_select_box')
         if st.button("Confirm Category Change", key='change_category_btn'):
             game = st.session_state.game
@@ -1673,7 +1673,7 @@ def display_game():
                             new_word_length = 5
                     except Exception:
                         new_word_length = 5
-                categories = ["general", "animals", "food", "places", "science", "tech", "sports", "brands", "4th_grade"]
+                categories = ["general", "animals", "food", "places", "science", "tech", "sports", "brands", "4th_grade", "cities"]
                 new_subject = random.choice(categories) if orig_category == "any" else game.subject
 
                 st.session_state.game = GameLogic(

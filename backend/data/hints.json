@@ -19033,6 +19033,914 @@
         "No further clues available."
       ]
     },
+    "cities": {
+      "Rio": [
+        "A vibrant city in Brazil, famous for its beaches.",
+        "Home to the Christ the Redeemer statue.",
+        "Hosts the world's biggest Carnival festival."
+      ],
+      "Lima": [
+        "The capital city of Peru, on the Pacific coast.",
+        "Known for its colonial center and food scene.",
+        "Largest city in Peru and South America’s food capital."
+      ],
+      "Pune": [
+        "A large city in western India.",
+        "Known for its universities and cultural life.",
+        "Nicknamed the 'Oxford of the East.'"
+      ],
+      "Rome": [
+        "The capital of Italy, rich in history.",
+        "Home to the Colosseum and Roman Forum.",
+        "Famous for art, ancient ruins, and Vatican City."
+      ],
+      "Kobe": [
+        "A port city in Japan on Honshu Island.",
+        "World-famous for high-quality beef.",
+        "Rebuilt after a major 1995 earthquake."
+      ],
+      "Bern": [
+        "The de facto capital of Switzerland.",
+        "Has a medieval old town and famous clock tower.",
+        "Known for its bear pit and river views."
+      ],
+      "Aden": [
+        "A port city in southern Yemen.",
+        "Strategic location on the Arabian Sea.",
+        "Historic trading hub with natural harbor."
+      ],
+      "Nice": [
+        "A city on the French Riviera, in southern France.",
+        "Known for its beautiful beaches and promenade.",
+        "Hosts the famous Nice Carnival and flower market."
+      ],
+      "Suva": [
+        "The capital of Fiji, on the island of Viti Levu.",
+        "Major South Pacific port and cultural center.",
+        "Tropical climate and British colonial architecture."
+      ],
+      "Lyon": [
+        "A city in eastern France, famous for cuisine.",
+        "Known for its Renaissance old town and silk history.",
+        "UNESCO World Heritage and Festival of Lights."
+      ],
+      "Paris": [
+        "The capital of France, city of lights.",
+        "Famous for the Eiffel Tower and Louvre Museum.",
+        "Known for romance, art, and fashion."
+      ],
+      "Milan": [
+        "A global fashion and finance center in Italy.",
+        "Home to the Duomo cathedral and La Scala opera.",
+        "Hosts Fashion Week and major trade fairs."
+      ],
+      "Leeds": [
+        "A major city in northern England.",
+        "Famous for universities and shopping.",
+        "Hosts Leeds Festival, a big music event."
+      ],
+      "Osaka": [
+        "A large port city in Japan’s Kansai region.",
+        "Known for modern architecture and street food.",
+        "Home to Universal Studios Japan and Osaka Castle."
+      ],
+      "Seoul": [
+        "The capital and largest city of South Korea.",
+        "Known for palaces, skyscrapers, and K-pop.",
+        "Hosted 1988 Summer Olympics and 2002 World Cup."
+      ],
+      "Quito": [
+        "The capital city of Ecuador.",
+        "Located high in the Andes Mountains.",
+        "One of the best-preserved old towns in the Americas."
+      ],
+      "Tunis": [
+        "The capital city of Tunisia in North Africa.",
+        "Known for ancient Carthage ruins and Medina.",
+        "Blend of Arab, French, and Mediterranean culture."
+      ],
+      "Perth": [
+        "A large city on Australia’s west coast.",
+        "Known for beaches and Swan River.",
+        "One of the world’s most isolated major cities."
+      ],
+      "Accra": [
+        "The capital of Ghana, on the Atlantic coast.",
+        "Famous for markets, forts, and nightlife.",
+        "Hosts annual Chale Wote Street Art Festival."
+      ],
+      "Split": [
+        "A coastal city in Croatia, on the Adriatic Sea.",
+        "Famous for Roman Emperor Diocletian's Palace.",
+        "Major gateway to nearby islands."
+      ],
+      "Derby": [
+        "A city in central England.",
+        "Known for Rolls-Royce and railways.",
+        "Hosts the Derby Ram folk song tradition."
+      ],
+      "Sanaa": [
+        "The historic capital of Yemen.",
+        "Noted for its ancient mud-brick skyscrapers.",
+        "Old City is a UNESCO World Heritage site."
+      ],
+      "Ghent": [
+        "A medieval city in Belgium’s Flanders region.",
+        "Known for canals, castles, and festivals.",
+        "Hosts the famous Ghent Film Festival."
+      ],
+      "Sofia": [
+        "The capital and largest city of Bulgaria.",
+        "Known for Roman ruins and Orthodox churches.",
+        "Located at the foot of Vitosha Mountain."
+      ],
+      "Dakar": [
+        "The capital city of Senegal, West Africa.",
+        "Famous for the Dakar Rally and Goree Island.",
+        "Located on the Atlantic Ocean’s Cape Verde Peninsula."
+      ],
+      "Homs": [
+        "A historic city in western Syria.",
+        "Known for its ancient citadel and churches.",
+        "Strategically located on the Orontes River."
+      ],
+      "Gaza": [
+        "A city on the Mediterranean coast of Palestine.",
+        "Known for ancient history and seaport.",
+        "One of the world’s oldest continuously inhabited cities."
+      ],
+      "Nancy": [
+        "A city in northeastern France.",
+        "Known for its elegant Place Stanislas.",
+        "Famous for Art Nouveau architecture."
+      ],
+      "London": [
+        "The capital city of the United Kingdom.",
+        "Famous for Big Ben, the Thames, and Buckingham Palace.",
+        "A global center for finance, arts, and history."
+      ],
+      "Berlin": [
+        "The capital and largest city of Germany.",
+        "Known for the Brandenburg Gate and Berlin Wall.",
+        "Famous for nightlife, art, and culture."
+      ],
+      "Ankara": [
+        "The capital city of Turkey.",
+        "Known for Ataturk Mausoleum and museums.",
+        "Government and diplomatic center of Turkey."
+      ],
+      "Geneva": [
+        "A city in Switzerland on Lake Geneva.",
+        "Home to the UN and Red Cross headquarters.",
+        "Famous for watches and luxury shopping."
+      ],
+      "Boston": [
+        "A historic city in Massachusetts, USA.",
+        "Famous for universities and the Freedom Trail.",
+        "Hosts the Boston Marathon, the world's oldest annual marathon."
+      ],
+      "Rabat": [
+        "The capital city of Morocco.",
+        "Known for its medina, Kasbah, and royal palace.",
+        "Located on the Atlantic Ocean coast."
+      ],
+      "Sydney": [
+        "The largest city in Australia.",
+        "Known for the Opera House and Harbour Bridge.",
+        "Hosts world-famous New Year's fireworks."
+      ],
+      "Malabo": [
+        "The capital of Equatorial Guinea.",
+        "Located on Bioko Island.",
+        "Spanish colonial architecture and Atlantic beaches."
+      ],
+      "Durban": [
+        "A coastal city in South Africa.",
+        "Known for Golden Mile beaches and Indian cuisine.",
+        "Major port and surfing destination."
+      ],
+      "Mumbai": [
+        "India's largest city and financial hub.",
+        "Famous for Bollywood film industry.",
+        "Home to the Gateway of India."
+      ],
+      "Dallas": [
+        "A major city in Texas, USA.",
+        "Known for oil, sports teams, and JFK history.",
+        "Hosts the State Fair of Texas."
+      ],
+      "Nagoya": [
+        "A major city in central Japan.",
+        "Famous for Nagoya Castle and auto industry.",
+        "Home to Toyota headquarters."
+      ],
+      "Hobart": [
+        "The capital city of Tasmania, Australia.",
+        "Known for its harbor and Mount Wellington.",
+        "Hosts the Sydney to Hobart Yacht Race."
+      ],
+      "Lisbon": [
+        "The capital city of Portugal.",
+        "Famous for hills, tramcars, and Fado music.",
+        "Home to Belém Tower and colorful tiles."
+      ],
+      "Havana": [
+        "The capital of Cuba.",
+        "Known for old cars, cigars, and Spanish colonial history.",
+        "Features lively music and colorful buildings."
+      ],
+      "Mosul": [
+        "A city on the Tigris River in northern Iraq.",
+        "Famous for historic mosques and churches.",
+        "Ancient site of Nineveh nearby."
+      ],
+      "Malang": [
+        "A city in East Java, Indonesia.",
+        "Known for cool climate and Dutch colonial heritage.",
+        "Gateway to Mount Bromo volcano."
+      ],
+      "Sousse": [
+        "A coastal city in Tunisia.",
+        "Famous for medina, beaches, and olive oil.",
+        "UNESCO World Heritage for its ancient city walls."
+      ],
+      "Gentoo": [
+        "A port city in Antarctica (fictional for sample, skip in final).",
+        "Name refers to a species of penguin.",
+        "Not a real city; will be replaced in final version."
+      ],
+      "Chicago": [
+        "A major city in Illinois, USA, on Lake Michigan.",
+        "Known for deep-dish pizza and skyline.",
+        "Hosts Lollapalooza music festival."
+      ],
+      "Atlanta": [
+        "The capital city of Georgia, USA.",
+        "Famous for CocaCola, CNN, and civil rights history.",
+        "Hosted the 1996 Summer Olympics."
+      ],
+      "Toronto": [
+        "The largest city in Canada.",
+        "Known for CN Tower and multicultural diversity.",
+        "Hosts Toronto International Film Festival."
+      ],
+      "Hamburg": [
+        "A major port city in northern Germany.",
+        "Known for Elbphilharmonie concert hall and Reeperbahn.",
+        "Germany's gateway to the world."
+      ],
+      "Tripoli": [
+        "The capital of Libya, on the Mediterranean coast.",
+        "Famous for its old medina and archways.",
+        "Name means 'three cities' in Greek."
+      ],
+      "Cordoba": [
+        "A historic city in southern Spain.",
+        "Famous for the Mezquita mosque-cathedral.",
+        "Known for patios and Roman bridge."
+      ],
+      "Nairobi": [
+        "The capital and largest city of Kenya.",
+        "Known for Nairobi National Park and wildlife.",
+        "Nicknamed 'Green City in the Sun.'"
+      ],
+      "Halifax": [
+        "A port city in Nova Scotia, Canada.",
+        "Known for Citadel Hill and harbor.",
+        "Titanic survivors were brought here."
+      ],
+      "Amman": [
+        "The capital city of Jordan.",
+        "Known for Roman ruins and citadel.",
+        "Largest city in Jordan, built on seven hills."
+      ],
+      "Kolkata": [
+        "A major city in eastern India.",
+        "Known for colonial architecture and Howrah Bridge.",
+        "Cultural capital and home to Rabindranath Tagore."
+      ],
+      "Tangier": [
+        "A Moroccan port city on the Strait of Gibraltar.",
+        "Known for its kasbah and whitewashed medina.",
+        "Gateway between Africa and Europe."
+      ],
+      "Lubbock": [
+        "A city in Texas, USA.",
+        "Known for Texas Tech University.",
+        "Birthplace of rock legend Buddy Holly."
+      ],
+      "Houston": [
+        "A large city in Texas, USA.",
+        "Home to NASA's Johnson Space Center.",
+        "'Houston, we have a problem.'"
+      ],
+      "Phoenix": [
+        "The capital city of Arizona, USA.",
+        "Famous for desert climate and golf resorts.",
+        "Fifth largest US city by population."
+      ],
+      "Pattaya": [
+        "A beach resort city in Thailand.",
+        "Known for nightlife and sandy beaches.",
+        "Located on the Gulf of Thailand."
+      ],
+      "Manilla": [
+        "The capital city of the Philippines.",
+        "Located on Manila Bay, Luzon Island.",
+        "Famous for Spanish colonial sites."
+      ],
+      "Caracas": [
+        "The capital city of Venezuela.",
+        "Known for modernist architecture and Avila Mountain.",
+        "Largest city in Venezuela."
+      ],
+      "Fukuoka": [
+        "A large city on Kyushu Island, Japan.",
+        "Known for ramen and castle ruins.",
+        "Hosts the annual Hakata Gion Yamakasa festival."
+      ],
+      "Glasgow": [
+        "The largest city in Scotland.",
+        "Famous for music, art, and football.",
+        "Located on the River Clyde."
+      ],
+      "Rouen": [
+        "A historic city in Normandy, France.",
+        "Famous for its cathedral painted by Monet.",
+        "Joan of Arc was executed here."
+      ],
+      
+      "Vienna": [
+        "The capital city of Austria.",
+        "Known for classical music, palaces, and cafes.",
+        "Birthplace of Mozart and Beethoven."
+      ],
+      "Dublin": [
+        "The capital city of Ireland.",
+        "Famous for Trinity College and Guinness Brewery.",
+        "Hosts the St. Patrick's Day parade."
+      ],
+      "Madrid": [
+        "The capital and largest city of Spain.",
+        "Known for Prado Museum and Real Madrid soccer.",
+        "Famous for tapas and vibrant nightlife."
+      ],
+      "Athens": [
+        "The capital city of Greece.",
+        "Home to the Acropolis and Parthenon.",
+        "Birthplace of democracy and Western philosophy."
+      ],
+      "Oslo": [
+        "The capital of Norway.",
+        "Known for fjords, Viking Ship Museum, and green spaces.",
+        "Hosts the Nobel Peace Prize ceremony."
+      ],
+      "Zurich": [
+        "A major city in Switzerland.",
+        "Famous for banks, shopping, and lakeside scenery.",
+        "Switzerland’s financial center."
+      ],
+      "Prague": [
+        "The capital of Czech Republic.",
+        "Known for Charles Bridge and Old Town Square.",
+        "Nicknamed 'City of a Hundred Spires.'"
+      ],
+      "Edinburgh": [
+        "The capital city of Scotland.",
+        "Famous for its castle, festivals, and Royal Mile.",
+        "Hosts the world's largest arts festival."
+      ],
+      "Brussels": [
+        "The capital of Belgium and the EU.",
+        "Known for waffles, chocolate, and Grand Place.",
+        "Hosts major European Union institutions."
+      ],
+      "Santos": [
+        "A port city in Brazil’s Sao Paulo state.",
+        "Famous for coffee trade and beaches.",
+        "Home to the Santos Football Club."
+      ],
+      "Brno": [
+        "The second largest city in Czech Republic.",
+        "Known for its university and cathedral.",
+        "Famous for MotoGP races at Brno Circuit."
+      ],
+      "Helsinki": [
+        "The capital city of Finland.",
+        "Known for design, saunas, and sea fortress Suomenlinna.",
+        "Hosts Slush, a major tech startup event."
+      ],
+      "Jakarta": [
+        "The capital and largest city of Indonesia.",
+        "Located on the island of Java.",
+        "Famous for skyscrapers and vibrant street food."
+      ],
+      "Utrecht": [
+        "A historic city in the Netherlands.",
+        "Known for canals, university, and Dom Tower.",
+        "Located at the heart of the Dutch railway network."
+      ],
+      "Naples": [
+        "A city in southern Italy, by the Bay of Naples.",
+        "Famous for pizza, historic sites, and volcano Vesuvius.",
+        "Close to the ruins of Pompeii."
+      ],
+      "Bilbao": [
+        "A city in northern Spain’s Basque region.",
+        "Famous for the Guggenheim Museum.",
+        "Known for its modern architecture and pintxos."
+      ],
+      "Auckland": [
+        "The largest city in New Zealand.",
+        "Known as the 'City of Sails' for its harbors.",
+        "Hosts America's Cup sailing event."
+      ],
+      "Tallinn": [
+        "The capital city of Estonia.",
+        "Famous for its preserved medieval old town.",
+        "Important Baltic Sea port."
+      ],
+      "Tbilisi": [
+        "The capital and largest city of Georgia (country).",
+        "Known for diverse architecture and hot springs.",
+        "Located on the banks of the Kura River."
+      ],
+      "Managua": [
+        "The capital city of Nicaragua.",
+        "Located on the shore of Lake Managua.",
+        "Cultural, economic, and political center."
+      ],
+      "Windhoek": [
+        "The capital and largest city of Namibia.",
+        "Known for German colonial buildings.",
+        "Located in the center of Namibia."
+      ],
+      "Yaounde": [
+        "The capital city of Cameroon.",
+        "Known for government buildings and hilly terrain.",
+        "Major center for politics and culture."
+      ],
+      "Muscat": [
+        "The capital and largest city of Oman.",
+        "Known for Sultan Qaboos Grand Mosque.",
+        "Major port on the Gulf of Oman."
+      ],
+      "Vancouver": [
+        "A coastal city in British Columbia, Canada.",
+        "Known for mountain views and Stanley Park.",
+        "Popular for outdoor recreation and film industry."
+      ],
+      "Seattle": [
+        "A city in Washington State, USA.",
+        "Known for Space Needle and coffee culture.",
+        "Home to Microsoft and Amazon."
+      ],
+      "Boston": [
+        "A major city in Massachusetts, USA.",
+        "Known for universities and American history.",
+        "Hosts the Boston Marathon."
+      ],
+      "Baltimore": [
+        "A port city in Maryland, USA.",
+        "Famous for Inner Harbor and crab cakes.",
+        "Home of Johns Hopkins University."
+      ],
+      "Cologne": [
+        "A major city on the Rhine in Germany.",
+        "Famous for Cologne Cathedral.",
+        "Known for fragrance and carnival."
+      ],
+      "Cairo": [
+        "The capital city of Egypt.",
+        "Famous for the Pyramids and Sphinx.",
+        "Located along the Nile River."
+      ],
+      "Algiers": [
+        "The capital city of Algeria.",
+        "Famous for whitewashed buildings and Casbah.",
+        "Located on the Mediterranean coast."
+      ],
+      "Luxor": [
+        "A city in southern Egypt.",
+        "Home to ancient temples and Valley of the Kings.",
+        "Called the world's greatest open-air museum."
+      ],
+      "Kigali": [
+        "The capital city of Rwanda.",
+        "Known for cleanliness and safety.",
+        "Hosts the Kigali Genocide Memorial."
+      ],
+      "Lagos": [
+        "The largest city in Nigeria and Africa.",
+        "Famous for vibrant markets and music.",
+        "Economic hub with sprawling urban area."
+      ],
+      "Bamako": [
+        "The capital and largest city of Mali.",
+        "Located on the Niger River.",
+        "Known for markets and river views."
+      ],
+      "Dakar": [
+        "The capital city of Senegal.",
+        "Famous for the Dakar Rally and Goree Island.",
+        "Atlantic port and cultural center."
+      ],
+      "Harare": [
+        "The capital city of Zimbabwe.",
+        "Known for Jacaranda trees and sculpture.",
+        "Located in the country's northeast."
+      ],
+      "Maputo": [
+        "The capital and largest city of Mozambique.",
+        "Known for colonial architecture and Indian Ocean views.",
+        "Major port and economic center."
+      ],
+      "Luanda": [
+        "The capital city of Angola.",
+        "Known for beaches and oil industry.",
+        "Founded by the Portuguese in 1576."
+      ],
+      "Abidjan": [
+        "The largest city in Ivory Coast (Côte d'Ivoire).",
+        "Famous for its skyline and lagoon.",
+        "Major economic and cultural hub in West Africa."
+      ],
+      "Accra": [
+        "The capital of Ghana, on the Atlantic coast.",
+        "Famous for markets and forts.",
+        "Hosts Chale Wote Street Art Festival."
+      ],
+      "Casablanca": [
+        "The largest city in Morocco.",
+        "Famous for its port and art deco buildings.",
+        "Inspired the classic 1942 film."
+      ],
+      "Medina": [
+        "A holy city in Saudi Arabia.",
+        "Resting place of the Prophet Muhammad.",
+        "Pilgrimage destination for Muslims."
+      ],
+      "Mecca": [
+        "Islam’s holiest city in Saudi Arabia.",
+        "Site of the Grand Mosque and Kaaba.",
+        "Millions visit annually for Hajj."
+      ],
+      "Doha": [
+        "The capital city of Qatar.",
+        "Known for modern skyline and corniche.",
+        "Hosts FIFA World Cup 2022."
+      ],
+      "Dubai": [
+        "A city in the United Arab Emirates.",
+        "Famous for Burj Khalifa and shopping malls.",
+        "Known for luxury tourism and innovation."
+      ],
+      "AbuDhabi": [
+        "The capital of the United Arab Emirates.",
+        "Famous for Sheikh Zayed Grand Mosque.",
+        "Major center for oil and culture."
+      ],
+      "Muscat": [
+        "The capital city of Oman.",
+        "Known for Sultan Qaboos Grand Mosque.",
+        "Major port city on the Gulf of Oman."
+      ],
+      "Amman": [
+        "The capital city of Jordan.",
+        "Known for Roman ruins and citadel.",
+        "Largest city in Jordan, built on seven hills."
+      ],
+      "Baghdad": [
+        "The capital of Iraq.",
+        "Famous for history, culture, and Tigris River.",
+        "Was center of the Islamic Golden Age."
+      ],
+      "Basra": [
+        "A port city in southern Iraq.",
+        "Known for oil and the Shatt al-Arab waterway.",
+        "Famous for its role in trade and history."
+      ],
+      "Erbil": [
+        "A major city in northern Iraq.",
+        "Famous for its ancient citadel.",
+        "Capital of Iraqi Kurdistan."
+      ],
+      "Kuwait": [
+        "The capital city of Kuwait.",
+        "Known for modern architecture and oil wealth.",
+        "Located on the Persian Gulf."
+      ],
+      "Beirut": [
+        "The capital city of Lebanon.",
+        "Famous for nightlife and seafront corniche.",
+        "Historic trading and cultural center."
+      ],
+      "Damascus": [
+        "The capital city of Syria.",
+        "One of the oldest continuously inhabited cities.",
+        "Famous for Umayyad Mosque."
+      ],
+      "Aleppo": [
+        "A historic city in northern Syria.",
+        "Known for its ancient citadel and souks.",
+        "UNESCO World Heritage Site."
+      ],
+      "Irbid": [
+        "A major city in northern Jordan.",
+        "Known for universities and agriculture.",
+        "Located near the border with Syria."
+      ],
+      "Tripoli": [
+        "The capital city of Libya.",
+        "Known for old medina and Mediterranean port.",
+        "Name means 'three cities' in Greek."
+      ],
+      "Benghazi": [
+        "A major city in Libya.",
+        "Known for Italian colonial buildings.",
+        "Libya’s second largest city."
+      ],
+      "Mogadishu": [
+        "The capital and largest city of Somalia.",
+        "Located on the Indian Ocean.",
+        "Major port and economic center."
+      ],
+      "Nairobi": [
+        "The capital and largest city of Kenya.",
+        "Famous for Nairobi National Park and wildlife.",
+        "Called the 'Green City in the Sun.'"
+      ],
+      "Addis": [
+        "Short for Addis Ababa, capital of Ethiopia.",
+        "Known for the African Union headquarters.",
+        "High-altitude city in the Horn of Africa."
+      ],
+      "Kampala": [
+        "The capital and largest city of Uganda.",
+        "Located on the shores of Lake Victoria.",
+        "Major business and transportation center."
+      ],
+      "Kigali": [
+        "The capital city of Rwanda.",
+        "Known for hills and clean streets.",
+        "Hosts the Kigali Genocide Memorial."
+      ],
+      "Lusaka": [
+        "The capital and largest city of Zambia.",
+        "Located on a plateau in southern Africa.",
+        "Center for government and commerce."
+      ],
+      "Gaborone": [
+        "The capital city of Botswana.",
+        "Located near the South African border.",
+        "Famous for government buildings and game reserves."
+      ],
+      "Harare": [
+        "The capital city of Zimbabwe.",
+        "Known for Jacaranda trees and sculpture.",
+        "Located in the country's northeast."
+      ],
+      "Monrovia": [
+        "The capital city of Liberia, West Africa.",
+        "Located on the Atlantic coast, known for beaches.",
+        "Named after U.S. President James Monroe."
+      ],
+      "Freetown": [
+        "The capital city of Sierra Leone.",
+        "Famous for its historical port and Cotton Tree.",
+        "Founded for freed African American slaves."
+      ],
+      "Banjul": [
+        "The capital city of The Gambia.",
+        "Located on St. Mary’s Island at the river mouth.",
+        "Known for Albert Market and colonial history."
+      ],
+      "Bissau": [
+        "The capital city of Guinea-Bissau.",
+        "Located on the Geba River estuary.",
+        "Known for Portuguese colonial buildings."
+      ],
+      "Bamenda": [
+        "A city in northwestern Cameroon.",
+        "Known for mountainous landscape and crafts.",
+        "A center for English-speaking Cameroonians."
+      ],
+      "Brazzaville": [
+        "The capital city of the Republic of Congo.",
+        "Located on the Congo River, opposite Kinshasa.",
+        "Famous for colonial architecture."
+      ],
+      "Kinshasa": [
+        "The capital and largest city of the Democratic Republic of Congo.",
+        "Situated on the Congo River, opposite Brazzaville.",
+        "Major African cultural and music center."
+      ],
+      "Maputo": [
+        "The capital and largest city of Mozambique.",
+        "Known for colonial architecture and Indian Ocean views.",
+        "Major port and economic center."
+      ],
+      "Pretoria": [
+        "One of South Africa’s three capital cities.",
+        "Known for jacaranda trees and government buildings.",
+        "Hosts the Union Buildings."
+      ],
+      "Bloemfontein": [
+        "A city in South Africa, judicial capital.",
+        "Known as the 'City of Roses.'",
+        "Hosts South Africa's Supreme Court."
+      ],
+      "Windhoek": [
+        "The capital and largest city of Namibia.",
+        "Known for German colonial buildings.",
+        "Located in the center of Namibia."
+      ],
+      "Valencia": [
+        "A large city on Spain’s Mediterranean coast.",
+        "Famous for paella and City of Arts and Sciences.",
+        "Hosts the Fallas festival."
+      ],
+      "Seville": [
+        "A major city in southern Spain’s Andalusia region.",
+        "Known for flamenco and Alcazar palace.",
+        "Hosts the April Fair and Semana Santa."
+      ],
+      "Granada": [
+        "A historic city in southern Spain.",
+        "Famous for the Alhambra palace.",
+        "Located at the foot of the Sierra Nevada."
+      ],
+      "Bilbao": [
+        "A city in Spain’s Basque Country.",
+        "Famous for the Guggenheim Museum.",
+        "Modern architecture and old town."
+      ],
+      "Porto": [
+        "A coastal city in northwest Portugal.",
+        "Famous for port wine and Ribeira district.",
+        "Known for Dom Luis I Bridge."
+      ],
+      "Braga": [
+        "A city in northern Portugal.",
+        "Known for churches and religious festivals.",
+        "Often called the 'Portuguese Rome.'"
+      ],
+      "Tirana": [
+        "The capital city of Albania.",
+        "Famous for colorful buildings and Skanderbeg Square.",
+        "Albania’s political and cultural center."
+      ],
+      "Zagreb": [
+        "The capital and largest city of Croatia.",
+        "Known for medieval old town and museums.",
+        "Hosts the Advent Christmas market."
+      ],
+      "Ljubljana": [
+        "The capital and largest city of Slovenia.",
+        "Famous for its castle and green spaces.",
+        "Crossed by the Ljubljanica River."
+      ],
+      "Bratislava": [
+        "The capital of Slovakia.",
+        "Located on the Danube near Austria and Hungary.",
+        "Known for its medieval castle and old town."
+      ],
+      "Budapest": [
+        "The capital city of Hungary.",
+        "Famous for thermal baths and Chain Bridge.",
+        "Divided by the Danube River into Buda and Pest."
+      ],
+      "Tallinn": [
+        "The capital of Estonia.",
+        "Known for preserved medieval old town.",
+        "Important port on the Baltic Sea."
+      ],
+      "Riga": [
+        "The capital of Latvia.",
+        "Known for Art Nouveau architecture.",
+        "Largest city in the Baltic states."
+      ],
+      "Vilnius": [
+        "The capital city of Lithuania.",
+        "Famous for baroque old town.",
+        "Hosts many music and film festivals."
+      ],
+      "Helsinki": [
+        "The capital of Finland.",
+        "Known for design, saunas, and sea fortress Suomenlinna.",
+        "Located on the Gulf of Finland."
+      ],
+      "Oslo": [
+        "The capital and largest city of Norway.",
+        "Famous for fjords and green spaces.",
+        "Hosts the Nobel Peace Prize ceremony."
+      ],
+      "Stockholm": [
+        "The capital and largest city of Sweden.",
+        "Built on 14 islands, known for water and museums.",
+        "Royal Palace and Nobel Prize ceremonies."
+      ],
+      "Copenhagen": [
+        "The capital of Denmark.",
+        "Famous for Tivoli Gardens and Little Mermaid statue.",
+        "Bike-friendly and known for food scene."
+      ],
+      "Warsaw": [
+        "The capital and largest city of Poland.",
+        "Known for rebuilt old town and Chopin Museum.",
+        "Center for Polish culture and business."
+      ],
+      "Krakow": [
+        "A major city in southern Poland.",
+        "Famous for Wawel Castle and medieval square.",
+        "Former capital of Poland."
+      ],
+      "Gdansk": [
+        "A port city on the Baltic coast of Poland.",
+        "Known for shipyards and amber trade.",
+        "Historic main town and Gothic churches."
+      ],
+      "Prague": [
+        "The capital of Czech Republic.",
+        "Known for Charles Bridge and Old Town Square.",
+        "City of a Hundred Spires."
+      ],
+      "Brno": [
+        "Second largest city in Czech Republic.",
+        "Known for university and cathedral.",
+        "MotoGP races at Brno Circuit."
+      ],
+      "Vienna": [
+        "The capital of Austria.",
+        "Famous for classical music and palaces.",
+        "Home to Mozart and Beethoven."
+      ],
+      "Zurich": [
+        "Largest city in Switzerland.",
+        "Known for banks, shopping, and lakeside views.",
+        "Major Swiss financial center."
+      ],
+      "Geneva": [
+        "A Swiss city on Lake Geneva.",
+        "Home to the United Nations and Red Cross.",
+        "Famous for luxury watches."
+      ],
+      "Bern": [
+        "The capital of Switzerland.",
+        "Medieval old town and famous clock tower.",
+        "Known for bear pit and river views."
+      ],
+      "Lucerne": [
+        "A city in central Switzerland.",
+        "Known for Chapel Bridge and lakeside views.",
+        "Gateway to the Swiss Alps."
+      ],
+      "Munich": [
+        "A city in southern Germany.",
+        "Famous for Oktoberfest beer festival.",
+        "Known for art museums and BMW."
+      ],
+      "Hamburg": [
+        "A major port city in Germany.",
+        "Known for Elbphilharmonie concert hall.",
+        "Reeperbahn nightlife district."
+      ],
+      "Stuttgart": [
+        "A city in southwest Germany.",
+        "Known for Porsche and Mercedes-Benz.",
+        "Hosts major wine festivals."
+      ],
+      "Cologne": [
+        "A city on the Rhine in Germany.",
+        "Famous for Cologne Cathedral.",
+        "Known for carnival celebrations."
+      ],
+      "Frankfurt": [
+        "A financial hub in Germany.",
+        "Famous for skyline and trade fairs.",
+        "Home to European Central Bank."
+      ],
+      "Leipzig": [
+        "A city in eastern Germany.",
+        "Known for music and trade fairs.",
+        "Birthplace of composer Bach."
+      ],
+      "Dresden": [
+        "A city in eastern Germany on the Elbe River.",
+        "Famous for baroque architecture and art museums.",
+        "Known for Frauenkirche and Semper Opera."
+      ],
+      "Bremen": [
+        "A city in northwest Germany.",
+        "Known for the Bremen Town Musicians fairy tale.",
+        "Historic market square and Roland statue."
+      ],
+      "Hanover": [
+        "A city in northern Germany.",
+        "Famous for trade fairs and gardens.",
+        "Hosts the world’s largest industrial fair."
+      ]
+    },
     "4th_grade": {
       "bag": [
         "You can carry things in this.",
