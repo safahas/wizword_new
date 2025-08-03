@@ -19941,6 +19941,798 @@
         "Hosts the world’s largest industrial fair."
       ]
     },
+    "medicines": {
+      "aspirin": [
+        "A common pain reliever and fever reducer.",
+        "Often used to reduce heart attack risk.",
+        "First mass-produced by Bayer in 1899."
+      ],
+      "metformin": [
+        "An oral medication for type 2 diabetes.",
+        "Helps control blood sugar.",
+        "One of the world’s most prescribed diabetes drugs."
+      ],
+      "lisinopril": [
+        "A blood pressure medicine, ACE inhibitor.",
+        "Used to treat hypertension and heart failure.",
+        "May also protect the kidneys in diabetes."
+      ],
+      "amlodipine": [
+        "A calcium channel blocker for high blood pressure.",
+        "Often prescribed for angina (chest pain).",
+        "Works by relaxing blood vessels."
+      ],
+      "atorvastatin": [
+        "A statin medication to lower cholesterol.",
+        "Reduces risk of heart attack and stroke.",
+        "Brand name is Lipitor."
+      ],
+      "simvastatin": [
+        "A statin for lowering cholesterol.",
+        "Used to prevent heart and blood vessel disease.",
+        "Works best when combined with diet changes."
+      ],
+      "omeprazole": [
+        "A proton pump inhibitor for acid reflux.",
+        "Reduces stomach acid, treats GERD.",
+        "Often taken before meals."
+      ],
+      "levothyroxine": [
+        "A thyroid hormone replacement.",
+        "Treats hypothyroidism (low thyroid).",
+        "Most prescribed medication in the US."
+      ],
+      "hydrochlorothiazide": [
+        "A diuretic ('water pill') for high blood pressure.",
+        "Helps the body get rid of extra salt and water.",
+        "Also treats swelling from heart failure."
+      ],
+      "losartan": [
+        "A blood pressure drug, angiotensin receptor blocker.",
+        "Helps relax blood vessels and lower BP.",
+        "May also protect kidney function."
+      ],
+      "clopidogrel": [
+        "An antiplatelet medication to prevent blood clots.",
+        "Often given after heart attack or stent.",
+        "Brand name is Plavix."
+      ],
+      "albuterol": [
+        "A bronchodilator for asthma and COPD.",
+        "Relieves wheezing and shortness of breath.",
+        "Commonly used as a rescue inhaler, but also oral."
+      ],
+      "sertraline": [
+        "An SSRI antidepressant.",
+        "Used for depression, anxiety, and OCD.",
+        "Brand name is Zoloft."
+      ],
+      "gabapentin": [
+        "A medicine for nerve pain and seizures.",
+        "Often used for neuropathy and shingles pain.",
+        "Sometimes prescribed for anxiety."
+      ],
+      "furosemide": [
+        "A strong diuretic used for heart failure.",
+        "Helps remove excess fluid from the body.",
+        "Brand name is Lasix."
+      ],
+      "metoprolol": [
+        "A beta blocker for heart and blood pressure.",
+        "Used for angina, hypertension, and after heart attack.",
+        "May also treat migraine and anxiety."
+      ],
+      "azithromycin": [
+        "A broad-spectrum antibiotic.",
+        "Treats respiratory, skin, and some sexually transmitted infections.",
+        "Brand name is Zithromax or 'Z-Pak.'"
+      ],
+      "rosuvastatin": [
+        "A statin drug to lower cholesterol.",
+        "Prescribed for high cholesterol and heart disease prevention.",
+        "Brand name is Crestor."
+      ],
+      "pravastatin": [
+        "A cholesterol-lowering statin.",
+        "Prevents heart attack and stroke.",
+        "May be better tolerated for some people."
+      ],
+      "tramadol": [
+        "A pain reliever for moderate to moderately severe pain.",
+        "Works in the brain to change pain perception.",
+        "Sometimes called an 'atypical opioid.'"
+      ],
+      "meloxicam": [
+        "A nonsteroidal anti-inflammatory drug (NSAID).",
+        "Treats pain and inflammation from arthritis.",
+        "Often preferred for once-daily dosing."
+      ],
+      "duloxetine": [
+        "An antidepressant and nerve pain medicine.",
+        "Treats depression, anxiety, and fibromyalgia.",
+        "Brand name is Cymbalta."
+      ],
+      "warfarin": [
+        "An anticoagulant (blood thinner).",
+        "Prevents blood clots, stroke, and embolism.",
+        "Requires regular INR blood tests."
+      ],
+      "citalopram": [
+        "An SSRI antidepressant.",
+        "Treats depression and panic disorder.",
+        "Brand name is Celexa."
+      ],
+      "fluoxetine": [
+        "An SSRI for depression, OCD, and anxiety.",
+        "Brand name is Prozac.",
+        "Sometimes prescribed for bulimia."
+      ],
+      "pantoprazole": [
+        "A proton pump inhibitor for stomach acid.",
+        "Treats GERD and ulcers.",
+        "Brand name is Protonix."
+      ],
+      "doxycycline": [
+        "A tetracycline antibiotic.",
+        "Treats many infections, including acne and Lyme disease.",
+        "Also used for malaria prevention."
+      ],
+      "tamsulosin": [
+        "Used for enlarged prostate (BPH).",
+        "Makes it easier to urinate.",
+        "Brand name is Flomax."
+      ],
+      "amoxicillin": [
+        "A penicillin-type antibiotic.",
+        "Treats many bacterial infections.",
+        "Often used for ear, throat, and urinary infections."
+      ],
+      "ciprofloxacin": [
+        "A fluoroquinolone antibiotic.",
+        "Used for urinary tract and GI infections.",
+        "Brand name is Cipro."
+      ],
+      "prednisone": [
+        "A corticosteroid for inflammation and immune conditions.",
+        "Treats asthma, allergies, arthritis, and more.",
+        "Should be taken with food to avoid stomach upset."
+      ],
+      "loratadine": [
+        "A non-drowsy allergy medicine (antihistamine).",
+        "Relieves sneezing, runny nose, and itchy eyes.",
+        "Brand name is Claritin."
+      ],
+      "spironolactone": [
+        "A diuretic for blood pressure and heart failure.",
+        "Also treats fluid retention and hormonal acne.",
+        "Can cause increased potassium."
+      ],
+      "allopurinol": [
+        "Used to treat gout and high uric acid.",
+        "Prevents gout attacks and kidney stones.",
+        "Usually taken long-term for prevention."
+      ],
+      "propranolol": [
+        "A beta blocker for high blood pressure and heart rhythm.",
+        "Also used for migraines and performance anxiety.",
+        "May reduce tremors and stage fright."
+      ],
+      "levetiracetam": [
+        "An anti-seizure medication.",
+        "Used for epilepsy and seizure disorders.",
+        "Brand name is Keppra."
+      ],
+      "hydralazine": [
+        "A vasodilator for high blood pressure.",
+        "Relaxes blood vessels to lower blood pressure.",
+        "Sometimes used in heart failure."
+      ],
+      "atenolol": [
+        "A beta blocker for high blood pressure and angina.",
+        "May help prevent heart attacks.",
+        "Also used for certain types of arrhythmias."
+      ],
+      "clonazepam": [
+        "A benzodiazepine for anxiety and seizures.",
+        "Helps with panic disorder and epilepsy.",
+        "Brand name is Klonopin."
+      ],
+      "lorazepam": [
+        "A benzodiazepine for anxiety and insomnia.",
+        "Used before surgery to relax patients.",
+        "Brand name is Ativan."
+      ],
+      "alprazolam": [
+        "A benzodiazepine for anxiety and panic attacks.",
+        "Helps calm nerves quickly.",
+        "Brand name is Xanax."
+      ],
+      "buspirone": [
+        "A medication for generalized anxiety disorder.",
+        "Not habit-forming like benzodiazepines.",
+        "Usually taken twice a day."
+      ],
+      "escitalopram": [
+        "An SSRI antidepressant.",
+        "Treats depression and anxiety.",
+        "Brand name is Lexapro."
+      ],
+      "paroxetine": [
+        "An SSRI for depression, anxiety, and PTSD.",
+        "Brand name is Paxil.",
+        "Can cause more weight gain than other SSRIs."
+      ],
+      "mirtazapine": [
+        "An antidepressant also used for sleep and appetite.",
+        "Treats depression and anxiety.",
+        "Often prescribed for elderly patients."
+      ],
+      "venlafaxine": [
+        "An SNRI antidepressant.",
+        "Treats depression, anxiety, and panic disorder.",
+        "Brand name is Effexor."
+      ],
+      "bupropion": [
+        "An atypical antidepressant also used for smoking cessation.",
+        "Brand names include Wellbutrin and Zyban.",
+        "Less likely to cause weight gain or sexual side effects."
+      ],
+      "topiramate": [
+        "A medication for epilepsy and migraines.",
+        "Sometimes used for weight loss.",
+        "Brand name is Topamax."
+      ],
+      "carvedilol": [
+        "A beta blocker for heart failure and high blood pressure.",
+        "May improve survival after heart attack.",
+        "Brand name is Coreg."
+      ],
+      "glimepiride": [
+        "An oral diabetes medication (sulfonylurea).",
+        "Helps the pancreas release more insulin.",
+        "Usually taken once daily with breakfast."
+      ],
+      "glipizide": [
+        "A sulfonylurea medicine for type 2 diabetes.",
+        "Helps lower blood sugar by increasing insulin.",
+        "Brand name is Glucotrol."
+      ],
+      "glyburide": [
+        "A diabetes medicine (sulfonylurea).",
+        "Lowers blood sugar by helping pancreas make insulin.",
+        "Usually taken with breakfast."
+      ],
+      "sitagliptin": [
+        "An oral diabetes drug (DPP-4 inhibitor).",
+        "Helps regulate blood sugar in type 2 diabetes.",
+        "Brand name is Januvia."
+      ],
+      "pioglitazone": [
+        "A thiazolidinedione (TZD) diabetes medicine.",
+        "Improves insulin sensitivity in type 2 diabetes.",
+        "Brand name is Actos."
+      ],
+      "rosiglitazone": [
+        "A TZD diabetes drug.",
+        "Used for type 2 diabetes, but less common now.",
+        "Brand name is Avandia."
+      ],
+      "canagliflozin": [
+        "A diabetes medication (SGLT2 inhibitor).",
+        "Helps kidneys remove excess sugar in urine.",
+        "Brand name is Invokana."
+      ],
+      "dapagliflozin": [
+        "An SGLT2 inhibitor for type 2 diabetes.",
+        "Lowers blood sugar and may protect the heart.",
+        "Brand name is Farxiga."
+      ],
+      "empagliflozin": [
+        "A diabetes drug (SGLT2 inhibitor).",
+        "Helps control blood sugar and protect heart.",
+        "Brand name is Jardiance."
+      ],
+      "linagliptin": [
+        "A DPP-4 inhibitor for type 2 diabetes.",
+        "Regulates blood sugar, taken orally.",
+        "Brand name is Tradjenta."
+      ],
+      "saxagliptin": [
+        "A diabetes medication (DPP-4 inhibitor).",
+        "Used for type 2 diabetes to control glucose.",
+        "Brand name is Onglyza."
+      ],
+      "repaglinide": [
+        "A meglitinide diabetes drug.",
+        "Helps the pancreas produce insulin quickly after meals.",
+        "Brand name is Prandin."
+      ],
+      "nateglinide": [
+        "An oral diabetes medication (meglitinide).",
+        "Helps control blood sugar after eating.",
+        "Brand name is Starlix."
+      ],
+      "acarbose": [
+        "An alpha-glucosidase inhibitor for diabetes.",
+        "Slows the breakdown of carbohydrates in the gut.",
+        "Brand name is Precose."
+      ],
+     "ranitidine": [
+        "A medication for stomach ulcers and acid reflux.",
+        "Reduces stomach acid production.",
+        "Brand name was Zantac (many uses replaced by other drugs)."
+      ],
+      "famotidine": [
+        "A medicine for heartburn and ulcers.",
+        "Blocks stomach acid, taken by mouth.",
+        "Brand name is Pepcid."
+      ],
+      "loperamide": [
+        "Used to treat diarrhea.",
+        "Slows down gut movement.",
+        "Brand name is Imodium."
+      ],
+      "ondansetron": [
+        "A medication for nausea and vomiting.",
+        "Commonly used after chemotherapy or surgery.",
+        "Brand name is Zofran."
+      ],
+      "meclizine": [
+        "Used for motion sickness and vertigo.",
+        "Reduces dizziness and nausea.",
+        "Brand name is Antivert."
+      ],
+      "promethazine": [
+        "Treats nausea, allergies, and motion sickness.",
+        "Sedating antihistamine.",
+        "Brand name is Phenergan."
+      ],
+      "dicyclomine": [
+        "Treats irritable bowel syndrome (IBS) symptoms.",
+        "Reduces stomach and bowel cramping.",
+        "Brand name is Bentyl."
+      ],
+      "mesalamine": [
+        "An anti-inflammatory drug for ulcerative colitis.",
+        "Helps control bowel inflammation.",
+        "Often used long-term for remission."
+      ],
+      "sulfasalazine": [
+        "Used to treat ulcerative colitis and rheumatoid arthritis.",
+        "Reduces inflammation in the gut and joints.",
+        "Can cause orange-yellow urine."
+      ],
+      "hydroxyzine": [
+        "An antihistamine for anxiety, itching, and allergies.",
+        "Can help with sleep and nausea.",
+        "Brand name is Atarax or Vistaril."
+      ],
+      "cetirizine": [
+        "A non-drowsy antihistamine for allergies.",
+        "Treats hay fever and hives.",
+        "Brand name is Zyrtec."
+      ],
+      "fexofenadine": [
+        "A non-sedating allergy medicine.",
+        "Treats hay fever and skin itching.",
+        "Brand name is Allegra."
+      ],
+      "diphenhydramine": [
+        "An antihistamine for allergies and sleep.",
+        "Also used to treat motion sickness.",
+        "Brand name is Benadryl."
+      ],
+      "chlorpheniramine": [
+        "A sedating antihistamine for allergy symptoms.",
+        "Relieves sneezing, itching, and watery eyes.",
+        "Often found in cold/flu remedies."
+      ],
+      "loratadine": [
+        "A non-drowsy allergy medicine.",
+        "Relieves runny nose and itchy eyes.",
+        "Brand name is Claritin."
+      ],
+      "desloratadine": [
+        "An antihistamine for allergies.",
+        "Treats sneezing and itchy skin.",
+        "Brand name is Clarinex."
+      ],
+      "montelukast": [
+        "A medicine for asthma and allergies.",
+        "Prevents wheezing and difficulty breathing.",
+        "Brand name is Singulair."
+      ],
+      "theophylline": [
+        "Used for asthma and COPD.",
+        "Relaxes the airways to improve breathing.",
+        "Older drug, requires blood level monitoring."
+      ],
+      "guaifenesin": [
+        "An expectorant for coughs and chest congestion.",
+        "Helps loosen mucus.",
+        "Brand name is Mucinex."
+      ],
+      "acetaminophen": [
+        "A common pain reliever and fever reducer.",
+        "Often used for headaches and minor aches.",
+        "Known as paracetamol outside the US."
+      ],
+      "ibuprofen": [
+        "A nonsteroidal anti-inflammatory drug (NSAID).",
+        "Treats pain, inflammation, and fever.",
+        "Brand names include Advil and Motrin."
+      ],
+      "naproxen": [
+        "A long-acting NSAID for pain and arthritis.",
+        "Relieves inflammation and menstrual cramps.",
+        "Brand name is Aleve."
+      ],
+      "diclofenac": [
+        "A strong NSAID for pain and arthritis.",
+        "Also available as a topical gel.",
+        "Brand names include Voltaren."
+      ],
+      "indomethacin": [
+        "An NSAID for pain, arthritis, and gout.",
+        "Often used for gout attacks.",
+        "Can cause GI side effects."
+      ],
+      "celecoxib": [
+        "A COX-2 selective NSAID for pain and arthritis.",
+        "Less likely to cause stomach ulcers.",
+        "Brand name is Celebrex."
+      ],
+      "methocarbamol": [
+        "A muscle relaxant for muscle spasms and pain.",
+        "Often used after injuries or sprains.",
+        "Brand name is Robaxin."
+      ],
+      "cyclobenzaprine": [
+        "A muscle relaxant for short-term muscle pain.",
+        "Used for strains, sprains, and back pain.",
+        "Brand name is Flexeril."
+      ],
+      "baclofen": [
+        "A muscle relaxant for spasticity.",
+        "Used in conditions like MS or spinal injury.",
+        "Works by relaxing certain muscles."
+      ],
+      "tizanidine": [
+        "A muscle relaxant for spasticity.",
+        "Often prescribed for MS or spinal cord injury.",
+        "Brand name is Zanaflex."
+      ],
+      "carisoprodol": [
+        "A muscle relaxant for acute pain.",
+        "Short-term use only.",
+        "Brand name is Soma."
+      ],
+      "gabapentin": [
+        "A medicine for nerve pain and seizures.",
+        "Often used for neuropathy and shingles pain.",
+        "Sometimes prescribed for anxiety."
+      ],
+      "pregabalin": [
+        "A medicine for nerve pain, fibromyalgia, and seizures.",
+        "Reduces pain signals in the nervous system.",
+        "Brand name is Lyrica."
+      ],
+      "topiramate": [
+        "A medicine for seizures and migraines.",
+        "Sometimes used for weight loss.",
+        "Brand name is Topamax."
+      ],
+      "valproate": [
+        "An anti-seizure and mood stabilizing drug.",
+        "Used for epilepsy and bipolar disorder.",
+        "May require liver function monitoring."
+      ],
+      "carbamazepine": [
+        "Used for seizures, nerve pain, and bipolar disorder.",
+        "Commonly treats trigeminal neuralgia.",
+        "Brand name is Tegretol."
+      ],
+      "lamotrigine": [
+        "An anti-seizure and mood stabilizer.",
+        "Used for epilepsy and bipolar disorder.",
+        "Brand name is Lamictal."
+      ],
+      "levetiracetam": [
+        "A medicine for seizure control.",
+        "Used in many types of epilepsy.",
+        "Brand name is Keppra."
+      ],
+      "phenytoin": [
+        "A classic anti-seizure medicine.",
+        "Prevents and controls seizures.",
+        "Brand name is Dilantin."
+      ],
+      "phenobarbital": [
+        "An older medicine for seizures and anxiety.",
+        "Barbiturate class, can be sedating.",
+        "Requires prescription monitoring."
+      ],
+      "oxcarbazepine": [
+        "Used for epilepsy and seizures.",
+        "Similar to carbamazepine but may have fewer side effects.",
+        "Brand name is Trileptal."
+      ],
+      "ethosuximide": [
+        "A seizure medication, especially for absence seizures.",
+        "Common in childhood epilepsy.",
+        "Brand name is Zarontin."
+      ],
+      "primidone": [
+        "A medicine for seizures and essential tremor.",
+        "Related to phenobarbital.",
+        "Brand name is Mysoline."
+      ],
+      "donepezil": [
+        "A medicine for Alzheimer’s disease.",
+        "Helps with memory and cognition.",
+        "Brand name is Aricept."
+      ],
+      "memantine": [
+        "Used for moderate to severe Alzheimer’s disease.",
+        "Improves memory and daily function.",
+        "Brand name is Namenda."
+      ],
+      "rivastigmine": [
+        "A medicine for dementia and Alzheimer’s.",
+        "Improves thinking and memory.",
+        "Brand name is Exelon."
+      ],
+      "galantamine": [
+        "Used for mild to moderate Alzheimer’s disease.",
+        "Helps with memory and alertness.",
+        "Brand name is Razadyne."
+      ],
+      "benztropine": [
+        "Used for Parkinson’s disease and movement disorders.",
+        "Helps reduce tremors and muscle stiffness.",
+        "Brand name is Cogentin."
+      ],
+      "trihexyphenidyl": [
+        "A medicine for Parkinson’s disease symptoms.",
+        "Reduces tremors and stiffness.",
+        "May be used with other Parkinson’s medications."
+      ],
+      "levodopa": [
+        "A main treatment for Parkinson’s disease.",
+        "Often combined with carbidopa.",
+        "Improves movement and reduces stiffness."
+      ],
+      "carbidopa": [
+        "Combined with levodopa for Parkinson’s disease.",
+        "Prevents breakdown of levodopa before it reaches the brain.",
+        "Improves effectiveness of Parkinson’s therapy."
+      ],
+      "amantadine": [
+        "Used for Parkinson’s disease and flu prevention.",
+        "Reduces movement symptoms.",
+        "Brand name is Symmetrel."
+      ],
+      "selegiline": [
+        "Used in Parkinson’s disease and depression.",
+        "Enhances effects of levodopa.",
+        "Brand name is Eldepryl."
+      ],
+      "rasagiline": [
+        "Used to treat symptoms of Parkinson’s disease.",
+        "May be taken alone or with levodopa.",
+        "Brand name is Azilect."
+      ],
+      "entacapone": [
+        "Used with levodopa for Parkinson’s disease.",
+        "Prolongs the effect of levodopa.",
+        "Brand name is Comtan."
+      ],
+      "tolcapone": [
+        "Another Parkinson’s disease medicine.",
+        "Used to manage movement symptoms.",
+        "Brand name is Tasmar."
+      ],
+      "pramipexole": [
+        "Used for Parkinson’s disease and restless legs syndrome.",
+        "A dopamine agonist.",
+        "Brand name is Mirapex."
+      ],
+      "ropinirole": [
+        "Used for Parkinson’s and restless legs syndrome.",
+        "Dopamine agonist class.",
+        "Brand name is Requip."
+      ],
+      "apomorphine": [
+        "A medicine for Parkinson’s disease episodes.",
+        "Quickly relieves severe movement symptoms.",
+        "Brand name is Apokyn."
+      ],
+      "hydroxychloroquine": [
+        "Used for malaria prevention and autoimmune diseases.",
+        "Commonly treats lupus and rheumatoid arthritis.",
+        "Brand name is Plaquenil."
+      ],
+      "methotrexate": [
+        "A medicine for rheumatoid arthritis and cancer.",
+        "Slows the immune system to reduce inflammation.",
+        "Also treats psoriasis; requires regular monitoring."
+      ],
+      "sulfasalazine": [
+        "Used for rheumatoid arthritis and ulcerative colitis.",
+        "Reduces joint and bowel inflammation.",
+        "May turn urine or skin yellow-orange."
+      ],
+      "azathioprine": [
+        "Used to prevent organ rejection and treat autoimmune diseases.",
+        "Suppresses the immune system.",
+        "Brand name is Imuran."
+      ],
+      "mycophenolate": [
+        "Used to prevent organ rejection after transplant.",
+        "Suppresses immune system response.",
+        "Brand name is Cellcept."
+      ],
+      "cyclosporine": [
+        "Used for transplant rejection and autoimmune diseases.",
+        "Weakens the immune system.",
+        "Brand name is Neoral or Sandimmune."
+      ],
+      "prednisolone": [
+        "A corticosteroid for inflammation and immune conditions.",
+        "Treats allergies, arthritis, and more.",
+        "Related to prednisone, but taken as a liquid or tablet."
+      ],
+      "methylprednisolone": [
+        "A corticosteroid for inflammation.",
+        "Treats severe allergies and arthritis.",
+        "Brand names include Medrol."
+      ],
+      "hydrocortisone": [
+        "A corticosteroid for skin and inflammatory conditions.",
+        "Treats eczema, allergies, and adrenal insufficiency.",
+        "Available as a tablet and topical cream."
+      ],
+      "dexamethasone": [
+        "A strong steroid for inflammation, cancer, and severe illness.",
+        "Used in COVID-19, allergic reactions, and brain swelling.",
+        "Brand names include Decadron."
+      ],
+      "spironolactone": [
+        "A diuretic for high blood pressure and heart failure.",
+        "Also treats hormonal acne and fluid retention.",
+        "Can raise potassium levels."
+      ],
+      "eplerenone": [
+        "A diuretic used for heart failure and high blood pressure.",
+        "Blocks aldosterone effects in the body.",
+        "May be better tolerated than spironolactone."
+      ],
+      "chlorthalidone": [
+        "A diuretic for high blood pressure.",
+        "Helps lower fluid and salt in the body.",
+        "Often used once daily."
+      ],
+      "indapamide": [
+        "A diuretic used to treat high blood pressure.",
+        "Also reduces swelling from heart failure.",
+        "Usually taken in the morning."
+      ],
+      "torsemide": [
+        "A loop diuretic for swelling and high blood pressure.",
+        "Works faster than furosemide.",
+        "Brand name is Demadex."
+      ],
+      "amiloride": [
+        "A potassium-sparing diuretic.",
+        "Treats high blood pressure and fluid retention.",
+        "Can be combined with other diuretics."
+      ],
+      "triamterene": [
+        "A diuretic used with other blood pressure drugs.",
+        "Helps prevent low potassium.",
+        "Brand name is Dyrenium."
+      ],
+      "methyldopa": [
+        "Used for high blood pressure, especially in pregnancy.",
+        "Relaxes blood vessels in the brain.",
+        "Brand name is Aldomet."
+      ],
+      "clonidine": [
+        "Used for high blood pressure and ADHD.",
+        "Can also help with withdrawal symptoms.",
+        "Brand name is Catapres."
+      ],
+      "guanfacine": [
+        "Used for ADHD and high blood pressure.",
+        "May help with impulse control.",
+        "Brand name is Tenex."
+      ],
+      "reserpine": [
+        "An old blood pressure medicine.",
+        "Rarely used today due to side effects.",
+        "Works by slowing nerve signals."
+      ],
+      "hydralazine": [
+        "A vasodilator for high blood pressure.",
+        "Relaxes blood vessels.",
+        "Also used for heart failure."
+      ],
+      "minoxidil": [
+        "A vasodilator for high blood pressure and hair growth.",
+        "Also used topically for hair loss.",
+        "Brand name is Loniten for oral use."
+      ],
+      "propranolol": [
+        "A beta blocker for blood pressure, anxiety, and tremors.",
+        "May prevent migraines and stage fright.",
+        "Brand name is Inderal."
+      ],
+      "nadolol": [
+        "A beta blocker for blood pressure and angina.",
+        "Long-acting medication.",
+        "Brand name is Corgard."
+      ],
+      "bisoprolol": [
+        "A beta blocker for high blood pressure and heart failure.",
+        "May improve survival after heart attack.",
+        "Brand name is Zebeta."
+      ],
+      "nebivolol": [
+        "A beta blocker for high blood pressure.",
+        "Helps relax blood vessels.",
+        "Brand name is Bystolic."
+      ],
+      "acebutolol": [
+        "A beta blocker used for hypertension and arrhythmias.",
+        "Less commonly prescribed than others.",
+        "Brand name is Sectral."
+      ],
+      "pindolol": [
+        "A beta blocker for blood pressure.",
+        "Has some intrinsic activity.",
+        "Brand name is Visken."
+      ],
+      "diltiazem": [
+        "A calcium channel blocker for high blood pressure.",
+        "Also used for chest pain and arrhythmia.",
+        "Brand name is Cardizem."
+      ],
+      "verapamil": [
+        "A calcium channel blocker for heart conditions.",
+        "Treats high blood pressure and arrhythmias.",
+        "Brand names include Calan and Verelan."
+      ],
+      "nifedipine": [
+        "A calcium channel blocker for high blood pressure.",
+        "Also treats angina.",
+        "Brand names include Procardia and Adalat."
+      ],
+      "felodipine": [
+        "A calcium channel blocker for high blood pressure.",
+        "Relaxes blood vessels and lowers BP.",
+        "Brand name is Plendil."
+      ],
+      "isradipine": [
+        "A calcium channel blocker for hypertension.",
+        "Helps relax blood vessels.",
+        "Brand name is Dynacirc."
+      ],
+      "nicardipine": [
+        "Used for high blood pressure and angina.",
+        "Belongs to the calcium channel blocker group.",
+        "Brand name is Cardene."
+      ],
+      "clevidipine": [
+        "A fast-acting IV calcium channel blocker.",
+        "Mostly used in hospitals for severe hypertension.",
+        "Brand name is Cleviprex."
+      ],
+      "amlodipine": [
+        "A calcium channel blocker for high blood pressure.",
+        "Prescribed for angina and coronary artery disease.",
+        "Brand name is Norvasc."
+      ]
+    },
     "4th_grade": {
       "bag": [
         "You can carry things in this.",
