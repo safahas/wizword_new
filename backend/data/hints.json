@@ -19764,6 +19764,793 @@
         "Brand name is Norvasc."
       ]
     },
+    "anatomy": {
+      "arm": [
+        "The limb extending from the shoulder to the hand.",
+        "Used for lifting, carrying, and waving.",
+        "Includes the upper arm, forearm, and hand."
+      ],
+      "leg": [
+        "The lower limb from the hip to the foot.",
+        "Supports the body and allows walking or running.",
+        "Divided into thigh, knee, and lower leg."
+      ],
+      "jaw": [
+        "The bone structure forming the mouth.",
+        "Used for chewing and speaking.",
+        "Lower jaw is called the mandible."
+      ],
+      "ear": [
+        "An organ for hearing and balance.",
+        "Has outer, middle, and inner parts.",
+        "Contains the smallest bones in the body."
+      ],
+      "eye": [
+        "The organ of sight.",
+        "Senses light and sends signals to the brain.",
+        "Includes iris, pupil, retina, and cornea."
+      ],
+      "lip": [
+        "The soft edge of the mouth.",
+        "Helps with speech and eating.",
+        "Sensitive to touch, taste, and temperature."
+      ],
+      "rib": [
+        "A curved bone in the chest.",
+        "Protects the heart and lungs.",
+        "Humans have 12 pairs of ribs."
+      ],
+      "toe": [
+        "One of the digits at the end of the foot.",
+        "Helps with balance and walking.",
+        "Big toe provides most push-off power."
+      ],
+      "gum": [
+        "The soft tissue covering the jawbones in the mouth.",
+        "Supports and protects the teeth.",
+        "Healthy gums are pink and firm."
+      ],
+      "lid": [
+        "Short for eyelid, the fold of skin covering the eye.",
+        "Protects the eye from dust and injury.",
+        "Blinks help spread tears for moisture."
+      ],
+      "hip": [
+        "The joint where the thigh bone meets the pelvis.",
+        "Supports body weight when standing or walking.",
+        "A common site for replacement surgery."
+      ],
+      "sac": [
+        "A pouch or cavity in the body that holds fluid.",
+        "Examples: amniotic sac, bursa, synovial sac.",
+        "Provides cushioning and protection."
+      ],
+      "heart": [
+        "The muscular organ that pumps blood through the body.",
+        "Has four chambers and beats about 100,000 times a day.",
+        "Vital for delivering oxygen to tissues."
+      ],
+      "brain": [
+        "The organ that controls thoughts and the nervous system.",
+        "Protected by the skull.",
+        "Has regions for memory, movement, and senses."
+      ],
+      "liver": [
+        "A large organ in the upper right abdomen.",
+        "Processes nutrients and detoxifies blood.",
+        "Can regenerate if partially damaged."
+      ],
+      "skull": [
+        "The bony structure that encloses the brain.",
+        "Composed of 22 bones fused together.",
+        "Also protects eyes and supports facial structure."
+      ],
+      "tooth": [
+        "A hard structure in the mouth for biting and chewing.",
+        "Adults have 32 permanent teeth.",
+        "Types: incisors, canines, premolars, molars."
+      ],
+      "spine": [
+        "Also called the backbone or vertebral column.",
+        "Made of 33 vertebrae stacked vertically.",
+        "Supports the body and protects the spinal cord."
+      ],
+      "nerve": [
+        "A bundle of fibers transmitting electrical signals.",
+        "Connects brain and spinal cord to the body.",
+        "Responsible for sensation and movement."
+      ],
+      "joint": [
+        "A point where two bones meet.",
+        "Allows for movement and flexibility.",
+        "Examples: knee, elbow, and shoulder."
+      ],
+      "thumb": [
+        "The short, thick first digit of the hand.",
+        "Allows grasping and manipulating objects.",
+        "Opposable thumbs are unique to humans and primates."
+      ],
+      "femur": [
+        "The thigh bone, longest bone in the body.",
+        "Connects the hip to the knee.",
+        "Supports most body weight during standing and walking."
+      ],
+      "lungs": [
+        "Pair of organs in the chest for breathing.",
+        "Exchange oxygen and carbon dioxide.",
+        "Protected by the rib cage."
+      ],
+      "veins": [
+        "Blood vessels that return blood to the heart.",
+        "Appear blue under the skin.",
+        "Valves prevent blood from flowing backward."
+      ],
+      "elbow": [
+        "The joint connecting the upper and lower arm.",
+        "Allows arm to bend and straighten.",
+        "Contains the funny bone (ulnar nerve)."
+      ],
+      "colon": [
+        "The main part of the large intestine.",
+        "Absorbs water and forms stool.",
+        "Divided into ascending, transverse, and descending parts."
+      ],
+      "nasal": [
+        "Relating to the nose.",
+        "Includes nasal cavity and septum.",
+        "Helps filter, warm, and moisten air."
+      ],
+      "lymph": [
+        "A clear fluid that circulates through the lymphatic system.",
+        "Contains white blood cells to fight infection.",
+        "Filtered through lymph nodes."
+      ],
+      "ulna": [
+        "A long bone in the forearm.",
+        "Runs from elbow to wrist, next to the radius.",
+        "Forms the bony part of the elbow."
+      ],
+      "wrist": [
+        "The joint connecting the hand to the forearm.",
+        "Made up of eight small bones.",
+        "Allows rotation and movement of the hand."
+      ],
+      "gland": [
+        "An organ that produces and releases substances.",
+        "Examples: thyroid, adrenal, sweat glands.",
+        "Essential for hormones and bodily functions."
+      ],
+      "stern": [
+        "Short for sternum, the breastbone in the chest.",
+        "Protects the heart and lungs.",
+        "Joins with ribs and clavicle."
+      ],
+      "stomach": [
+        "A muscular organ in the abdomen for digesting food.",
+        "Mixes food with acid and enzymes.",
+        "Leads to the small intestine."
+      ],
+      "forearm": [
+        "The part of the arm between the elbow and wrist.",
+        "Contains radius and ulna bones.",
+        "Moves the hand and fingers."
+      ],
+      "retina": [
+        "The layer at the back of the eye sensing light.",
+        "Contains rods and cones for vision.",
+        "Transmits images to the brain via the optic nerve."
+      ],
+      "cornea": [
+        "The clear, dome-shaped surface covering the eye.",
+        "Helps focus incoming light.",
+        "No blood vessels, receives oxygen from tears."
+      ],
+      "tendon": [
+        "A tough cord that connects muscle to bone.",
+        "Helps move joints when muscles contract.",
+        "Achilles tendon is the strongest in the body."
+      ],
+      "mandible": [
+        "The lower jaw bone.",
+        "Holds the lower teeth in place.",
+        "Moves for chewing and speaking."
+      ],
+      "eyelid": [
+        "The fold of skin covering the eye.",
+        "Protects and lubricates the eyeball.",
+        "Blinks keep the eye moist."
+      ],
+      "bronchi": [
+        "Two main airways leading from the trachea into the lungs.",
+        "Branch into smaller bronchioles.",
+        "Allow air to reach all parts of the lungs."
+      ],
+      "neuron": [
+        "A nerve cell transmitting signals in the body.",
+        "Basic unit of the brain and nervous system.",
+        "Communicates via electrical and chemical signals."
+      ],
+      "pelvis": [
+        "The bony structure at the base of the spine.",
+        "Connects spine to legs.",
+        "Supports weight and protects organs."
+      ],
+      "scapula": [
+        "Also called the shoulder blade.",
+        "Connects the upper arm bone to the collarbone.",
+        "Triangular-shaped and located on the upper back."
+      ],
+      "sinus": [
+        "A cavity or hollow space, often refers to nasal sinuses.",
+        "Helps humidify air and enhance voice resonance.",
+        "Can become infected, causing sinusitis."
+      ],
+      "phalange": [
+        "A bone in the fingers or toes.",
+        "Each hand and foot has 14 phalanges.",
+        "Arranged as proximal, middle, and distal."
+      ],
+      "triceps": [
+        "A large muscle on the back of the upper arm.",
+        "Straightens the elbow joint.",
+        "Has three heads: long, lateral, and medial."
+      ],
+      "alveoli": [
+        "Tiny air sacs in the lungs.",
+        "Site of oxygen and carbon dioxide exchange.",
+        "Number in the hundreds of millions per lung."
+      ],
+      "pylorus": [
+        "The opening from the stomach into the small intestine.",
+        "Controls the flow of food and liquid.",
+        "Pyloric sphincter acts as a valve."
+      ],
+      "sclera": [
+        "The white outer layer of the eyeball.",
+        "Provides structure and protection.",
+        "Visible in the white of the eyes."
+      ],
+      "patella": [
+        "The kneecap bone.",
+        "Protects the knee joint and aids in extension.",
+        "Largest sesamoid bone in the body."
+      ],
+      "larynx": [
+        "The voice box, located in the neck.",
+        "Contains vocal cords for sound production.",
+        "Essential for speech and breathing."
+      ],
+      "muscle": [
+        "Tissue that contracts to produce movement.",
+        "Over 600 muscles in the human body.",
+        "Three types: skeletal, cardiac, smooth."
+      ],
+      "humerus": [
+        "The upper arm bone.",
+        "Connects the shoulder to the elbow.",
+        "Longest bone in the arm."
+      ],
+      "radius": [
+        "A bone in the forearm, on the thumb side.",
+        "Rotates around the ulna for wrist movement.",
+        "Fractures are common in falls."
+      ],
+      "fibula": [
+        "The smaller bone of the lower leg.",
+        "Runs parallel to the tibia.",
+        "Helps stabilize the ankle."
+      ],
+      "tibia": [
+        "The shin bone, larger bone of the lower leg.",
+        "Bears most body weight.",
+        "Connects the knee to the ankle."
+      ],
+      "ilium": [
+        "The largest bone of the pelvis.",
+        "Flared portion forms the hip.",
+        "Can be felt at the waist."
+      ],
+      "ischium": [
+        "The lower back part of the pelvis.",
+        "Supports weight when sitting.",
+        "Part of the hip bone."
+      ],
+      "pubis": [
+        "The front portion of the pelvic bone.",
+        "Joins at the pubic symphysis.",
+        "Important in childbirth."
+      ],
+      "coccyx": [
+        "The tailbone at the base of the spine.",
+        "Formed by fused vertebrae.",
+        "Can be bruised by a fall."
+      ],
+      "sacrum": [
+        "A triangular bone at the base of the spine.",
+        "Connects the spine to the pelvis.",
+        "Composed of five fused vertebrae."
+      ],     
+     "spinal": [
+        "Related to the spine or backbone.",
+        "Contains the spinal cord, which carries nerve signals.",
+        "Spinal injuries can affect movement and sensation."
+      ],
+      "cortex": [
+        "The outer layer of an organ, especially the brain.",
+        "Responsible for thinking, memory, and senses.",
+        "Cerebral cortex is folded for more surface area."
+      ],
+      "medulla": [
+        "The inner part of an organ, like the brainstem.",
+        "Controls vital functions like breathing and heart rate.",
+        "Full name: medulla oblongata."
+      ],
+      "pons": [
+        "A part of the brainstem.",
+        "Relays messages between brain regions.",
+        "Regulates breathing and sleep cycles."
+      ],
+      "thalamus": [
+        "A structure deep in the brain.",
+        "Acts as a relay station for sensory signals.",
+        "Involved in consciousness and alertness."
+      ],
+      "hypothalamus": [
+        "A region at the base of the brain.",
+        "Regulates hunger, thirst, temperature, and hormones.",
+        "Controls the pituitary gland."
+      ],
+      "pituitary": [
+        "A small gland at the base of the brain.",
+        "Called the 'master gland' for hormone control.",
+        "Affects growth, metabolism, and reproduction."
+      ],
+      "pineal": [
+        "A small endocrine gland in the brain.",
+        "Produces melatonin to regulate sleep.",
+        "Sometimes called the 'third eye.'"
+      ],
+      "amygdala": [
+        "An almond-shaped area in the brain.",
+        "Key role in processing emotions and fear.",
+        "Name means 'almond' in Greek."
+      ],
+      "hippocampus": [
+        "A part of the brain critical for memory.",
+        "Helps form and organize new memories.",
+        "Named after its seahorse shape."
+      ],
+      "ventricle": [
+        "A fluid-filled chamber in the brain or heart.",
+        "Brain ventricles hold cerebrospinal fluid.",
+        "Heart ventricles pump blood to lungs and body."
+      ],
+      "atrium": [
+        "An upper chamber in the heart.",
+        "Receives blood from the body or lungs.",
+        "Each heart has a left and right atrium."
+      ],
+      "aorta": [
+        "The main artery from the heart.",
+        "Carries oxygen-rich blood to the body.",
+        "Largest blood vessel in the body."
+      ],
+      "artery": [
+        "A blood vessel carrying blood away from the heart.",
+        "Pulse can be felt in major arteries.",
+        "Can be affected by atherosclerosis."
+      ],
+      "vein": [
+        "A blood vessel carrying blood back to the heart.",
+        "Veins have valves to prevent backflow.",
+        "Appear blue under the skin."
+      ],
+      "capillary": [
+        "The smallest type of blood vessel.",
+        "Connects arteries and veins, allowing exchange of gases.",
+        "Thin walls for nutrient and waste transfer."
+      ],
+      "plasma": [
+        "The liquid part of blood.",
+        "Carries cells, hormones, and nutrients.",
+        "Makes up about 55% of blood volume."
+      ],
+      "platelet": [
+        "A cell fragment involved in blood clotting.",
+        "Helps stop bleeding from wounds.",
+        "Low platelet count can cause bleeding problems."
+      ],
+      "erythrocyte": [
+        "A red blood cell.",
+        "Carries oxygen using hemoglobin.",
+        "Gives blood its red color."
+      ],
+      "leukocyte": [
+        "A white blood cell.",
+        "Helps defend the body against infection.",
+        "Several types: neutrophils, lymphocytes, monocytes."
+      ],
+      "lymphocyte": [
+        "A type of white blood cell.",
+        "Important in immune response.",
+        "Includes T cells and B cells."
+      ],
+      "macrophage": [
+        "A large white blood cell that eats bacteria and debris.",
+        "Found throughout the body in tissues.",
+        "Key part of the immune system."
+      ],
+      "tonsil": [
+        "A lymphoid tissue at the back of the throat.",
+        "Helps trap germs entering through the mouth or nose.",
+        "Can become swollen or infected."
+      ],
+      "thymus": [
+        "A gland in the upper chest, behind the breastbone.",
+        "Essential for developing immune cells in childhood.",
+        "Shrinks after puberty."
+      ],
+      "spleen": [
+        "An organ in the upper left abdomen.",
+        "Filters blood and stores immune cells.",
+        "Can be removed if ruptured or diseased."
+      ],
+      "pancreas": [
+        "An organ behind the stomach.",
+        "Produces insulin and digestive enzymes.",
+        "Essential for controlling blood sugar."
+      ],
+      "duodenum": [
+        "The first part of the small intestine.",
+        "Receives food from the stomach.",
+        "Site of important chemical digestion."
+      ],
+      "jejunum": [
+        "The middle section of the small intestine.",
+        "Absorbs nutrients from food.",
+        "Comes after the duodenum."
+      ],
+      "ileum": [
+        "The last part of the small intestine.",
+        "Connects to the large intestine (colon).",
+        "Finishes absorbing nutrients."
+      ],
+      "rectum": [
+        "The final part of the large intestine.",
+        "Stores stool before it leaves the body.",
+        "Ends at the anus."
+      ],
+      "anus": [
+        "The opening at the end of the digestive tract.",
+        "Where waste exits the body.",
+        "Surrounded by muscles called sphincters."
+      ],
+      "bladder": [
+        "A muscular sac that stores urine.",
+        "Expands as it fills and signals when to urinate.",
+        "Located in the lower abdomen."
+      ],
+      "ureter": [
+        "A tube carrying urine from kidney to bladder.",
+        "Humans have two, one for each kidney.",
+        "About 25–30 cm long."
+      ],
+      "urethra": [
+        "The tube carrying urine from the bladder out of the body.",
+        "Shorter in females than males.",
+        "Also used for semen in males."
+      ],
+      "kidney": [
+        "A bean-shaped organ that filters blood.",
+        "Removes waste and extra water as urine.",
+        "Humans usually have two kidneys."
+      ],
+      "adrenal": [
+        "A gland on top of each kidney.",
+        "Produces hormones like adrenaline and cortisol.",
+        "Helps regulate stress and metabolism."
+      ],
+      "ovary": [
+        "A female reproductive organ.",
+        "Produces eggs and hormones.",
+        "Two in each woman, on either side of the uterus."
+      ],
+      "testis": [
+        "A male reproductive gland.",
+        "Produces sperm and testosterone.",
+        "Usually two, located in the scrotum."
+      ],
+      "uterus": [
+        "The organ where a baby develops during pregnancy.",
+        "Has a lining that thickens monthly.",
+        "Also called the womb."
+      ],
+      "cervix": [
+        "The lower, narrow part of the uterus.",
+        "Opens into the vagina.",
+        "Dilates during childbirth."
+      ],
+      "vagina": [
+        "A muscular tube in the female pelvis.",
+        "Connects the uterus to the outside.",
+        "Part of the birth canal."
+      ],
+      "prostate": [
+        "A gland below the male bladder.",
+        "Produces fluid that mixes with sperm.",
+        "Can enlarge with age or cause health issues."
+      ],
+      "penis": [
+        "The external male genital organ.",
+        "Used for urination and reproduction.",
+        "Contains erectile tissue and the urethra."
+      ],
+      "scrotum": [
+        "A pouch of skin containing the testicles.",
+        "Regulates temperature for sperm production.",
+        "Located below the penis."
+      ],
+      "epididymis": [
+        "A coiled tube on the testis.",
+        "Stores and carries sperm.",
+        "Matures sperm before ejaculation."
+      ],
+      "vasdeferens": [
+        "A tube carrying sperm from testis to urethra.",
+        "Part of the male reproductive tract.",
+        "Cut during a vasectomy."
+      ],
+      "seminal": [
+        "Relating to semen, the male reproductive fluid.",
+        "Seminal vesicles add fluid to sperm.",
+        "Important for fertility."
+      ],
+      "fallopian": [
+        "A pair of tubes connecting ovaries to uterus.",
+        "Where fertilization usually occurs.",
+        "Also called uterine tubes."
+      ],
+      "placenta": [
+        "An organ in the uterus during pregnancy.",
+        "Transfers oxygen and nutrients to the fetus.",
+        "Delivered after the baby at birth."
+      ],
+      "embryo": [
+        "A developing baby during early pregnancy.",
+        "Up to 8 weeks after fertilization.",
+        "Becomes a fetus after this stage."
+      ],
+      "fetus": [
+        "A developing baby after 8 weeks of pregnancy.",
+        "Grows inside the uterus until birth.",
+        "Stage after embryo, before newborn."
+      ],
+      "alveolus": [
+        "A tiny air sac in the lungs.",
+        "Site of oxygen and carbon dioxide exchange.",
+        "There are millions in each lung."
+      ],
+      "bronchiole": [
+        "A small airway in the lungs.",
+        "Leads to alveoli for gas exchange.",
+        "Can constrict in asthma attacks."
+      ],
+      "epiglottis": [
+        "A flap of tissue in the throat.",
+        "Covers the windpipe during swallowing.",
+        "Prevents food from entering the airway."
+      ],
+     "larynx": [
+        "The voice box located in the neck.",
+        "Contains the vocal cords and helps produce sound.",
+        "Essential for speech and breathing."
+      ],
+      "trachea": [
+        "The windpipe, a tube that connects the larynx to the lungs.",
+        "Allows air passage in and out of the lungs.",
+        "Has C-shaped cartilage rings."
+      ],
+      "esophagus": [
+        "A muscular tube for food passage from throat to stomach.",
+        "Moves food via peristalsis.",
+        "Can develop conditions like reflux."
+      ],
+      "pharynx": [
+        "The throat; part of both the digestive and respiratory systems.",
+        "Connects mouth and nasal passages to esophagus and larynx.",
+        "Involved in swallowing and speech."
+      ],
+      "tonsils": [
+        "Lymphatic tissues at the back of the throat.",
+        "Trap germs and help fight infection.",
+        "Can become inflamed, called tonsillitis."
+      ],
+      "adenoid": [
+        "A mass of lymphatic tissue behind the nose.",
+        "Part of immune defense in children.",
+        "Shrinks after childhood."
+      ],
+      "uvula": [
+        "The small fleshy extension at the back of the soft palate.",
+        "Helps with swallowing and speech sounds.",
+        "Can cause snoring if enlarged."
+      ],
+      "palate": [
+        "The roof of the mouth, separates oral and nasal cavities.",
+        "Has hard and soft sections.",
+        "Essential for speech and swallowing."
+      ],
+      "gingiva": [
+        "Another name for gums in the mouth.",
+        "Covers the bone around the teeth.",
+        "Healthy gingiva prevents tooth loss."
+      ],
+      "incisor": [
+        "A type of front tooth for cutting food.",
+        "Adults have eight incisors.",
+        "Flat and sharp for biting."
+      ],
+      "canine": [
+        "A pointed tooth next to the incisors.",
+        "Used for tearing food.",
+        "Each person has four canines."
+      ],
+      "premolar": [
+        "A tooth located between the canine and molar teeth.",
+        "Used for crushing and grinding food.",
+        "Adults have eight premolars."
+      ],
+      "molar": [
+        "A large tooth at the back of the mouth.",
+        "Used for grinding and chewing food.",
+        "Adults have 12 molars, including wisdom teeth."
+      ],
+      "enamel": [
+        "The hard, outer surface of the tooth.",
+        "Strongest substance in the body.",
+        "Protects teeth from decay."
+      ],
+      "dentin": [
+        "A layer of tooth beneath the enamel.",
+        "Sensitive to hot, cold, and pressure.",
+        "Supports the enamel and protects the pulp."
+      ],
+      "pulp": [
+        "The innermost part of a tooth.",
+        "Contains nerves and blood vessels.",
+        "Can become infected, causing toothache."
+      ],
+      "root": [
+        "The part of a tooth or hair below the surface.",
+        "Anchors the tooth or hair in place.",
+        "Covered by gum or skin."
+      ],
+      "follicle": [
+        "A small sac or cavity, like a hair follicle.",
+        "Where hair, teeth, or eggs develop.",
+        "Can become infected, called folliculitis."
+      ],
+      "cuticle": [
+        "A layer of skin at the base of a nail.",
+        "Protects new nail from bacteria.",
+        "Important for nail health."
+      ],
+      "lunula": [
+        "The white, crescent-shaped area at the base of a fingernail.",
+        "Visible on most thumbs.",
+        "Name means 'little moon' in Latin."
+      ],
+      "matrix": [
+        "The tissue in nails or bones that produces growth.",
+        "Nail matrix makes new nail cells.",
+        "Bone matrix is the hard part of bone."
+      ],
+      "dermis": [
+        "The thick layer of skin beneath the surface.",
+        "Contains nerves, blood vessels, and hair roots.",
+        "Supports the outer skin, called epidermis."
+      ],
+      "epidermis": [
+        "The outermost layer of the skin.",
+        "Protects the body from germs and water loss.",
+        "Constantly replaced with new cells."
+      ],
+      "melanin": [
+        "A pigment that gives skin, hair, and eyes their color.",
+        "Protects skin from sun damage.",
+        "Produced by cells called melanocytes."
+      ],
+      "sebaceous": [
+        "A gland in the skin that produces oil.",
+        "Keeps hair and skin soft.",
+        "Blockage can cause acne."
+      ],
+      "sweatgland": [
+        "A gland that produces sweat for cooling.",
+        "Located in the skin all over the body.",
+        "Most numerous in hands, feet, and forehead."
+      ],
+      "arrector": [
+        "Short for arrector pili, small muscles attached to hair follicles.",
+        "Causes goosebumps by contracting.",
+        "React to cold or emotional states."
+      ],
+      "nipple": [
+        "The small projection in the center of the breast.",
+        "Milk exits here during breastfeeding.",
+        "Sensitive to touch and temperature."
+      ],
+      "areola": [
+        "The pigmented area around the nipple.",
+        "Contains small glands for lubrication.",
+        "Varies in size, shape, and color."
+      ],
+      "pectorals": [
+        "The chest muscles.",
+        "Used for pushing movements and arm flexion.",
+        "Commonly called 'pecs.'"
+      ],
+      "deltoid": [
+        "The main muscle over the shoulder.",
+        "Raises the arm and gives the shoulder its shape.",
+        "Named after the Greek letter delta."
+      ],
+      "latissimus": [
+        "A large back muscle, full name latissimus dorsi.",
+        "Helps pull arms down and back.",
+        "Called the 'lats' in fitness."
+      ],
+      "trapezius": [
+        "A large, diamond-shaped upper back muscle.",
+        "Raises and rotates the shoulder.",
+        "Named for its trapezoid shape."
+      ],
+      "gluteus": [
+        "The main muscles of the buttocks.",
+        "Includes maximus, medius, and minimus.",
+        "Used for standing, climbing, and running."
+      ],
+      "iliopsoas": [
+        "A deep hip muscle group.",
+        "Main flexor of the hip joint.",
+        "Important for walking and running."
+      ],
+      "sartorius": [
+        "The longest muscle in the human body.",
+        "Runs diagonally across the thigh.",
+        "Helps cross your legs."
+      ],
+      "quadriceps": [
+        "A group of four muscles in the front of the thigh.",
+        "Extends the knee joint.",
+        "Crucial for walking and jumping."
+      ],
+      "hamstring": [
+        "A group of three muscles in the back of the thigh.",
+        "Flexes the knee and extends the hip.",
+        "Injuries are common in runners."
+      ],
+      "gastrocnemius": [
+        "The main calf muscle.",
+        "Helps point the toes and lift the heel.",
+        "Important for running and jumping."
+      ],
+      "soleus": [
+        "A muscle in the lower leg under the calf.",
+        "Helps push off when walking or running.",
+        "Works with the gastrocnemius."
+      ],
+      "peroneus": [
+        "A muscle group on the outside of the lower leg.",
+        "Helps move the ankle and foot.",
+        "Supports balance during walking."
+      ],
+      "tibialis": [
+        "A muscle along the shin bone (tibia).",
+        "Raises the foot upward.",
+        "Often strained in 'shin splints.'"
+      ]
+    },
     "4th_grade": {
       "bag": [
         "You can carry things in this.",
