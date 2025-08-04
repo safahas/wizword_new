@@ -2515,9 +2515,11 @@ def log_beat_word_count_event(event, value):
     with open("beat_word_count_debug.log", "a", encoding="utf-8") as f:
         f.write(f"{event}: beat_word_count = {value}\n")
 
+GAME_RESULTS_PATH = os.environ.get('GAME_RESULTS_PATH', 'game_results.json')
+
 def save_game_to_user_profile(game_summary):
     import os, json
-    game_file = "game_results.json"
+    game_file = GAME_RESULTS_PATH
     # Ensure timestamp exists
     if 'timestamp' not in game_summary:
         from datetime import datetime
@@ -2542,8 +2544,6 @@ def save_game_to_user_profile(game_summary):
     all_games[user].append(dict(game_summary))
     with open(game_file, "w", encoding="utf-8") as f:
         json.dump(all_games, f, indent=2)
-        # import logging, os
-        # logging.info(f"[PROOF] game_results.json updated for user '{user}' with game: {game_summary}")
         abs_path = os.path.abspath(game_file)
         try:
             mtime = os.path.getmtime(game_file)
@@ -2551,6 +2551,7 @@ def save_game_to_user_profile(game_summary):
             mtime_str = datetime.datetime.fromtimestamp(mtime).isoformat()
         except Exception as e:
             mtime_str = f"(could not get mtime: {e})"
+        import logging
         logging.info(f"[DEBUG] game_results.json path: {abs_path}, last modified: {mtime_str}")
         print(f"[DEBUG] game_results.json path: {abs_path}, last modified: {mtime_str}")
 
@@ -2559,9 +2560,8 @@ def load_all_users():
         return json.load(f)
 
 def get_all_game_results():
-    # Load all game results from the new grouped file
     import os, json
-    game_file = "game_results.json"
+    game_file = GAME_RESULTS_PATH
     if not os.path.exists(game_file):
         return []
     with open(game_file, "r", encoding="utf-8") as f:
