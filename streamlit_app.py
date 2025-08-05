@@ -64,6 +64,7 @@ st.set_page_config(
         'About': "# WizWord - Word Guessing Game\nTest your deduction skills against AI!"
     }
 )
+
 # st.write("🚨 [DEBUG] THIS IS THE REAL streamlit_app.py - TEST MARKER")
 from backend.game_logic import GameLogic
 import os
@@ -969,6 +970,15 @@ def main():
     if not st.session_state.get('logged_in', False):
         display_login()
         return
+# --- Admin-only: Display all user profiles ---
+    if st.session_state.get('user', {}).get('username', '').lower() == 'admin':
+        st.sidebar.markdown('---')
+        if st.sidebar.button('Display All User Profiles', key='admin_show_users'):
+            users = st.session_state.get('users', {})
+            st.markdown('## All User Profiles')
+            import pandas as pd
+            df = pd.DataFrame.from_dict(users, orient='index').reset_index().rename(columns={'index': 'username'})
+            st.dataframe(df)
 
     if 'game' not in st.session_state or not st.session_state.game or getattr(st.session_state.game, 'mode', None) != 'Beat':
         random_length = random.randint(3, 10)
