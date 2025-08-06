@@ -2297,7 +2297,11 @@ def display_game_over(game_summary):
         leaderboard_category = game_summary.get('subject', None)
     if not leaderboard_category:
         leaderboard_category = 'All Categories'
-    st.markdown(f"## 🏆 Global Leaderboard (Top 10 by SEI) - {leaderboard_category.title() if leaderboard_category != 'All Categories' else 'All Categories'}")
+    st.markdown(f"""
+    <div style='font-size:1.1em; font-weight:700; color:#fff; margin-bottom:0.5em;'>
+        🏆 Global Leaderboard (Top 10 by SEI) - {leaderboard_category.title() if leaderboard_category != 'All Categories' else 'All Categories'}
+    </div>
+    """, unsafe_allow_html=True)
     user_sei = {}
     for g in all_games:
         user = g.get('nickname', '').lower()
