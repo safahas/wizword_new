@@ -373,7 +373,8 @@ class ShareCardGenerator:
             # Prepare output path
             if output_path is None:
                 os.makedirs('game_data/share_cards', exist_ok=True)
-                output_path = os.path.join('game_data/share_cards', f'share_card_{word.lower()}.png')
+                safe_nickname = (nickname or 'user').replace(' ', '_').lower()
+                output_path = os.path.join('game_data/share_cards', f'share_card_current_{safe_nickname}.png')
             
             # Create gradient background
             image = self._create_gradient_background()
