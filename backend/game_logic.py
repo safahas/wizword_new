@@ -184,21 +184,8 @@ class GameLogic:
         points_added = 0
         if self.mode in ("Wiz", "Beat"):
             if is_correct:
-                # Calculate base points with difficulty multiplier
-                base_points = (len(self.selected_word) * self.current_settings["base_points_multiplier"])
-                
-                # Add time bonus for Hard mode
-                time_bonus = 0
-                if self.difficulty == "Hard":
-                    time_taken = time.time() - self.start_time
-                    if time_taken < 60:  # Under 1 minute
-                        time_bonus = 50
-                    elif time_taken < 120:  # Under 2 minutes
-                        time_bonus = 25
-                        
-                # Calculate final points
-                question_penalty = len(self.questions_asked) * abs(self.current_settings["question_penalty"])
-                points_added = max(base_points + time_bonus - question_penalty, 10)
+                # Always award 100 points per correct word, regardless of word length or difficulty
+                points_added = 100
             else:
                 points_added = self.current_settings["guess_penalty"]
             
