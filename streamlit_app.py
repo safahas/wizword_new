@@ -814,7 +814,7 @@ def display_login():
         - **Correct guess:** 100 points per word
         - **Show Word:** -100 points
         - **Beat Mode:** Solve as many words as possible in 5 minutes! The timer starts when you click the Start button.
-
+        - **Score Efficiency Index (SEI):** Your SEI is calculated as (Average Score per Word) / (Average Time per Word in seconds). A higher SEI means you are both fast and accurate. The global leaderboard ranks users by their highest SEI in any single game.        
         ### User Profile
         - Access your profile from the menu (☰ > User Profile)
         - Edit your **education**, **occupation**, **address**, and **birthday** (from 1900 onward)
@@ -2066,6 +2066,7 @@ def display_game_over(game_summary):
             # Prepare data
             avg_scores = []
             avg_times = []
+            sei_values = []
             game_dates = []
             total_score = 0
             total_time = 0
@@ -2081,16 +2082,19 @@ def display_game_over(game_summary):
                     total_words += words
                     avg_score = total_score / total_words if total_words > 0 else 0
                     avg_time = total_time / total_words if total_words > 0 else 0
+                    sei = avg_score / avg_time if avg_time > 0 else 0
                     avg_scores.append(avg_score)
                     avg_times.append(avg_time)
+                    sei_values.append(sei)
                     # Use only the date part for x-axis
                     if isinstance(date, str):
                         date = date.split('T')[0]
                     game_dates.append(date)
-            if avg_scores and avg_times and game_dates:
+            if avg_scores and avg_times and sei_values and game_dates:
                 fig, ax = plt.subplots(figsize=(6, 3))
                 color1 = 'tab:blue'
                 color2 = 'tab:orange'
+                color3 = 'tab:green'
                 ax.plot(game_dates, avg_scores, marker='o', linewidth=2, markersize=6, color=color1, label='Running Avg Score/Word')
                 ax.set_xlabel('Game Date')
                 ax.set_ylabel('Running Avg Score/Word', color=color1)
@@ -2102,10 +2106,17 @@ def display_game_over(game_summary):
                 ax2.set_ylabel('Running Avg Time per Word (sec)', color=color2)
                 ax2.set_ylim(0, 300)
                 ax2.tick_params(axis='y', labelcolor=color2)
+                # Plot SEI on a third axis
+                ax3 = ax.twinx()
+                ax3.spines['right'].set_position(('outward', 60))
+                ax3.plot(game_dates, sei_values, marker='^', linewidth=2, markersize=6, color=color3, label='SEI (Score/Time)')
+                ax3.set_ylabel('SEI (Score/Time)', color=color3)
+                ax3.tick_params(axis='y', labelcolor=color3)
                 lines, labels = ax.get_legend_handles_labels()
                 lines2, labels2 = ax2.get_legend_handles_labels()
-                ax2.legend(lines + lines2, labels + labels2, loc='upper left')
-                ax.set_title('Running Avg Score/Word & Time/Word vs. Game Date')
+                lines3, labels3 = ax3.get_legend_handles_labels()
+                ax3.legend(lines + lines2 + lines3, labels + labels2 + labels3, loc='upper left')
+                ax.set_title('Running Avg Score/Word, Time/Word & SEI vs. Game Date')
                 fig.tight_layout()
                 st.pyplot(fig)
         # (Removed: recent games/results list from this tab)
@@ -2125,10 +2136,12 @@ def display_game_over(game_summary):
                 total_words = sum(g.get('words_solved', 1) for g in user_games)
                 avg_score_per_word = round(total_score / total_words, 2) if total_words > 0 else 0
                 avg_time_per_word = round(total_time / total_words, 2) if total_words > 0 else 0
-                # When calling create_share_card, pass avg_time_per_word as 'time_taken' and avg_score_per_word as 'score' in game_summary
+                sei = round(avg_score_per_word / avg_time_per_word, 2) if avg_time_per_word > 0 else 0
+                # When calling create_share_card, pass avg_time_per_word as 'time_taken', avg_score_per_word as 'score', and sei as 'sei' in game_summary
                 game_summary_for_card = dict(game_summary)
                 game_summary_for_card['time_taken'] = avg_time_per_word
                 game_summary_for_card['score'] = avg_score_per_word
+                game_summary_for_card['sei'] = sei
                 share_card_path = create_share_card(game_summary_for_card)
                 if share_card_path:
                     st.session_state['share_card_path'] = share_card_path
@@ -2139,6 +2152,8 @@ def display_game_over(game_summary):
                         file_name="word_guess_share.png",
                         mime="image/png"
                     )
+                # Display SEI in the share card tab
+                st.markdown(f"**Score Efficiency Index (SEI):** {sei} points/sec")
         # --- New: Send by Email ---
         if st.session_state.get('share_card_path') and st.session_state.get('user') and st.session_state.user.get('email'):
             unique_id = f"{mode}_{game_summary.get('word','')}"
@@ -2263,44 +2278,23 @@ def display_game_over(game_summary):
         else:
             st.info("No games played yet.")
         st.markdown("---")
-        st.markdown("## 🏆 Global Leaderboard (Top 10)")
-        mode = st.selectbox("Game Mode", ["All", "Fun", "Wiz", "Beat"], key="global_leaderboard_mode")
-        category = st.selectbox("Category", ["All"] + [cat.title() for cat in WordSelector.CATEGORIES], key="global_leaderboard_category")
-        leaderboard = get_global_leaderboard(top_n=10, mode=mode if mode != "All" else None, category=category if category != "All" else None)
-        if leaderboard:
-            # Banner with top 3 results
-            top3 = leaderboard[:3]
-            banner_html = "<div style='background:linear-gradient(90deg,#FFD93D,#FF6B6B,#4ECDC4);padding:1.2em 1em;border-radius:1.2em;margin-bottom:1em;box-shadow:0 2px 12px rgba(0,0,0,0.10);display:flex;justify-content:center;align-items:center;gap:2em;'>"
-            for i, entry in enumerate(top3, 1):
-                date_str = entry.get('timestamp')
-                if date_str:
-                    try:
-                        if isinstance(date_str, (float, int)):
-                            from datetime import datetime
-                            date_str = datetime.fromtimestamp(date_str).strftime('%Y-%m-%d')
-                        else:
-                            date_str = str(date_str)[:10]
-                    except Exception:
-                        date_str = str(date_str)[:10]
-                banner_html += f"<span style='font-size:1.2em;font-weight:700;color:#222;'>🏅 {i}. {entry['nickname']} - {entry.get('score',0)} pts | {entry.get('mode','?')} | {entry.get('subject','?').title()} | {date_str}</span>"
-            banner_html += "</div>"
-            st.markdown(banner_html, unsafe_allow_html=True)
-            # Use Streamlit expander for the full leaderboard
-            with st.expander("Show Full Leaderboard"):
-                for i, entry in enumerate(leaderboard, 1):
-                    date_str = entry.get('timestamp')
-                    if date_str:
-                        try:
-                            if isinstance(date_str, (float, int)):
-                                from datetime import datetime
-                                date_str = datetime.fromtimestamp(date_str).strftime('%Y-%m-%d')
-                            else:
-                                date_str = str(date_str)[:10]
-                        except Exception:
-                            date_str = str(date_str)[:10]
-                    st.markdown(f"{i}. {entry['nickname']} - {entry.get('score',0)} pts | {entry.get('mode','?')} | {entry.get('subject','?').title()} | {date_str}")
-        else:
-            st.info("No leaderboard data available.")
+        st.markdown("## 🏆 Global Leaderboard (Top 10 by SEI)")
+        # Compute SEI for each user and sort by highest SEI
+        all_games = get_all_game_results()
+        user_sei = {}
+        for g in all_games:
+            user = g.get('nickname', '').lower()
+            score = g.get('score', 0)
+            time_taken = g.get('time_taken', g.get('duration', 0))
+            words = g.get('words_solved', 1) if g.get('mode') == 'Beat' else 1
+            avg_score = score / words if words > 0 else 0
+            avg_time = time_taken / words if words > 0 else 0
+            sei = avg_score / avg_time if avg_time > 0 else 0
+            if user not in user_sei or sei > user_sei[user]:
+                user_sei[user] = sei
+        # Sort users by highest SEI
+        top_users = sorted(user_sei.items(), key=lambda x: x[1], reverse=True)[:10]
+        st.table([{ 'User': u, 'Highest SEI': round(sei, 2) } for u, sei in top_users])
 
     # After all tabs (summary_tab, stats_tab, share_tab, stats_leader_tab), restore the play again and restart buttons
     col1, col2 = st.columns(2)

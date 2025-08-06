@@ -69,7 +69,7 @@ streamlit run streamlit_app.py
    - Strategic scoring system:
      - Each question: -5 points
      - Wrong guess: -10 points
-     - Correct guess: Base points = Word length × 20
+     - Correct guess: 100 points per word
      - Question penalty: Number of questions × 5
      - Final points = max(Base points - Question penalty, 10)
    - Higher scores are better!
@@ -89,8 +89,17 @@ streamlit run streamlit_app.py
    - Guesses must match the chosen word length
    - In Challenge mode:
      - Wrong guesses cost 10 points
-     - Correct guesses earn points based on word length and questions asked
+     - Correct guesses always earn 100 points per word
      - Try to minimize questions to maximize your score!
+
+## Score Efficiency Index (SEI)
+SEI is a performance metric that combines your average score per word and your average time per word:
+
+    SEI = (Average Score per Word) / (Average Time per Word in seconds)
+
+- A higher SEI means you are both fast and accurate.
+- The global leaderboard ranks users by their highest SEI in any single game.
+- SEI is shown on your share card and in your statistics graphs.
 
 ## Game Statistics & Performance Graphs
 

@@ -484,6 +484,20 @@ class ShareCardGenerator:
                 fill=self.colors['text'],
                 anchor="mm"
             )
+            # Draw SEI (Score Efficiency Index) below time
+            sei_val = kwargs.get('sei')
+            if sei_val is None:
+                try:
+                    sei_val = round(float(score) / float(duration), 2) if float(duration) > 0 else 0
+                except Exception:
+                    sei_val = 0
+            draw.text(
+                (self.width//2, score_y + 100),
+                f"Score Efficiency Index (SEI): {sei_val} points/sec",
+                font=fonts['subtitle'],
+                fill=self.colors['text'],
+                anchor="mm"
+            )
             
             # Draw player stats if available
             if player_stats:
