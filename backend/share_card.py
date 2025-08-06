@@ -464,21 +464,21 @@ class ShareCardGenerator:
                 anchor="mm"
             )
             
-            # Draw score (move further down for better spacing)
+            # Draw score and time on separate lines to avoid overlap
             score_y = word_y + 180
             score_color = self._get_score_color(score, mode)
             # Use provided difficulty, or fallback to player_stats or N/A
             difficulty_label = difficulty or (player_stats.get('difficulty') if player_stats and 'difficulty' in player_stats else 'N/A')
             draw.text(
-                (self.width//4, score_y),
-                f"Score: {score}",
+                (self.width//2, score_y),
+                f"Total Average per Word (Score): {score}",
                 font=fonts['subtitle'],
                 fill=score_color,
                 anchor="mm"
             )
             draw.text(
-                (3*self.width//4, score_y),
-                f"Time: {self._format_duration(duration)}",
+                (self.width//2, score_y + 50),
+                f"Total Average per Word (Seconds): {duration}",
                 font=fonts['subtitle'],
                 fill=self.colors['text'],
                 anchor="mm"

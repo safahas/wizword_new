@@ -2115,10 +2115,20 @@ def display_game_over(game_summary):
         # Generate share card for this game
         if st.button("Generate Share Card"):
             with st.spinner("Generating share card..."):
+                # In display_game_over, before calling create_share_card
+                # Calculate total average score and time per word across all games for the user
+                all_games = get_all_game_results()
+                username = game_summary.get('nickname', '').lower()
+                user_games = [g for g in all_games if g.get('nickname', '').lower() == username]
+                total_score = sum(g.get('score', 0) for g in user_games)
+                total_time = sum(g.get('time_taken', g.get('duration', 0)) for g in user_games)
+                total_words = sum(g.get('words_solved', 1) for g in user_games)
+                avg_score_per_word = round(total_score / total_words, 2) if total_words > 0 else 0
+                avg_time_per_word = round(total_time / total_words, 2) if total_words > 0 else 0
+                # When calling create_share_card, pass avg_time_per_word as 'time_taken' and avg_score_per_word as 'score' in game_summary
                 game_summary_for_card = dict(game_summary)
-                if mode == "Beat":
-                    game_summary_for_card["score"] = st.session_state.get('beat_score', 0)
-                    game_summary_for_card["word"] = "--"
+                game_summary_for_card['time_taken'] = avg_time_per_word
+                game_summary_for_card['score'] = avg_score_per_word
                 share_card_path = create_share_card(game_summary_for_card)
                 if share_card_path:
                     st.session_state['share_card_path'] = share_card_path
