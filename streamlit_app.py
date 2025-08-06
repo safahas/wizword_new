@@ -812,7 +812,7 @@ def display_login():
         - **Hints:** See above
         - **Wrong guesses:** -10 points
         - **Correct guess:** 100 points per word
-        - **Show Word:** Point penalty applied
+        - **Show Word:** -100 points
         - **Beat Mode:** Solve as many words as possible in 5 minutes! The timer starts when you click the Start button.
 
         ### User Profile

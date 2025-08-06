@@ -310,8 +310,7 @@ class GameLogic:
         penalty = 0
         if self.mode in ("Wiz", "Fun", "Beat"):
             if self.selected_word:
-                word_len = len(self.selected_word)
-                penalty = -20 * word_len
+                penalty = -100  # Always -100 points
             else:
                 penalty = -50  # fallback if word is missing
             if not getattr(self, 'show_word_penalty_applied', False):
