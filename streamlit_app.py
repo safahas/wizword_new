@@ -2280,24 +2280,33 @@ def display_game_over(game_summary):
         else:
             st.info("No games played yet.")
         st.markdown("---")
-        st.markdown("## 🏆 Global Leaderboard (Top 10 by SEI)")
-        # Compute SEI for each user and sort by highest SEI
-        all_games = get_all_game_results()
-        user_sei = {}
-        for g in all_games:
-            user = g.get('nickname', '').lower()
-            score = g.get('score', 0)
-            time_taken = g.get('time_taken', g.get('duration', 0))
-            words = g.get('words_solved', 1) if g.get('mode') == 'Beat' else 1
-            avg_score = score / words if words > 0 else 0
-            avg_time = time_taken / words if words > 0 else 0
-            sei = avg_score / avg_time if avg_time > 0 else 0
-            if user not in user_sei or sei > user_sei[user]:
-                user_sei[user] = sei
-        # Sort users by highest SEI
-        top_users = sorted(user_sei.items(), key=lambda x: x[1], reverse=True)[:10]
-        st.table([{ 'User': u, 'Highest SEI': round(sei, 2) } for u, sei in top_users])
-
+    # Default leaderboard category to current session's category
+    leaderboard_category = None
+    if 'game' in st.session_state and st.session_state.game:
+        leaderboard_category = getattr(st.session_state.game, 'subject', None)
+    if not leaderboard_category:
+        leaderboard_category = game_summary.get('subject', None)
+    if not leaderboard_category:
+        leaderboard_category = 'All Categories'
+    st.markdown(f"## 🏆 Global Leaderboard (Top 10 by SEI) - {leaderboard_category.title() if leaderboard_category != 'All Categories' else 'All Categories'}")
+    user_sei = {}
+    for g in all_games:
+        user = g.get('nickname', '').lower()
+        game_category = g.get('subject', '').lower()
+        if leaderboard_category and leaderboard_category.lower() != 'all categories' and game_category != leaderboard_category.lower():
+            continue
+        score = g.get('score', 0)
+        time_taken = g.get('time_taken', g.get('duration', 0))
+        words = g.get('words_solved', 1) if g.get('mode') == 'Beat' else 1
+        avg_score = score / words if words > 0 else 0
+        avg_time = time_taken / words if words > 0 else 0
+        sei = avg_score / avg_time if avg_time > 0 else 0
+        # Only keep the highest SEI for each user in this category
+        if user not in user_sei or sei > user_sei[user]:
+            user_sei[user] = sei
+    # Sort users by highest SEI
+    top_users = sorted(user_sei.items(), key=lambda x: x[1], reverse=True)[:10]
+    st.table([{ 'User': u, 'Highest SEI': round(sei, 2) } for u, sei in top_users])
     # After all tabs (summary_tab, stats_tab, share_tab, stats_leader_tab), restore the play again and restart buttons
     col1, col2 = st.columns(2)
     with col1:
