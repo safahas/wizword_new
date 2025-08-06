@@ -2054,8 +2054,17 @@ def display_game_over(game_summary):
         username = game_summary.get('nickname', '').lower()
         all_games = get_all_game_results()
         user_games = [g for g in all_games if g.get('nickname', '').lower() == username]
+        # Filter user_games to only include games from the running category
+        running_category = None
+        if 'game' in st.session_state and st.session_state.game:
+            running_category = getattr(st.session_state.game, 'subject', None)
+        if not running_category:
+            running_category = game_summary.get('subject', None)
+        if running_category:
+            user_games = [g for g in user_games if g.get('subject', '').lower() == running_category.lower()]
         if user_games:
             import matplotlib.pyplot as plt
+            # ...
             import seaborn as sns
             import numpy as np
             import pandas as pd
