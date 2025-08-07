@@ -85,6 +85,7 @@ import requests
 import time as _time
 import string
 import streamlit.components.v1 as components
+import sys
 
 
 
@@ -1300,7 +1301,24 @@ def display_game():
             occupation_other = st.text_input('Please specify your occupation', value=user.get('occupation', '') if user.get('occupation', '') not in occupation_options else '')
         address = st.text_input('Address', value=user.get('address', ''))
         min_birthday = datetime.date(1900, 1, 1)
-        birthday = st.date_input('Birthday', value=user.get('birthday') if user.get('birthday') else None, min_value=min_birthday)
+        raw_birthday = user.get('birthday', None)
+        birthday_value = None  # Always define before use
+        print(f"[DEBUG] raw_birthday from user profile: {raw_birthday} (type: {type(raw_birthday)})", file=sys.stderr)
+        if isinstance(raw_birthday, datetime.date):
+            birthday_value = raw_birthday
+        elif isinstance(raw_birthday, datetime.datetime):
+            birthday_value = raw_birthday.date()
+        elif isinstance(raw_birthday, str) and raw_birthday:
+            try:
+                birthday_value = datetime.date.fromisoformat(raw_birthday)
+            except Exception:
+                try:
+                    birthday_value = datetime.datetime.fromisoformat(raw_birthday).date()
+                except Exception:
+                    birthday_value = None
+        if not birthday_value:
+            birthday_value = datetime.date.today()
+        birthday = st.date_input('Birthday', value=birthday_value, min_value=min_birthday)
         if st.button('Save Profile', key='save_profile_btn'):
             username = user.get('username')
             final_education = education_other if education == 'Other' else education

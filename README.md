@@ -101,6 +101,14 @@ SEI is a performance metric that combines your average score per word and your a
 - The global leaderboard ranks users by their highest SEI in any single game.
 - SEI is shown on your share card and in your statistics graphs.
 
+## Favorite Category
+
+Your **Favorite Category** is the word category (such as Tech, Brands, Science, etc.) in which you have played the most games. The app tracks all your games and determines which category you play most frequently. This is shown in your stats sidebar as:
+
+    Favorite Category: Tech
+
+This helps you quickly see which type of words you enjoy or play the most!
+
 ## Game Statistics & Performance Graphs
 
 After each game, WizWord provides detailed performance statistics and visualizations:
