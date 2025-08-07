@@ -888,6 +888,14 @@ def display_login():
         new_username = st.text_input("Choose a username", key="register_username")
         new_email = st.text_input("Email", key="register_email")
         new_password = st.text_input("Choose a password", type="password", key="register_password")
+        # Add compulsory birthday and education fields
+        import datetime
+        min_birthday = datetime.date(1900, 1, 1)
+        birthday = st.date_input("Birthday (required)", value=datetime.date(2000, 1, 1), min_value=min_birthday, key="register_birthday")
+        education_options = [
+            'Student', 'High School', 'Bachelor', 'Master', 'PhD', 'Other'
+        ]
+        education = st.selectbox('Education (required)', education_options, key="register_education")
         register_btn = st.button("Register", key="register_btn")
         if st.button("Back to Login", key="back_to_login_from_register"):
             st.session_state['auth_mode'] = 'login'
@@ -895,8 +903,9 @@ def display_login():
         if register_btn:
             users = st.session_state['users']
             new_username_lower = new_username.lower()
-            if not new_username or not new_password or not new_email:
-                st.error("Please enter username, email, and password.")
+            # Require all fields
+            if not new_username or not new_password or not new_email or not birthday or not education:
+                st.error("Please enter username, email, password, birthday, and education.")
             elif new_username_lower in users:
                 st.error("Username already exists.")
             elif any(u['email'] == new_email for u in users.values()):
@@ -904,7 +913,9 @@ def display_login():
             else:
                 users[new_username_lower] = {
                     'password': new_password,
-                    'email': new_email
+                    'email': new_email,
+                    'birthday': str(birthday),
+                    'education': education
                 }
                 st.session_state['users'] = users
                 save_users(users)
