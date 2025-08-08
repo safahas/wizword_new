@@ -692,7 +692,7 @@ def display_login():
     }
     .wizword-animated-text {
         font-family: 'Baloo 2', 'Poppins', 'Arial Black', Arial, sans-serif !important;
-        font-size: 2em;                       /* Reduced from 3.8em */
+        font-size: 1.4em;                       /* 30% smaller */
         font-weight: 900;
         letter-spacing: 0.10em;
         background: linear-gradient(90deg, #FFD93D 0%, #FF6B6B 40%, #4ECDC4 80%, #FFD93D 100%);
@@ -709,7 +709,7 @@ def display_login():
         padding: 0 0.05em;
     }
     .wizword-banner-subtitle {
-        font-size: 1em; /* Reduced from 1.45em */
+        font-size: 0.7em; /* 30% smaller */
         color: #fff;
         opacity: 0.98;
         letter-spacing: 0.07em;
@@ -847,25 +847,115 @@ def display_login():
 
     # --- LOGIN FORM ---
     if st.session_state['auth_mode'] == 'login':
-        st.markdown("## Login")
+        # Modern login card UI
+        st.markdown("""
+        <style>
+        .auth-card {
+            max-width: 430px;
+            margin: 2px auto 4px auto;
+            background: rgba(15,17,25,0.92);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            border-radius: 16px;
+            border: 1px solid rgba(255,255,255,0.35);
+            box-shadow: 0 10px 26px rgba(0,0,0,0.12), 0 2px 6px rgba(0,0,0,0.08);
+            padding: 8px 10px 8px 10px;
+        }
+        .auth-title {
+            font-family: 'Poppins', 'Baloo 2', system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+            font-size: 1.35em;
+            font-weight: 800;
+            letter-spacing: 0.04em;
+            background: linear-gradient(90deg, #FF6B6B 0%, #FFD93D 50%, #4ECDC4 100%);
+            -webkit-background-clip: text; background-clip: text;
+            -webkit-text-fill-color: transparent; color: transparent;
+            text-align: center;
+            margin: 2px 0 6px 0;
+        }
+        .auth-subtitle {
+            text-align: center; color: #333; opacity: 0.85;
+            font-size: 0.92em; margin-bottom: 8px;
+        }
+        .auth-sep { height: 4px; }
+        .auth-muted { text-align:center; font-size:0.86em; color:#333; opacity:0.8; }
+        .auth-link { color:#1c64f2; text-decoration: none; font-weight:700; }
+        .auth-actions { display:flex; gap:8px; }
+        .auth-actions .stButton>button { height: 2.4em; }
+        .auth-primary .stButton>button {
+            background: linear-gradient(90deg, #6FDFBF 0%, #A8D8F0 100%) !important;
+            color: #222 !important; border: none !important; font-weight: 800 !important;
+            box-shadow: 0 6px 16px rgba(0,0,0,0.10) !important;
+        }
+        .auth-secondary .stButton>button {
+            background: rgba(0,0,0,0.06) !important; color:#222 !important; border: 1px solid rgba(0,0,0,0.12) !important;
+        }
+        .auth-card .stTextInput>div>div>input { padding: 0.45em 0.55em; margin-top: -2px; }
+        .auth-spacer { height: 6px; }
+        </style>
+        """, unsafe_allow_html=True)
+
+        # Teal gradient styling for primary Sign In button; lighter style for secondary actions
+        st.markdown(
+            """
+            <style>
+            /* Primary Sign In: first button inside the login form */
+            div[data-testid="stForm"] form button:first-of-type {
+              background: linear-gradient(135deg, #06b6d4 0%, #22d3ee 50%, #34d399 100%) !important;
+              color: #0b1220 !important;
+              font-weight: 800 !important;
+              border: none !important;
+              border-radius: 10px !important;
+              box-shadow: 0 8px 18px rgba(34, 211, 238, 0.25) !important;
+            }
+            div[data-testid="stForm"] form button:first-of-type:hover {
+              filter: brightness(1.05);
+              transform: translateY(-1px);
+              box-shadow: 0 10px 22px rgba(34, 211, 238, 0.32) !important;
+            }
+            /* Secondary buttons: all other form buttons */
+            div[data-testid="stForm"] form button:not(:first-of-type) {
+              background: rgba(255,255,255,0.06) !important;
+              color: #e6e6e6 !important;
+              border: 1px solid rgba(255,255,255,0.16) !important;
+              font-weight: 700 !important;
+              border-radius: 10px !important;
+              box-shadow: none !important;
+            }
+            div[data-testid="stForm"] form button:not(:first-of-type):hover {
+              background: rgba(255,255,255,0.10) !important;
+            }
+            </style>
+            """,
+            unsafe_allow_html=True,
+        )
+
         # Show error if present (ALWAYS before the form)
         if st.session_state.get('login_error'):
             st.error(st.session_state['login_error'])
         with st.form("login_form", clear_on_submit=False):
-            username = st.text_input("Username", key="login_username")
-            password = st.text_input("Password", type="password", key="login_password")
-            login_btn = st.form_submit_button("Login", use_container_width=True)
-            col1, col2 = st.columns(2)
-            with col1:
-                if st.form_submit_button("Register"):
-                    st.session_state['auth_mode'] = 'register'
-                    st.session_state['login_error'] = ""
-                    st.rerun()
-            with col2:
-                if st.form_submit_button("Forgot Password?"):
-                    st.session_state['auth_mode'] = 'forgot'
-                    st.session_state['login_error'] = ""
-                    st.rerun()
+            # Inputs inside the card
+            with st.container():
+                st.markdown("<div class='auth-spacer'></div>", unsafe_allow_html=True)
+                username = st.text_input(" ", key="login_username", placeholder="Username")
+                password = st.text_input(" ", type="password", key="login_password", placeholder="Password")
+                st.markdown("<div class='auth-spacer'></div>", unsafe_allow_html=True)
+                # Primary action
+                with st.container():
+                    with st.container():
+                        login_btn = st.form_submit_button("Sign In", use_container_width=True)
+                # Secondary actions
+                st.markdown("<div class='auth-sep'></div>", unsafe_allow_html=True)
+                c1, c2 = st.columns(2)
+                with c1:
+                    if st.form_submit_button("Create account", use_container_width=True):
+                        st.session_state['auth_mode'] = 'register'
+                        st.session_state['login_error'] = ""
+                        st.rerun()
+                with c2:
+                    if st.form_submit_button("Forgot password?", use_container_width=True):
+                        st.session_state['auth_mode'] = 'forgot'
+                        st.session_state['login_error'] = ""
+                        st.rerun()
             if login_btn:
                 users = st.session_state['users']
                 username_lower = username.lower()
