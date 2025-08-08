@@ -1488,8 +1488,8 @@ def display_game():
             background: linear-gradient(90deg, #FF6B6B 0%, #FFD93D 50%, #4ECDC4 100%);
             color: #fff;
             padding: 10px 24px 10px 24px;
-            margin: 10px 0 18px 0;
-            border-radius: 16px;
+            margin: 0 0 0 0;
+            border-radius: 0;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.10),
                         inset 0 -2px 0px rgba(0, 0, 0, 0.07);
             -webkit-text-stroke: 1px #222;
@@ -1497,6 +1497,13 @@ def display_game():
             text-shadow: 1px 1px 4px rgba(0,0,0,0.13),
                          0 1px 4px rgba(0,0,0,0.08);
             transition: box-shadow 0.2s, background 0.2s;
+            position: fixed;
+            top: 56px;
+            left: 0;
+            right: 0;
+            width: 100vw;
+            z-index: 10000;
+            backdrop-filter: blur(2px);
         }}
         .wizword-banner-title {{
             font-family: 'Baloo 2', 'Poppins', 'Arial Black', Arial, sans-serif !important;
@@ -1583,6 +1590,22 @@ def display_game():
         </style>
         """
         st.markdown(stats_html, unsafe_allow_html=True)
+        # Override styles to reduce banner height
+        st.markdown(
+            """
+            <style>
+            .wizword-banner { padding: 4px 12px !important; }
+            .wizword-banner-title { font-size: 1.2em !important; }
+            .wizword-banner-stats { gap: 10px !important; font-size: 1.0em !important; }
+            .wizword-stat { padding: 2px 8px !important; min-width: 44px !important; }
+            .wizword-beat-timer { font-size: 1.6em !important; border-width: 2px !important; }
+            .wizword-beat-score { font-size: 1.6em !important; border-width: 2px !important; }
+            </style>
+            """,
+            unsafe_allow_html=True,
+        )
+        # Add a spacer to prevent content from hiding under the fixed banner
+        st.markdown("<div style='height: 16px;'></div>", unsafe_allow_html=True)
     else:
         stats_html = f"""
         <div class='wizword-banner'>
@@ -2005,6 +2028,10 @@ def display_game_over(game_summary):
         text-shadow: 1px 1px 4px rgba(0,0,0,0.13),
                      0 1px 4px rgba(0,0,0,0.08);
         transition: box-shadow 0.2s, background 0.2s;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        backdrop-filter: blur(2px);
     }
     .wizword-banner-title {
         font-family: 'Baloo 2', 'Poppins', 'Arial Black', Arial, sans-serif !important;
