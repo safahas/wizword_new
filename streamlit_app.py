@@ -2314,7 +2314,14 @@ def display_game_over(game_summary):
                             date_str = str(date_str)[:10]
                     except Exception:
                         date_str = str(date_str)[:10]
-                st.markdown(f"- {g.get('subject','?').title()} | {g.get('mode','?')} | Score: {g.get('score',0)} | {date_str}")
+                # Compute SEI per game
+                score_g = g.get('score', 0)
+                time_taken_g = g.get('time_taken', g.get('duration', 0))
+                words_g = g.get('words_solved', 1) if g.get('mode') == 'Beat' else 1
+                avg_score_g = (score_g / words_g) if words_g > 0 else 0
+                avg_time_g = (time_taken_g / words_g) if words_g > 0 else 0
+                sei_g = (avg_score_g / avg_time_g) if avg_time_g > 0 else 0
+                st.markdown(f"- {g.get('subject','?').title()} | {g.get('mode','?')} | SEI: {sei_g:.2f} | {date_str}")
         else:
             st.info("No games played yet.")
         st.markdown("---")
