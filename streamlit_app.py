@@ -301,16 +301,18 @@ st.markdown(
         border-radius: 8px;
         margin-top: 10px;
     }
-    /* Style for hint text */
+    /* Style for hint text (compact, high-clarity) */
     [data-testid="hint-text"] {
-        font-size: 1.1em;
+        font-size: 0.9em;
+        line-height: 1.35;
         font-weight: 600;
-        color: #000000;
-        background: rgba(255, 255, 255, 0.9);
-        padding: 10px;
-        border-radius: 8px;
-        margin: 5px 0;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        color: #111111;
+        background: #fffdf5;
+        padding: 5px 8px;
+        border-radius: 6px;
+        border: 1px solid rgba(0,0,0,0.08);
+        margin: 3px 0;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.06);
     }
     /* Timer styles */
     .timer {
@@ -2602,11 +2604,11 @@ def display_hint_section(game):
             <div style='width:100%; display:flex; justify-content:center;'>
               <div style='
                   display: inline-block;
-                  max-width: 420px;
+                  max-width: 360px;
                   background: linear-gradient(90deg, #FFD93D 0%, #FF6B6B 50%, #4ECDC4 100%);
-                  color: #111; font-size: 2em; font-weight: bold; 
-                  border-radius: 1em; padding: 0.5em 0.5em; margin: 0.5em 0; 
-                  box-shadow: 0 2px 12px rgba(0,0,0,0.13); text-align: center;'>
+                  color: #111; font-size: 1.1em; line-height: 1.3; font-weight: 700; 
+                  border-radius: 0.6em; padding: 0.25em 0.4em; margin: 0.35em 0; 
+                  box-shadow: 0 1px 6px rgba(0,0,0,0.12); text-align: center;'>
                 💡 {styled_hint}
               </div>
             </div>
