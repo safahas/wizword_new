@@ -1559,6 +1559,14 @@ def display_game():
                 st.session_state['change_category'] = True
                 st.rerun()
             st.stop()
+        # Determine banner stickiness from environment
+        _sticky_env = os.getenv('WIZWORD_STICKY_BANNER', 'true').strip().lower()
+        _is_sticky_banner = _sticky_env in ('1', 'true', 'yes', 'on')
+        _banner_position_css = (
+            "position: fixed; top: 56px; left: 0; right: 0; width: 100vw; z-index: 10000; backdrop-filter: blur(2px);"
+            if _is_sticky_banner else
+            "position: static;"
+        )
         # Normal banner and timer logic follows as before
         stats_html = f"""
         <div class='wizword-banner'>
@@ -1589,13 +1597,7 @@ def display_game():
             text-shadow: 1px 1px 4px rgba(0,0,0,0.13),
                          0 1px 4px rgba(0,0,0,0.08);
             transition: box-shadow 0.2s, background 0.2s;
-            position: fixed;
-            top: 56px;
-            left: 0;
-            right: 0;
-            width: 100vw;
-            z-index: 10000;
-            backdrop-filter: blur(2px);
+            {_banner_position_css}
         }}
         .wizword-banner-title {{
             font-family: 'Baloo 2', 'Poppins', 'Arial Black', Arial, sans-serif !important;
