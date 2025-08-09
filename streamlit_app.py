@@ -2696,11 +2696,11 @@ def display_hint_section(game):
             <div style='width:100%; display:flex; justify-content:center;'>
               <div style='
                   display: inline-block;
-                  max-width: 360px;
+                  max-width: 468px;
                   background: linear-gradient(90deg, #FFD93D 0%, #FF6B6B 50%, #4ECDC4 100%);
-                  color: #111; font-size: 1.1em; line-height: 1.3; font-weight: 700; 
-                  border-radius: 0.6em; padding: 0.25em 0.4em; margin: 0.35em 0; 
-                  box-shadow: 0 1px 6px rgba(0,0,0,0.12); text-align: center;'>
+                  color: #111; font-size: 1.43em; line-height: 1.3; font-weight: 700; 
+                  border-radius: 0.78em; padding: 0.33em 0.52em; margin: 0.455em 0; 
+                  box-shadow: 0 2px 8px rgba(0,0,0,0.14); text-align: center;'>
                 💡 {styled_hint}
               </div>
             </div>
