@@ -183,3 +183,39 @@ word_guess_contest_ai/
 ## License
 
 This project is licensed under the MIT License - see the LICENSE file for details. 
+
+## UI Configuration
+
+- WIZWORD_STICKY_BANNER (default: true)
+  - Controls whether the in-game WizWord banner (score/timer strip) stays fixed at the top or scrolls with the page.
+  - Accepted truthy values: `true`, `1`, `yes`, `on`
+  - Accepted falsy values: `false`, `0`, `no`, `off`
+  - Example (in `.env`):
+    ```env
+    WIZWORD_STICKY_BANNER=true
+    ```
+  - After changing this value, restart Streamlit.
+
+## Admin Dashboard Counters
+
+WizWord maintains lightweight global counters for basic platform stats, stored in a separate JSON file.
+
+- File location: `game_data/global_counters.json`
+  - Override with env var `GLOBAL_COUNTERS_PATH` if you need a custom path.
+  - The app will auto-create the file and its parent directory if missing.
+
+- Tracked counters:
+  - `users_count`: total registered users (increments on successful registration)
+  - `total_game_time_seconds`: cumulative game time across all saved games (adds each game’s `time_taken`/`duration`)
+  - `total_sessions`: total sessions started (increments when a new Beat game is instantiated)
+
+- Viewing counters (Admin only):
+  - Log in as an admin user; the sidebar shows three metrics:
+    - Users
+    - Global Game Time (HHh MMm)
+    - Total Sessions
+
+- Example env configuration:
+  ```env
+  GLOBAL_COUNTERS_PATH=game_data/global_counters.json
+  ``` 

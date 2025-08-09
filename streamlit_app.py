@@ -18,6 +18,44 @@ logging.getLogger('matplotlib.category').setLevel(logging.WARNING)
 
 USERS_FILE = "users.json"
 
+# Global counters file (users count, total game time, total sessions)
+GLOBAL_COUNTERS_PATH = os.environ.get('GLOBAL_COUNTERS_PATH', 'game_data/global_counters.json')
+
+def _ensure_global_counters_file() -> None:
+    try:
+        os.makedirs(os.path.dirname(GLOBAL_COUNTERS_PATH) or '.', exist_ok=True)
+        if not os.path.exists(GLOBAL_COUNTERS_PATH):
+            with open(GLOBAL_COUNTERS_PATH, 'w', encoding='utf-8') as f:
+                json.dump({
+                    'users_count': 0,
+                    'total_game_time_seconds': 0,
+                    'total_sessions': 0
+                }, f, indent=2)
+    except Exception:
+        pass
+
+def _load_global_counters() -> dict:
+    _ensure_global_counters_file()
+    try:
+        with open(GLOBAL_COUNTERS_PATH, 'r', encoding='utf-8') as f:
+            return json.load(f)
+    except Exception:
+        return {'users_count': 0, 'total_game_time_seconds': 0, 'total_sessions': 0}
+
+def _save_global_counters(counters: dict) -> None:
+    try:
+        with open(GLOBAL_COUNTERS_PATH, 'w', encoding='utf-8') as f:
+            json.dump(counters, f, indent=2)
+    except Exception:
+        pass
+
+def update_global_counters(users_delta: int = 0, time_seconds_delta: int = 0, sessions_delta: int = 0) -> None:
+    counters = _load_global_counters()
+    counters['users_count'] = max(0, counters.get('users_count', 0) + users_delta)
+    counters['total_game_time_seconds'] = max(0, counters.get('total_game_time_seconds', 0) + int(time_seconds_delta))
+    counters['total_sessions'] = max(0, counters.get('total_sessions', 0) + sessions_delta)
+    _save_global_counters(counters)
+
 def load_users():
     if os.path.exists(USERS_FILE):
         with open(USERS_FILE, "r", encoding="utf-8") as f:
@@ -943,7 +981,7 @@ def display_login():
                 with st.container():
                     with st.container():
                         login_btn = st.form_submit_button("Sign In", use_container_width=True)
-                # Secondary actions
+                                # Secondary actions
                 st.markdown("<div class='auth-sep'></div>", unsafe_allow_html=True)
                 c1, c2 = st.columns(2)
                 with c1:
@@ -1011,6 +1049,8 @@ def display_login():
                 }
                 st.session_state['users'] = users
                 save_users(users)
+                # Increment users_count on successful registration
+                update_global_counters(users_delta=1)
                 st.success("Registration successful! Please log in.")
                 st.session_state['auth_mode'] = 'login'
                 save_users(st.session_state['users'])
@@ -1077,6 +1117,27 @@ def main():
 # --- Admin-only: Display all user profiles ---
     if st.session_state.get('user', {}).get('username', '').lower() == 'admin':
         st.sidebar.markdown('---')
+        # Admin dashboard counters (sidebar)
+        counters = _load_global_counters()
+        st.sidebar.markdown("### Admin Stats")
+        st.sidebar.metric("Users", counters.get('users_count', 0))
+        total_secs = counters.get('total_game_time_seconds', 0)
+        hours = total_secs // 3600
+        minutes = (total_secs % 3600) // 60
+        st.sidebar.metric("Global Game Time", f"{hours}h {minutes}m")
+        st.sidebar.metric("Total Sessions", counters.get('total_sessions', 0))
+        # Make sidebar metric values clearly visible in red
+        st.sidebar.markdown(
+            """
+            <style>
+            section[data-testid="stSidebar"] [data-testid="stMetricValue"] {
+              color: #ff3b30 !important; /* vivid red */
+              text-shadow: 0 1px 2px rgba(0,0,0,0.15);
+            }
+            </style>
+            """,
+            unsafe_allow_html=True,
+        )
         if st.sidebar.button('Display All User Profiles', key='admin_show_users'):
             users = st.session_state.get('users', {})
             st.markdown('## All User Profiles')
@@ -1097,6 +1158,8 @@ def main():
             nickname=st.session_state.user['username'],
             difficulty='Medium'
         )
+        # Increment total_sessions when a new Beat game is instantiated
+        update_global_counters(sessions_delta=1)
         st.session_state.game_over = False
         st.session_state.game_summary = None
         st.session_state.beat_word_count = 0
@@ -2061,6 +2124,13 @@ def display_game_over(game_summary):
         or st.session_state.get('last_mode', None)
         or game_summary.get('mode', 'Fun')
     )
+    # Update total game time seconds when saving a game
+    try:
+        _duration = int(game_summary.get('time_taken') or game_summary.get('duration') or 0)
+        update_global_counters(time_seconds_delta=_duration)
+    except Exception:
+        pass
+
     # Debug print for beat_word_count and full session state
     #print(f"[DEBUG] display_game_over: beat_word_count = {st.session_state.get('beat_word_count', 'MISSING')}")
     #print(f"[DEBUG] display_game_over: session_state = {dict(st.session_state)}")
