@@ -2258,6 +2258,19 @@ def display_game_over(game_summary):
         
         if mode == "Beat":
             print(f"[DEBUG] summary_tab: words_solved = {game_summary.get('words_solved', 'MISSING')}")
+            # Compute SEI for this game
+            words = game_summary.get('words_solved', 1)
+            time_taken = game_summary.get('duration') or game_summary.get('time_taken', 0)
+            try:
+                avg_score = (score / words) if words else 0
+                avg_time = (time_taken / words) if words else 0
+                sei_val = (avg_score / avg_time) if avg_time > 0 else 0
+            except Exception:
+                sei_val = 0
+            # Show as an additional metric row
+            c_sei1, c_sei2, c_sei3 = st.columns(3)
+            with c_sei1:
+                st.metric("SEI (Score/Time)", f"{sei_val:.2f}")
             # (Removed: last word display above words solved)
             st.markdown(f"**Words solved:** {game_summary.get('words_solved', 0)}")
         else:
