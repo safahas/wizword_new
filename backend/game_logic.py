@@ -38,6 +38,8 @@ class GameLogic:
         if self.mode == "Beat":
             self.current_settings["max_hints"] = 3
         self.total_points = 0
+        # New: track only penalty points (sum of absolute negative deductions)
+        self.total_penalty_points = 0
         self.questions_asked = []
         self.hints_given = []
         self.available_hints = []
@@ -145,6 +147,8 @@ class GameLogic:
             points_added = self.current_settings["question_penalty"]
             self.score += points_added
             self.total_points += points_added
+            if points_added < 0:
+                self.total_penalty_points += abs(points_added)
             print(f"[DEBUG] Penalty applied in ask_question: {points_added}, new score: {self.score}")  # <-- Debug print
 
         # Record the question and answer
@@ -157,7 +161,6 @@ class GameLogic:
         })
 
         return True, answer, points_added
-
 
     def make_guess(self, guess: str) -> Tuple[bool, str, int]:
         """Make a final guess for the word."""
@@ -191,6 +194,8 @@ class GameLogic:
             
             self.score += points_added
             self.total_points += points_added
+            if points_added < 0:
+                self.total_penalty_points += abs(points_added)
         
         # Add debug print for wrong/correct guess
         print(f"[DEBUG] make_guess: is_correct={is_correct}, points_added={points_added}, guess_penalty={self.current_settings['guess_penalty']}")
@@ -198,15 +203,9 @@ class GameLogic:
         self.game_over = is_correct
         if is_correct:
             self.end_time = time.time()
-            # Mark the word as played (update recent list and last word)
-            self.word_selector.mark_word_played(self.selected_word, self.nickname if self.nickname else "global", self.subject)
-            self.stats_manager.record_game(self.get_game_summary())
         
-        # Update message to show points change
         if is_correct:
-            message = f"Correct! You won! Final score: {self.score}"
-            if self.difficulty == "Hard" and points_added > base_points:
-                message += f" (includes time bonus: +{time_bonus} points)"
+            message = f"Correct! You guessed the word '{self.selected_word}'. Current score: {self.score}"
         else:
             point_text = f" (-{abs(points_added)} points)" if points_added < 0 else ""
             message = f"Wrong! Try again. Current score: {self.score}{point_text}"
@@ -254,15 +253,20 @@ class GameLogic:
                 points_deducted = self.current_settings["hint_penalty"]
                 self.score += points_deducted
                 self.total_points += points_deducted
+                if points_deducted < 0:
+                    self.total_penalty_points += abs(points_deducted)
                 logger.info(f"[HINT REQUEST] Applied point deduction: {points_deducted}")
         elif self.mode == "Wiz":
             points_deducted = self.current_settings["hint_penalty"]
             self.score += points_deducted
             self.total_points += points_deducted
-            logger.info(f"[HINT REQUEST] Applied point deduction: {points_deducted}")
+            if points_deducted < 0:
+                self.total_penalty_points += abs(points_deducted)
+        
         # Record the hint
         self.hints_given.append(hint)
-        logger.info(f"[HINT REQUEST] Total hints given: {len(self.hints_given)}/{max_hints}")
+        remaining = max(0, self.current_settings["max_hints"] - len(self.hints_given))
+        logger.info(f"[HINT REQUEST] Total hints given: {len(self.hints_given)}/{self.current_settings['max_hints']}")
         
         return hint, points_deducted
 
@@ -316,6 +320,9 @@ class GameLogic:
             if not getattr(self, 'show_word_penalty_applied', False):
                 self.score += penalty  # penalty is negative
                 self.total_points += penalty
+                # Track penalty separately
+                if penalty < 0:
+                    self.total_penalty_points += abs(penalty)
                 self.show_word_penalty_applied = True
                 # Mark the word as played (add to recent list)
                 username = self.nickname if self.nickname else "global"

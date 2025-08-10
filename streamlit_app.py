@@ -1874,6 +1874,12 @@ def display_game():
             st.session_state['final_word_time'] = 0
             # Now proceed to win logic
             is_correct, message, points = game.make_guess(game.selected_word)
+            # Sync penalties to session after final scoring
+            try:
+                if hasattr(game, 'total_penalty_points'):
+                    st.session_state['beat_total_points'] = int(getattr(game, 'total_penalty_points', 0))
+            except Exception:
+                pass
             st.session_state['feedback'] = message
             if game.mode == 'Beat':
                 # Clear show_word and feedback before loading new word
@@ -1949,6 +1955,14 @@ def display_game():
             # Apply -10 point penalty for each wrong attempt
             game.score -= 10
             game.total_points -= 10
+            # Update total penalty tracker
+            try:
+                if hasattr(game, 'total_penalty_points'):
+                    game.total_penalty_points += 10
+                else:
+                    game.total_penalty_points = 10
+            except Exception:
+                pass
             st.session_state['feedback'] = '  |  '.join(feedback)
             st.session_state['clear_guess_field'] = True
             st.rerun()
@@ -1971,6 +1985,12 @@ def display_game():
         print(f"[DEBUG] Game mode before asking question: {game.mode}")
         prev_score = game.score
         success, answer, points = game.ask_question(question)
+        # Sync penalties to session after a question penalty is applied
+        try:
+            if hasattr(game, 'total_penalty_points'):
+                st.session_state['beat_total_points'] = int(getattr(game, 'total_penalty_points', 0))
+        except Exception:
+            pass
         print(f"[DEBUG] Score before question: {prev_score}")
         print(f"[DEBUG] Points for this question: {points}")
         print(f"[DEBUG] Score after question: {game.score}")
@@ -2061,7 +2081,8 @@ def display_game():
     # --- Skip button for Beat mode, directly below Show Word ---
     if game.mode == 'Beat':
         if st.button('Skip', key='skip_word_btn_main'):
-            st.session_state['beat_total_points'] += game.total_points
+            # Do not accumulate penalties here; penalties are tracked in backend total_penalty_points
+            # st.session_state['beat_total_points'] += game.total_points
             # st.session_state.beat_word_count += 1  # <-- REMOVE THIS LINE
             new_word_length = 5
             new_subject = game.subject
@@ -2138,6 +2159,23 @@ def display_game_over(game_summary):
     # --- FIX: Always inject correct words_solved for Beat mode ---
     if mode == "Beat":
         game_summary["words_solved"] = st.session_state.get("beat_word_count", 0)
+        # Sync total penalty from current game if available
+        try:
+            _cg = st.session_state.get('game') if 'game' in st.session_state else None
+            if _cg is not None and hasattr(_cg, 'total_penalty_points'):
+                st.session_state['beat_total_points'] = int(getattr(_cg, 'total_penalty_points', 0))
+                game_summary['total_penalty_points'] = int(getattr(_cg, 'total_penalty_points', 0))
+        except Exception:
+            pass
+    else:
+        # For non-Beat, if current game has penalties, carry them to summary
+        try:
+            _cg = st.session_state.get('game') if 'game' in st.session_state else None
+            if _cg is not None and hasattr(_cg, 'total_penalty_points'):
+                game_summary['total_penalty_points'] = int(getattr(_cg, 'total_penalty_points', 0))
+        except Exception:
+            pass
+
     # --- NEW: Save game result to user profile only once ---
     if not st.session_state.get('game_saved', False):
         save_game_to_user_profile(game_summary)
@@ -2254,7 +2292,26 @@ def display_game_over(game_summary):
         with col2:
             st.metric("Time Taken", format_duration(game_summary.get("duration") or game_summary.get("time_taken", 0)))
         with col3:
-            st.metric("Total Points", st.session_state.get('total_points', 0))
+            # Show total penalty points
+            total_penalty = game_summary.get('total_penalty_points')
+            if total_penalty is None:
+                try:
+                    current_game = st.session_state.get('game') if 'game' in st.session_state else None
+                except Exception:
+                    current_game = None
+                if current_game is not None:
+                    total_penalty = getattr(current_game, 'total_penalty_points', None)
+            # Fallbacks without forcing zero
+            if total_penalty is None:
+                if mode == "Beat":
+                    total_penalty = st.session_state.get('beat_total_points')
+                else:
+                    total_penalty = st.session_state.get('total_points')
+            # Default display value
+            display_penalty = total_penalty if (isinstance(total_penalty, (int, float)) and total_penalty != 0) else (
+                str(total_penalty) if (isinstance(total_penalty, str) and total_penalty.strip() != "0") else "NA"
+            )
+            st.metric("Total Penalty Points", display_penalty)
         
         if mode == "Beat":
             print(f"[DEBUG] summary_tab: words_solved = {game_summary.get('words_solved', 'MISSING')}")
