@@ -1165,6 +1165,9 @@ def main():
         st.session_state.beat_word_count = 0
         st.session_state.beat_time_left = 0
         st.session_state['game_saved'] = False
+        # Reset Beat session accumulators for a fresh run
+        st.session_state['beat_total_points'] = 0
+        st.session_state['beat_total_penalty'] = 0
     # Always go directly to the game page
     display_game()
 
@@ -1381,6 +1384,9 @@ def display_game():
     # Ensure beat_total_points is always initialized for Beat mode
     if 'beat_total_points' not in st.session_state:
         st.session_state['beat_total_points'] = 0
+    # New: accumulator for total penalties across Beat session
+    if 'beat_total_penalty' not in st.session_state:
+        st.session_state['beat_total_penalty'] = 0
 
     # If game is not initialized, always use user's default_category for Beat mode
     if 'game' not in st.session_state or not st.session_state.game:
@@ -1878,6 +1884,9 @@ def display_game():
             try:
                 if hasattr(game, 'total_penalty_points'):
                     st.session_state['beat_total_points'] = int(getattr(game, 'total_penalty_points', 0))
+                # If points were negative on last action, accumulate
+                if isinstance(points, (int, float)) and points < 0:
+                    st.session_state['beat_total_penalty'] = int(st.session_state.get('beat_total_penalty', 0)) + abs(points)
             except Exception:
                 pass
             st.session_state['feedback'] = message
@@ -1961,6 +1970,7 @@ def display_game():
                     game.total_penalty_points += 10
                 else:
                     game.total_penalty_points = 10
+                st.session_state['beat_total_penalty'] = int(st.session_state.get('beat_total_penalty', 0)) + 10
             except Exception:
                 pass
             st.session_state['feedback'] = '  |  '.join(feedback)
@@ -1989,6 +1999,7 @@ def display_game():
         try:
             if hasattr(game, 'total_penalty_points'):
                 st.session_state['beat_total_points'] = int(getattr(game, 'total_penalty_points', 0))
+                st.session_state['beat_total_penalty'] = int(st.session_state.get('beat_total_penalty', 0)) + (abs(points) if points < 0 else 0)
         except Exception:
             pass
         print(f"[DEBUG] Score before question: {prev_score}")
@@ -2067,6 +2078,14 @@ def display_game():
     if st.button('Show Word', key='show_word_btn_bottom'):
         game = st.session_state.game
         penalty = game.apply_show_word_penalty()  # <-- Apply the penalty!
+        # Sync penalties to session so Total Penalty Points includes Show Word
+        try:
+            if hasattr(game, 'total_penalty_points'):
+                st.session_state['beat_total_points'] = int(getattr(game, 'total_penalty_points', 0))
+            if isinstance(penalty, (int, float)) and penalty < 0:
+                st.session_state['beat_total_penalty'] = int(st.session_state.get('beat_total_penalty', 0)) + abs(penalty)
+        except Exception:
+            pass
         st.session_state['feedback'] = (
             f"The word is: {getattr(game, 'selected_word', '???').upper()}"
             + (f"  \n(-{abs(penalty)} points)" if penalty else "")
@@ -2308,9 +2327,15 @@ def display_game_over(game_summary):
                 else:
                     total_penalty = st.session_state.get('total_points')
             # Default display value
-            display_penalty = total_penalty if (isinstance(total_penalty, (int, float)) and total_penalty != 0) else (
-                str(total_penalty) if (isinstance(total_penalty, str) and total_penalty.strip() != "0") else "NA"
-            )
+            if isinstance(total_penalty, (int, float)) and total_penalty != 0:
+                display_penalty = total_penalty
+            else:
+                # Fallback to persistent session accumulator if available
+                session_acc = st.session_state.get('beat_total_penalty') if mode == "Beat" else None
+                if isinstance(session_acc, (int, float)) and session_acc > 0:
+                    display_penalty = session_acc
+                else:
+                    display_penalty = (str(total_penalty) if (isinstance(total_penalty, str) and total_penalty.strip() != "0") else "NA")
             st.metric("Total Penalty Points", display_penalty)
         
         if mode == "Beat":
@@ -2637,6 +2662,9 @@ def display_game_over(game_summary):
                 st.session_state.beat_time_left = BEAT_MODE_TIMEOUT_SECONDS
                 st.session_state.beat_start_time = time.time()
                 st.session_state['beat_started'] = False
+                # Reset Beat penalty/session accumulators
+                st.session_state['beat_total_points'] = 0
+                st.session_state['beat_total_penalty'] = 0
                 st.session_state.game = GameLogic(
                     word_length=new_word_length,
                     subject=new_subject,
@@ -2797,16 +2825,23 @@ def display_hint_section(game):
     show_prev = st.session_state.get("show_prev_hints", False)
 
     with col1:
-        # Only show "Show Hint" if not showing previous hints
+        # Only show "Get Hint" if not showing previous hints
         if not show_prev:
-            if st.button("Next Hint", 
+            if st.button("💡 Get Hint", 
                         disabled=len(game.hints_given) >= max_hints,
                         help=f"{hints_remaining} hints remaining",
                         use_container_width=True,
                         key="hint-button"):
                 hint, points = game.get_hint()
-#                if points < 0:
-#                    st.warning(f"Got hint but lost {abs(points)} points!")
+                # Sync penalties to session after a hint penalty is applied
+                try:
+                    if hasattr(game, 'total_penalty_points'):
+                        st.session_state['beat_total_points'] = int(getattr(game, 'total_penalty_points', 0))
+                    if isinstance(points, (int, float)) and points < 0:
+                        st.session_state['beat_total_penalty'] = int(st.session_state.get('beat_total_penalty', 0)) + abs(points)
+                except Exception:
+                    pass
+                st.rerun()
 
     with col2:
         # Toggle show previous hints
