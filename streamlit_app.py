@@ -2344,8 +2344,9 @@ def display_game_over(game_summary):
             words = game_summary.get('words_solved', 1)
             time_taken = game_summary.get('duration') or game_summary.get('time_taken', 0)
             try:
-                avg_score = (score / words) if words else 0
-                avg_time = (time_taken / words) if words else 0
+                denom = max(int(words or 0), 1)
+                avg_score = (score / denom)
+                avg_time = (time_taken / denom) if time_taken is not None else 0
                 sei_val = (avg_score / avg_time) if avg_time > 0 else 0
             except Exception:
                 sei_val = 0
@@ -2400,12 +2401,13 @@ def display_game_over(game_summary):
                 words = g.get('words_solved', 1) if g.get('mode') == 'Beat' else 1
                 time_taken = g.get('time_taken', g.get('duration', None))
                 date = g.get('timestamp')
-                if time_taken is not None and words > 0 and date:
+                if time_taken is not None and date:
                     total_score += score
                     total_time += time_taken
                     total_words += words
-                    avg_score = total_score / total_words if total_words > 0 else 0
-                    avg_time = total_time / total_words if total_words > 0 else 0
+                    denom = max(int(total_words or 0), 1)
+                    avg_score = total_score / denom
+                    avg_time = total_time / denom
                     sei = avg_score / avg_time if avg_time > 0 else 0
                     avg_scores.append(avg_score)
                     avg_times.append(avg_time)
@@ -2460,8 +2462,8 @@ def display_game_over(game_summary):
                 total_score = sum(g.get('score', 0) for g in user_games)
                 total_time = sum(g.get('time_taken', g.get('duration', 0)) for g in user_games)
                 total_words = sum(g.get('words_solved', 1) for g in user_games)
-                avg_score_per_word = round(total_score / total_words, 2) if total_words > 0 else 0
-                avg_time_per_word = round(total_time / total_words, 2) if total_words > 0 else 0
+                avg_score_per_word = round(total_score / total_words, 2)
+                avg_time_per_word = round(total_time / total_words, 2)
                 sei = round(avg_score_per_word / avg_time_per_word, 2) if avg_time_per_word > 0 else 0
                 # When calling create_share_card, pass avg_time_per_word as 'time_taken', avg_score_per_word as 'score', and sei as 'sei' in game_summary
                 game_summary_for_card = dict(game_summary)
@@ -2604,8 +2606,9 @@ def display_game_over(game_summary):
                 score_g = g.get('score', 0)
                 time_taken_g = g.get('time_taken', g.get('duration', 0))
                 words_g = g.get('words_solved', 1) if g.get('mode') == 'Beat' else 1
-                avg_score_g = (score_g / words_g) if words_g > 0 else 0
-                avg_time_g = (time_taken_g / words_g) if words_g > 0 else 0
+                denom_g = max(int(words_g or 0), 1)
+                avg_score_g = (score_g / denom_g)
+                avg_time_g = (time_taken_g / denom_g)
                 sei_g = (avg_score_g / avg_time_g) if avg_time_g > 0 else 0
                 st.markdown(f"- {g.get('subject','?').title()} | {g.get('mode','?')} | SEI: {sei_g:.2f} | {date_str}")
         else:
@@ -2633,8 +2636,9 @@ def display_game_over(game_summary):
         score = g.get('score', 0)
         time_taken = g.get('time_taken', g.get('duration', 0))
         words = g.get('words_solved', 1) if g.get('mode') == 'Beat' else 1
-        avg_score = score / words if words > 0 else 0
-        avg_time = time_taken / words if words > 0 else 0
+        denom = max(int(words or 0), 1)
+        avg_score = score / denom
+        avg_time = time_taken / denom
         sei = avg_score / avg_time if avg_time > 0 else 0
         # Only keep the highest SEI for each user in this category
         if user not in user_sei or sei > user_sei[user]:
