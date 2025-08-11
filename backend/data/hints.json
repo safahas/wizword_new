@@ -20522,6 +20522,879 @@
         "Often strained in 'shin splints.'"
       ]
     },
+    "SAT":{
+      "abate": [
+        "To lessen in intensity or amount.",
+        "Storms tend to calm after the strongest winds pass.",
+        "Synonyms include diminish and subside."
+      ],
+      "abhor": [
+        "To feel deep disgust or hatred toward something.",
+        "Some people have a strong aversion to cruelty.",
+        "Synonyms include detest and loathe."
+      ],
+      "abridge": [
+        "To shorten a text while keeping its main meaning.",
+        "Editors often cut novels for easier reading in class.",
+        "Synonyms include condense and curtail."
+      ],
+      "accede": [
+        "To agree to a request or demand.",
+        "Leaders sometimes yield to public pressure.",
+        "Synonyms include consent and comply."
+      ],
+      "acclaim": [
+        "To praise enthusiastically and publicly.",
+        "Standing ovations often signal strong approval.",
+        "Synonyms include applaud and commend."
+      ],
+      "accord": [
+        "A formal agreement between two parties.",
+        "Nations sometimes reach harmony after years of conflict.",
+        "Synonyms include pact and treaty."
+      ],
+      "acerbic": [
+        "Sharp or biting in tone or taste.",
+        "Some critics deliver reviews with harsh wit.",
+        "Synonyms include caustic and pungent."
+      ],
+      "acme": [
+        "The highest point of achievement or quality.",
+        "Winning an Olympic medal represents the peak of a career.",
+        "Synonyms include pinnacle and summit."
+      ],
+      "acquit": [
+        "To clear someone of a criminal charge.",
+        "A jury may find a defendant not guilty after deliberation.",
+        "Synonyms include exonerate and absolve."
+      ],
+      "adept": [
+        "Highly skilled or proficient in a task.",
+        "Chess masters show remarkable strategic ability.",
+        "Synonyms include expert and accomplished."
+      ],
+      "adhere": [
+        "To stick firmly to a surface or belief.",
+        "Labels sometimes need strong glue to stay in place.",
+        "Synonyms include cling and comply."
+      ],
+      "adjacent": [
+        "Lying next to or adjoining something else.",
+        "Two classrooms can share the same wall.",
+        "Synonyms include neighboring and bordering."
+      ],
+      "adroit": [
+        "Skillful and clever, especially with hands or mind.",
+        "A magician handles cards with great finesse.",
+        "Synonyms include dexterous and nimble."
+      ],
+      "adversary": [
+        "An opponent in a contest or conflict.",
+        "Teams often face tough rivals in championships.",
+        "Synonyms include foe and antagonist."
+      ],
+      "adverse": [
+        "Unfavorable or harmful in effect.",
+        "Bad weather can ruin outdoor events.",
+        "Synonyms include detrimental and hostile."
+      ],
+      "advocate": [
+        "A person who publicly supports a cause.",
+        "Some speak in favor of human rights in court.",
+        "Synonyms include proponent and supporter."
+      ],
+      "aegis": [
+        "Protection or sponsorship provided by someone.",
+        "Projects may operate under the care of a trusted organization.",
+        "Synonyms include shield and patronage."
+      ],
+      "affable": [
+        "Friendly and easy to talk to.",
+        "Hosts who greet guests warmly create a welcoming atmosphere.",
+        "Synonyms include amiable and genial."
+      ],
+      "affluent": [
+        "Having a lot of wealth or resources.",
+        "Luxury cars often appear in wealthy neighborhoods.",
+        "Synonyms include prosperous and rich."
+      ],
+      "agile": [
+        "Able to move quickly and easily.",
+        "Gymnasts often display remarkable flexibility and speed.",
+        "Synonyms include nimble and spry."
+      ],
+      "alacrity": [
+        "Brisk and cheerful readiness.",
+        "Volunteers sometimes respond with eager enthusiasm.",
+        "Synonyms include willingness and promptness."
+      ],
+      "allege": [
+        "To claim something without proof.",
+        "Witnesses may state events happened a certain way before trial.",
+        "Synonyms include assert and contend."
+      ],
+      "allot": [
+        "To assign or distribute a share of something.",
+        "Teachers may give each group a specific project role.",
+        "Synonyms include allocate and assign."
+      ],
+      "aloof": [
+        "Not friendly or forthcoming; distant.",
+        "Some people stay apart from social gatherings.",
+        "Synonyms include detached and reserved."
+      ],
+      "alter": [
+        "To change or modify.",
+        "Tailors adjust clothing to fit better.",
+        "Synonyms include adjust and transform."
+      ],
+      "amass": [
+        "To gather together or accumulate.",
+        "Collectors build large assortments of rare items.",
+        "Synonyms include accumulate and compile."
+      ],
+      "ambiguous": [
+        "Open to more than one interpretation.",
+        "Some poems can have double meanings.",
+        "Synonyms include vague and equivocal."
+      ],
+      "ambivalent": [
+        "Having mixed feelings about something.",
+        "A student may feel torn about choosing a major.",
+        "Synonyms include conflicted and unsure."
+      ],
+      "amiable": [
+        "Displaying a pleasant and friendly nature.",
+        "Smiling service staff often create a warm mood.",
+        "Synonyms include cordial and good-natured."
+      ],
+      "amicable": [
+        "Showing goodwill in resolving disputes.",
+        "Neighbors might settle property issues without hostility.",
+        "Synonyms include friendly and peaceable."
+      ],
+      "amplify": [
+        "To increase in volume or intensity.",
+        "Speakers can make music much louder at concerts.",
+        "Synonyms include magnify and intensify."
+      ],
+      "analogy": [
+        "A comparison between two things for explanation.",
+        "Teachers compare unfamiliar ideas to familiar ones for clarity.",
+        "Synonyms include similarity and parallel."
+      ],
+      "anarchy": [
+        "A state without government or order.",
+        "Lawless periods often follow sudden regime collapse.",
+        "Synonyms include chaos and disorder."
+      ],
+      "anecdote": [
+        "A short, interesting story about a real incident.",
+        "Speakers sometimes share a brief tale to make a point.",
+        "Synonyms include narrative and vignette."
+      ],
+      "anguish": [
+        "Severe mental or physical pain.",
+        "Families suffer deeply after tragic events.",
+        "Synonyms include agony and torment."
+      ],
+      "animosity": [
+        "Strong hostility or dislike.",
+        "Rival teams often harbor ill will.",
+        "Synonyms include hatred and antagonism."
+      ],
+      "annex": [
+        "To add territory to a domain.",
+        "Countries sometimes expand borders by taking new lands.",
+        "Synonyms include acquire and append."
+      ],
+      "annul": [
+        "To declare something legally invalid.",
+        "Courts can cancel certain contracts.",
+        "Synonyms include void and rescind."
+      ],
+      "anomaly": [
+        "Something that deviates from the norm.",
+        "Unusual temperatures can surprise scientists.",
+        "Synonyms include irregularity and exception."
+      ],
+      "antagonist": [
+        "A person actively opposing someone or something.",
+        "Stories often feature a central opponent to the hero.",
+        "Synonyms include adversary and rival."
+      ],
+      "antecedent": [
+        "Something that comes before another thing.",
+        "Historical causes can lead to later events.",
+        "Synonyms include precursor and forerunner."
+      ],
+      "antidote": [
+        "A remedy to counteract poison or harm.",
+        "Doctors may administer it after snake bites.",
+        "Synonyms include cure and remedy."
+      ],
+      "antipathy": [
+        "A deep-seated feeling of dislike.",
+        "Some show strong aversion to injustice.",
+        "Synonyms include hostility and distaste."
+      ],
+      "antiquated": [
+        "Old-fashioned or outdated.",
+        "Some technology becomes useless over time.",
+        "Synonyms include obsolete and archaic."
+      ],
+      "apathetic": [
+        "Showing little or no interest.",
+        "Voters sometimes stay home due to indifference.",
+        "Synonyms include indifferent and unresponsive."
+      ],
+      "apex": [
+        "The top or highest part of something.",
+        "Climbers aim for the peak of a mountain.",
+        "Synonyms include summit and zenith."
+      ],
+      "appall": [
+        "To greatly dismay or horrify.",
+        "Witnessing cruelty can cause deep shock.",
+        "Synonyms include horrify and outrage."
+      ],
+      "appease": [
+        "To calm or satisfy someone by meeting demands.",
+        "Leaders sometimes make concessions to avoid conflict.",
+        "Synonyms include pacify and placate."
+      ],
+      "appraise": [
+        "To assess the value or quality of something.",
+        "Experts estimate the worth of rare art.",
+        "Synonyms include evaluate and assess."
+      ],
+      "apt": [
+        "Likely or inclined to do something.",
+        "Careless drivers are prone to accidents.",
+        "Synonyms include inclined and suitable."
+      ],
+      "arable": [
+        "Suitable for growing crops.",
+        "Fertile fields produce abundant harvests.",
+        "Synonyms include cultivable and fertile."
+      ],
+      "arbiter": [
+        "A person with power to settle disputes.",
+        "Judges often make final decisions in competitions.",
+        "Synonyms include referee and mediator."
+      ],
+      "arcane": [
+        "Understood by few; mysterious.",
+        "Ancient symbols may be known only to scholars.",
+        "Synonyms include obscure and esoteric."
+      ],
+      "archaic": [
+        "Very old or old-fashioned.",
+        "Some words are no longer used in modern language.",
+        "Synonyms include outdated and antiquated."
+      ],
+      "ardent": [
+        "Very enthusiastic or passionate.",
+        "Fans often show intense devotion to their team.",
+        "Synonyms include fervent and eager."
+      ],
+      "arduous": [
+        "Requiring much effort and hard work.",
+        "Climbing steep mountains demands great energy.",
+        "Synonyms include strenuous and laborious."
+      ],
+      "arid": [
+        "Extremely dry, often describing a climate or region.",
+        "Few plants can survive in such conditions.",
+        "Synonyms include barren and parched."
+      ],
+      "arouse": [
+        "To stimulate feelings or response.",
+        "A sudden noise can cause excitement or alarm.",
+        "Synonyms include provoke and awaken."
+      ],
+      "articulate": [
+        "Able to express ideas clearly and effectively.",
+        "Speakers who explain points well often inspire others.",
+        "Synonyms include eloquent and expressive."
+      ],
+      "ascend": [
+        "To move upward or rise.",
+        "Hikers often climb steep trails toward a peak.",
+        "Synonyms include climb and soar."
+      ],
+      "ascertain": [
+        "To find out with certainty.",
+        "Investigators confirm details before making conclusions.",
+        "Synonyms include determine and verify."
+      ],
+      "aspire": [
+        "To have a strong desire to achieve something.",
+        "Students often aim for prestigious universities.",
+        "Synonyms include strive and aim."
+      ],
+      "assail": [
+        "To attack vigorously.",
+        "Critics sometimes bombard an idea with harsh reviews.",
+        "Synonyms include assault and berate."
+      ],
+      "assess": [
+        "To evaluate or estimate the nature or quality of something.",
+        "Teachers grade assignments to judge understanding.",
+        "Synonyms include appraise and evaluate."
+      ],
+      "assiduous": [
+        "Showing great care and perseverance.",
+        "Meticulous workers check every detail twice.",
+        "Synonyms include diligent and industrious."
+      ],
+      "assuage": [
+        "To make an unpleasant feeling less intense.",
+        "Medicine can ease the pain after injury.",
+        "Synonyms include alleviate and soothe."
+      ],
+      "astute": [
+        "Able to notice and understand things quickly.",
+        "Shrewd investors identify profitable opportunities early.",
+        "Synonyms include perceptive and insightful."
+      ],
+      "atrophy": [
+        "A gradual decline in effectiveness or strength.",
+        "Muscles weaken without regular use.",
+        "Synonyms include degeneration and wasting."
+      ],
+      "attain": [
+        "To reach or achieve a goal.",
+        "Graduating college marks a major accomplishment.",
+        "Synonyms include accomplish and secure."
+      ],
+      "audible": [
+        "Able to be heard.",
+        "The teacher’s voice carried clearly across the room.",
+        "Synonyms include perceptible and clear."
+      ],
+      "augment": [
+        "To make something greater by adding to it.",
+        "Extra workers can increase production speed.",
+        "Synonyms include enhance and expand."
+      ],
+      "auspicious": [
+        "Promising success or favorable outcomes.",
+        "Bright weather can signal a good start to an event.",
+        "Synonyms include favorable and fortunate."
+      ],
+      "austere": [
+        "Severe or strict in manner or appearance.",
+        "Monks often live in plain, simple conditions.",
+        "Synonyms include stern and unadorned."
+      ],
+      "authentic": [
+        "Genuine and not a copy.",
+        "Certificates can prove the originality of artwork.",
+        "Synonyms include real and legitimate."
+      ],
+      "autonomy": [
+        "The right to self-government.",
+        "Regions sometimes seek control over their own laws.",
+        "Synonyms include independence and self-rule."
+      ],
+      "avid": [
+        "Having a strong interest or enthusiasm.",
+        "Book lovers may read several novels a week.",
+        "Synonyms include eager and passionate."
+      ],
+      "avow": [
+        "To openly declare a belief or feeling.",
+        "Public statements can show commitment to a cause.",
+        "Synonyms include profess and affirm."
+      ],
+      "awe": [
+        "A feeling of reverential respect mixed with fear or wonder.",
+        "Spectators often react this way to grand natural sights.",
+        "Synonyms include admiration and wonder."
+      ],
+      "axiom": [
+        "A statement accepted as true without proof.",
+        "Mathematics relies on self-evident principles.",
+        "Synonyms include principle and truism."
+      ],
+      "balmy": [
+        "Pleasantly warm weather.",
+        "Evenings in tropical climates often feel gentle and mild.",
+        "Synonyms include mild and temperate."
+      ],
+      "banal": [
+        "Lacking originality or freshness.",
+        "Overused jokes can feel dull and predictable.",
+        "Synonyms include trite and unoriginal."
+      ],
+      "banish": [
+        "To send someone away as punishment.",
+        "Leaders may expel corrupt officials.",
+        "Synonyms include exile and expel."
+      ],
+      "barrage": [
+        "A concentrated outpouring of something.",
+        "Reporters may ask many questions at once.",
+        "Synonyms include bombardment and onslaught."
+      ],
+      "barren": [
+        "Unable to produce life or growth.",
+        "Deserts often lack vegetation.",
+        "Synonyms include infertile and desolate."
+      ],
+      "bastion": [
+        "A stronghold or fortification.",
+        "Castles serve as protective defenses during attacks.",
+        "Synonyms include stronghold and fortress."
+      ],
+      "bawl": [
+        "To cry out loudly.",
+        "Infants often express distress this way.",
+        "Synonyms include shout and wail."
+      ],
+      "beckon": [
+        "To signal with a gesture to approach.",
+        "A teacher might motion a student to the desk.",
+        "Synonyms include summon and wave."
+      ],
+      "behoove": [
+        "To be appropriate or beneficial to do.",
+        "It’s wise to review notes before an exam.",
+        "Synonyms include benefit and suit."
+      ],
+      "belated": [
+        "Happening later than expected.",
+        "Cards sometimes arrive after a birthday has passed.",
+        "Synonyms include overdue and tardy."
+      ],
+      "belie": [
+        "To give a false impression of something.",
+        "A calm expression can hide nervousness.",
+        "Synonyms include contradict and disguise."
+      ],
+      "belittle": [
+        "To make someone or something seem less important.",
+        "Critics sometimes downplay achievements unfairly.",
+        "Synonyms include disparage and demean."
+      ],
+      "belligerent": [
+        "Hostile and aggressive in nature.",
+        "Arguing in a confrontational tone shows this behavior.",
+        "Synonyms include combative and antagonistic."
+      ],
+      "benevolent": [
+        "Well-meaning and kind.",
+        "Donors sometimes provide aid to those in need.",
+        "Synonyms include charitable and compassionate."
+      ],
+      "benign": [
+        "Gentle and not harmful.",
+        "Some growths in the body pose no medical threat.",
+        "Synonyms include harmless and kind."
+      ],
+      "bequeath": [
+        "To leave property to someone after death.",
+        "Wills often transfer possessions to heirs.",
+        "Synonyms include bestow and endow."
+      ],
+      "berate": [
+        "To scold or criticize angrily.",
+        "Coaches sometimes yell at players for mistakes.",
+        "Synonyms include rebuke and chide."
+      ],
+      "bereft": [
+        "Deprived of something needed or loved.",
+        "Loss can leave a person feeling empty.",
+        "Synonyms include lacking and desolate."
+      ],
+      "beseech": [
+        "To ask someone urgently and fervently.",
+        "Children sometimes plead for extra playtime.",
+        "Synonyms include implore and entreat."
+      ],
+      "bestow": [
+        "To give as a gift or honor.",
+        "Awards are often granted at ceremonies.",
+        "Synonyms include confer and present."
+      ],
+      "betrothed": [
+        "Engaged to be married.",
+        "Couples may plan a wedding months in advance.",
+        "Synonyms include engaged and promised."
+      ],
+      "biased": [
+        "Showing prejudice for or against something.",
+        "Judges must remain neutral during trials.",
+        "Synonyms include partial and prejudiced."
+      ],
+      "bicker": [
+        "To argue about petty matters.",
+        "Siblings often quarrel over trivial issues.",
+        "Synonyms include squabble and argue."
+      ],
+      "bilk": [
+        "To cheat or defraud someone.",
+        "Scammers may swindle money from victims.",
+        "Synonyms include swindle and cheat."
+      ],
+      "blanch": [
+        "To make pale or whiten.",
+        "Vegetables may be boiled briefly before freezing.",
+        "Synonyms include pale and bleach."
+      ],
+      "bland": [
+        "Lacking strong flavor or excitement.",
+        "Plain food often has mild taste.",
+        "Synonyms include dull and insipid."
+      ],
+      "blatant": [
+        "Completely obvious in an offensive way.",
+        "Breaking rules openly shows disregard.",
+        "Synonyms include flagrant and conspicuous."
+      ],
+      "bleak": [
+        "Cold, bare, or without hope.",
+        "Empty landscapes can feel lifeless.",
+        "Synonyms include desolate and grim."
+      ],
+      "blemish": [
+        "A small mark or flaw that spoils appearance.",
+        "Fruit with spots may be less appealing.",
+        "Synonyms include flaw and defect."
+      ],
+      "bliss": [
+        "Perfect happiness or joy.",
+        "Relaxing on a sunny beach can bring contentment.",
+        "Synonyms include joy and delight."
+      ],
+      "blithe": [
+        "Showing a casual and cheerful indifference.",
+        "Some walk through life with carefree confidence.",
+        "Synonyms include carefree and heedless."
+      ],
+      "bloat": [
+        "To swell or puff up.",
+        "Bread expands when yeast produces gas.",
+        "Synonyms include expand and inflate."
+      ],
+      "blunt": [
+        "Not sharp or direct in speech.",
+        "Some people give feedback without softening their words.",
+        "Synonyms include candid and dull."
+      ],
+      "blurt": [
+        "To say something suddenly without thinking.",
+        "Children sometimes reveal secrets accidentally.",
+        "Synonyms include exclaim and spill."
+      ],
+      "bogus": [
+        "Not genuine or true.",
+        "Fake IDs are illegal to possess.",
+        "Synonyms include false and counterfeit."
+      ],
+      "boisterous": [
+        "Noisy, energetic, and cheerful.",
+        "Crowds at sporting events can be loud and full of life.",
+        "Synonyms include rowdy and exuberant."
+      ],
+      "bolster": [
+        "To support or strengthen.",
+        "Extra evidence can make an argument more convincing.",
+        "Synonyms include reinforce and boost."
+      ],
+      "bombastic": [
+        "High-sounding but with little meaning.",
+        "Some speeches use grand words without substance.",
+        "Synonyms include pretentious and pompous."
+      ],
+      "boon": [
+        "A helpful or beneficial thing.",
+        "Modern technology can make daily tasks easier.",
+        "Synonyms include blessing and benefit."
+      ],
+      "bourgeois": [
+        "Belonging to the middle class, often materialistic.",
+        "Associated with comfort and conventional attitudes.",
+        "Synonyms include conventional and materialistic."
+      ],
+      "brandish": [
+        "To wave or flourish something as a threat or in excitement.",
+        "A knight may raise a sword before battle.",
+        "Synonyms include wield and display."
+      ],
+      "brevity": [
+        "Concise and exact use of words.",
+        "Good writing often gets to the point quickly.",
+        "Synonyms include conciseness and succinctness."
+      ],
+      "broach": [
+        "To bring up a subject for discussion.",
+        "Diplomats may raise sensitive issues in talks.",
+        "Synonyms include introduce and mention."
+      ],
+      "brook": [
+        "To tolerate or allow something.",
+        "Some managers won’t permit delays in deadlines.",
+        "Synonyms include endure and allow."
+      ],
+      "bucolic": [
+        "Relating to the pleasant aspects of the countryside.",
+        "Rolling hills and quiet farms create a peaceful scene.",
+        "Synonyms include pastoral and rustic."
+      ],
+      "bulwark": [
+        "A strong defensive wall or protection.",
+        "Fortresses use thick barriers against attack.",
+        "Synonyms include rampart and safeguard."
+      ],
+      "bumptious": [
+        "Self-assertive in an irritating way.",
+        "Overly confident people may dominate conversations.",
+        "Synonyms include arrogant and pushy."
+      ],
+      "bungle": [
+        "To carry out a task clumsily.",
+        "Poor planning can ruin an event’s success.",
+        "Synonyms include botch and mishandle."
+      ],
+      "buoyant": [
+        "Able to float or stay cheerful.",
+        "Objects lighter than water rise to the surface.",
+        "Synonyms include optimistic and floating."
+      ],
+      "burgeon": [
+        "To begin to grow or increase rapidly.",
+        "Small startups can expand quickly in booming markets.",
+        "Synonyms include flourish and thrive."
+      ],
+      "burnish": [
+        "To polish something until it shines.",
+        "Metal can be made glossy through rubbing.",
+        "Synonyms include shine and enhance."
+      ],
+      "buttress": [
+        "A support built against a wall for strength.",
+        "Cathedrals often use stone structures to prevent collapse.",
+        "Synonyms include reinforce and support."
+      ],
+      "cacophony": [
+        "A harsh, discordant mixture of sounds.",
+        "City traffic can produce a jarring noise.",
+        "Synonyms include din and racket."
+      ],
+      "cadence": [
+        "A rhythmic flow of sounds or words.",
+        "Speeches often have a rise and fall in tone.",
+        "Synonyms include rhythm and tempo."
+      ],
+      "cajole": [
+        "To persuade with flattery or gentle urging.",
+        "Friends may sweet-talk you into joining an activity.",
+        "Synonyms include coax and entice."
+      ],
+      "calamity": [
+        "An event causing great damage or distress.",
+        "Earthquakes often leave devastation behind.",
+        "Synonyms include disaster and catastrophe."
+      ],
+      "caliber": [
+        "The quality of someone's ability or character.",
+        "Top universities attract students of exceptional skill.",
+        "Synonyms include standard and ability."
+      ],
+      "callous": [
+        "Showing or having an insensitive disregard for others.",
+        "Ignoring someone’s suffering can seem cold-hearted.",
+        "Synonyms include heartless and unfeeling."
+      ],
+      "calumny": [
+        "A false statement made to damage someone's reputation.",
+        "Gossip can ruin a person’s good name.",
+        "Synonyms include slander and defamation."
+      ],
+      "candor": [
+        "The quality of being open and honest.",
+        "True friends speak frankly even about flaws.",
+        "Synonyms include frankness and sincerity."
+      ],
+      "canny": [
+        "Having good judgment, especially in business matters.",
+        "Wise investors act with caution and insight.",
+        "Synonyms include shrewd and astute."
+      ],
+      "capacious": [
+        "Having a lot of space inside.",
+        "Large bags can hold many belongings.",
+        "Synonyms include roomy and spacious."
+      ],
+      "capitulate": [
+        "To cease resisting and surrender.",
+        "Armies may yield after long battles.",
+        "Synonyms include submit and yield."
+      ],
+      "capricious": [
+        "Given to sudden changes of mood or behavior.",
+        "Weather can shift unpredictably in some regions.",
+        "Synonyms include fickle and unpredictable."
+      ],
+      "captivate": [
+        "To attract and hold interest.",
+        "Great storytellers keep audiences engaged.",
+        "Synonyms include enchant and charm."
+      ],
+      "carping": [
+        "Constantly finding fault in a petty way.",
+        "Critics sometimes nitpick minor details.",
+        "Synonyms include nagging and faultfinding."
+      ],
+      "castigate": [
+        "To criticize severely.",
+        "Harsh reviews can discourage creative risk-taking.",
+        "Synonyms include reprimand and chastise."
+      ],
+      "catalyst": [
+        "Something that causes a change without being affected itself.",
+        "Leaders can spark reform in society.",
+        "Synonyms include trigger and stimulus."
+      ],
+      "caustic": [
+        "Able to burn or corrode; sarcastic in tone.",
+        "Certain chemicals can dissolve metal surfaces.",
+        "Synonyms include corrosive and biting."
+      ],
+      "censure": [
+        "To express strong disapproval.",
+        "Officials may face formal criticism for misconduct.",
+        "Synonyms include reprimand and condemn."
+      ],
+      "chagrin": [
+        "Distress caused by disappointment or embarrassment.",
+        "Forgetting a speech can cause lasting discomfort.",
+        "Synonyms include annoyance and humiliation."
+      ],
+      "charisma": [
+        "A compelling charm that inspires devotion.",
+        "Some leaders attract followers through personal magnetism.",
+        "Synonyms include allure and charm."
+      ],
+      "chasm": [
+        "A deep opening in the earth or a division between groups.",
+        "Earthquakes can leave wide gaps in the ground.",
+        "Synonyms include gulf and rift."
+      ],
+      "chauvinism": [
+        "Excessive or prejudiced loyalty to a cause or group.",
+        "Extreme nationalism can create hostility toward outsiders.",
+        "Synonyms include bigotry and bias."
+      ],
+      "chide": [
+        "To scold or rebuke.",
+        "Parents sometimes correct children firmly.",
+        "Synonyms include reprimand and admonish."
+      ],
+      "choleric": [
+        "Easily angered or bad-tempered.",
+        "Short tempers can spark sudden arguments.",
+        "Synonyms include irritable and testy."
+      ],
+      "circumvent": [
+        "To find a way around a problem or obstacle.",
+        "Creative thinkers bypass strict rules with alternatives.",
+        "Synonyms include avoid and bypass."
+      ],
+      "clamor": [
+        "A loud and confused noise.",
+        "Protests can fill the streets with sound.",
+        "Synonyms include uproar and din."
+      ],
+      "clandestine": [
+        "Kept secret or done secretly.",
+        "Covert meetings often occur late at night.",
+        "Synonyms include covert and hidden."
+      ],
+      "clarity": [
+        "The quality of being clear and easy to understand.",
+        "Good explanations remove confusion.",
+        "Synonyms include lucidity and precision."
+      ],
+      "claustro": [
+        "Relating to being closed in or confined.",
+        "Small, enclosed rooms can cause unease.",
+        "Root linked to 'closed' or 'shut' in Latin."
+      ],
+      "cleave": [
+        "To split or sever something; to cling closely.",
+        "Axes can split wood into smaller pieces.",
+        "Synonyms include split and adhere."
+      ],
+      "clemency": [
+        "Mercy or leniency shown toward an offender.",
+        "Judges sometimes reduce sentences out of compassion.",
+        "Synonyms include mercy and forgiveness."
+      ],
+      "cliché": [
+        "An overused phrase or idea.",
+        "Predictable plots often follow familiar patterns.",
+        "Synonyms include platitude and truism."
+      ],
+      "coalesce": [
+        "To come together and form one mass.",
+        "Separate groups can unite for a common cause.",
+        "Synonyms include merge and unite."
+      ],
+      "coerce": [
+        "To force someone to act through threats or pressure.",
+        "Extortion relies on intimidation to get results.",
+        "Synonyms include compel and pressure."
+      ],
+      "cogent": [
+        "Clear, logical, and convincing.",
+        "Well-structured arguments persuade more effectively.",
+        "Synonyms include compelling and sound."
+      ],
+      "coherent": [
+        "Logically connected and consistent.",
+        "Well-organized essays flow smoothly.",
+        "Synonyms include logical and consistent."
+      ],
+      "colloquial": [
+        "Informal language used in conversation.",
+        "Regional slang differs from formal speech.",
+        "Synonyms include conversational and informal."
+      ],
+      "collusion": [
+        "Secret cooperation for a dishonest purpose.",
+        "Competitors sometimes conspire to fix prices.",
+        "Synonyms include conspiracy and plotting."
+      ],
+      "commence": [
+        "To begin or start something.",
+        "Ceremonies often open with a welcoming speech.",
+        "Synonyms include initiate and embark."
+      ],
+      "commend": [
+        "To praise formally or officially.",
+        "Awards honor outstanding performance.",
+        "Synonyms include applaud and compliment."
+      ],
+      "commodity": [
+        "A raw material or primary product for trade.",
+        "Oil and wheat are often sold in bulk markets.",
+        "Synonyms include product and good."
+      ],
+      "compel": [
+        "To force or drive someone to act.",
+        "Strong evidence can persuade a jury.",
+        "Synonyms include coerce and obligate."
+      ],
+      "complacent": [
+        "Self-satisfied and unaware of possible dangers.",
+        "Ignoring warning signs can lead to trouble.",
+        "Synonyms include smug and unconcerned."
+      ]
+    },
+    
     "4th_grade": {
       "bag": [
         "You can carry things in this.",
