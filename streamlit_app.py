@@ -1256,15 +1256,15 @@ def display_welcome():
             with cols[1]:
                 subject = st.selectbox(
                     "Category",
-                    options=["any", "4th_grade", "anatomy", "animals", "brands", "cities", "food", "general", "medicines", "places", "sat", "science", "sports", "tech"],
-                    index=6 if "general" not in ["any", "4th_grade", "anatomy", "animals", "brands", "cities", "food", "general", "medicines", "places", "sat", "science", "sports", "tech"] else ["any", "4th_grade", "anatomy", "animals", "brands", "cities", "food", "general", "medicines", "places", "sat", "science", "sports", "tech"].index("general"),  # default to 'general'
+                    options=["any", "4th_grade", "anatomy", "animals", "brands", "cities", "food", "general", "gre", "medicines", "places", "psat", "sat", "science", "sports", "tech"],
+                    index=["any", "4th_grade", "anatomy", "animals", "brands", "cities", "food", "general", "gre", "medicines", "places", "psat", "sat", "science", "sports", "tech"].index("general"),  # default to 'general'
                     help="Word category (select 'any' for random category)",
                     format_func=lambda x: (
-                        'Any' if x == 'any' else ('SAT' if x == 'sat' else x.replace('_', ' ').title())
+                        'Any' if x == 'any' else ('SAT' if x == 'sat' else ('PSAT' if x == 'psat' else ('GRE' if x == 'gre' else x.replace('_', ' ').title())))
                     )
                 )
                 st.session_state['original_category_choice'] = subject
-                resolved_subject = random.choice(["general", "animals", "food", "places", "science", "tech", "sports", "brands", "4th_grade", "cities", "medicines", "anatomy", "sat"]) if subject == "any" else subject
+                resolved_subject = random.choice(["general", "animals", "food", "places", "science", "tech", "sports", "brands", "4th_grade", "cities", "medicines", "anatomy", "psat", "sat", "gre"]) if subject == "any" else subject
             word_length = "any"
             st.session_state['original_word_length_choice'] = word_length
             if start_pressed:
@@ -1517,8 +1517,8 @@ def display_game():
 
     # Handle change category
     if st.session_state.get('change_category', False):
-        categories = ["any", "anatomy", "animals", "brands", "cities", "food", "general", "medicines", "places", "sat", "science", "sports", "tech", "4th_grade"]
-        new_category = st.selectbox("Select a new category:", categories, format_func=lambda x: ('Any' if x=='any' else ('SAT' if x=='sat' else x.replace('_',' ').title())), key='category_select_box')
+        categories = ["any", "anatomy", "animals", "brands", "cities", "food", "general", "gre", "medicines", "places", "psat", "sat", "science", "sports", "tech", "4th_grade"]
+        new_category = st.selectbox("Select a new category:", categories, format_func=lambda x: ('Any' if x=='any' else ('GRE' if x=='gre' else ('SAT' if x=='sat' else ('PSAT' if x=='psat' else x.replace('_',' ').title())))), key='category_select_box')
         if st.button("Confirm Category Change", key='change_category_btn'):
             game = st.session_state.game
             st.session_state.game = GameLogic(
@@ -2356,7 +2356,15 @@ def display_game_over(game_summary):
             # Show as an additional metric row
             c_sei1, c_sei2, c_sei3 = st.columns(3)
             with c_sei1:
-                st.metric("SEI (Score/Time)", f"{sei_val:.2f}")
+                st.markdown(
+                    f"""
+                    <div style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 8px 12px;">
+                        <div style="font-size: 0.82em; color: #9CA3AF; font-weight: 600;">SEI (Score/Time Index)</div>
+                        <div style="font-size: 1.35em; color: #ff3b30; font-weight: 800;">{sei_val:.2f}</div>
+                    </div>
+                    """,
+                    unsafe_allow_html=True,
+                )
             # (Removed: last word display above words solved)
             st.markdown(f"**Words solved:** {game_summary.get('words_solved', 0)}")
         else:
@@ -2443,9 +2451,9 @@ def display_game_over(game_summary):
                 st.pyplot(fig)
                 # Add a separate SEI line graph
                 fig_sei, ax_sei = plt.subplots(figsize=(6, 3))
-                ax_sei.plot(game_dates, sei_values, marker='^', linewidth=2, markersize=6, color=color3, label='SEI (Score/Time)')
+                ax_sei.plot(game_dates, sei_values, marker='^', linewidth=2, markersize=6, color=color3, label='SEI (Score/Time Index)')
                 ax_sei.set_xlabel('Game Date')
-                ax_sei.set_ylabel('SEI (Score/Time)', color=color3)
+                ax_sei.set_ylabel('SEI (Score/Time Index)', color=color3)
                 ax_sei.set_title('Score Efficiency Index (SEI) per Game')
                 ax_sei.legend(loc='upper left')
                 fig_sei.tight_layout()
@@ -2593,6 +2601,26 @@ def display_game_over(game_summary):
                 st.metric("Total Time", format_duration(total_time))
             with col3:
                 st.metric("Favorite Category", favorite_category or "-")
+            # Average SEI across all user games
+            try:
+                total_words_all = sum((g.get('words_solved', 1) if g.get('mode') == 'Beat' else 1) for g in user_games)
+                denom_all = max(int(total_words_all or 0), 1)
+                avg_score_per_word_all = (sum(g.get('score', 0) for g in user_games) / denom_all)
+                avg_time_per_word_all = (sum(g.get('time_taken', g.get('duration', 0)) for g in user_games) / denom_all)
+                avg_sei_all = (avg_score_per_word_all / avg_time_per_word_all) if avg_time_per_word_all > 0 else 0
+            except Exception:
+                avg_sei_all = 0
+            st.markdown(
+                f"""
+                <div style="display:flex; gap:18px; margin: 6px 0 12px 0;">
+                    <div style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 8px 12px;">
+                        <div style="font-size: 0.82em; color: #9CA3AF; font-weight: 600;">Average SEI (Score/Time Index)</div>
+                        <div style="font-size: 1.35em; color: #ff3b30; font-weight: 800;">{avg_sei_all:.2f}</div>
+                    </div>
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
             st.markdown("**Recent Games:**")
             for g in user_games[-5:][::-1]:
                 date_str = g.get('end_time') or g.get('timestamp')

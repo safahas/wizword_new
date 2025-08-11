@@ -21392,9 +21392,2407 @@
         "Self-satisfied and unaware of possible dangers.",
         "Ignoring warning signs can lead to trouble.",
         "Synonyms include smug and unconcerned."
+      ],
+      "concise": [
+        "Expressed in few words while covering all key points.",
+        "Effective summaries keep details short but complete.",
+        "Synonyms include brief and succinct."
+      ],
+      "concur": [
+        "To agree with a statement or opinion.",
+        "Meeting participants may share the same view.",
+        "Synonyms include agree and coincide."
+      ],
+      "condone": [
+        "To accept or allow behavior that is wrong.",
+        "Leaders may overlook small infractions.",
+        "Synonyms include excuse and tolerate."
+      ],
+      "confer": [
+        "To discuss and exchange ideas.",
+        "Advisors meet privately before making decisions.",
+        "Synonyms include consult and deliberate."
+      ],
+      "confide": [
+        "To share private thoughts with someone trusted.",
+        "Friends sometimes reveal secrets in confidence.",
+        "Synonyms include disclose and reveal."
+      ],
+      "conform": [
+        "To follow rules or customs.",
+        "Uniforms help everyone fit the same standard.",
+        "Synonyms include comply and adapt."
+      ],
+      "confound": [
+        "To confuse or surprise unexpectedly.",
+        "Unexpected results can puzzle scientists.",
+        "Synonyms include bewilder and perplex."
+      ],
+      "conjure": [
+        "To bring to mind or call forth.",
+        "Stories can create vivid images in the imagination.",
+        "Synonyms include evoke and summon."
+      ],
+      "connive": [
+        "To secretly allow wrongdoing.",
+        "Corrupt officials may turn a blind eye to crimes.",
+        "Synonyms include collude and conspire."
+      ],
+      "construe": [
+        "To interpret or understand in a particular way.",
+        "Comments can be taken as praise or criticism.",
+        "Synonyms include interpret and analyze."
+      ],
+      "contrite": [
+        "Feeling remorse for wrongdoing.",
+        "A sincere apology often shows regret.",
+        "Synonyms include repentant and remorseful."
+      ],
+      "convene": [
+        "To gather for a meeting.",
+        "Committees meet to discuss proposals.",
+        "Synonyms include assemble and summon."
+      ],
+      "convolute": [
+        "Twisted or complex in form.",
+        "Some plots have so many twists they confuse viewers.",
+        "Synonyms include intricate and tangled."
+      ],
+      "copious": [
+        "Abundant in quantity.",
+        "Lecture notes can be filled with detailed information.",
+        "Synonyms include plentiful and ample."
+      ],
+      "cordial": [
+        "Warm and friendly in manner.",
+        "Hosts greet guests with a pleasant attitude.",
+        "Synonyms include gracious and genial."
+      ],
+      "corrode": [
+        "To wear away slowly by chemical action.",
+        "Metal left in saltwater may deteriorate over time.",
+        "Synonyms include erode and rust."
+      ],
+      "corroborate": [
+        "To confirm or support with evidence.",
+        "Witnesses help strengthen a case in court.",
+        "Synonyms include substantiate and verify."
+      ],
+      "cosmopolitan": [
+        "Familiar with and at ease in many cultures.",
+        "World travelers often adapt to diverse customs.",
+        "Synonyms include worldly and cultured."
+      ],
+      "cower": [
+        "To crouch down in fear.",
+        "Loud noises can make animals shrink back.",
+        "Synonyms include cringe and flinch."
+      ],
+      "craven": [
+        "Lacking courage.",
+        "Refusing to face danger shows weakness.",
+        "Synonyms include cowardly and timid."
+      ],
+      "credence": [
+        "Belief in something as true.",
+        "Scientific evidence gives weight to theories.",
+        "Synonyms include trust and acceptance."
+      ],
+      "credulous": [
+        "Too willing to believe things.",
+        "Scammers target those who accept claims easily.",
+        "Synonyms include gullible and naive."
+      ],
+      "crescendo": [
+        "A gradual increase in loudness or intensity.",
+        "Music builds up before a dramatic point.",
+        "Synonyms include escalation and climax."
+      ],
+      "criterion": [
+        "A standard by which something is judged.",
+        "Teachers use specific measures to grade work.",
+        "Synonyms include benchmark and standard."
+      ],
+      "cryptic": [
+        "Having a hidden or mysterious meaning.",
+        "Riddles often use puzzling clues.",
+        "Synonyms include enigmatic and obscure."
+      ],
+      "culminate": [
+        "To reach a final or highest point.",
+        "Years of effort can lead to a major victory.",
+        "Synonyms include conclude and climax."
+      ],
+      "culpable": [
+        "Deserving blame for a wrongdoing.",
+        "Neglect can make someone legally responsible.",
+        "Synonyms include guilty and blameworthy."
+      ],
+      "cursory": [
+        "Hasty and lacking detail.",
+        "Quick inspections can miss important problems.",
+        "Synonyms include superficial and brief."
+      ],
+      "curtail": [
+        "To reduce or limit something.",
+        "Budgets may force programs to cut back.",
+        "Synonyms include diminish and restrict."
+      ],
+      "daunt": [
+        "To make someone feel intimidated.",
+        "Steep cliffs can discourage inexperienced climbers.",
+        "Synonyms include dishearten and deter."
+      ],
+      "dearth": [
+        "A lack or scarcity.",
+        "Villages without fresh water face shortages.",
+        "Synonyms include paucity and deficiency."
+      ],
+      "debacle": [
+        "A sudden and complete failure.",
+        "Poor planning can lead to disastrous events.",
+        "Synonyms include fiasco and collapse."
+      ],
+      "debunk": [
+        "To expose the falseness of something.",
+        "Myths often get disproved by research.",
+        "Synonyms include disprove and refute."
+      ],
+      "decorum": [
+        "Proper and polite behavior.",
+        "Formal events require respectful manners.",
+        "Synonyms include propriety and etiquette."
+      ],
+      "decree": [
+        "An official order issued by authority.",
+        "Governments may announce new rules to the public.",
+        "Synonyms include edict and mandate."
+      ],
+      "defame": [
+        "To damage someone's reputation through false statements.",
+        "Spreading lies can ruin a public figure’s image.",
+        "Synonyms include slander and malign."
+      ],
+      "defer": [
+        "To postpone or put off.",
+        "Some students delay college for a year.",
+        "Synonyms include delay and yield."
+      ],
+      "defiant": [
+        "Showing resistance or bold disobedience.",
+        "Protesters may stand firm against authority.",
+        "Synonyms include rebellious and disobedient."
+      ],
+      "deft": [
+        "Skillful and quick in movement.",
+        "Musicians handle instruments with precision.",
+        "Synonyms include nimble and adept."
+      ],
+      "degrade": [
+        "To treat with disrespect or lower in quality.",
+        "Pollution can harm the environment’s health.",
+        "Synonyms include demean and deteriorate."
+      ],
+      "deign": [
+        "To do something considered beneath one's dignity.",
+        "Royalty rarely lower themselves to menial tasks.",
+        "Synonyms include condescend and stoop."
+      ],
+      "deleterious": [
+        "Harmful or damaging.",
+        "Smoking has negative effects on health.",
+        "Synonyms include injurious and detrimental."
+      ],
+      "delineate": [
+        "To describe or outline precisely.",
+        "Maps clearly show borders between countries.",
+        "Synonyms include define and portray."
+      ],
+      "delude": [
+        "To mislead into false belief.",
+        "Illusions can trick the mind.",
+        "Synonyms include deceive and mislead."
+      ],
+      "demagogue": [
+        "A leader who appeals to emotions rather than reason.",
+        "Crowds may be swayed by passionate speeches.",
+        "Synonyms include agitator and rabble-rouser."
+      ],
+      "demeanor": [
+        "A person's outward behavior.",
+        "Calm actions can inspire confidence.",
+        "Synonyms include manner and conduct."
+      ],
+      "demise": [
+        "A person's death or the end of something.",
+        "Empires collapse after losing power.",
+        "Synonyms include downfall and passing."
+      ],
+      "demur": [
+        "To raise doubts or objections.",
+        "Some hesitate before agreeing to risky plans.",
+        "Synonyms include object and protest."
+      ],
+      "denounce": [
+        "To publicly declare as wrong or evil.",
+        "Activists speak out against injustice.",
+        "Synonyms include condemn and criticize."
+      ],
+      "depict": [
+        "To represent through art or words.",
+        "Paintings can show scenes from history.",
+        "Synonyms include portray and illustrate."
+      ],
+      "deplete": [
+        "To use up resources.",
+        "Overfishing can empty the oceans of life.",
+        "Synonyms include exhaust and drain."
+      ],
+      "deplore": [
+        "To feel strong disapproval.",
+        "Many object to acts of cruelty.",
+        "Synonyms include condemn and regret."
+      ],
+      "deploy": [
+        "To position or arrange strategically.",
+        "Troops move into place before a mission.",
+        "Synonyms include position and utilize."
+      ],
+      "depose": [
+        "To remove from office suddenly.",
+        "Revolutions can overthrow leaders.",
+        "Synonyms include oust and dethrone."
+      ],
+      "depravity": [
+        "Moral corruption or wickedness.",
+        "History records acts of great evil.",
+        "Synonyms include vice and corruption."
+      ],
+      "deprecate": [
+        "To express disapproval of something.",
+        "Critics may speak against poor policies.",
+        "Synonyms include criticize and disparage."
+      ],
+      "deride": [
+        "To mock or ridicule.",
+        "Comedians sometimes make fun of social norms.",
+        "Synonyms include taunt and jeer."
+      ],
+      "derivative": [
+        "Imitative of another work or idea.",
+        "Some films feel unoriginal compared to classics.",
+        "Synonyms include copied and unoriginal."
+      ],
+      "desecrate": [
+        "To treat a sacred place with disrespect.",
+        "Graffiti on historic monuments angers communities.",
+        "Synonyms include defile and profane."
+      ],
+      "desist": [
+        "To stop doing something.",
+        "Courts may order an end to harmful activities.",
+        "Synonyms include cease and refrain."
+      ],
+      "desolate": [
+        "Empty and without life.",
+        "Abandoned towns can feel eerie and lonely.",
+        "Synonyms include barren and bleak."
+      ],
+      "despondent": [
+        "Feeling hopeless or discouraged.",
+        "Losing everything can drain motivation.",
+        "Synonyms include downcast and disheartened."
+      ],
+      "destitute": [
+        "Lacking basic necessities of life.",
+        "People without shelter face severe hardship.",
+        "Synonyms include impoverished and needy."
+      ],
+      "deter": [
+        "To discourage someone from taking action.",
+        "Visible security cameras can prevent theft.",
+        "Synonyms include discourage and dissuade."
+      ],
+      "detract": [
+        "To take away from value or importance.",
+        "Scratches can lower the worth of a car.",
+        "Synonyms include diminish and reduce."
+      ],
+      "devise": [
+        "To plan or invent through careful thought.",
+        "Engineers create solutions for complex problems.",
+        "Synonyms include design and formulate."
+      ],
+      "devoid": [
+        "Entirely lacking in something.",
+        "Deserts are often empty of vegetation.",
+        "Synonyms include empty and barren."
+      ],
+      "devout": [
+        "Deeply committed to a religion or cause.",
+        "Pilgrims often show great dedication in rituals.",
+        "Synonyms include pious and devoted."
+      ],
+      "dexterous": [
+        "Skillful, especially with the hands.",
+        "Watchmakers work with great precision and agility.",
+        "Synonyms include adept and nimble."
+      ],
+      "diatribe": [
+        "A forceful and bitter verbal attack.",
+        "Critics may deliver harsh speeches against policies.",
+        "Synonyms include tirade and rant."
+      ],
+      "didactic": [
+        "Intended to teach or instruct.",
+        "Some books are meant to educate as well as entertain.",
+        "Synonyms include instructive and educational."
+      ],
+      "diffuse": [
+        "To spread over a wide area.",
+        "A pleasant scent can fill an entire room.",
+        "Synonyms include disperse and scatter."
+      ],
+      "digress": [
+        "To temporarily leave the main topic.",
+        "Speakers sometimes wander into unrelated stories.",
+        "Synonyms include deviate and stray."
+      ],
+      "dilapidated": [
+        "Fallen into disrepair or ruin.",
+        "Old buildings can crumble without maintenance.",
+        "Synonyms include rundown and decayed."
+      ],
+      "diligent": [
+        "Showing steady effort and care in work.",
+        "Students who review daily tend to perform better.",
+        "Synonyms include industrious and conscientious."
+      ],
+      "dilute": [
+        "To make a liquid weaker by adding another substance.",
+        "Adding water reduces the strength of juice.",
+        "Synonyms include weaken and thin."
+      ],
+      "dim": [
+        "Not bright or clear.",
+        "Fog can make streetlights hard to see.",
+        "Synonyms include faint and obscure."
+      ],
+      "diminish": [
+        "To make smaller or less.",
+        "Rainfall shortages can lower crop yields.",
+        "Synonyms include reduce and lessen."
+      ],
+      "din": [
+        "A loud, unpleasant noise.",
+        "Construction sites can be overwhelming with constant sounds.",
+        "Synonyms include racket and clamor."
+      ],
+      "dingy": [
+        "Dark and dirty.",
+        "Old curtains can make a room look unclean.",
+        "Synonyms include shabby and grimy."
+      ],
+      "diplomatic": [
+        "Skilled in dealing with sensitive matters.",
+        "Negotiators maintain good relations between nations.",
+        "Synonyms include tactful and strategic."
+      ],
+      "dire": [
+        "Extremely serious or urgent.",
+        "Warnings often precede dangerous storms.",
+        "Synonyms include grave and desperate."
+      ],
+      "dirge": [
+        "A mournful song, often for the dead.",
+        "Funerals sometimes include slow, solemn music.",
+        "Synonyms include lament and requiem."
+      ],
+      "disavow": [
+        "To deny responsibility or support.",
+        "Officials may reject involvement in a scandal.",
+        "Synonyms include repudiate and disclaim."
+      ],
+      "disband": [
+        "To break up an organized group.",
+        "Clubs may dissolve when members lose interest.",
+        "Synonyms include dissolve and disperse."
+      ],
+      "disclose": [
+        "To make information known.",
+        "Laws may require revealing financial records.",
+        "Synonyms include reveal and divulge."
+      ],
+      "discreet": [
+        "Careful not to attract attention.",
+        "Whispering avoids drawing notice in meetings.",
+        "Synonyms include prudent and tactful."
+      ],
+      "disdain": [
+        "A feeling of contempt or scorn.",
+        "Snobs often look down on those they consider inferior.",
+        "Synonyms include scorn and contempt."
+      ],
+      "dishevel": [
+        "To make untidy or disordered.",
+        "Wind can mess up neatly styled hair.",
+        "Synonyms include rumple and tousle."
+      ],
+      "disparage": [
+        "To speak of in a disrespectful way.",
+        "Critics may belittle someone’s hard work.",
+        "Synonyms include belittle and denigrate."
+      ],
+      "dispel": [
+        "To drive away doubts or fears.",
+        "Evidence can remove suspicion.",
+        "Synonyms include banish and dissipate."
+      ],
+      "disperse": [
+        "To scatter or spread widely.",
+        "Police may break up large crowds.",
+        "Synonyms include scatter and distribute."
+      ],
+      "displace": [
+        "To move something from its usual place.",
+        "Floods can force families to leave homes.",
+        "Synonyms include remove and uproot."
+      ],
+      "dispute": [
+        "A disagreement or argument.",
+        "Neighbors may disagree about property lines.",
+        "Synonyms include conflict and quarrel."
+      ],
+      "disrupt": [
+        "To cause disorder or interruption.",
+        "Power outages can halt production.",
+        "Synonyms include disturb and interrupt."
+      ],
+      "dissent": [
+        "To hold an opinion that differs from the majority.",
+        "Judges may disagree with a court’s decision.",
+        "Synonyms include disagree and oppose."
+      ],
+      "dissipate": [
+        "To scatter or vanish over time.",
+        "Fog fades as the sun rises.",
+        "Synonyms include disperse and dissolve."
+      ],
+      "dissuade": [
+        "To persuade someone not to do something.",
+        "Friends may advise against risky ventures.",
+        "Synonyms include discourage and deter."
+      ],
+      "distend": [
+        "To swell from pressure inside.",
+        "Gas can make the stomach expand uncomfortably.",
+        "Synonyms include swell and bulge."
+      ],
+      "distinct": [
+        "Clearly different or separate.",
+        "Twins may have unique personalities.",
+        "Synonyms include unique and unmistakable."
+      ],
+      "distort": [
+        "To twist out of shape or misrepresent.",
+        "Funhouse mirrors change appearances humorously.",
+        "Synonyms include deform and misrepresent."
+      ],
+      "dither": [
+        "To be indecisive.",
+        "Shoppers may hesitate before making big purchases.",
+        "Synonyms include hesitate and vacillate."
+      ],
+      "diverge": [
+        "To move in different directions from a common point.",
+        "Two roads can split at a fork.",
+        "Synonyms include separate and branch."
+      ],
+      "divest": [
+        "To strip away possessions or rights.",
+        "Companies may sell off unprofitable divisions.",
+        "Synonyms include deprive and rid."
+      ],
+      "divulge": [
+        "To make known private information.",
+        "Reporters sometimes reveal confidential sources.",
+        "Synonyms include disclose and reveal."
+      ],
+      "docile": [
+        "Easily managed or taught.",
+        "Calm pets adapt well to new owners.",
+        "Synonyms include obedient and compliant."
+      ],
+      "dogged": [
+        "Showing persistent determination.",
+        "Athletes train hard despite repeated setbacks.",
+        "Synonyms include tenacious and resolute."
+      ],
+      "dogmatic": [
+        "Inclined to lay down principles as undeniably true.",
+        "Rigid leaders resist any opposing ideas.",
+        "Synonyms include opinionated and inflexible."
+      ],
+      "doleful": [
+        "Expressing sorrow or sadness.",
+        "Funeral attendees often appear solemn.",
+        "Synonyms include mournful and gloomy."
+      ],
+      "domineer": [
+        "To assert control over others in an arrogant way.",
+        "Bossy leaders often demand unquestioning obedience.",
+        "Synonyms include overbear and dictate."
+      ],
+      "dormant": [
+        "Inactive but capable of becoming active later.",
+        "Volcanoes can be quiet for decades before erupting.",
+        "Synonyms include inactive and latent."
+      ],
+      "dour": [
+        "Relentlessly severe or gloomy.",
+        "Grim faces can lower the mood in a room.",
+        "Synonyms include stern and sullen."
+      ],
+      "downcast": [
+        "Feeling sad or depressed.",
+        "Students may lower their gaze after failing a test.",
+        "Synonyms include dejected and dispirited."
+      ],
+      "drab": [
+        "Lacking brightness or interest.",
+        "Gray walls can make a room feel lifeless.",
+        "Synonyms include dull and monotonous."
+      ],
+      "draconian": [
+        "Excessively harsh or severe.",
+        "Strict laws can impose extreme penalties.",
+        "Synonyms include oppressive and severe."
+      ],
+      "dregs": [
+        "The remnants or least valuable part of something.",
+        "Coffee grounds left at the bottom of a cup.",
+        "Synonyms include residue and sediment."
+      ],
+      "dubious": [
+        "Hesitating or doubting.",
+        "Shoppers may be unsure about questionable deals.",
+        "Synonyms include skeptical and uncertain."
+      ],
+      "ductile": [
+        "Capable of being drawn into thin wire.",
+        "Copper is easily shaped without breaking.",
+        "Synonyms include pliable and malleable."
+      ],
+      "dulcet": [
+        "Sweet and soothing to hear.",
+        "Gentle music can calm the mind.",
+        "Synonyms include melodious and harmonious."
+      ],
+      "dumbfounded": [
+        "Greatly astonished or amazed.",
+        "Unexpected news can leave people speechless.",
+        "Synonyms include stunned and flabbergasted."
+      ]      
+    },
+    "PSAT": {
+      "adapt": [
+        "To adjust to new conditions or surroundings.",
+        "Animals may change behavior to survive in different climates.",
+        "Synonyms include adjust and accommodate."
+      ],
+      "adept": [
+        "Highly skilled or proficient.",
+        "Athletes who train often can perform exceptionally well.",
+        "Synonyms include skilled and expert."
+      ],
+      "adjacent": [
+        "Next to or close to something.",
+        "Houses may share a wall when side by side.",
+        "Synonyms include neighboring and adjoining."
+      ],
+      "adverse": [
+        "Unfavorable or harmful.",
+        "Poor weather can affect travel plans.",
+        "Synonyms include detrimental and negative."
+      ],
+      "advocate": [
+        "A person who publicly supports an idea or cause.",
+        "Lawyers may speak on behalf of their clients.",
+        "Synonyms include supporter and proponent."
+      ],
+      "affect": [
+        "To influence or change something.",
+        "Stress can influence decision-making abilities.",
+        "Synonyms include influence and impact."
+      ],
+      "agile": [
+        "Able to move quickly and easily.",
+        "Dancers show quick and graceful movements.",
+        "Synonyms include nimble and spry."
+      ],
+      "allege": [
+        "To claim without proof.",
+        "News reports may state something based on unverified sources.",
+        "Synonyms include assert and claim."
+      ],
+      "allocate": [
+        "To distribute for a purpose.",
+        "Funds are set aside for school programs.",
+        "Synonyms include assign and allot."
+      ],
+      "alter": [
+        "To make a change.",
+        "Tailors make clothing fit better.",
+        "Synonyms include modify and adjust."
+      ],
+      "ample": [
+        "More than enough.",
+        "The garden produced plenty of vegetables this year.",
+        "Synonyms include abundant and sufficient."
+      ],
+      "analyze": [
+        "To examine closely and in detail.",
+        "Scientists study data before reaching conclusions.",
+        "Synonyms include examine and evaluate."
+      ],
+      "annual": [
+        "Happening once a year.",
+        "The festival is held every summer.",
+        "Synonyms include yearly and once-yearly."
+      ],
+      "antique": [
+        "Very old and often valuable.",
+        "Collectors look for furniture from past centuries.",
+        "Synonyms include vintage and old-fashioned."
+      ],
+      "anxious": [
+        "Feeling worried or uneasy.",
+        "Students may feel nervous before an important exam.",
+        "Synonyms include uneasy and apprehensive."
+      ],
+      "apparent": [
+        "Clearly visible or understood.",
+        "It was obvious that he was excited about the trip.",
+        "Synonyms include evident and obvious."
+      ],
+      "appeal": [
+        "A request for help or support.",
+        "Charities ask for donations to fund projects.",
+        "Synonyms include request and plea."
+      ],
+      "approach": [
+        "To move closer or nearer.",
+        "Spring weather arrives after winter.",
+        "Synonyms include advance and come near."
+      ],
+      "ardent": [
+        "Very enthusiastic or passionate.",
+        "Fans show strong support for their team.",
+        "Synonyms include eager and fervent."
+      ],
+      "aspire": [
+        "To have a strong desire to achieve something.",
+        "Many students aim to attend top universities.",
+        "Synonyms include strive and aim."
+      ],
+      "assign": [
+        "To give a job or responsibility to someone.",
+        "Teachers give homework to students.",
+        "Synonyms include allocate and appoint."
+      ],
+      "assume": [
+        "To take on responsibility or suppose something.",
+        "People often guess before knowing the facts.",
+        "Synonyms include presume and undertake."
+      ],
+      "astonish": [
+        "To greatly surprise someone.",
+        "Unexpected gifts can cause amazement.",
+        "Synonyms include amaze and astound."
+      ],
+      "attain": [
+        "To reach a goal or level.",
+        "Athletes work hard to reach personal records.",
+        "Synonyms include achieve and accomplish."
+      ],
+      "attend": [
+        "To be present at an event or place.",
+        "Students go to class daily.",
+        "Synonyms include participate and visit."
+      ],
+      "augment": [
+        "To increase or make larger.",
+        "Extra practice can improve skills.",
+        "Synonyms include enhance and boost."
+      ],
+      "authentic": [
+        "Real and genuine.",
+        "Signatures are verified before contracts are signed.",
+        "Synonyms include genuine and legitimate."
+      ],
+      "avert": [
+        "To prevent something from happening.",
+        "Drivers avoid accidents by staying alert.",
+        "Synonyms include prevent and avoid."
+      ],
+      "avid": [
+        "Having a strong interest or enthusiasm.",
+        "Book lovers often read for hours.",
+        "Synonyms include eager and passionate."
+      ],
+      "baffle": [
+        "To confuse or puzzle.",
+        "Complex riddles can leave people uncertain.",
+        "Synonyms include perplex and bewilder."
+      ],
+      "ban": [
+        "To officially forbid something.",
+        "Some cities forbid smoking in public places.",
+        "Synonyms include prohibit and forbid."
+      ],
+      "banish": [
+        "To send away as punishment.",
+        "Criminals may be forced to leave a community.",
+        "Synonyms include exile and expel."
+      ],
+      "barrier": [
+        "An obstacle that blocks movement or progress.",
+        "Walls prevent entry to restricted areas.",
+        "Synonyms include obstacle and blockade."
+      ],
+      "bashful": [
+        "Shy and easily embarrassed.",
+        "Children may hide behind parents when meeting strangers.",
+        "Synonyms include timid and shy."
+      ],
+      "barren": [
+        "Not able to produce plants or life.",
+        "Dry deserts support little vegetation.",
+        "Synonyms include infertile and desolate."
+      ],
+      "beacon": [
+        "A light that guides or warns.",
+        "Lighthouses help ships navigate safely.",
+        "Synonyms include signal and guide."
+      ],
+      "beckon": [
+        "To signal with a gesture to come closer.",
+        "Teachers may motion students to the front.",
+        "Synonyms include summon and call."
+      ],
+      "benefit": [
+        "An advantage or positive outcome.",
+        "Exercise improves health and mood.",
+        "Synonyms include advantage and gain."
+      ],
+      "benevolent": [
+        "Kind and generous.",
+        "Volunteers help those in need.",
+        "Synonyms include charitable and kind-hearted."
+      ],
+      "bias": [
+        "An unfair preference for or against something.",
+        "Judges must avoid showing favoritism.",
+        "Synonyms include prejudice and partiality."
+      ],
+      "bland": [
+        "Lacking strong flavor or excitement.",
+        "Plain food has mild taste.",
+        "Synonyms include dull and tasteless."
+      ],
+      "blend": [
+        "To mix together.",
+        "Smoothies combine fruit and milk.",
+        "Synonyms include mix and combine."
+      ],
+      "bliss": [
+        "Perfect happiness.",
+        "Peaceful vacations bring joy to travelers.",
+        "Synonyms include joy and delight."
+      ],
+      "blunder": [
+        "A careless mistake.",
+        "Typing errors are common in fast writing.",
+        "Synonyms include error and oversight."
+      ],
+      "bold": [
+        "Willing to take risks; confident.",
+        "Explorers travel into the unknown.",
+        "Synonyms include daring and brave."
+      ],
+      "boon": [
+        "A helpful or beneficial thing.",
+        "Rainfall helps farmers grow crops.",
+        "Synonyms include blessing and advantage."
+      ],
+      "boost": [
+        "To increase or improve.",
+        "Extra study can raise test scores.",
+        "Synonyms include enhance and raise."
+      ],
+      "bother": [
+        "To annoy or trouble someone.",
+        "Loud noises can disturb concentration.",
+        "Synonyms include irritate and disturb."
+      ],
+      "brave": [
+        "Ready to face danger or fear.",
+        "Firefighters enter burning buildings.",
+        "Synonyms include courageous and valiant."
+      ],
+      "brevity": [
+        "The use of few words.",
+        "Good speeches are short and effective.",
+        "Synonyms include conciseness and succinctness."
+      ],
+      "brim": [
+        "The edge or top of a container.",
+        "Cups can be filled to the top.",
+        "Synonyms include rim and edge."
+      ],
+      "brisk": [
+        "Quick and energetic.",
+        "Morning walks refresh the mind.",
+        "Synonyms include lively and rapid."
+      ],
+      "brood": [
+        "To think deeply about something troubling.",
+        "Some dwell on past mistakes.",
+        "Synonyms include ponder and dwell."
+      ],
+      "budge": [
+        "To move slightly or make room.",
+        "Crowds may shift to allow passage.",
+        "Synonyms include shift and move."
+      ],
+      "burden": [
+        "A heavy load or responsibility.",
+        "Debt can weigh heavily on families.",
+        "Synonyms include load and obligation."
+      ],
+      "burst": [
+        "To break open suddenly.",
+        "Balloons pop when overinflated.",
+        "Synonyms include explode and pop."
+      ],
+      "bustle": [
+        "To move in an energetic way.",
+        "Markets are full of quick activity.",
+        "Synonyms include hustle and scurry."
+      ],
+      "bypass": [
+        "To go around something instead of through it.",
+        "Drivers use side roads to avoid traffic.",
+        "Synonyms include avoid and detour."
+      ],
+      "candid": [
+        "Honest and straightforward.",
+        "True friends speak openly about issues.",
+        "Synonyms include frank and sincere."
+      ],
+      "capable": [
+        "Having the ability to do something.",
+        "Mechanics can fix a wide range of problems.",
+        "Synonyms include competent and able."
+      ],
+      "capital": [
+        "A city that serves as a government's center.",
+        "Washington, D.C. is the seat of U.S. power.",
+        "Synonyms include metropolis and headquarters."
+      ],
+      "capture": [
+        "To take control of by force or skill.",
+        "Photographers freeze moments in images.",
+        "Synonyms include seize and apprehend."
+      ],
+      "carefree": [
+        "Free from worries or responsibilities.",
+        "Vacations allow people to relax without concern.",
+        "Synonyms include relaxed and lighthearted."
+      ],
+      "careful": [
+        "Taking care to avoid mistakes or harm.",
+        "Drivers slow down on icy roads.",
+        "Synonyms include cautious and attentive."
+      ],
+      "cater": [
+        "To provide food or service for an event.",
+        "Companies deliver meals to parties and meetings.",
+        "Synonyms include supply and serve."
+      ],
+      "cause": [
+        "A reason something happens.",
+        "Rainfall leads to flooding in low areas.",
+        "Synonyms include reason and source."
+      ],
+      "cease": [
+        "To stop doing something.",
+        "Factories halt operations during maintenance.",
+        "Synonyms include stop and end."
+      ],
+      "certain": [
+        "Sure about something.",
+        "Students are confident when they know the answer.",
+        "Synonyms include sure and definite."
+      ],
+      "chaos": [
+        "A state of complete disorder.",
+        "Unplanned events create confusion in crowds.",
+        "Synonyms include disorder and turmoil."
+      ],
+      "charge": [
+        "To ask a price or to rush forward.",
+        "Stores request payment for items.",
+        "Synonyms include bill and rush."
+      ],
+      "charm": [
+        "The quality of attracting or pleasing others.",
+        "Friendly hosts make guests feel welcome.",
+        "Synonyms include appeal and charisma."
+      ],
+      "cheer": [
+        "To shout in support or encouragement.",
+        "Fans applaud loudly at games.",
+        "Synonyms include applaud and encourage."
+      ],
+      "chief": [
+        "The leader or most important person.",
+        "Tribes often have a primary decision-maker.",
+        "Synonyms include leader and head."
+      ],
+      "choose": [
+        "To select from options.",
+        "Voters decide between candidates.",
+        "Synonyms include select and pick."
+      ],
+      "chorus": [
+        "A group singing together.",
+        "School groups perform songs in harmony.",
+        "Synonyms include ensemble and singers."
+      ],
+      "cite": [
+        "To refer to as an example or evidence.",
+        "Writers list their sources in essays.",
+        "Synonyms include reference and quote."
+      ],
+      "claim": [
+        "To state something is true without proof.",
+        "Witnesses may make statements in court.",
+        "Synonyms include assert and allege."
+      ],
+      "clarify": [
+        "To make something easier to understand.",
+        "Teachers explain complex topics in simple words.",
+        "Synonyms include explain and simplify."
+      ],
+      "clash": [
+        "A conflict or fight between opposing sides.",
+        "Protesters sometimes argue with officials.",
+        "Synonyms include conflict and quarrel."
+      ],
+      "classic": [
+        "Judged over time to be of the highest quality.",
+        "Novels remain popular for generations.",
+        "Synonyms include timeless and traditional."
+      ],
+      "cleanse": [
+        "To remove dirt or impurities.",
+        "Soap washes away bacteria.",
+        "Synonyms include purify and wash."
+      ],
+      "clever": [
+        "Quick to learn and understand.",
+        "Inventors find smart solutions to problems.",
+        "Synonyms include intelligent and ingenious."
+      ],
+      "clutch": [
+        "To hold something tightly.",
+        "Children grip their parents’ hands in crowds.",
+        "Synonyms include grasp and grip."
+      ],
+      "coarse": [
+        "Rough in texture or manner.",
+        "Sandpaper feels harsh to the touch.",
+        "Synonyms include rough and harsh."
+      ],
+      "coax": [
+        "To gently persuade someone.",
+        "Parents encourage children to eat vegetables.",
+        "Synonyms include persuade and cajole."
+      ],
+      "coerce": [
+        "To force someone to act against their will.",
+        "Threats make people comply.",
+        "Synonyms include compel and pressure."
+      ],
+      "collect": [
+        "To gather together.",
+        "Hikers pick up trash along trails.",
+        "Synonyms include gather and assemble."
+      ],
+      "combine": [
+        "To join or mix together.",
+        "Chefs blend spices to create flavors.",
+        "Synonyms include mix and unite."
+      ],
+      "comfort": [
+        "A state of physical or mental ease.",
+        "Warm blankets help in cold weather.",
+        "Synonyms include ease and relief."
+      ],
+      "commend": [
+        "To praise officially or publicly.",
+        "Awards honor exceptional performance.",
+        "Synonyms include applaud and compliment."
+      ],
+      "commit": [
+        "To carry out a pledge or action.",
+        "Athletes dedicate themselves to training.",
+        "Synonyms include pledge and perform."
+      ],
+      "common": [
+        "Occurring frequently or shared by many.",
+        "Rain is frequent in tropical regions.",
+        "Synonyms include usual and shared."
+      ],
+      "compel": [
+        "To force someone to do something.",
+        "Laws require citizens to pay taxes.",
+        "Synonyms include force and oblige."
+      ],
+      "compete": [
+        "To try to win against others.",
+        "Teams face off in tournaments.",
+        "Synonyms include contend and vie."
+      ],
+      "complex": [
+        "Having many parts; not simple.",
+        "Math problems may have several steps.",
+        "Synonyms include complicated and intricate."
+      ],
+      "compose": [
+        "To create or put together.",
+        "Musicians write new songs.",
+        "Synonyms include create and arrange."
+      ],
+      "comprise": [
+        "To consist of or include.",
+        "The committee includes members from all departments.",
+        "Synonyms include contain and include."
+      ],
+      "conceal": [
+        "To hide something from view.",
+        "Clouds cover the sun.",
+        "Synonyms include hide and disguise."
+      ],
+      "concern": [
+        "A matter of interest or worry.",
+        "Parents care about their children’s safety.",
+        "Synonyms include worry and interest."
+      ],
+      "conclude": [
+        "To bring to an end or make a judgment.",
+        "Speakers finish with closing remarks.",
+        "Synonyms include finish and decide."
+      ],
+      "conduct": [
+        "The way a person behaves.",
+        "Polite manners are expected at formal events.",
+        "Synonyms include behavior and manner."
+      ],
+      "confess": [
+        "To admit to a wrongdoing.",
+        "Suspects tell the truth during questioning.",
+        "Synonyms include admit and acknowledge."
+      ],
+      "confine": [
+        "To keep within limits.",
+        "Patients stay in certain hospital areas.",
+        "Synonyms include restrict and limit."
+      ],
+      "confirm": [
+        "To establish the truth or correctness.",
+        "Emails verify meeting times.",
+        "Synonyms include verify and validate."
+      ],
+      "conflict": [
+        "A serious disagreement or struggle.",
+        "Wars break out over political disputes.",
+        "Synonyms include dispute and battle."
+      ],
+      "conform": [
+        "To follow rules or customs.",
+        "Students wear uniforms in some schools.",
+        "Synonyms include comply and adhere."
+      ],
+      "conquer": [
+        "To overcome or take control of.",
+        "Explorers claimed new lands.",
+        "Synonyms include defeat and overcome."
+      ],
+      "consider": [
+        "To think about carefully.",
+        "Shoppers weigh pros and cons before buying.",
+        "Synonyms include contemplate and ponder."
+      ],
+      "consist": [
+        "To be made up of.",
+        "A team has players from different positions.",
+        "Synonyms include comprise and contain."
+      ],
+      "consult": [
+        "To seek advice or guidance.",
+        "Patients talk to doctors before treatment.",
+        "Synonyms include advise and confer."
+      ],
+      "contain": [
+        "To hold within something.",
+        "Bottles store liquids safely.",
+        "Synonyms include hold and include."
+      ],
+      "contend": [
+        "To compete for something.",
+        "Athletes fight for championship titles.",
+        "Synonyms include compete and vie."
+      ],
+      "continue": [
+        "To keep going without stopping.",
+        "The movie plays after a short break.",
+        "Synonyms include persist and proceed."
+      ],
+      "control": [
+        "To direct or manage something.",
+        "Pilots guide aircraft during flight.",
+        "Synonyms include regulate and command."
+      ],
+      "convert": [
+        "To change from one form to another.",
+        "Water changes into steam when boiled.",
+        "Synonyms include transform and adapt."
+      ],
+      "convey": [
+        "To communicate or transport.",
+        "Letters deliver personal messages.",
+        "Synonyms include transmit and express."
+      ],
+      "convince": [
+        "To make someone believe or do something.",
+        "Debaters use logic to persuade audiences.",
+        "Synonyms include persuade and assure."
+      ],
+      "cooperate": [
+        "To work together toward a goal.",
+        "Teams share responsibilities for success.",
+        "Synonyms include collaborate and assist."
+      ],
+      "cope": [
+        "To deal with problems effectively.",
+        "Meditation helps manage stress.",
+        "Synonyms include manage and handle."
+      ],
+      "copy": [
+        "To make a duplicate of something.",
+        "Printers reproduce documents.",
+        "Synonyms include replicate and reproduce."
+      ],
+      "correct": [
+        "Free from error or fault.",
+        "Proofreading helps ensure accuracy in essays.",
+        "Synonyms include accurate and right."
+      ],
+      "corrupt": [
+        "Dishonest for personal gain.",
+        "Officials may accept bribes to break rules.",
+        "Synonyms include dishonest and unethical."
+      ],
+      "costly": [
+        "Expensive or resulting in loss.",
+        "Mistakes can lead to wasted time and money.",
+        "Synonyms include expensive and dear."
+      ],
+      "counsel": [
+        "Advice given formally.",
+        "Lawyers provide guidance to clients.",
+        "Synonyms include advice and guidance."
+      ],
+      "count": [
+        "To determine the total number of things.",
+        "Teachers record the number of students present.",
+        "Synonyms include tally and enumerate."
+      ],
+      "courage": [
+        "The ability to face fear or difficulty.",
+        "Firefighters enter dangerous situations to save lives.",
+        "Synonyms include bravery and valor."
+      ],
+      "course": [
+        "A path or direction of movement.",
+        "Ships follow routes across the ocean.",
+        "Synonyms include route and track."
+      ],
+      "courtesy": [
+        "Polite behavior toward others.",
+        "Holding a door open shows respect.",
+        "Synonyms include politeness and respect."
+      ],
+      "create": [
+        "To bring something into existence.",
+        "Artists produce paintings and sculptures.",
+        "Synonyms include produce and invent."
+      ],
+      "credit": [
+        "Recognition or praise for an action.",
+        "Movies list all contributors in the final roll.",
+        "Synonyms include acknowledgment and praise."
+      ],
+      "crew": [
+        "A group working together on a task.",
+        "Sailors operate ships as a team.",
+        "Synonyms include team and staff."
+      ],
+      "crisp": [
+        "Firm, fresh, and pleasant to the touch or taste.",
+        "Autumn air feels cool and refreshing.",
+        "Synonyms include fresh and brittle."
+      ],
+      "critic": [
+        "A person who judges or evaluates something.",
+        "Reviewers write opinions about films and books.",
+        "Synonyms include reviewer and commentator."
+      ],
+      "crop": [
+        "A plant grown for food or sale.",
+        "Farmers harvest wheat, corn, and rice.",
+        "Synonyms include harvest and yield."
+      ],
+      "crucial": [
+        "Extremely important or necessary.",
+        "Water is essential for survival.",
+        "Synonyms include vital and essential."
+      ],
+      "crude": [
+        "In a natural or unfinished state.",
+        "Oil must be refined before use.",
+        "Synonyms include raw and unrefined."
+      ],
+      "cruel": [
+        "Causing pain or suffering deliberately.",
+        "Bullying harms emotional well-being.",
+        "Synonyms include harsh and mean."
+      ],
+      "crush": [
+        "To press or squeeze with force.",
+        "Machines flatten metal for recycling.",
+        "Synonyms include squash and compress."
+      ],
+      "cry": [
+        "To shed tears or shout loudly.",
+        "Babies express needs this way.",
+        "Synonyms include weep and shout."
+      ],
+      "cure": [
+        "To relieve a disease or condition.",
+        "Medicine eliminates infections.",
+        "Synonyms include heal and remedy."
+      ],
+      "curious": [
+        "Eager to know or learn something.",
+        "Children explore new objects and ideas.",
+        "Synonyms include inquisitive and eager."
+      ],
+      "current": [
+        "Happening now or a flow of water or air.",
+        "News reports describe present events.",
+        "Synonyms include present and flow."
+      ],
+      "curse": [
+        "A wish for harm or misfortune.",
+        "Stories feature spells that bring bad luck.",
+        "Synonyms include malediction and hex."
+      ],
+      "custom": [
+        "A traditional practice of a group.",
+        "Shaking hands is common in greetings.",
+        "Synonyms include tradition and practice."
+      ],
+      "cycle": [
+        "A repeating series of events.",
+        "The moon goes through phases each month.",
+        "Synonyms include sequence and rotation."
+      ],
+      "daily": [
+        "Happening every day.",
+        "People read the newspaper each morning.",
+        "Synonyms include everyday and routine."
+      ],
+      "damage": [
+        "Physical harm that reduces value or function.",
+        "Storms break windows and tear roofs.",
+        "Synonyms include harm and injury."
+      ],
+      "damp": [
+        "Slightly wet.",
+        "Rain leaves clothing moist.",
+        "Synonyms include moist and humid."
+      ],
+      "dance": [
+        "To move rhythmically to music.",
+        "Couples sway at weddings.",
+        "Synonyms include sway and groove."
+      ],
+      "daring": [
+        "Willing to take risks.",
+        "Explorers venture into unknown lands.",
+        "Synonyms include bold and adventurous."
+      ],
+      "dash": [
+        "To move quickly or strike something suddenly.",
+        "Runners sprint across the finish line.",
+        "Synonyms include sprint and dart."
+      ],
+      "data": [
+        "Facts and statistics collected for analysis.",
+        "Researchers gather information from experiments.",
+        "Synonyms include information and figures."
+      ],
+      "date": [
+        "A specific day or time.",
+        "Birthdays are recorded on calendars.",
+        "Synonyms include day and appointment."
+      ],
+      "dawn": [
+        "The time when daylight first appears.",
+        "Birds sing as the sun rises.",
+        "Synonyms include sunrise and daybreak."
+      ],
+      "daze": [
+        "A state of confusion or shock.",
+        "Accidents can leave people stunned.",
+        "Synonyms include stun and bewilder."
+      ],
+      "deal": [
+        "An agreement between parties.",
+        "Shops offer discounts during sales.",
+        "Synonyms include agreement and bargain."
+      ],
+      "debate": [
+        "A discussion where opposing arguments are presented.",
+        "Students compete in public speaking contests.",
+        "Synonyms include discussion and argument."
+      ],
+      "debt": [
+        "Money owed to someone.",
+        "Loans must be repaid with interest.",
+        "Synonyms include liability and obligation."
+      ],
+      "decade": [
+        "A period of ten years.",
+        "The 1990s lasted from 1990 to 1999.",
+        "Synonyms include ten years and era."
+      ],
+      "decay": [
+        "To break down over time.",
+        "Wood rots when left in damp areas.",
+        "Synonyms include rot and decompose."
+      ],
+      "decent": [
+        "Acceptable and of good quality.",
+        "Restaurants provide clean and fair service.",
+        "Synonyms include respectable and fair."
+      ],
+      "decide": [
+        "To choose a course of action.",
+        "Voters pick leaders in elections.",
+        "Synonyms include determine and choose."
+      ],
+      "declare": [
+        "To state something formally or publicly.",
+        "Nations announce independence through speeches.",
+        "Synonyms include announce and proclaim."
+      ],
+      "decline": [
+        "To become smaller or weaker.",
+        "Population numbers drop after disasters.",
+        "Synonyms include decrease and diminish."
+      ],
+      "decorate": [
+        "To make something look more attractive.",
+        "People hang ornaments during holidays.",
+        "Synonyms include adorn and embellish."
+      ],
+      "dedicate": [
+        "To devote time or effort to a purpose.",
+        "Volunteers spend hours helping others.",
+        "Synonyms include devote and commit."
+      ],
+      "deep": [
+        "Extending far down from the surface.",
+        "Oceans reach great depths.",
+        "Synonyms include profound and abyssal."
+      ],
+      "defeat": [
+        "To win against an opponent.",
+        "Teams celebrate victory after matches.",
+        "Synonyms include overcome and beat."
+      ],
+      "defend": [
+        "To protect from harm or attack.",
+        "Soldiers guard their homeland.",
+        "Synonyms include protect and shield."
+      ],
+      "define": [
+        "To explain the meaning of something.",
+        "Dictionaries provide explanations for words.",
+        "Synonyms include explain and describe."
+      ],
+      "degree": [
+        "A unit of measurement or academic award.",
+        "Thermometers measure heat in Celsius or Fahrenheit.",
+        "Synonyms include level and rank."
+      ],
+      "delay": [
+        "To make something happen later than planned.",
+        "Flights are pushed back due to weather.",
+        "Synonyms include postpone and defer."
+      ],
+      "delete": [
+        "To remove or erase something.",
+        "Writers erase mistakes from documents.",
+        "Synonyms include erase and remove."
+      ],
+      "delight": [
+        "A feeling of great pleasure.",
+        "Children enjoy birthday parties.",
+        "Synonyms include joy and happiness."
+      ],
+      "deliver": [
+        "To bring something to a person or place.",
+        "Couriers bring packages to homes.",
+        "Synonyms include bring and distribute."
+      ],
+      "demand": [
+        "To ask forcefully for something.",
+        "Customers expect quality service.",
+        "Synonyms include insist and require."
+      ],
+      "demonstrate": [
+        "To show clearly through action or example.",
+        "Teachers show steps to solve math problems.",
+        "Synonyms include exhibit and illustrate."
+      ],
+      "deny": [
+        "To state something is not true.",
+        "Officials reject false claims.",
+        "Synonyms include reject and refute."
+      ],
+      "depart": [
+        "To leave a place.",
+        "Trains leave stations on schedule.",
+        "Synonyms include leave and exit."
+      ],
+      "depend": [
+        "To rely on someone or something.",
+        "Plants need sunlight to grow.",
+        "Synonyms include rely and trust."
       ]
     },
-    
+    "GRE":{
+      "abate": [
+        "To become less intense or widespread.",
+        "Storms gradually lose strength after passing.",
+        "Synonyms include diminish and subside."
+      ],
+      "abbey": [
+        "A building used by monks or nuns for worship.",
+        "Historic monasteries often serve as tourist sites.",
+        "Synonyms include monastery and cloister."
+      ],
+      "abdicate": [
+        "To give up a position of power or responsibility.",
+        "Monarchs sometimes relinquish the throne voluntarily.",
+        "Synonyms include resign and relinquish."
+      ],
+      "aberrant": [
+        "Departing from the usual course.",
+        "Unusual animal behavior can indicate illness.",
+        "Synonyms include deviant and abnormal."
+      ],
+      "abet": [
+        "To encourage or assist in wrongdoing.",
+        "Accomplices help criminals commit crimes.",
+        "Synonyms include assist and support."
+      ],
+      "abhor": [
+        "To regard with extreme dislike.",
+        "People strongly reject acts of cruelty.",
+        "Synonyms include detest and loathe."
+      ],
+      "abjure": [
+        "To formally renounce a belief or claim.",
+        "Leaders publicly reject old political affiliations.",
+        "Synonyms include renounce and forswear."
+      ],
+      "abridge": [
+        "To shorten while keeping the main meaning.",
+        "Publishers release condensed versions of long novels.",
+        "Synonyms include condense and truncate."
+      ],
+      "absolve": [
+        "To free from blame or guilt.",
+        "Priests grant forgiveness during confessions.",
+        "Synonyms include exonerate and acquit."
+      ],
+      "abstain": [
+        "To refrain from doing something voluntarily.",
+        "Voters may choose not to participate in an election.",
+        "Synonyms include refrain and withhold."
+      ],
+      "abstruse": [
+        "Difficult to understand.",
+        "Philosophical texts may require deep thought to grasp.",
+        "Synonyms include obscure and complex."
+      ],
+      "accede": [
+        "To agree to a request or demand.",
+        "Officials eventually give consent to new policies.",
+        "Synonyms include consent and comply."
+      ],
+      "accolade": [
+        "An award or privilege granted as a special honor.",
+        "Actors receive recognition at film festivals.",
+        "Synonyms include award and honor."
+      ],
+      "accost": [
+        "To approach and speak to aggressively.",
+        "Street vendors sometimes confront tourists directly.",
+        "Synonyms include confront and address."
+      ],
+      "acerbic": [
+        "Sharp or bitter in tone or taste.",
+        "Critics often use harsh words in reviews.",
+        "Synonyms include biting and caustic."
+      ],
+      "acme": [
+        "The highest point of achievement.",
+        "Athletes reach peak performance after years of training.",
+        "Synonyms include peak and pinnacle."
+      ],
+      "acrid": [
+        "Having a sharp or bitter smell or taste.",
+        "Smoke from burning rubber irritates the nose.",
+        "Synonyms include pungent and bitter."
+      ],
+      "acrimony": [
+        "Bitterness or ill feeling.",
+        "Debates can be filled with personal hostility.",
+        "Synonyms include hostility and resentment."
+      ],
+      "acumen": [
+        "The ability to make quick, accurate judgments.",
+        "Business leaders need sharp decision-making skills.",
+        "Synonyms include shrewdness and insight."
+      ],
+      "adage": [
+        "A short, traditional saying expressing truth.",
+        "Proverbs often reflect cultural wisdom.",
+        "Synonyms include proverb and maxim."
+      ],
+      "adamant": [
+        "Refusing to be persuaded.",
+        "Negotiators sometimes hold firm despite pressure.",
+        "Synonyms include unyielding and resolute."
+      ],
+      "adept": [
+        "Highly skilled or proficient.",
+        "Surgeons perform delicate operations with precision.",
+        "Synonyms include expert and proficient."
+      ],
+      "adhere": [
+        "To stick firmly to a surface or belief.",
+        "Labels attach securely to packages.",
+        "Synonyms include stick and cling."
+      ],
+      "adjure": [
+        "To urge or request earnestly.",
+        "Judges plead for witnesses to tell the truth.",
+        "Synonyms include implore and beseech."
+      ],
+      "adroit": [
+        "Clever or skillful in handling situations.",
+        "Diplomats manage tense negotiations with ease.",
+        "Synonyms include skillful and deft."
+      ],
+      "adulation": [
+        "Excessive praise or flattery.",
+        "Celebrities often receive overwhelming admiration.",
+        "Synonyms include praise and idolization."
+      ],
+      "adversary": [
+        "One's opponent in a contest or conflict.",
+        "Boxers face challengers in the ring.",
+        "Synonyms include opponent and rival."
+      ],
+      "adverse": [
+        "Preventing success or development.",
+        "Economic hardship hinders business growth.",
+        "Synonyms include unfavorable and harmful."
+      ],
+      "advocate": [
+        "A person who supports a cause or policy.",
+        "Environmentalists speak for wildlife conservation.",
+        "Synonyms include supporter and proponent."
+      ],
+      "aegis": [
+        "Protection or support.",
+        "Projects thrive under the sponsorship of major institutions.",
+        "Synonyms include sponsorship and protection."
+      ],
+      "affable": [
+        "Friendly and easy to talk to.",
+        "Hosts greet visitors with warmth.",
+        "Synonyms include amiable and genial."
+      ],
+      "affinity": [
+        "A natural liking or connection.",
+        "Some people are drawn to similar hobbies.",
+        "Synonyms include rapport and attraction."
+      ],
+      "afflict": [
+        "To cause pain or suffering.",
+        "Diseases trouble communities worldwide.",
+        "Synonyms include plague and distress."
+      ],
+      "affluent": [
+        "Having a great deal of wealth.",
+        "Luxury neighborhoods are filled with grand houses.",
+        "Synonyms include wealthy and prosperous."
+      ],
+      "aggrandize": [
+        "To increase power or importance.",
+        "Leaders expand influence through strategic moves.",
+        "Synonyms include elevate and enhance."
+      ],
+      "aggregate": [
+        "A total formed by combining parts.",
+        "The sum of all votes determines the winner.",
+        "Synonyms include total and sum."
+      ],
+      "aghast": [
+        "Filled with shock or horror.",
+        "Witnesses react strongly to tragic events.",
+        "Synonyms include appalled and shocked."
+      ],
+      "alacrity": [
+        "Brisk and cheerful readiness.",
+        "Volunteers respond quickly to calls for help.",
+        "Synonyms include eagerness and willingness."
+      ],
+      "alchemy": [
+        "A medieval practice of turning base metals into gold.",
+        "Ancient chemists sought to create the philosopher's stone.",
+        "Synonyms include transformation and magic."
+      ],
+      "alienate": [
+        "To make someone feel isolated or estranged.",
+        "Harsh criticism can drive friends apart.",
+        "Synonyms include estrange and isolate."
+      ],
+      "allay": [
+        "To reduce fear or worry.",
+        "Reassuring words calm anxious minds.",
+        "Synonyms include alleviate and ease."
+      ],
+      "allege": [
+        "To claim something without proof.",
+        "Reports state accusations before trials conclude.",
+        "Synonyms include assert and claim."
+      ],
+      "alleviate": [
+        "To make pain or difficulty less severe.",
+        "Medicines ease symptoms of illness.",
+        "Synonyms include relieve and lessen."
+      ],
+      "allocate": [
+        "To assign resources for a specific purpose.",
+        "Funds are distributed for education and healthcare.",
+        "Synonyms include assign and distribute."
+      ],
+      "allude": [
+        "To refer to indirectly.",
+        "Authors hint at future events in novels.",
+        "Synonyms include refer and hint."
+      ],
+      "aloof": [
+        "Not friendly or forthcoming.",
+        "Some people remain distant in social gatherings.",
+        "Synonyms include detached and reserved."
+      ],
+      "alter": [
+        "To make a change.",
+        "Designers adjust clothing for a better fit.",
+        "Synonyms include modify and change."
+      ],
+      "amass": [
+        "To gather together in large quantities.",
+        "Investors collect significant wealth over time.",
+        "Synonyms include accumulate and collect."
+      ],
+      "ambiguous": [
+        "Open to more than one interpretation.",
+        "Phrases can have double meanings in literature.",
+        "Synonyms include unclear and equivocal."
+      ],
+      "ambivalent": [
+        "Having mixed feelings about something.",
+        "Graduates may be torn between two career paths.",
+        "Synonyms include conflicted and uncertain."
+      ],
+      "ameliorate": [
+        "To make something better.",
+        "Policies aim to improve living conditions.",
+        "Synonyms include improve and enhance."
+      ],
+      "amenable": [
+        "Willing to be persuaded or controlled.",
+        "Cooperative students follow teacher instructions.",
+        "Synonyms include agreeable and compliant."
+      ],
+      "amiable": [
+        "Displaying a pleasant and friendly manner.",
+        "Neighbors greet each other warmly.",
+        "Synonyms include friendly and pleasant."
+      ],
+      "amorphous": [
+        "Without a clearly defined shape or form.",
+        "Clouds shift into ever-changing outlines.",
+        "Synonyms include shapeless and formless."
+      ],
+      "anachronism": [
+        "Something out of place in time.",
+        "A smartphone in a medieval scene feels wrong.",
+        "Synonyms include misplacement and anachrony."
+      ],
+      "analogy": [
+        "A comparison between two things for clarity.",
+        "Teachers use examples to explain ideas.",
+        "Synonyms include comparison and parallel."
+      ],
+      "anarchy": [
+        "A state of disorder due to absence of authority.",
+        "Civil unrest can lead to lawlessness.",
+        "Synonyms include chaos and disorder."
+      ],
+      "anathema": [
+        "Something or someone strongly disliked.",
+        "Dishonesty is detested in close friendships.",
+        "Synonyms include abhorrence and bane."
+      ],
+      "ancillary": [
+        "Providing necessary support to a system.",
+        "Backup systems keep operations running smoothly.",
+        "Synonyms include supplementary and auxiliary."
+      ],
+
+
+
+
+
+      "abate": [
+        "To become less intense or widespread.",
+        "Storms gradually lose strength after passing.",
+        "Synonyms include diminish and subside."
+      ],
+      "abbey": [
+        "A building used by monks or nuns for worship.",
+        "Historic monasteries often serve as tourist sites.",
+        "Synonyms include monastery and cloister."
+      ],
+      "abdicate": [
+        "To give up a position of power or responsibility.",
+        "Monarchs sometimes relinquish the throne voluntarily.",
+        "Synonyms include resign and relinquish."
+      ],
+      "aberrant": [
+        "Departing from the usual course.",
+        "Unusual animal behavior can indicate illness.",
+        "Synonyms include deviant and abnormal."
+      ],
+      "abet": [
+        "To encourage or assist in wrongdoing.",
+        "Accomplices help criminals commit crimes.",
+        "Synonyms include assist and support."
+      ],
+      "abhor": [
+        "To regard with extreme dislike.",
+        "People strongly reject acts of cruelty.",
+        "Synonyms include detest and loathe."
+      ],
+      "abjure": [
+        "To formally renounce a belief or claim.",
+        "Leaders publicly reject old political affiliations.",
+        "Synonyms include renounce and forswear."
+      ],
+      "abridge": [
+        "To shorten while keeping the main meaning.",
+        "Publishers release condensed versions of long novels.",
+        "Synonyms include condense and truncate."
+      ],
+      "absolve": [
+        "To free from blame or guilt.",
+        "Priests grant forgiveness during confessions.",
+        "Synonyms include exonerate and acquit."
+      ],
+      "abstain": [
+        "To refrain from doing something voluntarily.",
+        "Voters may choose not to participate in an election.",
+        "Synonyms include refrain and withhold."
+      ],
+      "abstruse": [
+        "Difficult to understand.",
+        "Philosophical texts may require deep thought to grasp.",
+        "Synonyms include obscure and complex."
+      ],
+      "accede": [
+        "To agree to a request or demand.",
+        "Officials eventually give consent to new policies.",
+        "Synonyms include consent and comply."
+      ],
+      "accolade": [
+        "An award or privilege granted as a special honor.",
+        "Actors receive recognition at film festivals.",
+        "Synonyms include award and honor."
+      ],
+      "accost": [
+        "To approach and speak to aggressively.",
+        "Street vendors sometimes confront tourists directly.",
+        "Synonyms include confront and address."
+      ],
+      "acerbic": [
+        "Sharp or bitter in tone or taste.",
+        "Critics often use harsh words in reviews.",
+        "Synonyms include biting and caustic."
+      ],
+      "acme": [
+        "The highest point of achievement.",
+        "Athletes reach peak performance after years of training.",
+        "Synonyms include peak and pinnacle."
+      ],
+      "acrid": [
+        "Having a sharp or bitter smell or taste.",
+        "Smoke from burning rubber irritates the nose.",
+        "Synonyms include pungent and bitter."
+      ],
+      "acrimony": [
+        "Bitterness or ill feeling.",
+        "Debates can be filled with personal hostility.",
+        "Synonyms include hostility and resentment."
+      ],
+      "acumen": [
+        "The ability to make quick, accurate judgments.",
+        "Business leaders need sharp decision-making skills.",
+        "Synonyms include shrewdness and insight."
+      ],
+      "adage": [
+        "A short, traditional saying expressing truth.",
+        "Proverbs often reflect cultural wisdom.",
+        "Synonyms include proverb and maxim."
+      ],
+      "adamant": [
+        "Refusing to be persuaded.",
+        "Negotiators sometimes hold firm despite pressure.",
+        "Synonyms include unyielding and resolute."
+      ],
+      "adept": [
+        "Highly skilled or proficient.",
+        "Surgeons perform delicate operations with precision.",
+        "Synonyms include expert and proficient."
+      ],
+      "adhere": [
+        "To stick firmly to a surface or belief.",
+        "Labels attach securely to packages.",
+        "Synonyms include stick and cling."
+      ],
+      "adjure": [
+        "To urge or request earnestly.",
+        "Judges plead for witnesses to tell the truth.",
+        "Synonyms include implore and beseech."
+      ],
+      "adroit": [
+        "Clever or skillful in handling situations.",
+        "Diplomats manage tense negotiations with ease.",
+        "Synonyms include skillful and deft."
+      ],
+      "adulation": [
+        "Excessive praise or flattery.",
+        "Celebrities often receive overwhelming admiration.",
+        "Synonyms include praise and idolization."
+      ],
+      "adversary": [
+        "One's opponent in a contest or conflict.",
+        "Boxers face challengers in the ring.",
+        "Synonyms include opponent and rival."
+      ],
+      "adverse": [
+        "Preventing success or development.",
+        "Economic hardship hinders business growth.",
+        "Synonyms include unfavorable and harmful."
+      ],
+      "advocate": [
+        "A person who supports a cause or policy.",
+        "Environmentalists speak for wildlife conservation.",
+        "Synonyms include supporter and proponent."
+      ],
+      "aegis": [
+        "Protection or support.",
+        "Projects thrive under the sponsorship of major institutions.",
+        "Synonyms include sponsorship and protection."
+      ],
+      "affable": [
+        "Friendly and easy to talk to.",
+        "Hosts greet visitors with warmth.",
+        "Synonyms include amiable and genial."
+      ],
+      "affinity": [
+        "A natural liking or connection.",
+        "Some people are drawn to similar hobbies.",
+        "Synonyms include rapport and attraction."
+      ],
+      "afflict": [
+        "To cause pain or suffering.",
+        "Diseases trouble communities worldwide.",
+        "Synonyms include plague and distress."
+      ],
+      "affluent": [
+        "Having a great deal of wealth.",
+        "Luxury neighborhoods are filled with grand houses.",
+        "Synonyms include wealthy and prosperous."
+      ],
+      "aggrandize": [
+        "To increase power or importance.",
+        "Leaders expand influence through strategic moves.",
+        "Synonyms include elevate and enhance."
+      ],
+      "aggregate": [
+        "A total formed by combining parts.",
+        "The sum of all votes determines the winner.",
+        "Synonyms include total and sum."
+      ],
+      "aghast": [
+        "Filled with shock or horror.",
+        "Witnesses react strongly to tragic events.",
+        "Synonyms include appalled and shocked."
+      ],
+      "alacrity": [
+        "Brisk and cheerful readiness.",
+        "Volunteers respond quickly to calls for help.",
+        "Synonyms include eagerness and willingness."
+      ],
+      "alchemy": [
+        "A medieval practice of turning base metals into gold.",
+        "Ancient chemists sought to create the philosopher's stone.",
+        "Synonyms include transformation and magic."
+      ],
+      "alienate": [
+        "To make someone feel isolated or estranged.",
+        "Harsh criticism can drive friends apart.",
+        "Synonyms include estrange and isolate."
+      ],
+      "allay": [
+        "To reduce fear or worry.",
+        "Reassuring words calm anxious minds.",
+        "Synonyms include alleviate and ease."
+      ],
+      "allege": [
+        "To claim something without proof.",
+        "Reports state accusations before trials conclude.",
+        "Synonyms include assert and claim."
+      ],
+      "alleviate": [
+        "To make pain or difficulty less severe.",
+        "Medicines ease symptoms of illness.",
+        "Synonyms include relieve and lessen."
+      ],
+      "allocate": [
+        "To assign resources for a specific purpose.",
+        "Funds are distributed for education and healthcare.",
+        "Synonyms include assign and distribute."
+      ],
+      "allude": [
+        "To refer to indirectly.",
+        "Authors hint at future events in novels.",
+        "Synonyms include refer and hint."
+      ],
+      "aloof": [
+        "Not friendly or forthcoming.",
+        "Some people remain distant in social gatherings.",
+        "Synonyms include detached and reserved."
+      ],
+      "alter": [
+        "To make a change.",
+        "Designers adjust clothing for a better fit.",
+        "Synonyms include modify and change."
+      ],
+      "amass": [
+        "To gather together in large quantities.",
+        "Investors collect significant wealth over time.",
+        "Synonyms include accumulate and collect."
+      ],
+      "ambiguous": [
+        "Open to more than one interpretation.",
+        "Phrases can have double meanings in literature.",
+        "Synonyms include unclear and equivocal."
+      ],
+      "ambivalent": [
+        "Having mixed feelings about something.",
+        "Graduates may be torn between two career paths.",
+        "Synonyms include conflicted and uncertain."
+      ],
+      "ameliorate": [
+        "To make something better.",
+        "Policies aim to improve living conditions.",
+        "Synonyms include improve and enhance."
+      ],
+      "amenable": [
+        "Willing to be persuaded or controlled.",
+        "Cooperative students follow teacher instructions.",
+        "Synonyms include agreeable and compliant."
+      ],
+      "amiable": [
+        "Displaying a pleasant and friendly manner.",
+        "Neighbors greet each other warmly.",
+        "Synonyms include friendly and pleasant."
+      ],
+      "amorphous": [
+        "Without a clearly defined shape or form.",
+        "Clouds shift into ever-changing outlines.",
+        "Synonyms include shapeless and formless."
+      ],
+      "anachronism": [
+        "Something out of place in time.",
+        "A smartphone in a medieval scene feels wrong.",
+        "Synonyms include misplacement and anachrony."
+      ],
+      "analogy": [
+        "A comparison between two things for clarity.",
+        "Teachers use examples to explain ideas.",
+        "Synonyms include comparison and parallel."
+      ],
+      "anarchy": [
+        "A state of disorder due to absence of authority.",
+        "Civil unrest can lead to lawlessness.",
+        "Synonyms include chaos and disorder."
+      ],
+      "anathema": [
+        "Something or someone strongly disliked.",
+        "Dishonesty is detested in close friendships.",
+        "Synonyms include abhorrence and bane."
+      ],
+      "ancillary": [
+        "Providing necessary support to a system.",
+        "Backup systems keep operations running smoothly.",
+        "Synonyms include supplementary and auxiliary."
+      ],
+      "anecdote": [
+        "A short, amusing or interesting story about a real incident.",
+        "Speakers often include personal tales in presentations.",
+        "Synonyms include story and narrative."
+      ],
+      "animosity": [
+        "Strong hostility or dislike.",
+        "Rival teams often show bitter competition.",
+        "Synonyms include hostility and enmity."
+      ],
+      "annex": [
+        "To add or attach as an extra part.",
+        "Nations sometimes incorporate new territories.",
+        "Synonyms include append and incorporate."
+      ],
+      "annul": [
+        "To declare legally invalid.",
+        "Courts can cancel contracts or marriages.",
+        "Synonyms include void and cancel."
+      ],
+      "anomaly": [
+        "Something that deviates from what is normal.",
+        "Temperature spikes can signal unusual weather.",
+        "Synonyms include irregularity and aberration."
+      ],
+      "antagonist": [
+        "A person who actively opposes another.",
+        "Villains in novels challenge heroes.",
+        "Synonyms include opponent and adversary."
+      ],
+      "antedate": [
+        "To come before in time.",
+        "Historical events precede others in chronology.",
+        "Synonyms include precede and predate."
+      ],
+      "antediluvian": [
+        "Ridiculously old-fashioned.",
+        "Some traditions seem from a bygone era.",
+        "Synonyms include outdated and archaic."
+      ],
+      "anthology": [
+        "A published collection of writings.",
+        "Poetry books often gather works from many authors.",
+        "Synonyms include collection and compendium."
+      ],
+      "antipathy": [
+        "A deep feeling of dislike.",
+        "Neighbors may harbor resentment over disputes.",
+        "Synonyms include aversion and dislike."
+      ],
+      "antithetical": [
+        "Directly opposed or contrasting.",
+        "Kindness and cruelty cannot exist together.",
+        "Synonyms include contrary and opposite."
+      ],
+      "apathetic": [
+        "Showing no interest or concern.",
+        "Voters may ignore elections entirely.",
+        "Synonyms include indifferent and uninterested."
+      ],
+      "apex": [
+        "The highest point or peak.",
+        "Climbers aim to reach the summit of mountains.",
+        "Synonyms include peak and pinnacle."
+      ],
+      "apocryphal": [
+        "Of doubtful authenticity.",
+        "Legends often lack factual basis.",
+        "Synonyms include false and dubious."
+      ],
+      "apostate": [
+        "A person who renounces a belief or faith.",
+        "Former members may abandon strict traditions.",
+        "Synonyms include defector and deserter."
+      ],
+      "appall": [
+        "To greatly dismay or horrify.",
+        "Tragic accidents deeply shock witnesses.",
+        "Synonyms include shock and horrify."
+      ],
+      "appease": [
+        "To calm or pacify by giving in to demands.",
+        "Parents sometimes placate crying children with treats.",
+        "Synonyms include pacify and placate."
+      ],
+      "apposite": [
+        "Highly appropriate or relevant.",
+        "Well-chosen examples strengthen arguments.",
+        "Synonyms include relevant and fitting."
+      ],
+      "appraise": [
+        "To assess the value or quality of something.",
+        "Jewelers estimate the worth of precious stones.",
+        "Synonyms include evaluate and assess."
+      ],
+      "approbation": [
+        "Approval or praise.",
+        "Scholars welcome recognition for research.",
+        "Synonyms include approval and commendation."
+      ],
+      "arable": [
+        "Suitable for growing crops.",
+        "Fertile fields produce abundant harvests.",
+        "Synonyms include cultivable and fertile."
+      ],
+      "arbiter": [
+        "A person who settles disputes.",
+        "Judges resolve conflicts in court.",
+        "Synonyms include mediator and judge."
+      ],
+      "arcane": [
+        "Understood by few; mysterious.",
+        "Ancient scripts may puzzle modern readers.",
+        "Synonyms include mysterious and obscure."
+      ],
+      "archaic": [
+        "Very old or outdated.",
+        "Obsolete laws remain in old records.",
+        "Synonyms include antiquated and outdated."
+      ],
+      "arduous": [
+        "Requiring great effort or energy.",
+        "Hiking steep mountains tests stamina.",
+        "Synonyms include strenuous and difficult."
+      ],
+      "argot": [
+        "Specialized language of a group.",
+        "Gamers use unique slang in communities.",
+        "Synonyms include jargon and slang."
+      ],
+      "arid": [
+        "Extremely dry.",
+        "Deserts have little rainfall.",
+        "Synonyms include dry and barren."
+      ],
+      "arrant": [
+        "Complete or utter, usually in a negative sense.",
+        "Fraud is pure dishonesty.",
+        "Synonyms include absolute and thorough."
+      ],
+      "arrogate": [
+        "To claim without justification.",
+        "Leaders may seize power unlawfully.",
+        "Synonyms include seize and usurp."
+      ],
+      "artful": [
+        "Clever or skillful, especially in deceit.",
+        "Con artists manipulate others with charm.",
+        "Synonyms include crafty and cunning."
+      ],
+      "ascend": [
+        "To go up or rise.",
+        "Hot air balloons lift into the sky.",
+        "Synonyms include climb and rise."
+      ],
+      "ascetic": [
+        "Practicing severe self-discipline.",
+        "Monks live without luxury.",
+        "Synonyms include austere and self-denying."
+      ],
+      "askew": [
+        "Not straight or level.",
+        "Pictures hang crooked on the wall.",
+        "Synonyms include crooked and tilted."
+      ],
+      "asperity": [
+        "Harshness in tone or manner.",
+        "Critics speak sharply about failures.",
+        "Synonyms include harshness and severity."
+      ],
+      "aspersion": [
+        "An attack on someone's reputation.",
+        "Rivals spread damaging remarks.",
+        "Synonyms include slur and insult."
+      ],
+      "assail": [
+        "To attack violently.",
+        "Protesters confront government buildings.",
+        "Synonyms include attack and assault."
+      ],
+      "assent": [
+        "Agreement to a proposal.",
+        "Boards vote in favor of new policies.",
+        "Synonyms include agreement and approval."
+      ],
+      "assert": [
+        "To state firmly and confidently.",
+        "Lawyers present strong arguments in court.",
+        "Synonyms include declare and affirm."
+      ],
+      "assiduous": [
+        "Showing great care and perseverance.",
+        "Researchers spend years perfecting experiments.",
+        "Synonyms include diligent and persistent."
+      ],
+      "assuage": [
+        "To make an unpleasant feeling less intense.",
+        "Comforting words ease grief.",
+        "Synonyms include alleviate and soothe."
+      ],
+      "astute": [
+        "Having sharp judgment and insight.",
+        "Investors spot profitable trends early.",
+        "Synonyms include shrewd and perceptive."
+      ],
+      "atrophy": [
+        "Gradual decline or wasting away.",
+        "Unused muscles weaken over time.",
+        "Synonyms include decay and wither."
+      ],
+      "attest": [
+        "To provide proof or evidence.",
+        "Witnesses confirm facts under oath.",
+        "Synonyms include confirm and verify."
+      ],
+      "audacious": [
+        "Fearlessly bold or daring.",
+        "Explorers take on risky journeys.",
+        "Synonyms include bold and daring."
+      ],
+      "augment": [
+        "To make larger or increase.",
+        "Scholarships boost student opportunities.",
+        "Synonyms include increase and enhance."
+      ],
+      "augur": [
+        "To predict or foreshadow.",
+        "Dark clouds signal a coming storm.",
+        "Synonyms include foretell and predict."
+      ],
+      "austere": [
+        "Severe or strict in manner.",
+        "Minimalist rooms lack decoration.",
+        "Synonyms include stern and plain."
+      ],
+      "autonomy": [
+        "Self-government or independence.",
+        "Colonies seek freedom from control.",
+        "Synonyms include independence and self-rule."
+      ],
+      "avarice": [
+        "Extreme greed for wealth.",
+        "Misers hoard riches without sharing.",
+        "Synonyms include greed and cupidity."
+      ],
+      "aver": [
+        "To declare confidently as true.",
+        "Experts affirm facts during testimony.",
+        "Synonyms include affirm and assert."
+      ],
+      "averse": [
+        "Having a strong dislike or opposition.",
+        "Some people avoid spicy food.",
+        "Synonyms include opposed and unwilling."
+      ],
+      "avert": [
+        "To prevent or turn away.",
+        "Drivers avoid accidents by braking early.",
+        "Synonyms include prevent and avoid."
+      ],
+      "avid": [
+        "Showing great enthusiasm.",
+        "Readers devour books in a short time.",
+        "Synonyms include eager and passionate."
+      ],
+      "avow": [
+        "To openly declare or admit.",
+        "Leaders state their intentions to the public.",
+        "Synonyms include affirm and profess."
+      ],
+      "axiom": [
+        "A statement accepted as true without proof.",
+        "In math, some principles require no demonstration.",
+        "Synonyms include principle and maxim."
+      ],
+      "baleful": [
+        "Threatening harm or evil.",
+        "Glances full of malice unsettle others.",
+        "Synonyms include menacing and ominous."
+      ],
+      "banal": [
+        "Lacking originality; overused.",
+        "Clichés weaken creative writing.",
+        "Synonyms include trite and commonplace."
+      ],
+      "bane": [
+        "A cause of great distress or annoyance.",
+        "Mosquitoes trouble campers in summer.",
+        "Synonyms include curse and blight."
+      ],
+      "barrage": [
+        "A concentrated outpouring of something.",
+        "Reporters ask a flood of questions.",
+        "Synonyms include bombardment and flood."
+      ],
+      "bastion": [
+        "A stronghold or defender of principles.",
+        "Libraries protect freedom of information.",
+        "Synonyms include fortress and bulwark."
+      ]
+    },
     "4th_grade": {
       "bag": [
         "You can carry things in this.",
