@@ -8,6 +8,9 @@ import string
 import streamlit as st
 import smtplib
 from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+from email.mime.base import MIMEBase
+from email import encoders
 import json
 import os
 import uuid
@@ -88,6 +91,45 @@ def send_reset_email(to_email, reset_code):
         return True
     except Exception as e:
         print(f"Failed to send email: {e}")
+        return False
+
+def send_email_with_attachment(to_emails, subject, body, attachment_path=None, cc_emails=None) -> bool:
+    SMTP_SERVER = os.environ.get("SMTP_HOST")
+    SMTP_PORT = int(os.environ.get("SMTP_PORT", "587"))
+    SMTP_USER = os.environ.get("SMTP_USER")
+    SMTP_PASSWORD = os.environ.get("SMTP_PASS")
+
+    if isinstance(to_emails, str):
+        to_emails = [to_emails]
+    cc_emails = cc_emails or []
+
+    try:
+        msg = MIMEMultipart()
+        msg["From"] = SMTP_USER or ""
+        msg["To"] = ", ".join([e for e in to_emails if e])
+        if cc_emails:
+            msg["Cc"] = ", ".join([e for e in cc_emails if e])
+        msg["Subject"] = subject
+
+        msg.attach(MIMEText(body, "plain"))
+
+        if attachment_path and os.path.exists(attachment_path):
+            with open(attachment_path, "rb") as f:
+                part = MIMEBase('application', 'octet-stream')
+                part.set_payload(f.read())
+            encoders.encode_base64(part)
+            filename = os.path.basename(attachment_path)
+            part.add_header('Content-Disposition', f'attachment; filename="{filename}"')
+            msg.attach(part)
+
+        with smtplib.SMTP(SMTP_SERVER, SMTP_PORT) as server:
+            server.starttls()
+            server.login(SMTP_USER, SMTP_PASSWORD)
+            recipients = [e for e in to_emails if e] + [e for e in (cc_emails or []) if e]
+            server.sendmail(SMTP_USER, recipients, msg.as_string())
+        return True
+    except Exception as e:
+        print(f"Failed to send email with attachment: {e}")
         return False
 # Initialize user store for demo (replace with real DB in production)
 if 'users' not in st.session_state:
@@ -1186,6 +1228,40 @@ def display_welcome():
         return
     """Display the welcome screen and game setup."""
     if st.session_state.get('game'):
+        # Even if a game is active, show a compact Top 10 SEI for the current category
+        try:
+            current_cat = getattr(st.session_state.game, 'subject', None)
+            if current_cat:
+                all_games = get_all_game_results()
+                user_highest_sei = {}
+                for g in all_games:
+                    if (g.get('subject', '') or '').lower() != str(current_cat).lower():
+                        continue
+                    score = g.get('score', 0)
+                    time_taken = g.get('time_taken', g.get('duration', 0))
+                    words = g.get('words_solved', 1) if g.get('mode') == 'Beat' else 1
+                    denom = max(int(words or 0), 1)
+                    avg_score = score / denom
+                    avg_time = time_taken / denom
+                    sei = avg_score / avg_time if avg_time > 0 else None
+                    if sei is None:
+                        continue
+                    user = (g.get('nickname', '') or '').lower()
+                    if user not in user_highest_sei or sei > user_highest_sei[user]:
+                        user_highest_sei[user] = sei
+                top10 = sorted(user_highest_sei.items(), key=lambda x: x[1], reverse=True)[:10]
+                nice_cat = str(current_cat).replace('_',' ').title()
+                st.markdown(f"""
+                <div style='font-size:1.0em; font-weight:700; color:#fff; margin:0.5em 0 0.25em 0;'>
+                    🏆 Global Top 10 by SEI — {nice_cat}
+                </div>
+                """, unsafe_allow_html=True)
+                if top10:
+                    st.table([{ 'User': u, 'Highest SEI': round(v, 2) } for u, v in top10])
+                else:
+                    st.info("No games available yet for this category.")
+        except Exception:
+            pass
         return  # Defensive: never show settings if a game is active
     if not st.session_state.get('user'):
         # Show WizWord banner with only the title (no high score message)
@@ -1265,6 +1341,42 @@ def display_welcome():
                 )
                 st.session_state['original_category_choice'] = subject
                 resolved_subject = random.choice(["general", "animals", "food", "places", "science", "tech", "sports", "brands", "4th_grade", "cities", "medicines", "anatomy", "psat", "sat", "gre"]) if subject == "any" else subject
+                # --- Global Top 10 by SEI for chosen category (start page) ---
+                try:
+                    all_games = get_all_game_results()
+                    chosen_cat = subject.lower()
+                    # Build per-user highest SEI in this category (or all if 'any')
+                    user_highest_sei = {}
+                    for g in all_games:
+                        game_cat = (g.get('subject', '') or '').lower()
+                        if chosen_cat != 'any' and game_cat != chosen_cat:
+                            continue
+                        score = g.get('score', 0)
+                        time_taken = g.get('time_taken', g.get('duration', 0))
+                        words = g.get('words_solved', 1) if g.get('mode') == 'Beat' else 1
+                        denom = max(int(words or 0), 1)
+                        avg_score = score / denom
+                        avg_time = time_taken / denom
+                        sei = avg_score / avg_time if avg_time > 0 else None
+                        if sei is None:
+                            continue
+                        user = (g.get('nickname', '') or '').lower()
+                        if user not in user_highest_sei or sei > user_highest_sei[user]:
+                            user_highest_sei[user] = sei
+                    # Sort and present top 10
+                    top10 = sorted(user_highest_sei.items(), key=lambda x: x[1], reverse=True)[:10]
+                    nice_cat = ('All Categories' if chosen_cat == 'any' else subject.replace('_',' ').title())
+                    st.markdown(f"""
+                    <div style='font-size:1.0em; font-weight:700; color:#fff; margin:0.5em 0 0.25em 0;'>
+                        🏆 Global Top 10 by SEI — {nice_cat}
+                    </div>
+                    """, unsafe_allow_html=True)
+                    if top10:
+                        st.table([{ 'User': u, 'Highest SEI': round(v, 2) } for u, v in top10])
+                    else:
+                        st.info("No games available yet for this category.")
+                except Exception:
+                    pass
             word_length = "any"
             st.session_state['original_word_length_choice'] = word_length
             if start_pressed:
@@ -1283,6 +1395,41 @@ def display_welcome():
                 """, unsafe_allow_html=True)
                 st.rerun()
         # End of form block
+
+        # --- Global Top 10 by SEI for chosen category (outside form for visibility) ---
+        try:
+            chosen_cat = (st.session_state.get('original_category_choice') or 'any').lower()
+            all_games = get_all_game_results()
+            user_highest_sei = {}
+            for g in all_games:
+                game_cat = (g.get('subject', '') or '').lower()
+                if chosen_cat != 'any' and game_cat != chosen_cat:
+                    continue
+                score = g.get('score', 0)
+                time_taken = g.get('time_taken', g.get('duration', 0))
+                words = g.get('words_solved', 1) if g.get('mode') == 'Beat' else 1
+                denom = max(int(words or 0), 1)
+                avg_score = score / denom
+                avg_time = time_taken / denom
+                sei = avg_score / avg_time if avg_time > 0 else None
+                if sei is None:
+                    continue
+                user = (g.get('nickname', '') or '').lower()
+                if user not in user_highest_sei or sei > user_highest_sei[user]:
+                    user_highest_sei[user] = sei
+            top10 = sorted(user_highest_sei.items(), key=lambda x: x[1], reverse=True)[:10]
+            nice_cat = ('All Categories' if chosen_cat == 'any' else chosen_cat.replace('_',' ').title())
+            st.markdown(f"""
+            <div style='font-size:1.0em; font-weight:700; color:#fff; margin:0.5em 0 0.25em 0;'>
+                🏆 Global Top 10 by SEI — {nice_cat}
+            </div>
+            """, unsafe_allow_html=True)
+            if top10:
+                st.table([{ 'User': u, 'Highest SEI': round(v, 2) } for u, v in top10])
+            else:
+                st.info("No games available yet for this category.")
+        except Exception:
+            pass
 
         # Toggleable High Score Monthly History
         if "show_high_score_history" not in st.session_state:
@@ -2446,7 +2593,8 @@ def display_game_over(game_summary):
                 lines, labels = ax.get_legend_handles_labels()
                 lines2, labels2 = ax2.get_legend_handles_labels()
                 ax2.legend(lines + lines2, labels + labels2, loc='upper left')
-                ax.set_title('Running Avg Score/Word & Time/Word vs. Game Date')
+                category_label = (game_summary.get('subject') or getattr(st.session_state.game, 'subject', None) or 'All Categories')
+                ax.set_title(f"{category_label.title()} — Running Avg Score/Word & Time/Word vs. Game Date")
                 fig.tight_layout()
                 st.pyplot(fig)
                 # Add a separate SEI line graph
@@ -2454,7 +2602,8 @@ def display_game_over(game_summary):
                 ax_sei.plot(game_dates, sei_values, marker='^', linewidth=2, markersize=6, color=color3, label='SEI (Score/Time Index)')
                 ax_sei.set_xlabel('Game Date')
                 ax_sei.set_ylabel('SEI (Score/Time Index)', color=color3)
-                ax_sei.set_title('Score Efficiency Index (SEI) per Game')
+                category_label = (game_summary.get('subject') or getattr(st.session_state.game, 'subject', None) or 'All Categories')
+                ax_sei.set_title(f"{category_label.title()} — Score Efficiency Index (SEI) per Game")
                 ax_sei.legend(loc='upper left')
                 fig_sei.tight_layout()
                 st.pyplot(fig_sei)
@@ -2674,6 +2823,62 @@ def display_game_over(game_summary):
         # Only keep the highest SEI for each user in this category
         if user not in user_sei or sei > user_sei[user]:
             user_sei[user] = sei
+    # Email congrats when current game achieves highest SEI in this leaderboard category
+    try:
+        current_user = (game_summary.get('nickname', '') or '').lower()
+        current_category = (leaderboard_category or game_summary.get('subject', '') or '').lower()
+        score_cur = game_summary.get('score', 0)
+        time_cur = game_summary.get('time_taken', game_summary.get('duration', 0))
+        words_cur = game_summary.get('words_solved', 1) if game_summary.get('mode') == 'Beat' else 1
+        denom_cur = max(int(words_cur or 0), 1)
+        avg_score_cur = score_cur / denom_cur
+        avg_time_cur = (time_cur / denom_cur) if time_cur else 0
+        sei_cur = (avg_score_cur / avg_time_cur) if avg_time_cur > 0 else None
+        if sei_cur is not None:
+            if leaderboard_category and leaderboard_category.lower() != 'all categories':
+                highest_sei_in_cat = max(user_sei.values()) if user_sei else None
+            else:
+                highest_sei_in_cat = None
+                for g in all_games:
+                    if g.get('subject', '').lower() == current_category:
+                        s = g.get('score', 0)
+                        t = g.get('time_taken', g.get('duration', 0))
+                        w = g.get('words_solved', 1) if g.get('mode') == 'Beat' else 1
+                        d = max(int(w or 0), 1)
+                        asw = s / d
+                        atw = (t / d) if t else 0
+                        sei_val = (asw / atw) if atw > 0 else None
+                        if sei_val is not None and (highest_sei_in_cat is None or sei_val > highest_sei_in_cat):
+                            highest_sei_in_cat = sei_val
+            is_new_high = highest_sei_in_cat is not None and abs(sei_cur - highest_sei_in_cat) < 1e-9
+            users = st.session_state.get('users', {}) if isinstance(st.session_state.get('users'), dict) else {}
+            recipient = users.get(current_user, {}).get('email')
+            admin_email = os.getenv('ADMIN_EMAIL') or os.getenv('SMTP_USER')
+            has_smtp = bool(os.getenv('SMTP_HOST') and os.getenv('SMTP_USER') and os.getenv('SMTP_PASS'))
+            print(f"[DEBUG][SEI_EMAIL] Check: user='{current_user}', category='{current_category}', sei_cur={sei_cur if sei_cur is not None else 'None'}, highest={highest_sei_in_cat if highest_sei_in_cat is not None else 'None'}, is_new_high={is_new_high}, recipient={'set' if recipient else 'missing'}, admin={'set' if admin_email else 'missing'}, smtp={'set' if has_smtp else 'missing'}")
+            if is_new_high and recipient and has_smtp:
+                try:
+                    share_card_path = create_share_card(dict(game_summary))
+                except Exception:
+                    share_card_path = None
+                subject = f"🎉 New Highest SEI in {current_category.title()}!"
+                body = f"Congrats {current_user}! You just achieved the highest Score/Time Index in {current_category.title()}. Keep going!"
+                print("[DEBUG][SEI_EMAIL] Preparing email:", {"to": recipient, "cc": admin_email or "", "category": current_category, "sei_cur": round(sei_cur, 4) if isinstance(sei_cur, (int, float)) else None, "highest": round(highest_sei_in_cat, 4) if isinstance(highest_sei_in_cat, (int, float)) else None, "attachment": share_card_path})
+                try:
+                    sent_ok = send_email_with_attachment([recipient], subject, body, attachment_path=share_card_path, cc_emails=[admin_email] if admin_email else None)
+                    print(f"[DEBUG][SEI_EMAIL] Sent status: {sent_ok}")
+                except Exception as e:
+                    print(f"[DEBUG][SEI_EMAIL] Failed to send: {e}")
+            else:
+                # Log reasons for not sending
+                if not is_new_high:
+                    print("[DEBUG][SEI_EMAIL] Not sending: current game did not set/tie highest SEI for this category.")
+                if not recipient:
+                    print("[DEBUG][SEI_EMAIL] Not sending: recipient email missing in user profile.")
+                if not has_smtp:
+                    print("[DEBUG][SEI_EMAIL] Not sending: SMTP env vars missing (SMTP_HOST/SMTP_USER/SMTP_PASS).")
+    except Exception as e:
+        print(f"[DEBUG][SEI_EMAIL] Exception in email logic: {e}")
     # Sort users by highest SEI
     top_users = sorted(user_sei.items(), key=lambda x: x[1], reverse=True)[:10]
     st.table([{ 'User': u, 'Highest SEI': round(sei, 2) } for u, sei in top_users])
