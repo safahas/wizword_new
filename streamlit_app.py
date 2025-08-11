@@ -1398,7 +1398,19 @@ def display_welcome():
 
         # --- Global Top 10 by SEI for chosen category (outside form for visibility) ---
         try:
-            chosen_cat = (st.session_state.get('original_category_choice') or 'any').lower()
+            # Independent selector so it updates without submitting the form
+            lb_categories = ["any", "4th_grade", "anatomy", "animals", "brands", "cities", "food", "general", "gre", "medicines", "places", "psat", "sat", "science", "sports", "tech"]
+            default_cat = st.session_state.get('original_category_choice', 'any')
+            chosen_cat_disp = st.selectbox(
+                "Leaderboard Category",
+                lb_categories,
+                index=lb_categories.index(default_cat) if default_cat in lb_categories else 0,
+                format_func=lambda x: (
+                    'Any' if x == 'any' else ('SAT' if x == 'sat' else ('PSAT' if x == 'psat' else ('GRE' if x == 'gre' else x.replace('_',' ').title())))
+                ),
+                key='top10_category'
+            )
+            chosen_cat = chosen_cat_disp.lower()
             all_games = get_all_game_results()
             user_highest_sei = {}
             for g in all_games:
@@ -1426,10 +1438,13 @@ def display_welcome():
             """, unsafe_allow_html=True)
             if top10:
                 st.table([{ 'User': u, 'Highest SEI': round(v, 2) } for u, v in top10])
+                print(f"[DEBUG][TOP10] Rendered {len(top10)} entries for category '{chosen_cat}'.")
             else:
                 st.info("No games available yet for this category.")
-        except Exception:
-            pass
+                print(f"[DEBUG][TOP10] No games found for category '{chosen_cat}'. Total games loaded: {len(all_games)}")
+        except Exception as e:
+            print(f"[DEBUG][TOP10] Exception while rendering Top 10: {e}")
+            st.info("Unable to render Top 10 at the moment. Check logs for details.")
 
         # Toggleable High Score Monthly History
         if "show_high_score_history" not in st.session_state:
@@ -2604,6 +2619,9 @@ def display_game_over(game_summary):
                 ax_sei.set_ylabel('SEI (Score/Time Index)', color=color3)
                 category_label = (game_summary.get('subject') or getattr(st.session_state.game, 'subject', None) or 'All Categories')
                 ax_sei.set_title(f"{category_label.title()} — Score Efficiency Index (SEI) per Game")
+                # Match x-axis label styling to the main stats graph
+                ax_sei.set_xticks(game_dates)
+                ax_sei.set_xticklabels(game_dates, rotation=45, ha='right', fontsize=8)
                 ax_sei.legend(loc='upper left')
                 fig_sei.tight_layout()
                 st.pyplot(fig_sei)
@@ -2850,12 +2868,14 @@ def display_game_over(game_summary):
                         sei_val = (asw / atw) if atw > 0 else None
                         if sei_val is not None and (highest_sei_in_cat is None or sei_val > highest_sei_in_cat):
                             highest_sei_in_cat = sei_val
-            is_new_high = highest_sei_in_cat is not None and abs(sei_cur - highest_sei_in_cat) < 1e-9
+            # Skip sending if current SEI is exactly zero
+            zero_sei = isinstance(sei_cur, (int, float)) and abs(sei_cur) < 1e-12
+            is_new_high = (not zero_sei) and (highest_sei_in_cat is not None) and (abs(sei_cur - highest_sei_in_cat) < 1e-9)
             users = st.session_state.get('users', {}) if isinstance(st.session_state.get('users'), dict) else {}
             recipient = users.get(current_user, {}).get('email')
             admin_email = os.getenv('ADMIN_EMAIL') or os.getenv('SMTP_USER')
             has_smtp = bool(os.getenv('SMTP_HOST') and os.getenv('SMTP_USER') and os.getenv('SMTP_PASS'))
-            print(f"[DEBUG][SEI_EMAIL] Check: user='{current_user}', category='{current_category}', sei_cur={sei_cur if sei_cur is not None else 'None'}, highest={highest_sei_in_cat if highest_sei_in_cat is not None else 'None'}, is_new_high={is_new_high}, recipient={'set' if recipient else 'missing'}, admin={'set' if admin_email else 'missing'}, smtp={'set' if has_smtp else 'missing'}")
+            print(f"[DEBUG][SEI_EMAIL] Check: user='{current_user}', category='{current_category}', sei_cur={sei_cur if sei_cur is not None else 'None'}, highest={highest_sei_in_cat if highest_sei_in_cat is not None else 'None'}, zero_sei={zero_sei}, is_new_high={is_new_high}, recipient={'set' if recipient else 'missing'}, admin={'set' if admin_email else 'missing'}, smtp={'set' if has_smtp else 'missing'}")
             if is_new_high and recipient and has_smtp:
                 try:
                     share_card_path = create_share_card(dict(game_summary))
@@ -2871,7 +2891,9 @@ def display_game_over(game_summary):
                     print(f"[DEBUG][SEI_EMAIL] Failed to send: {e}")
             else:
                 # Log reasons for not sending
-                if not is_new_high:
+                if zero_sei:
+                    print("[DEBUG][SEI_EMAIL] Not sending: current SEI is 0.0")
+                if not is_new_high and not zero_sei:
                     print("[DEBUG][SEI_EMAIL] Not sending: current game did not set/tie highest SEI for this category.")
                 if not recipient:
                     print("[DEBUG][SEI_EMAIL] Not sending: recipient email missing in user profile.")
