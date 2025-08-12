@@ -1398,19 +1398,9 @@ def display_welcome():
 
         # --- Global Top 10 by SEI for chosen category (outside form for visibility) ---
         try:
-            # Independent selector so it updates without submitting the form
-            lb_categories = ["any", "4th_grade", "anatomy", "animals", "brands", "cities", "food", "general", "gre", "medicines", "places", "psat", "sat", "science", "sports", "tech"]
-            default_cat = st.session_state.get('original_category_choice', 'any')
-            chosen_cat_disp = st.selectbox(
-                "Leaderboard Category",
-                lb_categories,
-                index=lb_categories.index(default_cat) if default_cat in lb_categories else 0,
-                format_func=lambda x: (
-                    'Any' if x == 'any' else ('SAT' if x == 'sat' else ('PSAT' if x == 'psat' else ('GRE' if x == 'gre' else x.replace('_',' ').title())))
-                ),
-                key='top10_category'
-            )
-            chosen_cat = chosen_cat_disp.lower()
+            # Use user's default category from profile
+            user_profile = st.session_state.get('user', {})
+            chosen_cat = (user_profile.get('default_category') or 'any').lower()
             all_games = get_all_game_results()
             user_highest_sei = {}
             for g in all_games:
@@ -1433,7 +1423,7 @@ def display_welcome():
             nice_cat = ('All Categories' if chosen_cat == 'any' else chosen_cat.replace('_',' ').title())
             st.markdown(f"""
             <div style='font-size:1.0em; font-weight:700; color:#fff; margin:0.5em 0 0.25em 0;'>
-                🏆 Global Top 10 by SEI — {nice_cat}
+                🏆 Global Leaderboard (Top 10 by SEI) - {nice_cat}
             </div>
             """, unsafe_allow_html=True)
             if top10:
@@ -1792,6 +1782,41 @@ def display_game():
             if st.button('Change Category', key='change_category_btn_beat_start'):
                 st.session_state['change_category'] = True
                 st.rerun()
+            # Bottom-of-start-page Global Leaderboard (Top 10 by SEI) for user's default category
+            try:
+                user_profile = st.session_state.get('user', {})
+                chosen_cat = (user_profile.get('default_category') or 'any').lower()
+                all_games = get_all_game_results()
+                user_highest_sei = {}
+                for g in all_games:
+                    game_cat = (g.get('subject', '') or '').lower()
+                    if chosen_cat != 'any' and game_cat != chosen_cat:
+                        continue
+                    score = g.get('score', 0)
+                    time_taken = g.get('time_taken', g.get('duration', 0))
+                    words = g.get('words_solved', 1) if g.get('mode') == 'Beat' else 1
+                    denom = max(int(words or 0), 1)
+                    avg_score = score / denom
+                    avg_time = time_taken / denom
+                    sei = avg_score / avg_time if avg_time > 0 else None
+                    if sei is None:
+                        continue
+                    u = (g.get('nickname', '') or '').lower()
+                    if u not in user_highest_sei or sei > user_highest_sei[u]:
+                        user_highest_sei[u] = sei
+                top10 = sorted(user_highest_sei.items(), key=lambda x: x[1], reverse=True)[:10]
+                nice_cat = ('All Categories' if chosen_cat == 'any' else chosen_cat.replace('_',' ').title())
+                st.markdown(f"""
+                <div style='font-size:1.0em; font-weight:700; color:#fff; margin:1em 0 0.25em 0;'>
+                    🏆 Global Leaderboard (Top 10 by SEI) - {nice_cat}
+                </div>
+                """, unsafe_allow_html=True)
+                if top10:
+                    st.table([{ 'User': u, 'Highest SEI': round(v, 2) } for u, v in top10])
+                else:
+                    st.info("No games available yet for this category.")
+            except Exception as e:
+                print(f"[DEBUG][TOP10_BEAT] Exception rendering Beat start leaderboard: {e}")
             st.stop()
         # Determine banner stickiness from environment
         _sticky_env = os.getenv('WIZWORD_STICKY_BANNER', 'true').strip().lower()
