@@ -2354,6 +2354,115 @@ def display_game_over(game_summary):
         or st.session_state.get('last_mode', None)
         or game_summary.get('mode', 'Fun')
     )
+    # If achieved category top SEI, fly a trophy and show congrats banner
+    try:
+        score_cur = game_summary.get('score', 0)
+        time_cur = game_summary.get('time_taken', game_summary.get('duration', 0))
+        words_cur = game_summary.get('words_solved', 1) if game_summary.get('mode') == 'Beat' else 1
+        denom_cur = max(int(words_cur or 0), 1)
+        avg_score_cur = score_cur / denom_cur
+        avg_time_cur = (time_cur / denom_cur) if time_cur else 0
+        sei_cur = (avg_score_cur / avg_time_cur) if avg_time_cur > 0 else None
+        category = (game_summary.get('subject') or '').lower()
+        games = get_all_game_results()
+        highest = None
+        for g in games:
+            if (g.get('subject','') or '').lower() != category:
+                continue
+            s = g.get('score', 0)
+            t = g.get('time_taken', g.get('duration', 0))
+            w = g.get('words_solved', 1) if g.get('mode') == 'Beat' else 1
+            d = max(int(w or 0), 1)
+            asw = s / d
+            atw = (t / d) if t else 0
+            val = (asw / atw) if atw > 0 else None
+            if val is not None and (highest is None or val > highest):
+                highest = val
+        is_top = False
+        if sei_cur is not None and sei_cur > 0:
+            # Trigger if current SEI is a new high or ties the previous high (with small tolerance)
+            if highest is None or (sei_cur >= (highest - 1e-9)):
+                is_top = True
+        # Debug override to force the animation without requiring top SEI
+        if os.getenv('DEBUG_FORCE_TROPHY', '').strip().lower() in ('1', 'true', 'yes', 'on'):
+            is_top = True
+        if is_top:
+            print(f"[DEBUG][TROPHY] Triggering animation: sei_cur={sei_cur}, prev_highest={highest}")
+            st.markdown(
+                f"""
+                <style>
+                @keyframes flyTrophy {{
+                  0% {{ transform: translate(0, 0) scale(1); opacity: 0; }}
+                  10% {{ opacity: 1; }}
+                  90% {{ transform: translate(-50vw, -30vh) scale(1.2); opacity: 1; }}
+                  100% {{ transform: translate(-52vw, -32vh) scale(1.2); opacity: 0; }}
+                }}
+                .trophy-fly {{
+                  position: fixed;
+                  right: 16px;
+                  bottom: 16px;
+                  font-size: 48px;
+                  z-index: 999999;
+                  animation: flyTrophy 2.6s ease-in-out forwards;
+                  pointer-events: none;
+                }}
+                /* Rising congratulations banner */
+                @keyframes riseBanner {{
+                  0% {{ transform: translate(-50%, 120%); opacity: 0; }}
+                  10% {{ opacity: 1; }}
+                  100% {{ transform: translate(-50%, -10vh); opacity: 1; }}
+                }}
+                .banner-fly {{
+                  position: fixed;
+                  left: 50%;
+                  bottom: -80px;
+                  transform: translate(-50%, 120%);
+                  z-index: 999998;
+                  background: linear-gradient(90deg, #FFD93D 0%, #FF6B6B 100%);
+                  color: #222; font-weight: 800; border-radius: 12px; padding: 12px 18px; margin: 0;
+                  box-shadow: 0 4px 14px rgba(0,0,0,0.18);
+                  animation: riseBanner 1.8s ease-out forwards;
+                  pointer-events: none;
+                  white-space: nowrap;
+                }}
+                /* Floating balloons */
+                @keyframes floatBalloon {{
+                  0% {{ transform: translateY(0) translateX(0); opacity: 0; }}
+                  10% {{ opacity: 1; }}
+                  100% {{ transform: translateY(-60vh) translateX(-10px); opacity: 1; }}
+                }}
+                .balloon {{
+                  position: fixed;
+                  bottom: -24px;
+                  font-size: 32px;
+                  z-index: 999997;
+                  animation: floatBalloon 3s ease-in forwards;
+                  pointer-events: none;
+                }}
+                </style>
+                <div class="trophy-fly">🏆</div>
+                <div class="banner-fly">🎉 Congratulations! Global Top SEI — <b>{game_summary.get('subject','').title()}</b> 🎉</div>
+                <span class="balloon" style="left:20%; animation-delay: .0s;">🎈</span>
+                <span class="balloon" style="left:35%; animation-delay: .2s;">🎈</span>
+                <span class="balloon" style="left:50%; animation-delay: .4s;">🎈</span>
+                <span class="balloon" style="left:65%; animation-delay: .1s;">🎈</span>
+                <span class="balloon" style="left:80%; animation-delay: .3s;">🎈</span>
+                <script>
+                setTimeout(function(){{
+                  var t = document.querySelector('.trophy-fly'); if(t) t.remove();
+                }}, 1900);
+                setTimeout(function(){{
+                  var b = document.querySelector('.banner-fly'); if(b) b.remove();
+                }}, 2200);
+                setTimeout(function(){{
+                  document.querySelectorAll('.balloon').forEach(function(el){{ el.remove(); }});
+                }}, 4000);
+                </script>
+                """,
+                unsafe_allow_html=True,
+            )
+    except Exception:
+        pass
     # Update total game time seconds when saving a game
     try:
         _duration = int(game_summary.get('time_taken') or game_summary.get('duration') or 0)
@@ -2916,6 +3025,55 @@ def display_game_over(game_summary):
                 try:
                     sent_ok = send_email_with_attachment([recipient], subject, body, attachment_path=share_card_path, cc_emails=[admin_email] if admin_email else None)
                     print(f"[DEBUG][SEI_EMAIL] Sent status: {sent_ok}")
+                    # Show celebration animation immediately on Game Over after achieving top SEI
+                    cat_title = current_category.title()
+                    st.markdown(
+                        f"""
+                        <style>
+                        @keyframes flyTrophy {{
+                          0% {{ transform: translate(0, 0) scale(1); opacity: 0; }}
+                          10% {{ opacity: 1; }}
+                          90% {{ transform: translate(-50vw, -30vh) scale(1.2); opacity: 1; }}
+                          100% {{ transform: translate(-52vw, -32vh) scale(1.2); opacity: 0; }}
+                        }}
+                        .trophy-fly {{
+                          position: fixed; right: 16px; bottom: 16px; font-size: 48px; z-index: 999999;
+                          animation: flyTrophy 2.6s ease-in-out forwards; pointer-events: none;
+                        }}
+                        @keyframes riseBanner {{
+                          0% {{ transform: translate(-50%, 120%); opacity: 0; }}
+                          10% {{ opacity: 1; }}
+                          100% {{ transform: translate(-50%, -10vh); opacity: 1; }}
+                        }}
+                        .banner-fly {{
+                          position: fixed; left: 50%; bottom: -80px; transform: translate(-50%, 120%);
+                          z-index: 999998; background: linear-gradient(90deg, #FFD93D 0%, #FF6B6B 100%);
+                          color: #222; font-weight: 800; border-radius: 12px; padding: 12px 18px; margin: 0;
+                          box-shadow: 0 4px 14px rgba(0,0,0,0.18); animation: riseBanner 1.8s ease-out forwards;
+                          pointer-events: none; white-space: nowrap;
+                        }}
+                        @keyframes floatBalloon {{
+                          0% {{ transform: translateY(0) translateX(0); opacity: 0; }}
+                          10% {{ opacity: 1; }}
+                          100% {{ transform: translateY(-60vh) translateX(-10px); opacity: 1; }}
+                        }}
+                        .balloon {{ position: fixed; bottom: -24px; font-size: 32px; z-index: 999997; animation: floatBalloon 3s ease-in forwards; pointer-events: none; }}
+                        </style>
+                        <div class=\"trophy-fly\">🏆</div>
+                        <div class=\"banner-fly\">🎉 Congratulations! Global Top SEI — <b>{cat_title}</b> 🎉</div>
+                        <span class=\"balloon\" style=\"left:20%; animation-delay: .0s;\">🎈</span>
+                        <span class=\"balloon\" style=\"left:35%; animation-delay: .2s;\">🎈</span>
+                        <span class=\"balloon\" style=\"left:50%; animation-delay: .4s;\">🎈</span>
+                        <span class=\"balloon\" style=\"left:65%; animation-delay: .1s;\">🎈</span>
+                        <span class=\"balloon\" style=\"left:80%; animation-delay: .3s;\">🎈</span>
+                        <script>
+                        setTimeout(function(){{ var t = document.querySelector('.trophy-fly'); if(t) t.remove(); }}, 1900);
+                        setTimeout(function(){{ var b = document.querySelector('.banner-fly'); if(b) b.remove(); }}, 2200);
+                        setTimeout(function(){{ document.querySelectorAll('.balloon').forEach(function(el){{ el.remove(); }}); }}, 4000);
+                        </script>
+                        """,
+                        unsafe_allow_html=True,
+                    )
                 except Exception as e:
                     print(f"[DEBUG][SEI_EMAIL] Failed to send: {e}")
             else:
