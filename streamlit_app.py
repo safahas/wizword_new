@@ -878,45 +878,30 @@ def display_login():
     
     with st.expander("📖 How to Play", expanded=False):
         st.markdown("""
-        ### Gameplay
-        - Ask yes/no questions (costs 1 point each) or request hints (see below).
-        - Enter your guess at any time—type up to the full word. Each correct letter is revealed and earns points.
-        - Each wrong guess costs 10 points.
-        - Use the "Show Word" button to reveal the answer (with a point penalty).
-        - In Beat mode, use "Skip" to move to a new word, or "Change Category" to switch topics.
-
-        ### Hints (Beat Mode)
-        - **First hint is free** (no penalty)
-        - 2nd and 3rd hints cost **-10 points each** (max 3 per word)
-        - In other modes, all hints cost points as usual
-
-        ### Scoring
-        - **Questions:** -1 point each
-        - **Hints:** See above
-        - **Wrong guesses:** -10 points
-        - **Correct guess:** 100 points per word
-        - **Show Word:** -100 points
-        - **Beat Mode:** Solve as many words as possible in 5 minutes! The timer starts when you click the Start button.
-        - **Score Efficiency Index (SEI):** Your SEI is calculated as (Average Score per Word) / (Average Time per Word in seconds). A higher SEI means you are both fast and accurate. The global leaderboard ranks users by their highest SEI in any single game.        
-        ### User Profile
-        - Access your profile from the menu (☰ > User Profile)
-        - Edit your **education**, **occupation**, **address**, and **birthday** (from 1900 onward)
-        - Choose from common options or enter your own for education/occupation
-
-        ### Statistics & Leaderboards
-        - After each game, view your performance graphs: score trend, category breakdown, and time per game.
-        - See your all-time stats and recent games.
-        - Compete on the global leaderboard—filter by mode and category.
-
-        ### Sharing
-        - Generate a share card for your achievement.
-        - Download, copy, or share your results on social media.
-        - Email your share card to yourself.
-        - Show and share your highest score card for the current month.
-
-        ### Account
-        - Register and log in to save your stats.
-        - Reset your password via email if needed.
+        ### Game Instructions:
+        - Choose your game mode:
+            - **Fun**: Unlimited play, no timer, just for fun.
+            - **Wiz**: Classic mode with stats and leaderboards.
+            - **Beat**: Timed challenge—solve as many words as possible before time runs out.
+        - Select a word category, or pick 'any' for a random challenge.
+        - Ask yes/no questions or request hints to help you guess the word.
+        - Enter your guess at any time.
+        **Beat Mode Details:**
+        - You have 5 minutes to play.
+        - For each word, you can:
+            - **Guess the word:**
+                - Correct: **+100**
+                - Wrong: **-10**
+            - **Ask yes/no questions:** **-1** each
+            - **Request hints:** **-10** each (max 3 per word)
+            - **Show Word:** **-100** (reveals the answer)
+        - Try to solve as many words as possible and maximize your score before time runs out!
+        - Only Medium difficulty is available for all modes.
+        
+        #### Top SEI Achievements
+        - Achieve (or tie) the highest SEI in a category (with SEI > 0) to unlock:
+          - An emailed congratulations card (with trophy, your username, category, SEI, and UTC timestamp)
+          - An in-app celebration: a flying trophy, rising banner, and balloons that auto‑dismiss
         """)
 
 
@@ -1497,13 +1482,18 @@ def display_welcome():
             - You have 5 minutes to play.
             - For each word, you can:
                 - **Guess the word:**
-                    - Correct: **+20 × word length**
+                    - Correct: **+100**
                     - Wrong: **-10**
                 - **Ask yes/no questions:** **-1** each
                 - **Request hints:** **-10** each (max 3 per word)
-                - **Skip the word:** **-10** (new word loaded)
+                - **Show Word:** **-100** (reveals the answer)
             - Try to solve as many words as possible and maximize your score before time runs out!
             - Only Medium difficulty is available for all modes.
+            
+            #### Top SEI Achievements
+            - Achieve (or tie) the highest SEI in a category (with SEI > 0) to unlock:
+              - An emailed congratulations card (with trophy, your username, category, SEI, and UTC timestamp)
+              - An in-app celebration: a flying trophy, rising banner, and balloons that auto‑dismiss
             """)
         with st.expander("💡 Hints System", expanded=False):
             st.markdown("""

@@ -10,6 +10,7 @@ WizWord is an AI-powered word guessing game where players try to guess a hidden 
 - Optional nickname-based leaderboard
 - Local and cloud storage support
 - Mobile and desktop friendly UI
+- New: Category Top SEI achievements with email + share card + in‑app celebration
 
 ## Setup
 
@@ -42,6 +43,13 @@ AWS_REGION=your_aws_region  # e.g., us-east-1
 
 # Game Configuration
 USE_CLOUD_STORAGE=false  # Set to true to use AWS DynamoDB instead of local storage
+
+# SMTP for achievement emails
+SMTP_HOST=smtp.example.com
+SMTP_PORT=587
+SMTP_USER=bot@example.com
+SMTP_PASS=app_password
+ADMIN_EMAIL=admin@example.com  # optional; falls back to SMTP_USER if not set
 ```
 
 5. Run the game:
@@ -65,13 +73,12 @@ streamlit run streamlit_app.py
    - Make multiple guesses
    - Perfect for learning and practice
 
-   ### Challenge Mode
+   ### Challenge/Beat Mode
    - Strategic scoring system:
-     - Each question: -5 points
-     - Wrong guess: -10 points
-     - Correct guess: 100 points per word
-     - Question penalty: Number of questions × 5
-     - Final points = max(Base points - Question penalty, 10)
+     - Each question: -1 point (Beat), -5/-10/-15 depending on difficulty (Wiz)
+     - Wrong guess: -10 (Beat/Wiz)
+     - Correct guess: 100 points per word (fixed)
+     - Show Word: -100 points
    - Higher scores are better!
    - Be strategic with your questions to minimize penalties
 
@@ -87,10 +94,9 @@ streamlit run streamlit_app.py
 4. Making Guesses:
    - Type your guess when ready
    - Guesses must match the chosen word length
-   - In Challenge mode:
+   - In Beat mode:
      - Wrong guesses cost 10 points
      - Correct guesses always earn 100 points per word
-     - Try to minimize questions to maximize your score!
 
 ## Score Efficiency Index (SEI)
 SEI is a performance metric that combines your average score per word and your average time per word:
@@ -101,46 +107,33 @@ SEI is a performance metric that combines your average score per word and your a
 - The global leaderboard ranks users by their highest SEI in any single game.
 - SEI is shown on your share card and in your statistics graphs.
 
+### New: Top SEI Achievements
+When you achieve the highest SEI in a category (or tie the high with a non-zero SEI):
+- A dedicated “Congratulations” share card is generated and emailed to you (CC admin):
+  - Title: Congratulations!
+  - Subtitle: Global Top SEI — Category: <your category>
+  - UTC timestamp
+  - Your SEI value highlighted
+  - Trophy artwork with "WizWord" in the cup, your username on the top base tier, and the category on the bottom base tier
+- A celebration appears in-app on the Game Over screen:
+  - A trophy emoji flies up
+  - A rising congratulations banner and floating balloons briefly show, then auto-dismiss
+
+To test the animation without hitting top SEI, you can temporarily set:
+```env
+DEBUG_FORCE_TROPHY=true
+```
+(Do not use in production.)
+
 ## Favorite Category
 
-Your **Favorite Category** is the word category (such as Tech, Brands, Science, etc.) in which you have played the most games. The app tracks all your games and determines which category you play most frequently. This is shown in your stats sidebar as:
-
-    Favorite Category: Tech
-
-This helps you quickly see which type of words you enjoy or play the most!
+Your **Favorite Category** is the word category (such as Tech, Brands, Science, etc.) in which you have played the most games. The app tracks all your games and determines which category you play most frequently.
 
 ## Game Statistics & Performance Graphs
 
-After each game, WizWord provides detailed performance statistics and visualizations:
-
-### 1. Score & Time Trend Graph
-- **Graph Title:** Avg Score/Word & Avg Time/Word Trend (Last 12 Months)
-- **X-Axis:**
-  - Nonlinear: First 11 months are compressed (one point per month, averaged), last month is expanded (each game in the last month is shown as an individual point, labeled by date).
-- **Left Y-Axis:** Average Score per Word (total score divided by number of words for each game)
-- **Right Y-Axis:** Average Time per Word (seconds)
-  - For Beat mode: time for the game divided by number of words solved
-  - For other modes: time for the game
-  - Scale: 0–300 seconds
-- **Legend:** Both lines are shown with different colors and a shared legend.
-- **Details:**
-  - The graph visually emphasizes recent performance by expanding the last month’s results.
-  - Each game in the last month is labeled with its actual date (YYYY-MM-DD).
-
-### 2. Avg Time per Word vs. Cumulative Time
-- **X-Axis:** Cumulative time (seconds) across all games/words played
-- **Y-Axis:** Average time per word (seconds)
-- **Purpose:** Shows how your speed per word changes as you play more games.
-
-### 3. Beat Mode Aggregation
-- In Beat mode, statistics are aggregated for the entire session:
-  - **Total Points:** Sum of all points earned across all words in the session
-  - **Guesses Made:** Total number of guesses across all words in the session
-  - **Words Played:** List of all words solved in the session
-  - **Session Duration:** Total time spent in the session
-
-### 4. Leaderboard & Historical Stats
-- The leaderboard and your historical stats are based on these aggregated and per-game statistics.
+- Running average Score/Word and Time/Word per game
+- Separate SEI trend per game
+- Leaderboard filtered to the active category
 
 ## Cloud Deployment
 
@@ -162,9 +155,6 @@ word_guess_contest_ai/
 │   ├── game_logic.py                 # Game state and scoring
 │   ├── word_selector.py              # AI word selection
 │   └── session_manager.py            # Session handling
-│
-├── config/
-│   └── openrouter_config.py          # API configuration
 │
 ├── assets/                           # Static assets
 ├── game_data/                        # Local storage (if used)
@@ -188,34 +178,7 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 - WIZWORD_STICKY_BANNER (default: true)
   - Controls whether the in-game WizWord banner (score/timer strip) stays fixed at the top or scrolls with the page.
-  - Accepted truthy values: `true`, `1`, `yes`, `on`
-  - Accepted falsy values: `false`, `0`, `no`, `off`
-  - Example (in `.env`):
-    ```env
-    WIZWORD_STICKY_BANNER=true
-    ```
-  - After changing this value, restart Streamlit.
 
 ## Admin Dashboard Counters
 
-WizWord maintains lightweight global counters for basic platform stats, stored in a separate JSON file.
-
-- File location: `game_data/global_counters.json`
-  - Override with env var `GLOBAL_COUNTERS_PATH` if you need a custom path.
-  - The app will auto-create the file and its parent directory if missing.
-
-- Tracked counters:
-  - `users_count`: total registered users (increments on successful registration)
-  - `total_game_time_seconds`: cumulative game time across all saved games (adds each game’s `time_taken`/`duration`)
-  - `total_sessions`: total sessions started (increments when a new Beat game is instantiated)
-
-- Viewing counters (Admin only):
-  - Log in as an admin user; the sidebar shows three metrics:
-    - Users
-    - Global Game Time (HHh MMm)
-    - Total Sessions
-
-- Example env configuration:
-  ```env
-  GLOBAL_COUNTERS_PATH=game_data/global_counters.json
-  ``` 
+- `game_data/global_counters.json` tracks users count, total game time, and total sessions. 
