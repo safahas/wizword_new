@@ -1981,15 +1981,16 @@ class WordSelector:
             with open(hints_file, 'r', encoding='utf-8') as f:
                 hints_data = json.load(f)
             templates = hints_data.get('templates', {})
-            if subject not in templates:
-                subject = 'general'
-            all_words = list(templates.get(subject, {}).keys())
+            # Case-insensitive subject resolution
+            ci_key_map = {k.lower(): k for k in templates.keys()}
+            subject_key = ci_key_map.get(str(subject).lower()) or ci_key_map.get('general', 'general')
+            all_words = list(templates.get(subject_key, {}).keys())
         except Exception as e:
             logger.error(f"Error loading hints.json: {e}")
             all_words = []
 
         # Track recent words per user+subject
-        recent_key = f"{username}:{subject}"
+        recent_key = f"{username}:{(subject_key if 'subject_key' in locals() else subject)}"
         if not hasattr(self, "_recently_used_words_by_combo"):
             self._recently_used_words_by_combo = {}
         recent = set(self._recently_used_words_by_combo.get(recent_key, []))

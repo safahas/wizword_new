@@ -66,16 +66,19 @@ class GameLogic:
                 #     subject = "general"
                 with open(hints_file, 'r', encoding='utf-8') as f:
                     hints_data = json.load(f)
-                    # Try the original subject first
+                    # Try the original subject first (case-insensitive against hints.json keys)
                     lookup_subject = subject
-                    if "templates" in hints_data and lookup_subject in hints_data["templates"] and self.selected_word in hints_data["templates"][lookup_subject]:
-                        logger.info(f"Found hints in hints.json for '{self.selected_word}' in category '{lookup_subject}'")
-                        all_hints = hints_data["templates"][lookup_subject][self.selected_word]
+                    templates = hints_data.get("templates", {})
+                    ci_key_map = {k.lower(): k for k in templates.keys()}
+                    subject_key = ci_key_map.get(str(lookup_subject).lower())
+                    general_key = ci_key_map.get("general") if "general" in ci_key_map else "general"
+                    if subject_key and self.selected_word in templates.get(subject_key, {}):
+                        logger.info(f"Found hints in hints.json for '{self.selected_word}' in category '{subject_key}'")
+                        all_hints = templates[subject_key][self.selected_word]
                         logger.info(f"Using {len(all_hints)} hints from hints.json")
-                    # If not found, fall back to 'general'
-                    elif "templates" in hints_data and "general" in hints_data["templates"] and self.selected_word in hints_data["templates"]["general"]:
+                    elif general_key and self.selected_word in templates.get(general_key, {}):
                         logger.info(f"Falling back to 'general' for hints for '{self.selected_word}'")
-                        all_hints = hints_data["templates"]["general"][self.selected_word]
+                        all_hints = templates[general_key][self.selected_word]
                         logger.info(f"Using {len(all_hints)} hints from hints.json (general)")
                     else:
                         logger.warning(f"Word '{self.selected_word}' not found in hints.json templates for category '{lookup_subject}' or 'general'")
