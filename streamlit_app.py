@@ -2903,11 +2903,15 @@ def display_game_over(game_summary):
             print(f"[DEBUG][SEI_EMAIL] Check: user='{current_user}', category='{current_category}', sei_cur={sei_cur if sei_cur is not None else 'None'}, highest={highest_sei_in_cat if highest_sei_in_cat is not None else 'None'}, zero_sei={zero_sei}, is_new_high={is_new_high}, recipient={'set' if recipient else 'missing'}, admin={'set' if admin_email else 'missing'}, smtp={'set' if has_smtp else 'missing'}")
             if is_new_high and recipient and has_smtp:
                 try:
-                    share_card_path = create_share_card(dict(game_summary))
+                    from backend.share_card import create_congrats_sei_card
+                    share_card_path = create_congrats_sei_card(current_user, current_category, sei_cur)
                 except Exception:
                     share_card_path = None
-                subject = f"🎉 New Highest SEI in {current_category.title()}!"
-                body = f"Congrats {current_user}! You just achieved the highest Score/Time Index in {current_category.title()}. Keep going!"
+                subject = f"🎉 Congratulations — Global Top SEI in {current_category.title()}!"
+                body = (
+                    f"Congratulations {current_user}! You just achieved the global top SEI (Score/Time Index) in "
+                    f"the {current_category.title()} category. Keep it up!"
+                )
                 print("[DEBUG][SEI_EMAIL] Preparing email:", {"to": recipient, "cc": admin_email or "", "category": current_category, "sei_cur": round(sei_cur, 4) if isinstance(sei_cur, (int, float)) else None, "highest": round(highest_sei_in_cat, 4) if isinstance(highest_sei_in_cat, (int, float)) else None, "attachment": share_card_path})
                 try:
                     sent_ok = send_email_with_attachment([recipient], subject, body, attachment_path=share_card_path, cc_emails=[admin_email] if admin_email else None)
