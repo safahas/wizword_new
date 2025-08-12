@@ -4,7 +4,7 @@ Share card generator for Word Guess Contest game.
 
 import os
 import logging
-from datetime import timedelta, datetime
+from datetime import timedelta, datetime, timezone
 from PIL import Image, ImageDraw, ImageFont, ImageColor, ImageFilter
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -642,3 +642,115 @@ def create_monthly_high_score_share_card(stats_manager) -> str:
             return output_path
     # Regenerate share card
     return create_share_card({**high_score_game, "output_path": output_path}, is_monthly=True) 
+
+def create_congrats_sei_card(username: str, category: str, sei_value: float, output_path: str = None) -> str:
+    """Create a dedicated congratulations share card for Global Top SEI achievements."""
+    try:
+        generator = ShareCardGenerator()
+        # Reuse base canvas and styling
+        image = Image.new('RGB', (generator.width, generator.height), generator.colors['background'])
+        draw = ImageDraw.Draw(image)
+        fonts = generator._load_fonts() # Changed from _get_fonts() to _load_fonts()
+        # Background gradient
+        bg = generator._create_gradient_background()
+        image.paste(bg, (0, 0))
+        # Title
+        title = "Congratulations!"
+        subtitle = f"Global Top SEI — Category: {category.title()}"
+        draw.text((generator.padding, generator.padding), title, font=fonts['title'], fill=generator.colors['text'])
+        draw.text((generator.padding, generator.padding + 60), subtitle, font=fonts['subtitle'], fill=generator.colors['accent'])
+        # Date/Time (UTC) under subtitle
+        try:
+            dt_utc = datetime.now(timezone.utc)
+            dt_str = dt_utc.strftime('%Y-%m-%d %H:%M:%SZ')
+        except Exception:
+            dt_str = datetime.utcnow().strftime('%Y-%m-%d %H:%M:%SZ')
+        draw.text((generator.padding, generator.padding + 100), dt_str, font=fonts['small'], fill=(100, 100, 100))
+        # Big SEI value box
+        box_x = generator.padding
+        box_y = generator.padding + 130
+        box_w = generator.width - generator.padding * 2
+        box_h = 140
+        draw.rounded_rectangle((box_x, box_y, box_x + box_w, box_y + box_h), radius=20, fill=(255, 255, 255), outline=generator.colors['border'])
+        sei_label = "Score Efficiency Index (SEI)"
+        draw.text((box_x + 24, box_y + 20), sei_label, font=fonts['text'], fill=generator.colors['text'])
+        draw.text((box_x + 24, box_y + 70), f"{sei_value:.2f}", font=fonts['subtitle'], fill=(244, 67, 54))
+        # Congrats message
+        msg = f"Well done, {username}! Keep raising the bar."
+        msg_y = box_y + box_h + 40
+        draw.text((generator.padding, msg_y), msg, font=fonts['text'], fill=generator.colors['text'])
+        # Trophy icon (drawn) UNDER the message, centered; with category text in base
+        try:
+            cup_width = 180
+            tx = (generator.width - cup_width) // 2
+            ty = msg_y + 30
+            gold = (255, 215, 0)
+            outline = (180, 140, 0)
+            dark = (60, 45, 0)
+            # Cup bowl as trapezoid (winning cup)
+            bowl_top_left = (tx + 20, ty + 10)
+            bowl_top_right = (tx + cup_width - 20, ty + 10)
+            bowl_bottom_right = (tx + cup_width - 45, ty + 62)
+            bowl_bottom_left = (tx + 45, ty + 62)
+            bowl_points = [bowl_top_left, bowl_top_right, bowl_bottom_right, bowl_bottom_left]
+            draw.polygon(bowl_points, fill=gold, outline=outline)
+            # Handles (curved)
+            draw.arc((tx, ty + 12, tx + 40, ty + 72), start=90, end=270, fill=outline, width=3)
+            draw.arc((tx + cup_width - 40, ty + 12, tx + cup_width, ty + 72), start=-90, end=90, fill=outline, width=3)
+            # Stem
+            draw.rectangle((tx + (cup_width // 2) - 2, ty + 62, tx + (cup_width // 2) + 2, ty + 96), fill=gold, outline=outline)
+            # Base (two-tier)
+            base_top = (tx + 50, ty + 96)
+            base_top_br = (tx + cup_width - 50, ty + 116)
+            base_bottom = (tx + 42, ty + 116)
+            base_bottom_br = (tx + cup_width - 42, ty + 136)
+            draw.rounded_rectangle((*base_top, *base_top_br), radius=6, fill=gold, outline=outline, width=3)
+            draw.rounded_rectangle((*base_bottom, *base_bottom_br), radius=8, fill=gold, outline=outline, width=3)
+            # Inner label 'WizWord' centered inside bowl
+            try:
+                inner_font = fonts['small']
+            except Exception:
+                inner_font = fonts['text']
+            cx = (bowl_top_left[0] + bowl_top_right[0]) // 2
+            cy = (bowl_top_left[1] + bowl_bottom_left[1]) // 2 + 4
+            draw.text((cx, cy), "WizWord", font=inner_font, fill=dark, anchor="mm")
+            # Username text inside the top base tier
+            top_cx = (base_top[0] + base_top_br[0]) // 2
+            top_cy = (base_top[1] + base_top_br[1]) // 2
+            user_text = (username or "").title()
+            if user_text:
+                draw.text((top_cx, top_cy), user_text, font=fonts['small'], fill=dark, anchor="mm")
+            # Category text inside the base (bottom tier)
+            base_cx = (base_bottom[0] + base_bottom_br[0]) // 2
+            base_cy = (base_bottom[1] + base_bottom_br[1]) // 2
+            cat_text = category.title()
+            draw.text((base_cx, base_cy), cat_text, font=fonts['small'], fill=dark, anchor="mm")
+        except Exception:
+            pass
+        # Small stamp
+        stamp_radius = 60
+        stamp_center = (generator.width - generator.padding - stamp_radius, generator.height - generator.padding - stamp_radius)
+        draw.ellipse([
+            stamp_center[0] - stamp_radius, stamp_center[1] - stamp_radius,
+            stamp_center[0] + stamp_radius, stamp_center[1] + stamp_radius
+        ], fill=generator.colors['accent'], outline=(33, 33, 33), width=4)
+        draw.multiline_text(
+            stamp_center,
+            f"WizWord\n{datetime.now().year}",
+            font=fonts['small'],
+            fill=(255, 255, 255),
+            anchor="mm",
+            align="center",
+            spacing=2,
+        )
+        # Output path
+        if not output_path:
+            safe_user = (username or 'user').lower()
+            output_path = os.path.join('game_data/share_cards', f'congrats_sei_{safe_user}.png')
+        os.makedirs(os.path.dirname(output_path), exist_ok=True)
+        image.save(output_path, "PNG")
+        logger.info(f"Congrats SEI card saved to {output_path}")
+        return output_path
+    except Exception as e:
+        logger.error(f"Failed to generate congrats SEI card: {e}")
+        return "" 

@@ -2325,6 +2325,24 @@ class WordSelector:
             # Do NOT add to recent list here
             return word
 
+        # If dictionary yielded nothing but hints.json has this subject, pick from that subject explicitly
+        try:
+            hints_file = os.path.join('backend', 'data', 'hints.json')
+            with open(hints_file, 'r', encoding='utf-8') as f:
+                hints_data = json.load(f)
+            templates = hints_data.get('templates', {})
+            ci_key_map = {k.lower(): k for k in templates.keys()}
+            subject_key = ci_key_map.get(str(self.current_category).lower())
+            if subject_key and isinstance(templates.get(subject_key), dict) and templates[subject_key]:
+                subject_words = list(templates[subject_key].keys())
+                if subject_words:
+                    import random as _random
+                    picked = _random.choice(subject_words)
+                    if is_valid_word(picked):
+                        return picked
+        except Exception:
+            pass
+
         # Only use fallback pool if both API and dictionary fail
         word = get_fallback_word(word_length, self.current_category)
         if word and is_valid_word(word):
