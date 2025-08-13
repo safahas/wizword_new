@@ -1166,19 +1166,18 @@ def main():
             """,
             unsafe_allow_html=True,
         )
+        # Toggle profiles at bottom of Beat start page
+        if 'show_all_users_profiles' not in st.session_state:
+            st.session_state['show_all_users_profiles'] = False
         if st.sidebar.button('Display All User Profiles', key='admin_show_users'):
-            users = st.session_state.get('users', {})
-            st.markdown('## All User Profiles')
-            import pandas as pd
-            df = pd.DataFrame.from_dict(users, orient='index').reset_index().rename(columns={'index': 'username'})
-            st.dataframe(df)
+            st.session_state['show_all_users_profiles'] = not st.session_state['show_all_users_profiles']
 
     if 'game' not in st.session_state or not st.session_state.game or getattr(st.session_state.game, 'mode', None) != 'Beat':
         random_length = random.randint(3, 10)
         user_profile = st.session_state.get('user', {})
         default_category = user_profile.get('default_category', 'general')
         subject = default_category if default_category else 'general'
-        print(f"[DEBUG][main] Starting Beat mode with subject: {subject}")
+        
         st.session_state.game = GameLogic(
             word_length=random_length,  # Use random length between 3 and 10
             subject=subject,
@@ -1414,12 +1413,12 @@ def display_welcome():
             """, unsafe_allow_html=True)
             if top10:
                 st.table([{ 'User': u, 'Highest SEI': round(v, 2) } for u, v in top10])
-                print(f"[DEBUG][TOP10] Rendered {len(top10)} entries for category '{chosen_cat}'.")
+                
             else:
                 st.info("No games available yet for this category.")
-                print(f"[DEBUG][TOP10] No games found for category '{chosen_cat}'. Total games loaded: {len(all_games)}")
+                
         except Exception as e:
-            print(f"[DEBUG][TOP10] Exception while rendering Top 10: {e}")
+            
             st.info("Unable to render Top 10 at the moment. Check logs for details.")
 
         # Toggleable High Score Monthly History
@@ -1541,7 +1540,7 @@ def display_game():
         default_category = user_profile.get('default_category', 'general')
         subject = default_category if default_category else 'general'
         random_length = random.randint(3, 10)
-        print(f"[DEBUG][display_game] Initializing Beat mode with subject: {subject}")
+        
         st.session_state.game = GameLogic(
             word_length=random_length,
             subject=subject,
@@ -1622,7 +1621,7 @@ def display_game():
         min_birthday = datetime.date(1900, 1, 1)
         raw_birthday = user.get('birthday', None)
         birthday_value = None  # Always define before use
-        print(f"[DEBUG] raw_birthday from user profile: {raw_birthday} (type: {type(raw_birthday)})", file=sys.stderr)
+        
         if isinstance(raw_birthday, datetime.date):
             birthday_value = raw_birthday
         elif isinstance(raw_birthday, datetime.datetime):
@@ -1808,7 +1807,83 @@ def display_game():
                 else:
                     st.info("No games available yet for this category.")
             except Exception as e:
-                print(f"[DEBUG][TOP10_BEAT] Exception rendering Beat start leaderboard: {e}")
+                pass
+            # Admin-only: Show per-category highest SEI table on Beat start page
+            try:
+                _user = st.session_state.get('user', {})
+                if (_user.get('username') or '').lower() == 'admin':
+                    all_games = get_all_game_results()
+                    
+                    category_top = {}
+                    for g in all_games:
+                        cat = (g.get('subject', '') or '').lower()
+                        if not cat:
+                            continue
+                        score = g.get('score', 0)
+                        time_taken = g.get('time_taken', g.get('duration', 0))
+                        words = g.get('words_solved', 1) if g.get('mode') == 'Beat' else 1
+                        denom = max(int(words or 0), 1)
+                        avg_score = score / denom
+                        avg_time = (time_taken / denom) if time_taken else 0
+                        sei = (avg_score / avg_time) if avg_time > 0 else None
+                        if sei is None:
+                            continue
+                        # Debug each candidate row
+                        try:
+                            pass
+                        except Exception:
+                            pass
+                        # Exclude this current (pre-start) session if somehow present
+                        cur_ts = None
+                        try:
+                            cur_ts = st.session_state.get('game_summary', {}).get('timestamp')
+                        except Exception:
+                            pass
+                        if cur_ts and g.get('timestamp') == cur_ts:
+                            continue
+                        prev = category_top.get(cat)
+                        if (prev is None) or (sei > prev.get('highest_sei', -1)):
+                            # Format date
+                            date_str = g.get('end_time') or g.get('timestamp')
+                            try:
+                                if isinstance(date_str, (int, float)):
+                                    from datetime import datetime
+                                    date_str = datetime.fromtimestamp(date_str).strftime('%Y-%m-%d')
+                                else:
+                                    date_str = str(date_str)[:10]
+                            except Exception:
+                                date_str = str(date_str)[:10] if date_str else ''
+                            category_top[cat] = {
+                                'category': cat.replace('_', ' ').title(),
+                                'highest_sei': round(sei, 2),
+                                'user': (g.get('nickname', '') or '').lower(),
+                                'date': date_str,
+                            }
+                    st.markdown("""
+                    <div style='font-size:1.0em; font-weight:700; color:#fff; margin:1em 0 0.25em 0;'>
+                        📚 Category Top SEI (All Categories)
+                    </div>
+                    """, unsafe_allow_html=True)
+                    rows = sorted(category_top.values(), key=lambda r: r['category'])
+                    if rows:
+                        st.table(rows)
+                    else:
+                        st.info("No category results found yet.")
+            except Exception as e:
+                pass
+            # Optionally render all user profiles at bottom if toggled by admin button in sidebar
+            try:
+                if (_user.get('username') or '').lower() == 'admin' and st.session_state.get('show_all_users_profiles'):
+                    import pandas as pd
+                    users = st.session_state.get('users', {})
+                    st.markdown('## All User Profiles')
+                    df = pd.DataFrame.from_dict(users, orient='index').reset_index().rename(columns={'index': 'username'})
+                    st.dataframe(df)
+                    
+                else:
+                    pass
+            except Exception as e:
+                pass
             st.stop()
         # Determine banner stickiness from environment
         _sticky_env = os.getenv('WIZWORD_STICKY_BANNER', 'true').strip().lower()
@@ -2174,7 +2249,7 @@ def display_game():
         st.session_state['yes_no_question_input'] = question
     if question.strip():
         # Debug prints to confirm score update
-        print(f"[DEBUG] Game mode before asking question: {game.mode}")
+        
         prev_score = game.score
         success, answer, points = game.ask_question(question)
         # Sync penalties to session after a question penalty is applied
@@ -2184,9 +2259,7 @@ def display_game():
                 st.session_state['beat_total_penalty'] = int(st.session_state.get('beat_total_penalty', 0)) + (abs(points) if points < 0 else 0)
         except Exception:
             pass
-        print(f"[DEBUG] Score before question: {prev_score}")
-        print(f"[DEBUG] Points for this question: {points}")
-        print(f"[DEBUG] Score after question: {game.score}")
+        
         if success:
             st.session_state['feedback'] = f"Q: {question}  \nA: {answer}"
             st.session_state['feedback_round_id'] = st.session_state.get('current_round_id')
@@ -2391,7 +2464,7 @@ def display_game_over(game_summary):
         if os.getenv('DEBUG_FORCE_TROPHY', '').strip().lower() in ('1', 'true', 'yes', 'on'):
             is_top = True
         if is_top:
-            print(f"[DEBUG][TROPHY] Triggering animation: sei_cur={sei_cur}, prev_highest={highest}")
+            
             st.markdown(
                 f"""
                 <style>
@@ -2640,7 +2713,7 @@ def display_game_over(game_summary):
             st.metric("Total Penalty Points", display_penalty)
         
         if mode == "Beat":
-            print(f"[DEBUG] summary_tab: words_solved = {game_summary.get('words_solved', 'MISSING')}")
+            
             # Compute SEI for this game
             words = game_summary.get('words_solved', 1)
             time_taken = game_summary.get('duration') or game_summary.get('time_taken', 0)
@@ -3025,7 +3098,7 @@ def display_game_over(game_summary):
             recipient = users.get(current_user, {}).get('email')
             admin_email = os.getenv('ADMIN_EMAIL') or os.getenv('SMTP_USER')
             has_smtp = bool(os.getenv('SMTP_HOST') and os.getenv('SMTP_USER') and os.getenv('SMTP_PASS'))
-            print(f"[DEBUG][SEI_EMAIL] Check: user='{current_user}', category='{current_category}', sei_cur={sei_cur if sei_cur is not None else 'None'}, highest={highest_sei_in_cat if highest_sei_in_cat is not None else 'None'}, zero_sei={zero_sei}, is_new_high={is_new_high}, recipient={'set' if recipient else 'missing'}, admin={'set' if admin_email else 'missing'}, smtp={'set' if has_smtp else 'missing'}")
+            
             if is_new_high and recipient and has_smtp:
                 try:
                     from backend.share_card import create_congrats_sei_card
@@ -3037,10 +3110,10 @@ def display_game_over(game_summary):
                     f"Congratulations {current_user}! You just achieved the global top SEI (Score/Time Index) in "
                     f"the {current_category.title()} category. Keep it up!"
                 )
-                print("[DEBUG][SEI_EMAIL] Preparing email:", {"to": recipient, "cc": admin_email or "", "category": current_category, "sei_cur": round(sei_cur, 4) if isinstance(sei_cur, (int, float)) else None, "highest": round(highest_sei_in_cat, 4) if isinstance(highest_sei_in_cat, (int, float)) else None, "attachment": share_card_path})
+                
                 try:
                     sent_ok = send_email_with_attachment([recipient], subject, body, attachment_path=share_card_path, cc_emails=[admin_email] if admin_email else None)
-                    print(f"[DEBUG][SEI_EMAIL] Sent status: {sent_ok}")
+                    
                     # Show celebration animation immediately on Game Over after achieving top SEI
                     cat_title = current_category.title()
                     st.markdown(
@@ -3091,15 +3164,15 @@ def display_game_over(game_summary):
                         unsafe_allow_html=True,
                     )
                 except Exception as e:
-                    print(f"[DEBUG][SEI_EMAIL] Failed to send: {e}")
+                    pass
             else:
                 # Log reasons for not sending
                 if zero_sei:
-                    print("[DEBUG][SEI_EMAIL] Not sending: current SEI is 0.0")
+                    pass
                 if not is_new_high and not zero_sei:
-                    print("[DEBUG][SEI_EMAIL] Not sending: current game did not set/tie highest SEI for this category.")
+                    pass
                 if not recipient:
-                    print("[DEBUG][SEI_EMAIL] Not sending: recipient email missing in user profile.")
+                    pass
                 if not has_smtp:
                     print("[DEBUG][SEI_EMAIL] Not sending: SMTP env vars missing (SMTP_HOST/SMTP_USER/SMTP_PASS).")
     except Exception as e:

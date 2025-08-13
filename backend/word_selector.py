@@ -2113,18 +2113,18 @@ class WordSelector:
         logger.info(f"[HINT SOURCE] Starting hint generation for word '{word}' in subject '{subject}'")
         
         # Map categories to general if needed
-        logger.info(f"[DEBUG] Looking up hints for word: '{word}', subject: '{subject}'")
+        
         if subject in ["tech", "movies", "music", "brands", "history"]:
             subject = "general"
-        logger.info(f"[DEBUG] Normalized subject for lookup: '{subject}'")
+        
         # Try hints.json first
         try:
             hints_file = os.path.join('backend', 'data', 'hints.json')
             logger.info(f"[HINT SOURCE] Looking for hints in: {hints_file}")
             with open(hints_file, 'r', encoding='utf-8') as f:
                 hints_data = json.load(f)
-                logger.info(f"[DEBUG] Available categories in hints.json: {list(hints_data.get('templates', {}).keys())}")
-                logger.info(f"[DEBUG] Available words in category '{subject}': {list(hints_data.get('templates', {}).get(subject, {}).keys())}")
+                
+                
                 # Try specific category first
                 if "templates" in hints_data and subject in hints_data["templates"] and word in hints_data["templates"][subject]:
                     logger.info(f"[HINT SOURCE] Found hints in hints.json for '{word}' in category '{subject}'")
@@ -2149,7 +2149,7 @@ class WordSelector:
             logger.warning("[HINT SOURCE] Error decoding hints.json")
         except Exception as e:
             logger.warning(f"[HINT SOURCE] Error reading hints.json: {e}")
-        logger.warning(f"[DEBUG] Fallback triggered for word: '{word}', subject: '{subject}'")
+        
         
         # If no hints in hints.json, try word-specific hints from WORD_HINTS
         if word in WORD_HINTS:

@@ -171,15 +171,15 @@ def get_fallback_word(word_length: int, subject: str) -> Optional[str]:
         if word_length == 'any':
             words = list(templates.get(subject, {}).keys())
         else:
-            print(f"[DEBUG][get_fallback_word] word_length: {word_length} (type: {type(word_length)})")
+            
             try:
                 wl = int(word_length)
             except Exception as e:
-                print(f"[DEBUG][get_fallback_word] Invalid word_length for int(): {word_length} (type: {type(word_length)}), error: {e}")
+                
                 return None
             words = [w for w in templates.get(subject, {}).keys() if len(w) == wl]
         if not words:
-            print(f"[DEBUG][get_fallback_word] No words found for subject '{subject}' and word_length {word_length}")
+            
             logger.error(f"No words found for subject '{subject}' in hints.json")
             return None
         selected_word = random.choice(words)

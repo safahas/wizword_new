@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 
 class GameLogic:
     def __init__(self, word_length: int = None, subject: str = "general", mode: str = "Fun", nickname: str = "", initial_score: int = 0, difficulty: str = "Medium"):
-        print(f"[DEBUG][GameLogic.__init__] word_length: {word_length} (type: {type(word_length)}), subject: {subject} (type: {type(subject)})")
+        
         # Persist WordSelector across all GameLogic instances
         if not hasattr(GameLogic, 'word_selector'):
             GameLogic.word_selector = WordSelector()
@@ -52,9 +52,9 @@ class GameLogic:
         try:
             # Instead of selecting a word without username, always use nickname for recent word tracking
             username = self.nickname if self.nickname else "global"
-            print(f"[DEBUG][GameLogic.__init__] Calling select_word with word_length={word_length}, subject={subject}, username={username}")
+            
             self.selected_word = self.word_selector.select_word(word_length, subject, username=username)
-            print(f"[DEBUG] selected_word set to: {repr(self.selected_word)}")
+            
             if not self.selected_word:
                 raise ValueError("Failed to select a word")
             all_hints = []
@@ -106,7 +106,7 @@ class GameLogic:
             logger.error(f"Error initializing game: {e}")
             # Ensure word_length is always an int for fallback
             fallback_length = word_length if isinstance(word_length, int) and 3 <= word_length <= 10 else 5
-            print(f"[DEBUG][GameLogic.__init__] Fallback: using fallback_length={fallback_length}, subject={subject}")
+            
             self.selected_word = get_fallback_word(fallback_length, subject)
             self.available_hints = [f"This {subject} term has specific characteristics"] * self.current_settings["max_hints"]
             logger.warning(f"Using {len(self.available_hints)} fallback hints due to initialization error")
@@ -142,7 +142,7 @@ class GameLogic:
                 return False, "You already asked a similar question!", 0
 
         # Get answer from word selector
-        print(f"[DEBUG] Passing word to answer_question: {repr(self.selected_word)}")
+        
         answer = self.word_selector.answer_question(self.selected_word, question, self.subject)
 
         points_added = 0
@@ -152,7 +152,7 @@ class GameLogic:
             self.total_points += points_added
             if points_added < 0:
                 self.total_penalty_points += abs(points_added)
-            print(f"[DEBUG] Penalty applied in ask_question: {points_added}, new score: {self.score}")  # <-- Debug print
+            
 
         # Record the question and answer
         self.questions_asked.append({
@@ -201,7 +201,7 @@ class GameLogic:
                 self.total_penalty_points += abs(points_added)
         
         # Add debug print for wrong/correct guess
-        print(f"[DEBUG] make_guess: is_correct={is_correct}, points_added={points_added}, guess_penalty={self.current_settings['guess_penalty']}")
+        
         
         self.game_over = is_correct
         if is_correct:

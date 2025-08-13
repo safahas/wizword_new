@@ -173,7 +173,7 @@ def send_share_card_email(email: str, subject: str, body: str, image_path: str) 
             server.starttls()
             server.login(smtp_user, smtp_pass)
             response = server.sendmail(from_addr, [to_addr], msg.as_string())
-            print(f"[DEBUG] SMTP sendmail response: {response}")
+            
         return True
     except Exception as e:
         import traceback
