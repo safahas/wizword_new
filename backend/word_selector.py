@@ -1985,6 +1985,8 @@ class WordSelector:
             ci_key_map = {k.lower(): k for k in templates.keys()}
             subject_key = ci_key_map.get(str(subject).lower()) or ci_key_map.get('general', 'general')
             all_words = list(templates.get(subject_key, {}).keys())
+            # Normalize keys to their original displayed form but compare in lowercase
+            all_words = [w for w in all_words if isinstance(w, str)]
         except Exception as e:
             logger.error(f"Error loading hints.json: {e}")
             all_words = []
@@ -2227,8 +2229,9 @@ class WordSelector:
             if not word or not isinstance(word, str):
                 logger.warning(f"Invalid word type or empty word: {type(word)}")
                 return False
-            if not word.isalpha():
-                logger.warning(f"Word contains non-alphabetic characters: {word}")
+            # Accept alphanumeric words (letters and digits only)
+            if not word.isalnum():
+                logger.warning(f"Word contains non-alphanumeric characters: {word}")
                 return False
             # Use the combo recent list for repeat check (ignore length)
             recent_key = f"{username}:{self.current_category}"
@@ -2241,11 +2244,13 @@ class WordSelector:
             if word == last_word:
                 logger.warning(f"Word would be an immediate repeat: {word}")
                 return False
-            if len(set(word)) < 2:  # Word must have at least 2 different letters
-                logger.warning(f"Word has too few unique letters: {word}")
+            # Apply letter-based checks on letters-only view
+            _letters_only = ''.join(c for c in word if c.isalpha())
+            if len(set(_letters_only.lower())) < 2:  # At least 2 different letters
+                logger.warning(f"Word has too few unique letters (letters-only view): {word}")
                 return False
-            if not any(c in 'aeiou' for c in word):  # Word must contain at least one vowel
-                logger.warning(f"Word contains no vowels: {word}")
+            if not any(c in 'aeiou' for c in _letters_only.lower()):  # Must contain at least one vowel
+                logger.warning(f"Word contains no vowels (letters-only view): {word}")
                 return False
             return True
 
@@ -2346,9 +2351,12 @@ class WordSelector:
 
         # Only use fallback pool if both API and dictionary fail
         word = get_fallback_word(word_length, self.current_category)
-        if word and is_valid_word(word):
-            # Do NOT add to recent list here
-            return word
+        if word and isinstance(word, str):
+            # Accept alphanumeric from fallback too
+            word = word.strip()
+            if is_valid_word(word):
+                # Do NOT add to recent list here
+                return word
         
         logger.error("Failed to get a valid word from any source")
         raise ValueError("Could not select a valid word after exhausting all options")
