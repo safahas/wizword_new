@@ -4,7 +4,7 @@ WizWord is an AI-powered word guessing game where players try to guess a hidden 
 
 ## Features
 
-- Multiple difficulty levels and word categories
+- Multiple difficulty levels and word categories (now supports alphanumeric titles like "Se7en", "Rio2", "Sing2")
 - AI-powered word selection and question answering
 - Fun and Challenge modes with strategic scoring system
 - Optional nickname-based leaderboard
@@ -81,6 +81,7 @@ streamlit run streamlit_app.py
      - Show Word: -100 points
    - Higher scores are better!
    - Be strategic with your questions to minimize penalties
+   - Category notes: Movies/Music/Aviation may include titles/terms with digits (e.g., "Se7en", "Rio2").
 
 3. Asking Questions:
    - Questions must be yes/no format (start with Is, Are, Does, etc.)
@@ -92,11 +93,12 @@ streamlit run streamlit_app.py
      - "Would you use this daily?"
 
 4. Making Guesses:
-   - Type your guess when ready
-   - Guesses must match the chosen word length
-   - In Beat mode:
-     - Wrong guesses cost 10 points
-     - Correct guesses always earn 100 points per word
+    - Type your guess when ready
+    - Guesses must match the chosen word length
+    - Alphanumeric names are allowed (e.g., Se7en, Rio2, Sing2). Only letters count for vowel/uniqueness checks.
+    - In Beat mode:
+      - Wrong guesses cost 10 points
+      - Correct guesses always earn 100 points per word
 
 ## Score Efficiency Index (SEI)
 SEI is a performance metric that combines your average score per word and your average time per word:
@@ -110,6 +112,7 @@ SEI is a performance metric that combines your average score per word and your a
 ### New: Top SEI Achievements
 When you achieve the highest SEI in a category (or tie the high with a non-zero SEI):
 - A dedicated “Congratulations” share card is generated and emailed to you (CC admin):
+  - CCs the address from ADMIN_EMAIL (fallback: SMTP_USER if ADMIN_EMAIL is unset).
   - Title: Congratulations!
   - Subtitle: Global Top SEI — Category: <your category>
   - UTC timestamp
