@@ -681,38 +681,43 @@ def create_congrats_sei_card(username: str, category: str, sei_value: float, out
         draw.text((generator.padding, msg_y), msg, font=fonts['text'], fill=generator.colors['text'])
         # Trophy icon (drawn) UNDER the message, centered; with category text in base
         try:
-            cup_width = 180
+            # Scale trophy by 44% total (another +20% over previous 1.2x)
+            scale = 1.44
+            def sc(v: float) -> int:
+                return int(round(v * scale))
+            cup_width = sc(180)
             tx = (generator.width - cup_width) // 2
-            ty = msg_y + 30
+            ty = msg_y + sc(30)
             gold = (255, 215, 0)
             outline = (180, 140, 0)
             dark = (60, 45, 0)
             # Cup bowl as trapezoid (winning cup)
-            bowl_top_left = (tx + 20, ty + 10)
-            bowl_top_right = (tx + cup_width - 20, ty + 10)
-            bowl_bottom_right = (tx + cup_width - 45, ty + 62)
-            bowl_bottom_left = (tx + 45, ty + 62)
+            bowl_top_left = (tx + sc(20), ty + sc(10))
+            bowl_top_right = (tx + cup_width - sc(20), ty + sc(10))
+            bowl_bottom_right = (tx + cup_width - sc(45), ty + sc(62))
+            bowl_bottom_left = (tx + sc(45), ty + sc(62))
             bowl_points = [bowl_top_left, bowl_top_right, bowl_bottom_right, bowl_bottom_left]
             draw.polygon(bowl_points, fill=gold, outline=outline)
             # Handles (curved)
-            draw.arc((tx, ty + 12, tx + 40, ty + 72), start=90, end=270, fill=outline, width=3)
-            draw.arc((tx + cup_width - 40, ty + 12, tx + cup_width, ty + 72), start=-90, end=90, fill=outline, width=3)
+            lw = max(1, sc(3))
+            draw.arc((tx, ty + sc(12), tx + sc(40), ty + sc(72)), start=90, end=270, fill=outline, width=lw)
+            draw.arc((tx + cup_width - sc(40), ty + sc(12), tx + cup_width, ty + sc(72)), start=-90, end=90, fill=outline, width=lw)
             # Stem
-            draw.rectangle((tx + (cup_width // 2) - 2, ty + 62, tx + (cup_width // 2) + 2, ty + 96), fill=gold, outline=outline)
+            draw.rectangle((tx + (cup_width // 2) - sc(2), ty + sc(62), tx + (cup_width // 2) + sc(2), ty + sc(96)), fill=gold, outline=outline)
             # Base (two-tier)
-            base_top = (tx + 50, ty + 96)
-            base_top_br = (tx + cup_width - 50, ty + 116)
-            base_bottom = (tx + 42, ty + 116)
-            base_bottom_br = (tx + cup_width - 42, ty + 136)
-            draw.rounded_rectangle((*base_top, *base_top_br), radius=6, fill=gold, outline=outline, width=3)
-            draw.rounded_rectangle((*base_bottom, *base_bottom_br), radius=8, fill=gold, outline=outline, width=3)
+            base_top = (tx + sc(50), ty + sc(96))
+            base_top_br = (tx + cup_width - sc(50), ty + sc(116))
+            base_bottom = (tx + sc(42), ty + sc(116))
+            base_bottom_br = (tx + cup_width - sc(42), ty + sc(136))
+            draw.rounded_rectangle((*base_top, *base_top_br), radius=sc(6), fill=gold, outline=outline, width=lw)
+            draw.rounded_rectangle((*base_bottom, *base_bottom_br), radius=sc(8), fill=gold, outline=outline, width=lw)
             # Inner label 'WizWord' centered inside bowl
             try:
                 inner_font = fonts['small']
             except Exception:
                 inner_font = fonts['text']
             cx = (bowl_top_left[0] + bowl_top_right[0]) // 2
-            cy = (bowl_top_left[1] + bowl_bottom_left[1]) // 2 + 4
+            cy = (bowl_top_left[1] + bowl_bottom_left[1]) // 2 + sc(4)
             draw.text((cx, cy), "WizWord", font=inner_font, fill=dark, anchor="mm")
             # Username text inside the top base tier
             top_cx = (base_top[0] + base_top_br[0]) // 2
@@ -746,7 +751,8 @@ def create_congrats_sei_card(username: str, category: str, sei_value: float, out
         # Output path
         if not output_path:
             safe_user = (username or 'user').lower()
-            output_path = os.path.join('game_data/share_cards', f'congrats_sei_{safe_user}.png')
+            safe_cat = (category or 'all').lower().replace(' ', '_')
+            output_path = os.path.join('game_data/share_cards', f'congrats_sei_{safe_user}_{safe_cat}.png')
         os.makedirs(os.path.dirname(output_path), exist_ok=True)
         image.save(output_path, "PNG")
         logger.info(f"Congrats SEI card saved to {output_path}")

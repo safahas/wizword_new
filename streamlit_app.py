@@ -2366,6 +2366,13 @@ def display_game_over(game_summary):
         for g in games:
             if (g.get('subject','') or '').lower() != category:
                 continue
+            # Exclude the current game result (already saved) from comparison
+            try:
+                _cur_ts = game_summary.get('timestamp')
+                if _cur_ts and g.get('timestamp') == _cur_ts:
+                    continue
+            except Exception:
+                pass
             s = g.get('score', 0)
             t = g.get('time_taken', g.get('duration', 0))
             w = g.get('words_solved', 1) if g.get('mode') == 'Beat' else 1
@@ -2378,7 +2385,7 @@ def display_game_over(game_summary):
         is_top = False
         if sei_cur is not None and sei_cur > 0:
             # Trigger if current SEI is a new high or ties the previous high (with small tolerance)
-            if highest is None or (sei_cur >= (highest - 1e-9)):
+            if highest is None or (sei_cur > (highest + 1e-9)):
                 is_top = True
         # Debug override to force the animation without requiring top SEI
         if os.getenv('DEBUG_FORCE_TROPHY', '').strip().lower() in ('1', 'true', 'yes', 'on'):
@@ -2494,8 +2501,6 @@ def display_game_over(game_summary):
     # --- NEW: Save game result to user profile only once ---
     if not st.session_state.get('game_saved', False):
         save_game_to_user_profile(game_summary)
-        # import logging
-        # logging.info(f"[PROOF] Beat mode: game_results.json updated for user '{game_summary.get('nickname', '?')}' with game: {game_summary}")
         st.session_state['game_saved'] = True
     # Add WizWord banner at the top
     stats_html = """
@@ -2962,6 +2967,13 @@ def display_game_over(game_summary):
         game_category = g.get('subject', '').lower()
         if leaderboard_category and leaderboard_category.lower() != 'all categories' and game_category != leaderboard_category.lower():
             continue
+        # Exclude the current game (already saved) from consideration to avoid self-comparison
+        try:
+            _cur_ts = game_summary.get('timestamp')
+            if _cur_ts and g.get('timestamp') == _cur_ts:
+                continue
+        except Exception:
+            pass
         score = g.get('score', 0)
         time_taken = g.get('time_taken', g.get('duration', 0))
         words = g.get('words_solved', 1) if g.get('mode') == 'Beat' else 1
@@ -2990,6 +3002,13 @@ def display_game_over(game_summary):
                 highest_sei_in_cat = None
                 for g in all_games:
                     if g.get('subject', '').lower() == current_category:
+                        # Exclude current game if already saved
+                        try:
+                            _cur_ts = game_summary.get('timestamp')
+                            if _cur_ts and g.get('timestamp') == _cur_ts:
+                                continue
+                        except Exception:
+                            pass
                         s = g.get('score', 0)
                         t = g.get('time_taken', g.get('duration', 0))
                         w = g.get('words_solved', 1) if g.get('mode') == 'Beat' else 1
@@ -3001,7 +3020,7 @@ def display_game_over(game_summary):
                             highest_sei_in_cat = sei_val
             # Skip sending if current SEI is exactly zero
             zero_sei = isinstance(sei_cur, (int, float)) and abs(sei_cur) < 1e-12
-            is_new_high = (not zero_sei) and ((highest_sei_in_cat is None) or (sei_cur >= (highest_sei_in_cat - 1e-9)))
+            is_new_high = (not zero_sei) and ((highest_sei_in_cat is None) or (sei_cur > (highest_sei_in_cat + 1e-9)))
             users = st.session_state.get('users', {}) if isinstance(st.session_state.get('users'), dict) else {}
             recipient = users.get(current_user, {}).get('email')
             admin_email = os.getenv('ADMIN_EMAIL') or os.getenv('SMTP_USER')
