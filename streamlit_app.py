@@ -2994,7 +2994,7 @@ def display_game_over(game_summary):
                             highest_sei_in_cat = sei_val
             # Skip sending if current SEI is exactly zero
             zero_sei = isinstance(sei_cur, (int, float)) and abs(sei_cur) < 1e-12
-            is_new_high = (not zero_sei) and (highest_sei_in_cat is not None) and (abs(sei_cur - highest_sei_in_cat) < 1e-9)
+            is_new_high = (not zero_sei) and ((highest_sei_in_cat is None) or (sei_cur >= (highest_sei_in_cat - 1e-9)))
             users = st.session_state.get('users', {}) if isinstance(st.session_state.get('users'), dict) else {}
             recipient = users.get(current_user, {}).get('email')
             admin_email = os.getenv('ADMIN_EMAIL') or os.getenv('SMTP_USER')
