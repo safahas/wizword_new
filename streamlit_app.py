@@ -886,19 +886,20 @@ def display_login():
         - Select a word category, or pick 'any' for a random challenge.
         - Ask yes/no questions or request hints to help you guess the word.
         - Enter your guess at any time.
-        **Beat Mode Details:**
-        - You have 5 minutes to play.
-        - For each word, you can:
-            - **Guess the word:**
-                - Correct: **+100**
-                - Wrong: **-10**
-            - **Ask yes/no questions:** **-1** each
-            - **Request hints:** **-10** each (max 3 per word)
-            - **Show Word:** **-100** (reveals the answer)
-        - Try to solve as many words as possible and maximize your score before time runs out!
-        - Only Medium difficulty is available for all modes.
-        
-        #### Top SEI Achievements
+                    **Beat Mode Details:**
+            - You have 5 minutes to play.
+            - For each word, you can:
+                - **Guess the word:**
+                    - Correct: **+100**
+                    - Wrong: **-10**
+                - **Ask yes/no questions:** **-1** each
+                - **Request hints:** **-10** each (max 3 per word)
+                - **Show Word:** **-100** (reveals the answer)
+            - Try to solve as many words as possible and maximize your score before time runs out!
+            - Only Medium difficulty is available for all modes.
+            - Note: Some categories (e.g., Movies, Music, Aviation) may include alphanumeric titles like "Se7en" or "Rio2". Only letters count toward vowel/uniqueness checks.
+            
+            #### Top SEI Achievements
         - Achieve (or tie) the highest SEI in a category (with SEI > 0) to unlock:
           - An emailed congratulations card (with trophy, your username, category, SEI, and UTC timestamp)
           - An in-app celebration: a flying trophy, rising banner, and balloons that auto‑dismiss
@@ -1489,6 +1490,7 @@ def display_welcome():
                 - **Show Word:** **-100** (reveals the answer)
             - Try to solve as many words as possible and maximize your score before time runs out!
             - Only Medium difficulty is available for all modes.
+            - Note: Some categories (e.g., Movies, Music, Aviation) may include alphanumeric titles like "Se7en" or "Rio2". Only letters count toward vowel/uniqueness checks.
             
             #### Top SEI Achievements
             - Achieve (or tie) the highest SEI in a category (with SEI > 0) to unlock:
