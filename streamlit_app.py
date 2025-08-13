@@ -1659,7 +1659,7 @@ def display_game():
 
     # Handle change category
     if st.session_state.get('change_category', False):
-        categories = ["any", "anatomy", "animals", "brands", "cities", "food", "general", "gre", "history", "medicines", "movies", "music", "places", "psat", "sat", "science", "sports", "tech", "4th_grade"]
+        categories = ["any", "anatomy", "animals", "aviation", "brands", "cities", "food", "general", "gre", "history", "medicines", "movies", "music", "places", "psat", "sat", "science", "sports", "tech", "4th_grade"]
         new_category = st.selectbox("Select a new category:", categories, format_func=lambda x: ('Any' if x=='any' else ('GRE' if x=='gre' else ('SAT' if x=='sat' else ('PSAT' if x=='psat' else x.replace('_',' ').title())))), key='category_select_box')
         if st.button("Confirm Category Change", key='change_category_btn'):
             game = st.session_state.game
