@@ -209,6 +209,12 @@ class GameLogic:
         
         if is_correct:
             message = f"Correct! You guessed the word '{self.selected_word}'. Current score: {self.score}"
+            # Mark word as played to update recent list (avoid repeats per user+category)
+            try:
+                username = self.nickname if self.nickname else "global"
+                self.word_selector.mark_word_played(self.selected_word, username, self.subject)
+            except Exception:
+                pass
         else:
             point_text = f" (-{abs(points_added)} points)" if points_added < 0 else ""
             message = f"Wrong! Try again. Current score: {self.score}{point_text}"

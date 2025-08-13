@@ -2281,8 +2281,13 @@ def display_game():
     if game.mode == 'Beat':
         if st.button('Skip', key='skip_word_btn_main'):
             # Do not accumulate penalties here; penalties are tracked in backend total_penalty_points
-            # st.session_state['beat_total_points'] += game.total_points
-            # st.session_state.beat_word_count += 1  # <-- REMOVE THIS LINE
+            # Mark current word as played to avoid immediate repeats in recent list
+            try:
+                username = game.nickname if hasattr(game, 'nickname') and game.nickname else 'global'
+                if hasattr(game, 'selected_word') and game.selected_word:
+                    game.word_selector.mark_word_played(game.selected_word, username, game.subject)
+            except Exception:
+                pass
             new_word_length = 5
             new_subject = game.subject
             st.session_state.game = GameLogic(
