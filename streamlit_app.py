@@ -1412,7 +1412,26 @@ def display_welcome():
             </div>
             """, unsafe_allow_html=True)
             if top10:
-                st.table([{ 'User': u, 'Highest SEI': round(v, 2) } for u, v in top10])
+                # Build per-user date (most recent game achieving their highest SEI)
+                rows = []
+                for u, v in top10:
+                    dates = []
+                    for gg in all_games:
+                        gc = (gg.get('subject','') or '').lower()
+                        if chosen_cat != 'any' and gc != chosen_cat:
+                            continue
+                        if (gg.get('nickname','') or '').lower() != u:
+                            continue
+                        sc = gg.get('score', 0); tt = gg.get('time_taken', gg.get('duration', 0))
+                        wd = gg.get('words_solved', 1) if gg.get('mode') == 'Beat' else 1
+                        dn = max(int(wd or 0), 1)
+                        avs = sc / dn; avt = tt / dn if tt else 0
+                        sei_u = avs / avt if avt > 0 else None
+                        if sei_u is not None and abs(sei_u - v) < 1e-9:
+                            dates.append(str(gg.get('timestamp') or gg.get('end_time') or '')[:10])
+                    last = sorted([d for d in dates if d], reverse=True)[0] if dates else ''
+                    rows.append({'User': u, 'Highest SEI': round(v,2), 'Date': last})
+                st.table(rows)
                 
             else:
                 st.info("No games available yet for this category.")
@@ -1803,7 +1822,25 @@ def display_game():
                 </div>
                 """, unsafe_allow_html=True)
                 if top10:
-                    st.table([{ 'User': u, 'Highest SEI': round(v, 2) } for u, v in top10])
+                    rows = []
+                    for u, v in top10:
+                        dates = []
+                        for gg in all_games:
+                            gc = (gg.get('subject','') or '').lower()
+                            if chosen_cat != 'any' and gc != chosen_cat:
+                                continue
+                            if (gg.get('nickname','') or '').lower() != u:
+                                continue
+                            sc = gg.get('score', 0); tt = gg.get('time_taken', gg.get('duration', 0))
+                            wd = gg.get('words_solved', 1) if gg.get('mode') == 'Beat' else 1
+                            dn = max(int(wd or 0), 1)
+                            avs = sc / dn; avt = tt / dn if tt else 0
+                            sei_u = avs / avt if avt > 0 else None
+                            if sei_u is not None and abs(sei_u - v) < 1e-9:
+                                dates.append(str(gg.get('timestamp') or gg.get('end_time') or '')[:10])
+                        last = sorted([d for d in dates if d], reverse=True)[0] if dates else ''
+                        rows.append({'User': u, 'Highest SEI': round(v,2), 'Date': last})
+                    st.table(rows)
                 else:
                     st.info("No games available yet for this category.")
             except Exception as e:
@@ -2799,6 +2836,22 @@ def display_game_over(game_summary):
                         date = date.split('T')[0]
                     game_dates.append(date)
             if avg_scores and avg_times and sei_values and game_dates:
+                # Append current game's SEI point to the graph if in Beat mode
+                try:
+                    if game_summary.get('mode') == 'Beat':
+                        cur_date = (game_summary.get('timestamp') or '')[:10]
+                        if cur_date:
+                            game_dates.append(cur_date)
+                            # Use current avg values computed above for consistency
+                            _words = game_summary.get('words_solved', 1)
+                            _time = game_summary.get('duration') or game_summary.get('time_taken', 0)
+                            _den = max(int(_words or 0), 1)
+                            avg_scores.append((score / _den) if (score := game_summary.get('score', 0)) or True else 0)
+                            avg_times.append((_time / _den) if _time else 0)
+                            _sei_val = (avg_scores[-1] / avg_times[-1]) if avg_times[-1] > 0 else 0
+                            sei_values.append(_sei_val)
+                except Exception:
+                    pass
                 fig, ax = plt.subplots(figsize=(6, 3))
                 color1 = 'tab:blue'
                 color2 = 'tab:orange'
@@ -3029,9 +3082,21 @@ def display_game_over(game_summary):
         leaderboard_category = game_summary.get('subject', None)
     if not leaderboard_category:
         leaderboard_category = 'All Categories'
+    # Show current game's SEI alongside the leaderboard header
+    try:
+        _score_cur = game_summary.get('score', 0)
+        _time_cur = game_summary.get('time_taken', game_summary.get('duration', 0))
+        _words_cur = game_summary.get('words_solved', 1) if game_summary.get('mode') == 'Beat' else 1
+        _denom_cur = max(int(_words_cur or 0), 1)
+        _avg_score_cur = _score_cur / _denom_cur
+        _avg_time_cur = (_time_cur / _denom_cur) if _time_cur else 0
+        _sei_cur_display = (_avg_score_cur / _avg_time_cur) if _avg_time_cur > 0 else None
+    except Exception:
+        _sei_cur_display = None
+    _your_sei_html = (f" — Your SEI: {(_sei_cur_display if _sei_cur_display is not None else 0):.2f}" if _sei_cur_display is not None else "")
     st.markdown(f"""
     <div style='font-size:1.1em; font-weight:700; color:#fff; margin-bottom:0.5em;'>
-        🏆 Global Leaderboard (Top 10 by SEI) - {leaderboard_category.title() if leaderboard_category != 'All Categories' else 'All Categories'}
+        🏆 Global Leaderboard (Top 10 by SEI) - {leaderboard_category.title() if leaderboard_category != 'All Categories' else 'All Categories'}{_your_sei_html}
     </div>
     """, unsafe_allow_html=True)
     user_sei = {}
@@ -3040,13 +3105,7 @@ def display_game_over(game_summary):
         game_category = g.get('subject', '').lower()
         if leaderboard_category and leaderboard_category.lower() != 'all categories' and game_category != leaderboard_category.lower():
             continue
-        # Exclude the current game (already saved) from consideration to avoid self-comparison
-        try:
-            _cur_ts = game_summary.get('timestamp')
-            if _cur_ts and g.get('timestamp') == _cur_ts:
-                continue
-        except Exception:
-            pass
+
         score = g.get('score', 0)
         time_taken = g.get('time_taken', g.get('duration', 0))
         words = g.get('words_solved', 1) if g.get('mode') == 'Beat' else 1
@@ -3179,7 +3238,24 @@ def display_game_over(game_summary):
         print(f"[DEBUG][SEI_EMAIL] Exception in email logic: {e}")
     # Sort users by highest SEI
     top_users = sorted(user_sei.items(), key=lambda x: x[1], reverse=True)[:10]
-    st.table([{ 'User': u, 'Highest SEI': round(sei, 2) } for u, sei in top_users])
+    rows = []
+    for u, v in top_users:
+        dates = []
+        for gg in all_games:
+            if leaderboard_category and leaderboard_category.lower() != 'all categories' and (gg.get('subject','') or '').lower() != leaderboard_category.lower():
+                continue
+            if (gg.get('nickname','') or '').lower() != u:
+                continue
+            sc = gg.get('score', 0); tt = gg.get('time_taken', gg.get('duration', 0))
+            wd = gg.get('words_solved', 1) if gg.get('mode') == 'Beat' else 1
+            dn = max(int(wd or 0), 1)
+            avs = sc / dn; avt = tt / dn if tt else 0
+            sei_u = avs / avt if avt > 0 else None
+            if sei_u is not None and abs(sei_u - v) < 1e-9:
+                dates.append(str(gg.get('timestamp') or gg.get('end_time') or '')[:10])
+        last = sorted([d for d in dates if d], reverse=True)[0] if dates else ''
+        rows.append({'User': u, 'Highest SEI': round(v,2), 'Date': last})
+    st.table(rows)
     # After all tabs (summary_tab, stats_tab, share_tab, stats_leader_tab), restore the play again and restart buttons
     col1, col2 = st.columns(2)
     with col1:
