@@ -886,7 +886,7 @@ def display_login():
         - Select a word category, or pick 'any' for a random challenge.
         - Ask yes/no questions or request hints to help you guess the word.
         - Enter your guess at any time.
-                    **Beat Mode Details:**
+        **Beat Mode Details:**
             - You have 5 minutes to play.
             - For each word, you can:
                 - **Guess the word:**
@@ -900,15 +900,13 @@ def display_login():
             - Note: Some categories (e.g., Movies, Music, Aviation) may include alphanumeric titles like "Se7en" or "Rio2". Only letters count toward vowel/uniqueness checks.
             
             #### Top SEI Achievements
-        - Achieve (or tie) the highest SEI in a category (with SEI > 0) to unlock:
-          - An emailed congratulations card (with trophy, your username, category, SEI, and UTC timestamp)
-          - An in-app celebration: a flying trophy, rising banner, and balloons that auto‑dismiss
-
-        #### Support
-        - Use the ☰ Menu → Contact Support to send a subject and message to the admin (ADMIN_EMAIL; falls back to SMTP_USER).
-        """
-
-
+            - Achieve (or tie) the highest SEI in a category (with SEI > 0) to unlock:
+              - An emailed congratulations card (with trophy, your username, category, SEI, and UTC timestamp)
+              - An in-app celebration: a flying trophy, rising banner, and balloons that auto‑dismiss
+            
+            #### Support
+            - Use the ☰ Menu → Contact Support to send a subject and message to the admin.
+        """)
 
     # State for which form to show
     if 'auth_mode' not in st.session_state:
