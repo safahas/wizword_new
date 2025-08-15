@@ -903,7 +903,10 @@ def display_login():
         - Achieve (or tie) the highest SEI in a category (with SEI > 0) to unlock:
           - An emailed congratulations card (with trophy, your username, category, SEI, and UTC timestamp)
           - An in-app celebration: a flying trophy, rising banner, and balloons that auto‑dismiss
-        """)
+
+        #### Support
+        - Use the ☰ Menu → Contact Support to send a subject and message to the admin (ADMIN_EMAIL; falls back to SMTP_USER).
+        """
 
 
 
@@ -1608,6 +1611,31 @@ def display_game():
                 st.session_state['show_user_profile'] = not st.session_state.get('show_user_profile', False)
             if st.button('Toggle Sound/Music', key='toggle_sound_btn'):
                 st.session_state['sound_on'] = not st.session_state.get('sound_on', True)
+            # Support button under menu tab
+            if 'show_support' not in st.session_state:
+                st.session_state['show_support'] = False
+            if st.button('Contact Support', key='contact_support_btn_menu'):
+                st.session_state['show_support'] = not st.session_state['show_support']
+            if st.session_state.get('show_support'):
+                with st.form('support_form_menu', clear_on_submit=True):
+                    support_subject = st.text_input('Subject', key='support_subject_input_menu')
+                    support_message = st.text_area('Message', key='support_message_input_menu')
+                    submitted = st.form_submit_button('Send Support Message')
+                    if submitted:
+                        admin_email = os.getenv('ADMIN_EMAIL') or os.getenv('SMTP_USER')
+                        if not admin_email:
+                            st.error('Support email not configured. Set ADMIN_EMAIL or SMTP_USER.')
+                        else:
+                            user = st.session_state.get('user', {})
+                            sender = (user.get('username') or 'unknown')
+                            sender_email = user.get('email') or ''
+                            category = getattr(st.session_state.get('game'), 'subject', '') or ''
+                            body = f"From: {sender} <{sender_email}>\nCategory: {category}\n\n{support_message}"
+                            ok = send_email_with_attachment(admin_email, support_subject or '(no subject)', body)
+                            if ok:
+                                st.success('Support request sent!')
+                            else:
+                                st.error('Failed to send. Please try again later.')
             if st.button('Log Out', key='logout_btn'):
                 # Only remove session/user/game state, NOT the users database
                 keys_to_keep = ['users']
