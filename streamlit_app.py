@@ -902,11 +902,15 @@ def display_login():
         #### Top SEI Achievements
         - Achieve (or tie) the highest SEI in a category (with SEI > 0) to unlock:
           - An emailed congratulations card (with trophy, your username, category, SEI, and UTC timestamp)
-          - An in-app celebration: a flying trophy, rising banner, and balloons that auto‑dismiss
-            
-            #### Support
-            - Use the ☰ Menu → Contact Support to send a subject and message to the admin.
-        """)
+                        - An in-app celebration: a flying trophy, rising banner, and balloons that auto‑dismiss
+              
+              #### Game Over Page
+              - Summary: Final score, time taken, and total penalty points.
+              - Statistics: Running Avg Score/Word and Time/Word vs game date; SEI line graph; includes the current game's point.
+              - Leaderboard: Global Top 10 by SEI (with dates) for the current category; header shows your SEI.
+              - Share: Generate and download a share card (with QR) and share to social networks.
+              - My Stats & Leaderboard: Personal historical stats and per‑category leaderboard.
+          """}
 
     # State for which form to show
     if 'auth_mode' not in st.session_state:
@@ -1514,8 +1518,15 @@ def display_welcome():
             #### Top SEI Achievements
             - Achieve (or tie) the highest SEI in a category (with SEI > 0) to unlock:
               - An emailed congratulations card (with trophy, your username, category, SEI, and UTC timestamp)
-              - An in-app celebration: a flying trophy, rising banner, and balloons that auto‑dismiss
-            """)
+                        - An in-app celebration: a flying trophy, rising banner, and balloons that auto‑dismiss
+
+        #### Game Over Page
+        - Summary: Final score, time taken, and total penalty points.
+        - Statistics: Running Avg Score/Word and Time/Word vs game date; SEI line graph; includes the current game's point.
+        - Leaderboard: Global Top 10 by SEI (with dates) for the current category; header shows your SEI.
+        - Share: Generate and download a share card (with QR) and share to social networks.
+        - My Stats & Leaderboard: Personal historical stats and per‑category leaderboard.
+        """)
         with st.expander("💡 Hints System", expanded=False):
             st.markdown("""
             - Easy Mode: Up to 10 hints available (-5 points each)
