@@ -19,7 +19,7 @@ import logging
 logging.getLogger('matplotlib.font_manager').setLevel(logging.WARNING)
 logging.getLogger('matplotlib.category').setLevel(logging.WARNING)
 
-USERS_FILE = "users.json"
+USERS_FILE = os.environ.get("USERS_FILE", "users.json")
 
 # Global counters file (users count, total game time, total sessions)
 GLOBAL_COUNTERS_PATH = os.environ.get('GLOBAL_COUNTERS_PATH', 'game_data/global_counters.json')
@@ -877,7 +877,7 @@ def display_login():
     # --- How to Play as collapsible section ---
     
     with st.expander("📖 How to Play", expanded=False):
-        st.markdown("""
+        st.markdown(f"""
         ### Game Instructions:
         - Choose your game mode:
             - **Fun**: Unlimited play, no timer, just for fun.
@@ -887,22 +887,22 @@ def display_login():
         - Ask yes/no questions or request hints to help you guess the word.
         - Enter your guess at any time.
         **Beat Mode Details:**
-            - You have 5 minutes to play.
-            - For each word, you can:
-                - **Guess the word:**
-                    - Correct: **+100**
-                    - Wrong: **-10**
-                - **Ask yes/no questions:** **-1** each
-                - **Request hints:** **-10** each (max 3 per word)
-                - **Show Word:** **-100** (reveals the answer)
-            - Try to solve as many words as possible and maximize your score before time runs out!
-            - Only Medium difficulty is available for all modes.
+        - You have {int(os.getenv('BEAT_MODE_TIME', 300))} seconds to play.
+        - For each word, you can:
+            - **Guess the word:**
+                - Correct: **+100**
+                - Wrong: **-10**
+            - **Ask yes/no questions:** **-1** each
+            - **Request hints:** **-10** each (max 3 per word)
+            - **Show Word:** **-100** (reveals the answer)
+        - Try to solve as many words as possible and maximize your score before time runs out!
+        - Only Medium difficulty is available for all modes.
             - Note: Some categories (e.g., Movies, Music, Aviation) may include alphanumeric titles like "Se7en" or "Rio2". Only letters count toward vowel/uniqueness checks.
-            
-            #### Top SEI Achievements
-            - Achieve (or tie) the highest SEI in a category (with SEI > 0) to unlock:
-              - An emailed congratulations card (with trophy, your username, category, SEI, and UTC timestamp)
-              - An in-app celebration: a flying trophy, rising banner, and balloons that auto‑dismiss
+        
+        #### Top SEI Achievements
+        - Achieve (or tie) the highest SEI in a category (with SEI > 0) to unlock:
+          - An emailed congratulations card (with trophy, your username, category, SEI, and UTC timestamp)
+          - An in-app celebration: a flying trophy, rising banner, and balloons that auto‑dismiss
             
             #### Support
             - Use the ☰ Menu → Contact Support to send a subject and message to the admin.
@@ -1489,7 +1489,7 @@ def display_welcome():
         3. Click 'Start Game' to begin!
         """)
         with st.expander("📖 How to Play", expanded=False):
-            st.markdown("""
+            st.markdown(f"""
             ### Game Instructions:
             - Choose your game mode:
                 - **Fun**: Unlimited play, no timer, just for fun.
@@ -1499,7 +1499,7 @@ def display_welcome():
             - Ask yes/no questions or request hints to help you guess the word.
             - Enter your guess at any time.
             **Beat Mode Details:**
-            - You have 5 minutes to play.
+            - You have {int(os.getenv('BEAT_MODE_TIME', 300))} seconds to play.
             - For each word, you can:
                 - **Guess the word:**
                     - Correct: **+100**
