@@ -138,6 +138,25 @@ Your **Favorite Category** is the word category (such as Tech, Brands, Science, 
 - Separate SEI trend per game
 - Leaderboard filtered to the active category
 
+## Aggregates and Performance
+
+To avoid rescanning `game_results.json` on every render, the app maintains a compact aggregates store:
+
+- Location: `game_data/aggregates.json` (override with `AGGREGATES_PATH`)
+- Bootstrap: On first run, if the file is missing/empty, it auto-imports all existing games from `GAME_RESULTS_PATH` and builds aggregates
+- Incremental updates: On each Game Over, new results are appended to the aggregates
+- Consumers: Leaderboards, SEI tables, and stats line graphs read from the aggregates for O(Top N) reads
+
+Environment variables:
+- `GAME_RESULTS_PATH` (default: `game_results.json`) — full games log (append-only)
+- `AGGREGATES_PATH` (default: `game_data/aggregates.json`) — derived data for fast UI queries
+
+Docker/AWS paths (WORKDIR=/app):
+- `/app/game_data/aggregates.json` (mount this directory for persistence)
+
+Maintenance:
+- To rebuild from scratch, delete the aggregates file and restart; it will bootstrap from `GAME_RESULTS_PATH` on next run
+
 ## Cloud Deployment
 
 To enable cloud storage with AWS:

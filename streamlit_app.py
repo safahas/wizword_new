@@ -902,15 +902,15 @@ def display_login():
         #### Top SEI Achievements
         - Achieve (or tie) the highest SEI in a category (with SEI > 0) to unlock:
           - An emailed congratulations card (with trophy, your username, category, SEI, and UTC timestamp)
-                        - An in-app celebration: a flying trophy, rising banner, and balloons that auto‑dismiss
-              
-              #### Game Over Page
-              - Summary: Final score, time taken, and total penalty points.
-              - Statistics: Running Avg Score/Word and Time/Word vs game date; SEI line graph; includes the current game's point.
-              - Leaderboard: Global Top 10 by SEI (with dates) for the current category; header shows your SEI.
-              - Share: Generate and download a share card (with QR) and share to social networks.
-              - My Stats & Leaderboard: Personal historical stats and per‑category leaderboard.
-          """}
+          - An in-app celebration: a flying trophy, rising banner, and balloons that auto‑dismiss
+
+          #### Game Over Page
+          - Summary: Final score, time taken, and total penalty points.
+          - Statistics: Running Avg Score/Word and Time/Word vs game date; SEI line graph; includes the current game's point.
+          - Leaderboard: Global Top 10 by SEI (with dates) for the current category; header shows your SEI.
+          - Share: Generate and download a share card (with QR) and share to social networks.
+          - My Stats & Leaderboard: Personal historical stats and per‑category leaderboard.
+        """)
 
     # State for which form to show
     if 'auth_mode' not in st.session_state:
@@ -1065,20 +1065,31 @@ def display_login():
             st.rerun()
         if register_btn:
             users = st.session_state['users']
-            new_username_lower = new_username.lower()
-            # Require all fields
-            if not new_username or not new_password or not new_email or not birthday or not education:
-                st.error("Please enter username, email, password, birthday, and education.")
+            # Strip whitespace
+            u_name = (new_username or "").strip()
+            u_email = (new_email or "").strip()
+            u_pass = (new_password or "").strip()
+            u_edu = (education or "").strip()
+            new_username_lower = u_name.lower()
+            # Per-field validation
+            missing = []
+            if not u_name: missing.append("username")
+            if not u_email: missing.append("email")
+            if not u_pass: missing.append("password")
+            if not birthday: missing.append("birthday")
+            if not u_edu: missing.append("education")
+            if missing:
+                st.error("Please enter: " + ", ".join(missing) + ".")
             elif new_username_lower in users:
                 st.error("Username already exists.")
-            elif any(u['email'] == new_email for u in users.values()):
+            elif any((u.get('email') or '').lower() == u_email.lower() for u in users.values()):
                 st.error("Email already registered.")
             else:
                 users[new_username_lower] = {
-                    'password': new_password,
-                    'email': new_email,
+                    'password': u_pass,
+                    'email': u_email,
                     'birthday': str(birthday),
-                    'education': education
+                    'education': u_edu
                 }
                 st.session_state['users'] = users
                 save_users(users)
@@ -1143,6 +1154,11 @@ def display_login():
 
 def main():
     """Main application entry point."""
+    # Bootstrap aggregates on first run
+    try:
+        ensure_aggregates_bootstrap()
+    except Exception:
+        pass
     # Show login page if not logged in
     if not st.session_state.get('logged_in', False):
         display_login()
@@ -3537,6 +3553,7 @@ def log_beat_word_count_event(event, value):
         f.write(f"{event}: beat_word_count = {value}\n")
 
 GAME_RESULTS_PATH = os.environ.get('GAME_RESULTS_PATH', 'game_results.json')
+AGGREGATES_PATH = os.environ.get('AGGREGATES_PATH', 'game_data/aggregates.json')
 
 def save_game_to_user_profile(game_summary):
     import os, json
@@ -3635,6 +3652,110 @@ def format_duration(seconds):
     if minutes == 0:
         return f"{seconds}s"
     return f"{minutes}m {seconds}s"
+
+def _ensure_aggregates_file() -> None:
+    try:
+        os.makedirs(os.path.dirname(AGGREGATES_PATH) or '.', exist_ok=True)
+        if not os.path.exists(AGGREGATES_PATH):
+            with open(AGGREGATES_PATH, 'w', encoding='utf-8') as f:
+                json.dump({'category_user_highest': {}, 'user_time_series': {}}, f, indent=2)
+    except Exception:
+        pass
+
+def _load_aggregates() -> dict:
+    _ensure_aggregates_file()
+    try:
+        with open(AGGREGATES_PATH, 'r', encoding='utf-8') as f:
+            return json.load(f)
+    except Exception:
+        return {'category_user_highest': {}, 'user_time_series': {}}
+
+def _save_aggregates(data: dict) -> None:
+    try:
+        with open(AGGREGATES_PATH, 'w', encoding='utf-8') as f:
+            json.dump(data, f, indent=2)
+    except Exception:
+        pass
+
+def update_aggregates_with_game(game_summary: dict) -> None:
+    try:
+        # Compute per-word metrics and SEI
+        score = game_summary.get('score', 0)
+        time_taken = game_summary.get('time_taken', game_summary.get('duration', 0))
+        words = game_summary.get('words_solved', 1) if game_summary.get('mode') == 'Beat' else 1
+        denom = max(int(words or 0), 1)
+        avg_score = (score / denom)
+        avg_time = (time_taken / denom) if time_taken else 0
+        sei = (avg_score / avg_time) if avg_time > 0 else 0
+        user = (game_summary.get('nickname', '') or '').lower()
+        category = (game_summary.get('subject', '') or '').lower()
+        date_str = (game_summary.get('timestamp') or game_summary.get('end_time') or '')[:10]
+        agg = _load_aggregates()
+        # Update category_user_highest
+        cat_map = agg.setdefault('category_user_highest', {})
+        user_map = cat_map.setdefault(category, {})
+        prev = user_map.get(user)
+        if (prev is None) or (sei > float(prev.get('sei', 0))):
+            user_map[user] = {'sei': float(sei), 'date': date_str}
+        # Update user_time_series
+        uts = agg.setdefault('user_time_series', {})
+        series_key = user
+        series = uts.setdefault(series_key, [])
+        series.append({'date': date_str, 'category': category, 'avg_score_per_word': avg_score, 'avg_time_per_word': avg_time, 'sei': sei})
+        # Keep last 500 points per user to cap size
+        if len(series) > 500:
+            uts[series_key] = series[-500:]
+        _save_aggregates(agg)
+    except Exception:
+        pass
+
+def get_top10_from_aggregates(category: str) -> list[dict]:
+    """Return list of rows: {User, Highest SEI, Date} for a category; if category == 'any', combine all categories and pick per-user max."""
+    try:
+        agg = _load_aggregates()
+        cat_map = agg.get('category_user_highest', {})
+        rows = []
+        if category and category != 'any':
+            data = cat_map.get(category.lower(), {})
+            for u, rec in data.items():
+                rows.append({'User': u, 'Highest SEI': round(float(rec.get('sei', 0)), 2), 'Date': rec.get('date', '')})
+            rows.sort(key=lambda r: r['Highest SEI'], reverse=True)
+            return rows[:10]
+        # any: take best across all categories per user
+        best = {}
+        for cat, users in cat_map.items():
+            for u, rec in users.items():
+                v = float(rec.get('sei', 0))
+                d = rec.get('date', '')
+                if (u not in best) or (v > best[u]['Highest SEI']):
+                    best[u] = {'User': u, 'Highest SEI': round(v, 2), 'Date': d}
+        out = list(best.values())
+        out.sort(key=lambda r: r['Highest SEI'], reverse=True)
+        return out[:10]
+    except Exception:
+        return []
+
+def get_user_series_from_aggregates(user: str, category: str | None = None) -> list[dict]:
+    try:
+        agg = _load_aggregates()
+        series = agg.get('user_time_series', {}).get((user or '').lower(), [])
+        if category and category.lower() != 'any':
+            series = [p for p in series if (p.get('category') or '').lower() == category.lower()]
+        return series
+    except Exception:
+        return []
+
+def ensure_aggregates_bootstrap() -> None:
+    try:
+        # If aggregates exists and non-empty, skip
+        if os.path.exists(AGGREGATES_PATH) and os.path.getsize(AGGREGATES_PATH) > 2:
+            return
+        # Build from existing game_results.json
+        games = get_all_game_results()
+        for g in games:
+            update_aggregates_with_game(g)
+    except Exception:
+        pass
 
 if __name__ == "__main__":
     main() 
