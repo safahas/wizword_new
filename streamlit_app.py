@@ -2955,8 +2955,12 @@ def display_game_over(game_summary):
                 total_score = sum(g.get('score', 0) for g in user_games)
                 total_time = sum(g.get('time_taken', g.get('duration', 0)) for g in user_games)
                 total_words = sum(g.get('words_solved', 1) for g in user_games)
-                avg_score_per_word = round(total_score / total_words, 2)
-                avg_time_per_word = round(total_time / total_words, 2)
+                if int(total_words or 0) <= 0:
+                    avg_score_per_word = 0
+                    avg_time_per_word = 0
+                else:
+                    avg_score_per_word = round(total_score / total_words, 2)
+                    avg_time_per_word = round(total_time / total_words, 2)
                 sei = round(avg_score_per_word / avg_time_per_word, 2) if avg_time_per_word > 0 else 0
                 # When calling create_share_card, pass avg_time_per_word as 'time_taken', avg_score_per_word as 'score', and sei as 'sei' in game_summary
                 game_summary_for_card = dict(game_summary)
@@ -3016,6 +3020,33 @@ def display_game_over(game_summary):
         if stats_manager and st.button("Show My Highest Score This Month Card"):
             with st.spinner("Generating monthly high score share card..."):
                 high_score_card_path = create_monthly_high_score_share_card(stats_manager)
+                if not high_score_card_path:
+                    # Fallback: use current game_summary if it belongs to current month
+                    from datetime import datetime, timezone
+                    try:
+                        ts = game_summary.get('timestamp') or game_summary.get('end_time')
+                        if not ts:
+                            raise ValueError('no timestamp')
+                        if isinstance(ts, (int, float)):
+                            cur_month = datetime.fromtimestamp(ts, tz=timezone.utc).strftime('%Y-%m')
+                        else:
+                            cur_month = str(ts)[:7]
+                        now_month = datetime.now(timezone.utc).strftime('%Y-%m')
+                        if cur_month == now_month and stats_manager:
+                            # Temporarily inject the current game as the "highest" for this month
+                            # by creating a share card directly from game_summary aggregates
+                            gs = dict(game_summary)
+                            gs['sei'] = None  # let the card compute from provided averages if any
+                            # Compute per-word averages if missing
+                            score = gs.get('score', 0)
+                            time_taken = gs.get('time_taken', gs.get('duration', 0))
+                            words = gs.get('words_solved', 1) if gs.get('mode') == 'Beat' else 1
+                            denom = max(int(words or 0), 1)
+                            gs['time_taken'] = round((time_taken/denom) if time_taken else 0, 2)
+                            gs['score'] = round((score/denom), 2)
+                            high_score_card_path = create_share_card(gs, is_monthly=True)
+                    except Exception:
+                        pass
                 if high_score_card_path:
                     st.session_state['monthly_high_score_card_path'] = high_score_card_path
                     st.image(high_score_card_path, caption="Your Highest Score This Month")
