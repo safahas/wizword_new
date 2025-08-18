@@ -2444,40 +2444,57 @@ def display_game():
 
     # --- Skip button for Beat mode, directly below Show Word ---
     if game.mode == 'Beat':
+        # If a skip is pending, show the word above the Skip button until the timer elapses
+        try:
+            import time as _t
+            if st.session_state.get('skip_pending'):
+                _now = _t.time()
+                _until = st.session_state.get('skip_show_until', 0)
+                _word_to_show = (getattr(game, 'selected_word', '') or st.session_state.get('skip_word', '') or '')
+                if _now < _until and _word_to_show:
+                    st.markdown(
+                        f"<div style='text-align:center;margin:0.5em 0;font-size:1.6em;color:#7c3aed;font-weight:700;'>The word is: {str(_word_to_show).upper()}</div>",
+                        unsafe_allow_html=True
+                    )
+                else:
+                    # Time elapsed: load next word and clear flags
+                    try:
+                        username = game.nickname if hasattr(game, 'nickname') and game.nickname else 'global'
+                        if hasattr(game, 'selected_word') and game.selected_word:
+                            game.word_selector.mark_word_played(game.selected_word, username, game.subject)
+                    except Exception:
+                        pass
+                    new_word_length = 5
+                    new_subject = game.subject
+                    st.session_state.game = GameLogic(
+                        word_length=new_word_length,
+                        subject=new_subject,
+                        mode=game.mode,
+                        nickname=game.nickname,
+                        difficulty=game.difficulty,
+                        initial_score=game.score
+                    )
+                    st.session_state['show_prev_questions'] = False
+                    st.session_state['feedback'] = ''
+                    st.session_state['feedback_time'] = 0
+                    st.session_state['revealed_letters'] = set()
+                    st.session_state['used_letters'] = set()
+                    st.session_state['show_word'] = False
+                    st.session_state['show_word_round_id'] = None
+                    # Clear skip flags and continue
+                    st.session_state['skip_pending'] = False
+                    st.session_state['skip_show_until'] = 0
+                    st.session_state['skip_word'] = ''
+                    st.rerun()
+        except Exception:
+            pass
+        # Skip button
         if st.button('Skip', key='skip_word_btn_main'):
-            # Do not accumulate penalties here; penalties are tracked in backend total_penalty_points
-            # Mark current word as played to avoid immediate repeats in recent list
-            try:
-                username = game.nickname if hasattr(game, 'nickname') and game.nickname else 'global'
-                if hasattr(game, 'selected_word') and game.selected_word:
-                    game.word_selector.mark_word_played(game.selected_word, username, game.subject)
-            except Exception:
-                pass
-            new_word_length = 5
-            new_subject = game.subject
-            st.session_state.game = GameLogic(
-                word_length=new_word_length,
-                subject=new_subject,
-                mode=game.mode,
-                nickname=game.nickname,
-                difficulty=game.difficulty,
-                initial_score=game.score
-            )
-            st.session_state['show_prev_questions'] = False  # <-- Clear previous questions
-            feedback = st.session_state.get('feedback', '')
-            feedback_time = st.session_state.get('feedback_time', 0)
-            is_show_word = feedback.startswith("The word is:")
-            import time
-            if not (is_show_word and (time.time() - feedback_time < 4)):
-                st.session_state['feedback'] = ''
-                st.session_state['feedback_time'] = 0
-            st.session_state['revealed_letters'] = set()
-            st.session_state['used_letters'] = set()
-            st.session_state['show_word'] = False  # <-- Clear show_word for new word
-            st.session_state['show_word_round_id'] = None  # <-- Clear show_word_round_id for new word
+            import time as _t
+            st.session_state['skip_pending'] = True
+            st.session_state['skip_word'] = getattr(game, 'selected_word', '')
+            st.session_state['skip_show_until'] = _t.time() + 0.9  # 50% longer than 0.6s
             st.rerun()
-        # --- Remove Change Category button for Beat mode after timer starts ---
-        # (Button is now only shown on the Beat start page)
 
     # --- Timer auto-refresh for Beat mode ---
     if game.mode == 'Beat' and not st.session_state.get('game_over', False):
