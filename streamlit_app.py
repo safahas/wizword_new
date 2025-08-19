@@ -1029,8 +1029,8 @@ def display_login():
                         st.rerun()
             if login_btn:
                 users = st.session_state['users']
-                username_lower = username.lower()
-                if username_lower in users and users[username_lower]['password'] == password:
+                username_lower = (username or "").strip().lower()
+                if username_lower in users and users[username_lower]['password'] == (password or '').strip():
                     st.session_state.user = dict(users[username_lower])
                     st.session_state.user['username'] = username_lower
                     st.session_state.logged_in = True
