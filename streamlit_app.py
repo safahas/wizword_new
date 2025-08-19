@@ -3308,7 +3308,7 @@ def display_game_over(game_summary):
     except Exception as e:
         print(f"[DEBUG][SEI_EMAIL] Exception in email logic: {e}")
     # Sort users by highest SEI
-    top_users = sorted(user_sei.items(), key=lambda x: x[1], reverse=True)[:10]
+    top_users = sorted(user_sei.items(), key=lambda x: x[1], reverse=True)[:3]
     rows = []
     for u, v in top_users:
         dates = []
