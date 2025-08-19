@@ -2408,7 +2408,15 @@ def display_game():
             if st.session_state.get('skip_pending'):
                 _now = _t.time()
                 _until = st.session_state.get('skip_show_until', 0)
-                _word_to_show = (getattr(game, 'selected_word', '') or st.session_state.get('skip_word', '') or '')
+                # Only show the frozen word captured at skip time, never the current round's word
+                _word_to_show = (st.session_state.get('skip_word', '') or '')
+                # If the round has changed or the game's current word differs from the frozen skip word, stop showing
+                if st.session_state.get('skip_round_id') != st.session_state.get('current_round_id') or (getattr(game, 'selected_word', '') and getattr(game, 'selected_word', '') != st.session_state.get('skip_word', '')):
+                    st.session_state['skip_pending'] = False
+                    st.session_state['skip_show_until'] = 0
+                    st.session_state['skip_word'] = ''
+                    st.session_state.pop('skip_round_id', None)
+                    _word_to_show = ''
                 if _now < _until and _word_to_show:
                     st.markdown(
                         f"<div style='text-align:center;margin:0.5em 0;font-size:1.6em;color:#7c3aed;font-weight:700;'>The word is: {str(_word_to_show).upper()}</div>",
@@ -2443,6 +2451,7 @@ def display_game():
                     st.session_state['skip_pending'] = False
                     st.session_state['skip_show_until'] = 0
                     st.session_state['skip_word'] = ''
+                    st.session_state.pop('skip_round_id', None)
                     st.rerun()
         except Exception:
             pass
@@ -2452,6 +2461,8 @@ def display_game():
             st.session_state['skip_pending'] = True
             st.session_state['skip_word'] = getattr(game, 'selected_word', '')
             st.session_state['skip_show_until'] = _t.time() + 2.0  # show word for 2 seconds
+            # Track the round we initiated skip on, so we can stop showing after the round changes
+            st.session_state['skip_round_id'] = st.session_state.get('current_round_id')
             st.rerun()
 
     # --- Timer auto-refresh for Beat mode ---
