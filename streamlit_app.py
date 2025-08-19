@@ -1843,12 +1843,13 @@ def display_game():
                 background: #ffffff !important;
                 color: #333 !important;
                 font-weight: 600 !important;
-                font-size: 0.9em !important;
-                border-radius: 8px !important;
+                font-size: 0.45em !important; /* 50% smaller */
+                border-radius: 6px !important;
                 border: 1px solid #e5e7eb !important; /* light gray */
-                padding: 0.25em 0.8em !important;
-                margin-left: 0.4em !important;
+                padding: 0.125em 0.4em !important; /* halved padding */
+                margin-left: 0.2em !important;
                 box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+                transform: scale(1); /* ensure no inherited scaling */
             }
             .beat-change-cat button:hover {
                 background: #f9fafb !important;
@@ -1864,12 +1865,6 @@ def display_game():
                 st.session_state['beat_started'] = True
                 st.session_state['beat_start_time'] = _time.time()
                 st.rerun()
-            # Show Change Category button before starting (smaller, white)
-            st.markdown("<div class='beat-change-cat' style='display:inline-block;'>", unsafe_allow_html=True)
-            if st.button('Change Category', key='change_category_btn_beat_start'):
-                st.session_state['change_category'] = True
-                st.rerun()
-            st.markdown("</div>", unsafe_allow_html=True)
             # Bottom-of-start-page Global Leaderboard (Top 10 by SEI) for user's default category
             try:
                 user_profile = st.session_state.get('user', {})
@@ -1921,6 +1916,12 @@ def display_game():
                     st.table(rows)
                 else:
                     st.info("No games available yet for this category.")
+                # Change Category under Top 10
+                st.markdown("<div class='beat-change-cat' style='display:inline-block;margin-top:8px;'>", unsafe_allow_html=True)
+                if st.button('Change Category', key='change_category_btn_beat_start'):
+                    st.session_state['change_category'] = True
+                    st.rerun()
+                st.markdown("</div>", unsafe_allow_html=True)
             except Exception as e:
                 pass
             # Admin-only: Show per-category highest SEI table on Beat start page
