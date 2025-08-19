@@ -1816,21 +1816,44 @@ def display_game():
             # Now render the Start button in the same row, styled to match
             start_btn_html = """
             <style>
+            @keyframes flash-pulse {
+                0% { transform: scale(1); filter: brightness(1); }
+                50% { transform: scale(1.06); filter: brightness(1.25); }
+                100% { transform: scale(1); filter: brightness(1); }
+            }
             .beat-start-btn button {
                 background: linear-gradient(90deg, #FFD93D 0%, #FF6B6B 50%, #4ECDC4 100%) !important;
                 color: #222 !important;
-                font-weight: 700 !important;
-                font-size: 1.1em !important;
-                border-radius: 8px !important;
+                font-weight: 800 !important;
+                font-size: 1.2em !important;
+                border-radius: 10px !important;
                 border: none !important;
-                padding: 0.4em 1.2em !important;
+                padding: 0.5em 1.4em !important;
                 margin: 0 0.2em !important;
-                box-shadow: 0 2px 8px rgba(0,0,0,0.10);
-                transition: background 0.2s, color 0.2s;
+                box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+                animation: flash-pulse 1.3s ease-in-out infinite;
+                transition: transform 0.15s ease, filter 0.15s ease;
             }
             .beat-start-btn button:hover {
                 background: linear-gradient(90deg, #FFD93D 0%, #4ECDC4 100%) !important;
                 color: #fff !important;
+            }
+            /* Smaller, white Change Category button */
+            .beat-change-cat button {
+                background: #ffffff !important;
+                color: #333 !important;
+                font-weight: 600 !important;
+                font-size: 0.9em !important;
+                border-radius: 8px !important;
+                border: 1px solid #e5e7eb !important; /* light gray */
+                padding: 0.25em 0.8em !important;
+                margin-left: 0.4em !important;
+                box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+            }
+            .beat-change-cat button:hover {
+                background: #f9fafb !important;
+                color: #111 !important;
+                border-color: #d1d5db !important;
             }
             </style>
             <div class='beat-start-btn' style='display:inline-block;'>
@@ -1841,10 +1864,12 @@ def display_game():
                 st.session_state['beat_started'] = True
                 st.session_state['beat_start_time'] = _time.time()
                 st.rerun()
-            # Show Change Category button before starting
+            # Show Change Category button before starting (smaller, white)
+            st.markdown("<div class='beat-change-cat' style='display:inline-block;'>", unsafe_allow_html=True)
             if st.button('Change Category', key='change_category_btn_beat_start'):
                 st.session_state['change_category'] = True
                 st.rerun()
+            st.markdown("</div>", unsafe_allow_html=True)
             # Bottom-of-start-page Global Leaderboard (Top 10 by SEI) for user's default category
             try:
                 user_profile = st.session_state.get('user', {})
@@ -3374,14 +3399,11 @@ def display_game_over(game_summary):
                 st.session_state['play_again'] = True
                 st.rerun()
     with col2:
-        if st.button('🧹 Restart Game', key='restart-game-btn'):
-            # Removed debug print
-            log_beat_word_count_event("RESET_RESTART", st.session_state.get('beat_word_count', 'MISSING'))
-            user = st.session_state.get('user')
+        if st.button('🚪 Log Out', key='logout-after-game-btn'):
+            # Log and clear entire session to log out
+            log_beat_word_count_event("LOGOUT_AFTER_GAME", st.session_state.get('beat_word_count', 'MISSING'))
             for key in list(st.session_state.keys()):
                 del st.session_state[key]
-            if user:
-                st.session_state['user'] = user
             st.rerun()
 
 def reset_game():
