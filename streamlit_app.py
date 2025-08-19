@@ -1867,8 +1867,8 @@ def display_game():
                 st.rerun()
             # Bottom-of-start-page Global Leaderboard (Top 10 by SEI) for user's default category
             try:
-                user_profile = st.session_state.get('user', {})
-                chosen_cat = (user_profile.get('default_category') or 'any').lower()
+                # Use the running category shown in the banner
+                chosen_cat = (game.subject or 'any').lower()
                 all_games = get_all_game_results()
                 user_highest_sei = {}
                 for g in all_games:
@@ -1888,7 +1888,7 @@ def display_game():
                     if u not in user_highest_sei or sei > user_highest_sei[u]:
                         user_highest_sei[u] = sei
                 top10 = sorted(user_highest_sei.items(), key=lambda x: x[1], reverse=True)[:10]
-                nice_cat = ('All Categories' if chosen_cat == 'any' else chosen_cat.replace('_',' ').title())
+                nice_cat = chosen_cat.replace('_',' ').title()
                 st.markdown(f"""
                 <div style='font-size:1.0em; font-weight:700; color:#fff; margin:1em 0 0.25em 0;'>
                     🏆 Global Leaderboard (Top 10 by SEI) - {nice_cat}
