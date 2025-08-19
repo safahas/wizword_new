@@ -894,7 +894,7 @@ def display_login():
                 - Wrong: **-10**
             - **Ask yes/no questions:** **-1** each
             - **Request hints:** **-10** each (max 3 per word)
-            - **Show Word:** **-100** (reveals the answer)
+            - Skip: reveals the word for 2 seconds, then loads the next word (no additional penalty)
         - Try to solve as many words as possible and maximize your score before time runs out!
         - Only Medium difficulty is available for all modes.
             - Note: Some categories (e.g., Movies, Music, Aviation) may include alphanumeric titles like "Se7en" or "Rio2". Only letters count toward vowel/uniqueness checks.
@@ -1526,7 +1526,7 @@ def display_welcome():
                     - Wrong: **-10**
                 - **Ask yes/no questions:** **-1** each
                 - **Request hints:** **-10** each (max 3 per word)
-                - **Show Word:** **-100** (reveals the answer)
+                - Skip: reveals the word for 2 seconds, then loads the next word (no additional penalty)
             - Try to solve as many words as possible and maximize your score before time runs out!
             - Only Medium difficulty is available for all modes.
             - Note: Some categories (e.g., Movies, Music, Aviation) may include alphanumeric titles like "Se7en" or "Rio2". Only letters count toward vowel/uniqueness checks.
@@ -2419,28 +2419,6 @@ def display_game():
             st.session_state['feedback'] = ''
             st.session_state['feedback_time'] = 0
 
-    # --- Show Word button at the bottom ---
-    if st.button('Show Word', key='show_word_btn_bottom'):
-        game = st.session_state.game
-        penalty = game.apply_show_word_penalty()  # <-- Apply the penalty!
-        # Sync penalties to session so Total Penalty Points includes Show Word
-        try:
-            if hasattr(game, 'total_penalty_points'):
-                st.session_state['beat_total_points'] = int(getattr(game, 'total_penalty_points', 0))
-            if isinstance(penalty, (int, float)) and penalty < 0:
-                st.session_state['beat_total_penalty'] = int(st.session_state.get('beat_total_penalty', 0)) + abs(penalty)
-        except Exception:
-            pass
-        st.session_state['feedback'] = (
-            f"The word is: {getattr(game, 'selected_word', '???').upper()}"
-            + (f"  \n(-{abs(penalty)} points)" if penalty else "")
-        )
-        st.session_state['feedback_time'] = time.time()
-        st.session_state['show_word'] = True  # <-- Always set this!
-        st.session_state['show_word_round_id'] = st.session_state.get('current_round_id')
-        st.session_state['feedback_round_id'] = st.session_state.get('current_round_id')
-        st.session_state['show_prev_questions'] = False
-        st.rerun()
 
     # --- Skip button for Beat mode, directly below Show Word ---
     if game.mode == 'Beat':
@@ -2493,7 +2471,7 @@ def display_game():
             import time as _t
             st.session_state['skip_pending'] = True
             st.session_state['skip_word'] = getattr(game, 'selected_word', '')
-            st.session_state['skip_show_until'] = _t.time() + 0.9  # 50% longer than 0.6s
+            st.session_state['skip_show_until'] = _t.time() + 2.0  # show word for 2 seconds
             st.rerun()
 
     # --- Timer auto-refresh for Beat mode ---
