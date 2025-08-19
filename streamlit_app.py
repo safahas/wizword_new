@@ -1255,15 +1255,15 @@ def display_welcome():
                     user = (g.get('nickname', '') or '').lower()
                     if user not in user_highest_sei or sei > user_highest_sei[user]:
                         user_highest_sei[user] = sei
-                top10 = sorted(user_highest_sei.items(), key=lambda x: x[1], reverse=True)[:10]
+                top3 = sorted(user_highest_sei.items(), key=lambda x: x[1], reverse=True)[:3]
                 nice_cat = str(current_cat).replace('_',' ').title()
                 st.markdown(f"""
                 <div style='font-size:1.0em; font-weight:700; color:#fff; margin:0.5em 0 0.25em 0;'>
-                    🏆 Global Top 10 by SEI — {nice_cat}
+                    🏆 Global Top 3 by SEI — {nice_cat}
                 </div>
                 """, unsafe_allow_html=True)
-                if top10:
-                    st.table([{ 'User': u, 'Highest SEI': round(v, 2) } for u, v in top10])
+                if top3:
+                    st.table([{ 'User': u, 'Highest SEI': round(v, 2) } for u, v in top3])
                 else:
                     st.info("No games available yet for this category.")
         except Exception:
@@ -1347,7 +1347,7 @@ def display_welcome():
                 )
                 st.session_state['original_category_choice'] = subject
                 resolved_subject = random.choice(["general", "animals", "food", "places", "science", "tech", "sports", "brands", "4th_grade", "cities", "medicines", "anatomy", "psat", "sat", "gre"]) if subject == "any" else subject
-                # --- Global Top 10 by SEI for chosen category (start page) ---
+                # --- Global Top 3 by SEI for chosen category (start page) ---
                 try:
                     all_games = get_all_game_results()
                     chosen_cat = subject.lower()
@@ -1369,16 +1369,16 @@ def display_welcome():
                         user = (g.get('nickname', '') or '').lower()
                         if user not in user_highest_sei or sei > user_highest_sei[user]:
                             user_highest_sei[user] = sei
-                    # Sort and present top 10
-                    top10 = sorted(user_highest_sei.items(), key=lambda x: x[1], reverse=True)[:10]
+                    # Sort and present top 3
+                    top3 = sorted(user_highest_sei.items(), key=lambda x: x[1], reverse=True)[:3]
                     nice_cat = ('All Categories' if chosen_cat == 'any' else subject.replace('_',' ').title())
                     st.markdown(f"""
                     <div style='font-size:1.0em; font-weight:700; color:#fff; margin:0.5em 0 0.25em 0;'>
-                        🏆 Global Top 10 by SEI — {nice_cat}
+                        🏆 Global Top 3 by SEI — {nice_cat}
                     </div>
                     """, unsafe_allow_html=True)
-                    if top10:
-                        st.table([{ 'User': u, 'Highest SEI': round(v, 2) } for u, v in top10])
+                    if top3:
+                        st.table([{ 'User': u, 'Highest SEI': round(v, 2) } for u, v in top3])
                     else:
                         st.info("No games available yet for this category.")
                 except Exception:
@@ -1402,61 +1402,64 @@ def display_welcome():
                 st.rerun()
         # End of form block
 
-        # --- Global Top 10 by SEI for chosen category (outside form for visibility) ---
+        # --- Global Top 3 by SEI for chosen category (outside form for visibility) ---
         try:
-            # Use user's default category from profile
+            # Use user's default category for Top 3 (fallback to 'any' and then running category)
             user_profile = st.session_state.get('user', {})
             chosen_cat = (user_profile.get('default_category') or 'any').lower()
-            all_games = get_all_game_results()
-            user_highest_sei = {}
-            for g in all_games:
-                game_cat = (g.get('subject', '') or '').lower()
-                if chosen_cat != 'any' and game_cat != chosen_cat:
-                    continue
-                score = g.get('score', 0)
-                time_taken = g.get('time_taken', g.get('duration', 0))
-                words = g.get('words_solved', 1) if g.get('mode') == 'Beat' else 1
-                denom = max(int(words or 0), 1)
-                avg_score = score / denom
-                avg_time = time_taken / denom
-                sei = avg_score / avg_time if avg_time > 0 else None
-                if sei is None:
-                    continue
-                user = (g.get('nickname', '') or '').lower()
-                if user not in user_highest_sei or sei > user_highest_sei[user]:
-                    user_highest_sei[user] = sei
-            top10 = sorted(user_highest_sei.items(), key=lambda x: x[1], reverse=True)[:10]
-            nice_cat = ('All Categories' if chosen_cat == 'any' else chosen_cat.replace('_',' ').title())
+            top3_rows = get_top10_from_aggregates(chosen_cat)[:3]
+            if (not top3_rows) and chosen_cat != 'any':
+                top3_rows = get_top10_from_aggregates('any')[:3]
+            if (not top3_rows) and 'game' in st.session_state and st.session_state.game:
+                top3_rows = get_top10_from_aggregates(getattr(st.session_state.game, 'subject', 'any')).copy()[:3]
+            # Final fallback: pick a populated category from aggregates
+            if not top3_rows:
+                try:
+                    agg = _load_aggregates()
+                    cat_map = agg.get('category_user_highest', {})
+                    for cat_key, users in cat_map.items():
+                        if users:
+                            cand = get_top10_from_aggregates(cat_key)[:3]
+                            if cand:
+                                chosen_cat = cat_key
+                                top3_rows = cand
+                                break
+                except Exception:
+                    pass
+            # Debug output for diagnosing empty tables
+            try:
+                import os, logging
+                _dbg = os.getenv('DEBUG_TOP3', '').strip().lower() in ('1','true','yes','on')
+                cats = []
+                try:
+                    _agg = _load_aggregates()
+                    cats = list((_agg.get('category_user_highest') or {}).keys())
+                except Exception:
+                    pass
+                if _dbg and not st.session_state.get('top3_debug_done'):
+                    _agg_exists = os.path.exists(AGGREGATES_PATH)
+                    _agg_size = os.path.getsize(AGGREGATES_PATH) if _agg_exists else 0
+                    _msg = f"[TOP3] chosen_cat={chosen_cat}, cats={cats}, rows={len(top3_rows)} AGG_PATH={AGGREGATES_PATH} exists={_agg_exists} size={_agg_size}"
+                    logging.info(_msg)
+                    st.caption(f"DEBUG TOP3: chosen_cat={chosen_cat}, cats={cats}, rows={len(top3_rows)}")
+                    st.caption(f"DEBUG TOP3: AGG_PATH={AGGREGATES_PATH}, exists={_agg_exists}, size={_agg_size}")
+                    if not top3_rows:
+                        st.caption("DEBUG TOP3: No rows found after fallbacks")
+                    else:
+                        st.caption(f"DEBUG TOP3: First row sample: {top3_rows[0]}")
+                    st.session_state['top3_debug_done'] = True
+            except Exception:
+                pass
+            nice_cat = (chosen_cat.replace('_',' ').title())
             st.markdown(f"""
             <div style='font-size:1.0em; font-weight:700; color:#fff; margin:0.5em 0 0.25em 0;'>
-                🏆 Global Leaderboard (Top 10 by SEI) - {nice_cat}
+                🏆 Global Leaderboard (Top 3 by SEI) - {nice_cat}
             </div>
             """, unsafe_allow_html=True)
-            if top10:
-                # Build per-user date (most recent game achieving their highest SEI)
-                rows = []
-                for u, v in top10:
-                    dates = []
-                    for gg in all_games:
-                        gc = (gg.get('subject','') or '').lower()
-                        if chosen_cat != 'any' and gc != chosen_cat:
-                            continue
-                        if (gg.get('nickname','') or '').lower() != u:
-                            continue
-                        sc = gg.get('score', 0); tt = gg.get('time_taken', gg.get('duration', 0))
-                        wd = gg.get('words_solved', 1) if gg.get('mode') == 'Beat' else 1
-                        dn = max(int(wd or 0), 1)
-                        avs = sc / dn; avt = tt / dn if tt else 0
-                        sei_u = avs / avt if avt > 0 else None
-                        if sei_u is not None and abs(sei_u - v) < 1e-9:
-                            dates.append(str(gg.get('timestamp') or gg.get('end_time') or '')[:10])
-                    last = sorted([d for d in dates if d], reverse=True)[0] if dates else ''
-                    rows.append({'User': u, 'Highest SEI': round(v,2), 'Date': last})
-                st.table(rows)
-                
+            if top3_rows:
+                st.table(top3_rows)
             else:
                 st.info("No games available yet for this category.")
-                
         except Exception as e:
             
             st.info("Unable to render Top 10 at the moment. Check logs for details.")
@@ -1572,6 +1575,23 @@ def display_welcome():
 
 
 def display_game():
+    # Early debug: confirm we entered display_game and show Beat state
+    try:
+        import logging, os
+        # Gate debug output via env var and log only on state change
+        _dbg_enabled = os.getenv('DEBUG_DISPLAY_GAME', '').strip().lower() in ('1', 'true', 'yes', 'on')
+        _bs = st.session_state.get('beat_started', None)
+        _md = st.session_state.game.mode if ('game' in st.session_state and st.session_state.game) else None
+        _msg = f"[DBG] display_game entered: mode={_md}, beat_started={_bs}"
+        if _dbg_enabled:
+            _prev = st.session_state.get('_dbg_prev_state', {})
+            if _prev.get('mode') != _md or _prev.get('beat_started') != _bs or not st.session_state.get('_dbg_logged_once'):
+                logging.info(_msg)
+                st.session_state['_dbg_logged_once'] = True
+            st.session_state['_dbg_prev_state'] = {'mode': _md, 'beat_started': _bs}
+    except Exception:
+        pass
+    
     import time
     from streamlit_app import save_game_to_user_profile
     # Ensure beat_total_points is always initialized for Beat mode
@@ -1869,138 +1889,72 @@ def display_game():
             try:
                 # Use the running category shown in the banner
                 chosen_cat = (game.subject or 'any').lower()
-                all_games = get_all_game_results()
-                user_highest_sei = {}
-                for g in all_games:
-                    game_cat = (g.get('subject', '') or '').lower()
-                    if chosen_cat != 'any' and game_cat != chosen_cat:
-                        continue
-                    score = g.get('score', 0)
-                    time_taken = g.get('time_taken', g.get('duration', 0))
-                    words = g.get('words_solved', 1) if g.get('mode') == 'Beat' else 1
-                    denom = max(int(words or 0), 1)
-                    avg_score = score / denom
-                    avg_time = time_taken / denom
-                    sei = avg_score / avg_time if avg_time > 0 else None
-                    if sei is None:
-                        continue
-                    u = (g.get('nickname', '') or '').lower()
-                    if u not in user_highest_sei or sei > user_highest_sei[u]:
-                        user_highest_sei[u] = sei
-                top10 = sorted(user_highest_sei.items(), key=lambda x: x[1], reverse=True)[:10]
+                # Pull Top 3 from aggregates with simple per-category cache to avoid recomputation
+                _cache = st.session_state.get('_top3_start_cache', {})
+                if _cache.get('cat') == chosen_cat and 'rows' in _cache:
+                    top3_rows = _cache.get('rows', [])
+                else:
+                    # Compute and cache
+                    top3_rows = get_top10_from_aggregates(chosen_cat)[:3]
+                    if (not top3_rows) and chosen_cat != 'any':
+                        top3_rows = get_top10_from_aggregates('any')[:3]
+                    if not top3_rows:
+                        try:
+                            _agg = _load_aggregates()
+                            for cat_key, users in (_agg.get('category_user_highest') or {}).items():
+                                if users:
+                                    cand = get_top10_from_aggregates(cat_key)[:3]
+                                    if cand:
+                                        chosen_cat = cat_key
+                                        top3_rows = cand
+                                        break
+                        except Exception:
+                            pass
+                    st.session_state['_top3_start_cache'] = {'cat': chosen_cat, 'rows': top3_rows}
+                # Optional debug for start page block
+                import logging, os
+                _dbg = os.getenv('DEBUG_TOP3', '').strip().lower() in ('1','true','yes','on')
+                if _dbg and not st.session_state.get('top3_start_debug_done'):
+                    _exists = os.path.exists(AGGREGATES_PATH)
+                    _size = os.path.getsize(AGGREGATES_PATH) if _exists else 0
+                    _cats = []
+                    try:
+                        _a = _load_aggregates()
+                        _cats = list((_a.get('category_user_highest') or {}).keys())
+                    except Exception:
+                        pass
+                    _msg = f"[TOP3:START] chosen_cat={chosen_cat}, cats={_cats}, rows={len(top3_rows)} AGG_PATH={AGGREGATES_PATH} exists={_exists} size={_size}"
+                    logging.info(_msg)
+                    st.caption(f"DEBUG TOP3 START: chosen_cat={chosen_cat}, cats={_cats}, rows={len(top3_rows)}")
+                    st.caption(f"DEBUG TOP3 START: AGG_PATH={AGGREGATES_PATH}, exists={_exists}, size={_size}")
+                    if not top3_rows:
+                        st.caption("DEBUG TOP3 START: No rows found after fallbacks")
+                    else:
+                        st.caption(f"DEBUG TOP3 START: First row sample: {top3_rows[0]}")
+                    st.session_state['top3_start_debug_done'] = True
                 nice_cat = chosen_cat.replace('_',' ').title()
                 st.markdown(f"""
                 <div style='font-size:1.0em; font-weight:700; color:#fff; margin:1em 0 0.25em 0;'>
-                    🏆 Global Leaderboard (Top 10 by SEI) - {nice_cat}
+                    🏆 Global Leaderboard (Top 3 by SEI) - {nice_cat}
                 </div>
                 """, unsafe_allow_html=True)
-                if top10:
-                    rows = []
-                    for u, v in top10:
-                        dates = []
-                        for gg in all_games:
-                            gc = (gg.get('subject','') or '').lower()
-                            if chosen_cat != 'any' and gc != chosen_cat:
-                                continue
-                            if (gg.get('nickname','') or '').lower() != u:
-                                continue
-                            sc = gg.get('score', 0); tt = gg.get('time_taken', gg.get('duration', 0))
-                            wd = gg.get('words_solved', 1) if gg.get('mode') == 'Beat' else 1
-                            dn = max(int(wd or 0), 1)
-                            avs = sc / dn; avt = tt / dn if tt else 0
-                            sei_u = avs / avt if avt > 0 else None
-                            if sei_u is not None and abs(sei_u - v) < 1e-9:
-                                dates.append(str(gg.get('timestamp') or gg.get('end_time') or '')[:10])
-                        last = sorted([d for d in dates if d], reverse=True)[0] if dates else ''
-                        rows.append({'User': u, 'Highest SEI': round(v,2), 'Date': last})
-                    st.table(rows)
+                if top3_rows:
+                    st.table(top3_rows)
                 else:
                     st.info("No games available yet for this category.")
                 # Change Category under Top 10
                 st.markdown("<div class='beat-change-cat' style='display:inline-block;margin-top:8px;'>", unsafe_allow_html=True)
                 if st.button('Change Category', key='change_category_btn_beat_start'):
                     st.session_state['change_category'] = True
+                    # Clear the cached Top 3 so it refreshes for the new category
+                    st.session_state.pop('_top3_start_cache', None)
                     st.rerun()
                 st.markdown("</div>", unsafe_allow_html=True)
             except Exception as e:
+                # Surface an error line so it is visible in console if this block fails
+                import logging
+                logging.error(f"[TOP3:START] failed: {e}")
                 pass
-            # Admin-only: Show per-category highest SEI table on Beat start page
-            try:
-                _user = st.session_state.get('user', {})
-                if (_user.get('username') or '').lower() == 'admin':
-                    all_games = get_all_game_results()
-                    
-                    category_top = {}
-                    for g in all_games:
-                        cat = (g.get('subject', '') or '').lower()
-                        if not cat:
-                            continue
-                        score = g.get('score', 0)
-                        time_taken = g.get('time_taken', g.get('duration', 0))
-                        words = g.get('words_solved', 1) if g.get('mode') == 'Beat' else 1
-                        denom = max(int(words or 0), 1)
-                        avg_score = score / denom
-                        avg_time = (time_taken / denom) if time_taken else 0
-                        sei = (avg_score / avg_time) if avg_time > 0 else None
-                        if sei is None:
-                            continue
-                        # Debug each candidate row
-                        try:
-                            pass
-                        except Exception:
-                            pass
-                        # Exclude this current (pre-start) session if somehow present
-                        cur_ts = None
-                        try:
-                            cur_ts = st.session_state.get('game_summary', {}).get('timestamp')
-                        except Exception:
-                            pass
-                        if cur_ts and g.get('timestamp') == cur_ts:
-                            continue
-                        prev = category_top.get(cat)
-                        if (prev is None) or (sei > prev.get('highest_sei', -1)):
-                            # Format date
-                            date_str = g.get('end_time') or g.get('timestamp')
-                            try:
-                                if isinstance(date_str, (int, float)):
-                                    from datetime import datetime
-                                    date_str = datetime.fromtimestamp(date_str).strftime('%Y-%m-%d')
-                                else:
-                                    date_str = str(date_str)[:10]
-                            except Exception:
-                                date_str = str(date_str)[:10] if date_str else ''
-                            category_top[cat] = {
-                                'category': cat.replace('_', ' ').title(),
-                                'highest_sei': round(sei, 2),
-                                'user': (g.get('nickname', '') or '').lower(),
-                                'date': date_str,
-                            }
-                    st.markdown("""
-                    <div style='font-size:1.0em; font-weight:700; color:#fff; margin:1em 0 0.25em 0;'>
-                        📚 Category Top SEI (All Categories)
-                    </div>
-                    """, unsafe_allow_html=True)
-                    rows = sorted(category_top.values(), key=lambda r: r['category'])
-                    if rows:
-                        st.table(rows)
-                    else:
-                        st.info("No category results found yet.")
-            except Exception as e:
-                pass
-            # Optionally render all user profiles at bottom if toggled by admin button in sidebar
-            try:
-                if (_user.get('username') or '').lower() == 'admin' and st.session_state.get('show_all_users_profiles'):
-                    import pandas as pd
-                    users = st.session_state.get('users', {})
-                    st.markdown('## All User Profiles')
-                    df = pd.DataFrame.from_dict(users, orient='index').reset_index().rename(columns={'index': 'username'})
-                    st.dataframe(df)
-                    
-                else:
-                    pass
-            except Exception as e:
-                pass
-            st.stop()
         # Determine banner stickiness from environment
         _sticky_env = os.getenv('WIZWORD_STICKY_BANNER', 'true').strip().lower()
         _is_sticky_banner = _sticky_env in ('1', 'true', 'yes', 'on')
@@ -2686,6 +2640,18 @@ def display_game_over(game_summary):
     if not st.session_state.get('game_saved', False):
         save_game_to_user_profile(game_summary)
         st.session_state['game_saved'] = True
+    # --- NEW: Update aggregates once per game over ---
+    try:
+        if not st.session_state.get('aggregates_updated', False):
+            # Ensure timestamp exists for date bucketing
+            if 'timestamp' not in game_summary or not game_summary.get('timestamp'):
+                from datetime import datetime
+                game_summary['timestamp'] = datetime.utcnow().isoformat()
+            update_aggregates_with_game(game_summary)
+            st.session_state['aggregates_updated'] = True
+    except Exception as e:
+        import logging
+        logging.error(f"[AGGREGATES] update failed: {e}")
     # Add WizWord banner at the top
     stats_html = """
     <div class='wizword-banner'>
@@ -3201,7 +3167,7 @@ def display_game_over(game_summary):
     _your_sei_html = (f" — Your SEI: {(_sei_cur_display if _sei_cur_display is not None else 0):.2f}" if _sei_cur_display is not None else "")
     st.markdown(f"""
     <div style='font-size:1.1em; font-weight:700; color:#fff; margin-bottom:0.5em;'>
-        🏆 Global Leaderboard (Top 10 by SEI) - {leaderboard_category.title() if leaderboard_category != 'All Categories' else 'All Categories'}{_your_sei_html}
+        🏆 Global Leaderboard (Top 3 by SEI) - {leaderboard_category.title() if leaderboard_category != 'All Categories' else 'All Categories'}{_your_sei_html}
     </div>
     """, unsafe_allow_html=True)
     user_sei = {}
