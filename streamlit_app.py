@@ -1821,19 +1821,20 @@ def display_game():
             <div class='wizword-banner'>
               <div class='wizword-banner-title'>WizWord</div>
               <div class='wizword-banner-stats' style='display:flex;align-items:center;gap:18px;'>
-                <span class='wizword-stat'><b>🎮</b> Beat</span>
                 <span class='wizword-stat wizword-beat-category'><b>📚</b> {game.subject.replace('_', ' ').title()}</span>
                 <span class='wizword-stat wizword-beat-timer'><b>⏰</b> --s</span>
                 <span class='wizword-stat wizword-beat-score'><b>🏆</b> {game.score}</span>
                 <span class='wizword-stat'><b>🔢</b> {st.session_state.get('beat_word_count', 0)}</span>
-                <span class='wizword-stat' style='padding:0;margin:0;'>{{START_BUTTON}}</span>
+                <span class='wizword-stat' style='padding:0;margin:0;'>
+                  <div class='beat-start-btn' style='display:inline-block;'></div>
+                </span>
               </div>
             </div>
             <style>/* ... existing styles ... */</style>
             """
-            # Render the banner without the button first
-            st.markdown(stats_html.replace('{START_BUTTON}', ''), unsafe_allow_html=True)
-            # Now render the Start button in the same row, styled to match
+            # Render the banner (contains a marker div where the button sits)
+            st.markdown(stats_html, unsafe_allow_html=True)
+            # Now render the Start button which follows the marker div (styled via sibling selector)
             start_btn_html = """
             <style>
             @keyframes flash-pulse {
@@ -1841,22 +1842,23 @@ def display_game():
                 50% { transform: scale(1.06); filter: brightness(1.25); }
                 100% { transform: scale(1); filter: brightness(1); }
             }
-            .beat-start-btn button {
-                background: linear-gradient(90deg, #FFD93D 0%, #FF6B6B 50%, #4ECDC4 100%) !important;
+            .beat-start-btn + div button {
+                background: linear-gradient(90deg, #FFD93D 0%, #FF6B6B 35%, #4ECDC4 70%, #8EC5FF 100%) !important;
                 color: #222 !important;
-                font-weight: 800 !important;
-                font-size: 1.2em !important;
-                border-radius: 10px !important;
+                font-weight: 900 !important;
+                font-size: 2.4em !important; /* 100% larger */
+                border-radius: 9999px !important;
                 border: none !important;
-                padding: 0.5em 1.4em !important;
+                padding: 1.2em 3.2em !important; /* 100% larger */
                 margin: 0 0.2em !important;
-                box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+                box-shadow: 0 14px 30px rgba(0,0,0,0.22) !important;
                 animation: flash-pulse 1.3s ease-in-out infinite;
-                transition: transform 0.15s ease, filter 0.15s ease;
+                transition: transform 0.15s ease, filter 0.15s ease, box-shadow 0.15s ease;
             }
-            .beat-start-btn button:hover {
-                background: linear-gradient(90deg, #FFD93D 0%, #4ECDC4 100%) !important;
+            .beat-start-btn + div button:hover {
+                background: linear-gradient(90deg, #FFED8A 0%, #FF8A8A 35%, #70E6CD 70%, #A6D5FF 100%) !important;
                 color: #fff !important;
+                box-shadow: 0 12px 28px rgba(0,0,0,0.24) !important;
             }
             /* Smaller, white Change Category button */
             .beat-change-cat button {
@@ -1877,11 +1879,10 @@ def display_game():
                 border-color: #d1d5db !important;
             }
             </style>
-            <div class='beat-start-btn' style='display:inline-block;'>
-            </div>
+            <div class='beat-start-btn' style='display:inline-block;'></div>
             """
             st.markdown(start_btn_html, unsafe_allow_html=True)
-            if st.button('Start', key='beat_start_btn'):
+            if st.button('Click to Start Game', key='beat_start_btn'):
                 st.session_state['beat_started'] = True
                 st.session_state['beat_start_time'] = _time.time()
                 st.rerun()
@@ -1998,7 +1999,6 @@ def display_game():
         <div class='wizword-banner'>
           <div class='wizword-banner-title'>WizWord</div>
           <div class='wizword-banner-stats'>
-            <span class='wizword-stat'><b>🎮</b> Beat</span>
             <span class='wizword-stat wizword-beat-category'><b>📚</b> {game.subject.replace('_', ' ').title()}</span>
             <span class='wizword-stat wizword-beat-timer'><b>⏰</b> {time_left}s</span>
             <span class='wizword-stat wizword-beat-score'><b>🏆</b> {game.score}</span>
@@ -2115,11 +2115,17 @@ def display_game():
             """
             <style>
             .wizword-banner { padding: 4px 12px !important; }
-            .wizword-banner-title { font-size: 1.2em !important; }
-            .wizword-banner-stats { gap: 10px !important; font-size: 1.0em !important; }
-            .wizword-stat { padding: 2px 8px !important; min-width: 44px !important; }
-            .wizword-beat-timer { font-size: 1.6em !important; border-width: 2px !important; }
-            .wizword-beat-score { font-size: 1.6em !important; border-width: 2px !important; }
+            .wizword-banner-title { font-size: 1.2em !important; white-space: nowrap !important; }
+            .wizword-banner-stats { gap: 8px !important; font-size: 0.95em !important; flex-wrap: wrap !important; }
+            .wizword-stat { padding: 2px 8px !important; min-width: auto !important; max-width: 44vw !important; }
+            .wizword-beat-timer { font-size: 1.5em !important; border-width: 2px !important; }
+            .wizword-beat-score { font-size: 1.5em !important; border-width: 2px !important; }
+            @media (max-width: 420px) {
+              .wizword-banner { padding: 4px 8px !important; }
+              .wizword-banner-title { font-size: 1.05em !important; }
+              .wizword-banner-stats { gap: 6px !important; font-size: 0.9em !important; }
+              .wizword-stat { padding: 2px 6px !important; max-width: 46vw !important; }
+            }
             </style>
             """,
             unsafe_allow_html=True,
