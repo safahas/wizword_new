@@ -1945,6 +1945,36 @@ def display_game():
                     st.session_state.pop('_top3_start_cache', None)
                     st.rerun()
                 st.markdown("</div>", unsafe_allow_html=True)
+                # Admin-only: render all user profiles when toggled in the sidebar
+                try:
+                    if st.session_state.get('show_all_users_profiles'):
+                        st.markdown("### All User Profiles")
+                        users_obj = load_all_users()
+                        rows = []
+                        # Support both dict-based and list-based user stores
+                        if isinstance(users_obj, dict):
+                            for username, u in users_obj.items():
+                                if isinstance(u, dict):
+                                    rows.append({
+                                        'Username': username,
+                                        'Email': u.get('email', ''),
+                                        'Games': len(u.get('games', [])) if isinstance(u.get('games'), list) else 0
+                                    })
+                                else:
+                                    rows.append({'Username': str(username), 'Email': '', 'Games': 0})
+                        elif isinstance(users_obj, list):
+                            for u in users_obj:
+                                rows.append({
+                                    'Username': (u.get('username') if isinstance(u, dict) else ''),
+                                    'Email': (u.get('email') if isinstance(u, dict) else ''),
+                                    'Games': 0
+                                })
+                        if rows:
+                            st.table(rows)
+                        else:
+                            st.info('No user profiles found.')
+                except Exception:
+                    st.info('Unable to load user profiles.')
             except Exception as e:
                 # Surface an error line so it is visible in console if this block fails
                 import logging
