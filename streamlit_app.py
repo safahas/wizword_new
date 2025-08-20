@@ -3604,6 +3604,12 @@ def display_hint_section(game):
             line-height: 1.35; word-break: break-word; overflow-wrap: anywhere; white-space: normal;
             text-shadow: 0 2px 6px rgba(0,0,0,0.18);
         }
+        .hint-card-cta { 
+            display:block; margin-top: 0.35em; 
+            font-size: clamp(0.8em, 2.8vw, 1.1em); 
+            font-weight: 800; color: rgba(11,18,32,0.85);
+            text-shadow: 0 1px 3px rgba(255,255,255,0.45);
+        }
         .hint-card-wrap .stButton>button {
             position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0;
             background: transparent !important; border: none !important; box-shadow: none !important;
@@ -3614,8 +3620,8 @@ def display_hint_section(game):
         unsafe_allow_html=True,
     )
     st.markdown("<div class='hint-card-wrap'>", unsafe_allow_html=True)
-    st.markdown(f"<div class='hint-card-visual'>💡 {current_text}</div>", unsafe_allow_html=True)
-    clicked = st.button(" ", key="hint_card_click", help="Tap for next hint", use_container_width=True)
+    st.markdown(f"<div class='hint-card-visual'>💡 {current_text}<span class='hint-card-cta'>Click for next hint</span></div>", unsafe_allow_html=True)
+    clicked = st.button("Click for next hint", key="hint_card_click", help="Tap for next hint", use_container_width=True)
     st.markdown("</div>", unsafe_allow_html=True)
     if clicked and remaining > 0:
                 hint, points = game.get_hint()
