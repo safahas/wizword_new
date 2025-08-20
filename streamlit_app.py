@@ -2242,15 +2242,8 @@ def display_game():
         content = letter.upper() if is_revealed else "_"
         boxes.append(f"<span style='{style}'>{content}</span>")
     st.markdown(f"<div style='display:flex;flex-direction:row;justify-content:center;gap:0.2em;margin-bottom:1.2em;'>{''.join(boxes)}</div>", unsafe_allow_html=True)
-    # If skip overlay is active, render the frozen word directly above the Skip button area
-    if game.mode == 'Beat' and st.session_state.get('skip_overlay_active') and st.session_state.get('skip_word'):
-        frozen = str(st.session_state.get('skip_word', '')).upper()
-        with skip_word_display_container:
-            st.markdown(
-                f"<div style='text-align:center;margin:0.25em 0 0.25em 0;font-size:1.6em;color:#7c3aed;font-weight:800;'>The word is: {frozen}</div>",
-                unsafe_allow_html=True
-            )
-    else:
+    # Skipped word rendering is handled near the Skip button (below it) to avoid duplicates
+    if not (game.mode == 'Beat' and st.session_state.get('skip_overlay_active') and st.session_state.get('skip_word')):
         skip_word_display_container.empty()
 
     # Letter input below the container
@@ -3588,16 +3581,11 @@ def display_hint_section(game):
             color: #0b1220; font-weight: 900; letter-spacing: 0.01em;
             padding: 0.8em 1em; margin: 0.4em 0 0.2em 0; text-align: center;
             width: 100%; max-width: 100%;
-            font-size: clamp(1.4em, 4.8vw, 2.6em);
+            font-size: clamp(1.26em, 4.32vw, 2.34em);
             line-height: 1.35; word-break: break-word; overflow-wrap: anywhere; white-space: normal;
             text-shadow: 0 2px 6px rgba(0,0,0,0.18);
         }
-        .hint-card-cta { 
-            display:block; margin-top: 0.35em; 
-            font-size: clamp(0.8em, 2.8vw, 1.1em); 
-            font-weight: 800; color: rgba(11,18,32,0.85);
-            text-shadow: 0 1px 3px rgba(255,255,255,0.45);
-        }
+        .hint-card-cta { display:none; }
         .hint-card-wrap .stButton>button {
             position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0;
             background: transparent !important; border: none !important; box-shadow: none !important;
@@ -3608,8 +3596,9 @@ def display_hint_section(game):
         unsafe_allow_html=True,
     )
     st.markdown("<div class='hint-card-wrap'>", unsafe_allow_html=True)
-    st.markdown(f"<div class='hint-card-visual'>💡 {current_text}<span class='hint-card-cta'>Click for next hint</span></div>", unsafe_allow_html=True)
-    clicked = st.button("Click for next hint", key="hint_card_click", help="Tap for next hint", use_container_width=True)
+    st.markdown(f"<div class='hint-card-visual'>💡 {current_text}</div>", unsafe_allow_html=True)
+    _hint_btn_label = ("Click for next hint" if remaining > 0 else "No more hints")
+    clicked = st.button(_hint_btn_label, key="hint_card_click", help=("Tap for next hint" if remaining > 0 else "No more hints available"), use_container_width=True, disabled=(remaining == 0))
     st.markdown("</div>", unsafe_allow_html=True)
     if clicked and remaining > 0:
                 hint, points = game.get_hint()
