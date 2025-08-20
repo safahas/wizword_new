@@ -2833,42 +2833,7 @@ def display_game_over(game_summary):
     summary_tab, stats_tab, share_tab, stats_leader_tab = st.tabs(["Summary", "Statistics", "Share", "📈 My Stats & Leaderboard"])
     
     with summary_tab:
-        # Game summary
-        col1, col2, col3 = st.columns(3)
-        with col1:
-            st.metric("Final Score", score)
-        # Remove Questions Asked metric
-        # with col2:
-        #     st.metric("Questions Asked", len(game_summary["questions_asked"]))
-        with col2:
-            st.metric("Time Taken", format_duration(game_summary.get("duration") or game_summary.get("time_taken", 0)))
-        with col3:
-            # Show total penalty points
-            total_penalty = game_summary.get('total_penalty_points')
-            if total_penalty is None:
-                try:
-                    current_game = st.session_state.get('game') if 'game' in st.session_state else None
-                except Exception:
-                    current_game = None
-                if current_game is not None:
-                    total_penalty = getattr(current_game, 'total_penalty_points', None)
-            # Fallbacks without forcing zero
-            if total_penalty is None:
-                if mode == "Beat":
-                    total_penalty = st.session_state.get('beat_total_points')
-                else:
-                    total_penalty = st.session_state.get('total_points')
-            # Default display value
-            if isinstance(total_penalty, (int, float)) and total_penalty != 0:
-                display_penalty = total_penalty
-            else:
-                # Fallback to persistent session accumulator if available
-                session_acc = st.session_state.get('beat_total_penalty') if mode == "Beat" else None
-                if isinstance(session_acc, (int, float)) and session_acc > 0:
-                    display_penalty = session_acc
-                else:
-                    display_penalty = (str(total_penalty) if (isinstance(total_penalty, str) and total_penalty.strip() != "0") else "NA")
-            st.metric("Total Penalty Points", display_penalty)
+        # Remove duplicated top metrics row; consolidated strip is shown below the banner
         
         if mode == "Beat":
             
@@ -2882,20 +2847,7 @@ def display_game_over(game_summary):
                 sei_val = (avg_score / avg_time) if avg_time > 0 else 0
             except Exception:
                 sei_val = 0
-            # Show as an additional metric row
-            c_sei1, c_sei2, c_sei3 = st.columns(3)
-            with c_sei1:
-                st.markdown(
-                    f"""
-                    <div style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 8px 12px;">
-                        <div style="font-size: 0.82em; color: #9CA3AF; font-weight: 600;">SEI (Score/Time Index)</div>
-                        <div style="font-size: 1.35em; color: #ff3b30; font-weight: 800;">{sei_val:.2f}</div>
-                    </div>
-                    """,
-                    unsafe_allow_html=True,
-                )
-            # (Removed: last word display above words solved)
-            st.markdown(f"**Words solved:** {game_summary.get('words_solved', 0)}")
+            # (Removed: duplicate SEI box and words solved line; SEI is already shown in header and badges)
         else:
             st.markdown(f"**The word was:** {(game_summary.get('selected_word') or game_summary.get('word', '')).upper()}")
         # Remove Questions Asked section
@@ -3245,14 +3197,33 @@ def display_game_over(game_summary):
         _sei_cur_display = (_avg_score_cur / _avg_time_cur) if _avg_time_cur > 0 else None
     except Exception:
         _sei_cur_display = None
-    # Revert extra enlargement; keep moderate emphasis and use red text color
-    _your_sei_html = (
-        f" — <span style='font-size:1.7em; font-weight:900; color:#ff3b30;'>Your SEI : {(_sei_cur_display if _sei_cur_display is not None else 0):.2f}</span>"
-        if _sei_cur_display is not None else ""
+    # Show "Your SEI" at the top of the Summary section
+    _your_sei_value = (_sei_cur_display if _sei_cur_display is not None else 0)
+    st.markdown(
+        f"<div style='font-size:1.2em; font-weight:900; color:#ff3b30; margin: 6px 0 6px 0; text-align:center;'>Your SEI : {_your_sei_value:.2f}</div>",
+        unsafe_allow_html=True,
     )
+    # Pill badges: Final Score, Words Solved, Total Penalty (moved above Global Leaderboard)
+    try:
+        _final_score = int(game_summary.get('score', 0))
+        _penalty = int(game_summary.get('total_penalty_points', 0))
+        _words_solved = int(game_summary.get('words_solved', 0))
+        st.markdown(
+            f"""
+            <div style='display:flex; gap:14px; align-items:center; justify-content:center; margin:8px 0 10px 0;'>
+                <span style='background:#FFEDD5;color:#9A3412;font-weight:900;border-radius:10px;padding:6px 12px;box-shadow:0 1px 3px rgba(0,0,0,0.08);'>Final Score: {_final_score}</span>
+                <span style='background:#DCFCE7;color:#065F46;font-weight:900;border-radius:10px;padding:6px 12px;box-shadow:0 1px 3px rgba(0,0,0,0.08);'>Words Solved: {_words_solved}</span>
+                <span style='background:#FEE2E2;color:#991B1B;font-weight:900;border-radius:10px;padding:6px 12px;box-shadow:0 1px 3px rgba(0,0,0,0.08);'>Total Penalty: {_penalty}</span>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+    except Exception:
+        pass
+    # Global Leaderboard header without the inline Your SEI
     st.markdown(f"""
     <div style='font-size:1.1em; font-weight:700; color:#fff; margin-bottom:0.5em;'>
-        🏆 Global Leaderboard (Top 3 by SEI) - {leaderboard_category.title() if leaderboard_category != 'All Categories' else 'All Categories'}{_your_sei_html}
+        🏆 Global Leaderboard (Top 3 by SEI) - {leaderboard_category.title() if leaderboard_category != 'All Categories' else 'All Categories'}
     </div>
     """, unsafe_allow_html=True)
     user_sei = {}
@@ -3392,6 +3363,8 @@ def display_game_over(game_summary):
                     print("[DEBUG][SEI_EMAIL] Not sending: SMTP env vars missing (SMTP_HOST/SMTP_USER/SMTP_PASS).")
     except Exception as e:
         print(f"[DEBUG][SEI_EMAIL] Exception in email logic: {e}")
+    # (Removed duplicate consolidated summary strip here; badges are shown above the leaderboard)
+
     # Sort users by highest SEI
     top_users = sorted(user_sei.items(), key=lambda x: x[1], reverse=True)[:3]
     rows = []
