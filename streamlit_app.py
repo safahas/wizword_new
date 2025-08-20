@@ -1891,20 +1891,20 @@ def display_game():
                 else:
                     # Compute and cache
                     top3_rows = get_top10_from_aggregates(chosen_cat)[:3]
-                    if (not top3_rows) and chosen_cat != 'any':
-                        top3_rows = get_top10_from_aggregates('any')[:3]
-                    if not top3_rows:
-                        try:
-                            _agg = _load_aggregates()
-                            for cat_key, users in (_agg.get('category_user_highest') or {}).items():
-                                if users:
-                                    cand = get_top10_from_aggregates(cat_key)[:3]
-                                    if cand:
-                                        chosen_cat = cat_key
-                                        top3_rows = cand
-                                        break
-                        except Exception:
-                            pass
+                if (not top3_rows) and chosen_cat != 'any':
+                    top3_rows = get_top10_from_aggregates('any')[:3]
+                if not top3_rows:
+                    try:
+                        _agg = _load_aggregates()
+                        for cat_key, users in (_agg.get('category_user_highest') or {}).items():
+                            if users:
+                                cand = get_top10_from_aggregates(cat_key)[:3]
+                                if cand:
+                                    chosen_cat = cat_key
+                                    top3_rows = cand
+                                    break
+                    except Exception:
+                        pass
                     st.session_state['_top3_start_cache'] = {'cat': chosen_cat, 'rows': top3_rows}
                 # Optional debug for start page block
                 import logging, os
@@ -2138,10 +2138,6 @@ def display_game():
     # --- Prevent rendering gameplay UI until Beat has started ---
     if game.mode == 'Beat' and not st.session_state.get('beat_started', False):
         return
-    # --- Automatically show the first hint for Beat mode when a new word is loaded ---
-    if game.mode == 'Beat' and len(game.hints_given) == 0 and st.session_state.get('beat_started', False):
-        first_hint, _ = game.get_hint()
-        st.info(f"💡 First Hint (free): {first_hint}")
 
     display_hint_section(game)
 
@@ -2520,7 +2516,7 @@ def display_game():
             with col_b:
                 frozen = str(st.session_state.get('skip_word', '')).upper()
                 st.markdown(
-                    f"<div style='text-align:center;margin:0.25em 0 0.25em 0;font-size:1.6em;color:#7c3aed;font-weight:800;'>The word is: {frozen}</div>",
+                    f"<div style='text-align:center;margin:0.25em 0 0.25em 0;font-size:1.6em;color:#7c3aed;font-weight:800;'>The skipped word is: {frozen}</div>",
                     unsafe_allow_html=True
                 )
 
@@ -3560,36 +3556,69 @@ def display_game_stats(game):
 
 
 def display_hint_section(game):
-    max_hints = game.current_settings["max_hints"]
-    hints_remaining = max_hints - len(game.hints_given)
+    # Auto-show first hint per round for free
+    try:
+        cur_round = st.session_state.get('current_round_id')
+        if (len(game.hints_given) == 0) and (st.session_state.get('first_hint_round_id') != cur_round):
+            hint, points = game.get_hint()
+            # Refund penalty if any so first hint is free
+            try:
+                if isinstance(points, (int, float)) and points < 0:
+                    refund = abs(points)
+                    game.score += refund
+                    if hasattr(game, 'total_points'):
+                        game.total_points += refund
+                    if hasattr(game, 'total_penalty_points'):
+                        game.total_penalty_points = max(0, int(game.total_penalty_points) - refund)
+                    st.session_state['beat_total_points'] = int(getattr(game, 'total_penalty_points', 0)) if hasattr(game, 'total_penalty_points') else st.session_state.get('beat_total_points', 0)
+            except Exception:
+                pass
+            st.session_state['first_hint_round_id'] = cur_round
+    except Exception:
+        pass
 
-    # Header row: "Get a Hint" and "Hints Left" on the same line
+    # Allow up to 2 extra hints (each -10)
+    max_extra = 2
+    extra_used = max(len(game.hints_given) - 1, 0)
+    remaining = max(0, max_extra - extra_used)
+
+    # Build the current hint text (last hint or placeholder)
+    if game.hints_given:
+        current_text = highlight_letters_in_hint(game.hints_given[-1])
+    else:
+        current_text = "Tap for a hint"
+
+    # Render a visual card with a full-size invisible overlay button (preferred visual card approach)
     st.markdown(
-        f"""
-        <div style='display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.2em;'>
-            <span style='font-size: 1.6em; font-weight: 700; color: #222; letter-spacing: 0.01em;'>Get a Hint</span>
-            <span style='font-size: 1.1em; color: #7c3aed; font-weight:700;'>
-                Hints Left: <span style='background:#FFD93D; color:#222; border-radius:0.6em; padding:0.2em 0.8em;'>{hints_remaining}</span>
-            </span>
-        </div>
+        """
+        <style>
+        .hint-card-wrap { position: relative; width: 100% !important; }
+        .hint-card-visual {
+            background: linear-gradient(90deg, #FFEA00 0%, #FF8A80 45%, #80F7D3 100%);
+            border-radius: 18px; border: 3px solid rgba(255,255,255,0.55);
+            box-shadow: 0 10px 28px rgba(0,0,0,0.22), 0 0 0 6px rgba(255,255,255,0.08) inset;
+            color: #0b1220; font-weight: 900; letter-spacing: 0.01em;
+            padding: 0.8em 1em; margin: 0.4em 0 0.2em 0; text-align: center;
+            width: 100%; max-width: 100%;
+            font-size: clamp(1.4em, 4.8vw, 2.6em);
+            line-height: 1.35; word-break: break-word; overflow-wrap: anywhere; white-space: normal;
+            text-shadow: 0 2px 6px rgba(0,0,0,0.18);
+        }
+        .hint-card-wrap .stButton>button {
+            position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0;
+            background: transparent !important; border: none !important; box-shadow: none !important;
+            cursor: pointer;
+        }
+        </style>
         """,
-        unsafe_allow_html=True
+        unsafe_allow_html=True,
     )
-
-    # --- Two buttons side by side, each half width ---
-    col1, col2 = st.columns(2)
-    show_prev = st.session_state.get("show_prev_hints", False)
-
-    with col1:
-        # Only show "Get Hint" if not showing previous hints
-        if not show_prev:
-            if st.button("💡 Get Hint", 
-                        disabled=len(game.hints_given) >= max_hints,
-                        help=f"{hints_remaining} hints remaining",
-                        use_container_width=True,
-                        key="hint-button"):
+    st.markdown("<div class='hint-card-wrap'>", unsafe_allow_html=True)
+    st.markdown(f"<div class='hint-card-visual'>💡 {current_text}</div>", unsafe_allow_html=True)
+    clicked = st.button(" ", key="hint_card_click", help="Tap for next hint", use_container_width=True)
+    st.markdown("</div>", unsafe_allow_html=True)
+    if clicked and remaining > 0:
                 hint, points = game.get_hint()
-                # Sync penalties to session after a hint penalty is applied
                 try:
                     if hasattr(game, 'total_penalty_points'):
                         st.session_state['beat_total_points'] = int(getattr(game, 'total_penalty_points', 0))
@@ -3598,44 +3627,6 @@ def display_hint_section(game):
                 except Exception:
                     pass
                 st.rerun()
-
-    with col2:
-        # Toggle show previous hints
-        if st.button(
-            "Show Previous Hints" if not show_prev else "Hide Previous Hints",
-            use_container_width=True,
-            key="prev-hints-btn"
-        ):
-            st.session_state["show_prev_hints"] = not show_prev
-            st.rerun()
-
-    # --- Show only previous hints if toggled ---
-    if show_prev:
-        if game.hints_given:
-            styled_hints = [highlight_letters_in_hint(h) for h in game.hints_given]
-            st.markdown(
-                "<br>".join([f"<b>{i+1}.</b> {h}" for i, h in enumerate(styled_hints)]),
-                unsafe_allow_html=True
-            )
-        else:
-            st.info("No previous hints yet.", icon="💡")
-    # --- Otherwise, show only the last hint if available ---
-    elif game.hints_given:
-        last_hint = game.hints_given[-1]
-        styled_hint = highlight_letters_in_hint(last_hint)
-        st.markdown(f"""
-            <div style='width:100%; display:flex; justify-content:center;'>
-              <div style='
-                  display: inline-block;
-                  max-width: 468px;
-                  background: linear-gradient(90deg, #FFD93D 0%, #FF6B6B 50%, #4ECDC4 100%);
-                  color: #111; font-size: 1.43em; line-height: 1.3; font-weight: 700; 
-                  border-radius: 0.78em; padding: 0.33em 0.52em; margin: 0.455em 0; 
-                  box-shadow: 0 2px 8px rgba(0,0,0,0.14); text-align: center;'>
-                💡 {styled_hint}
-              </div>
-            </div>
-        """, unsafe_allow_html=True)
 
 def log_beat_word_count_event(event, value):
     with open("beat_word_count_debug.log", "a", encoding="utf-8") as f:
