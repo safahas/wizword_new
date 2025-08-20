@@ -3234,7 +3234,11 @@ def display_game_over(game_summary):
         _sei_cur_display = (_avg_score_cur / _avg_time_cur) if _avg_time_cur > 0 else None
     except Exception:
         _sei_cur_display = None
-    _your_sei_html = (f" — Your SEI: {(_sei_cur_display if _sei_cur_display is not None else 0):.2f}" if _sei_cur_display is not None else "")
+    # Revert extra enlargement; keep moderate emphasis and use red text color
+    _your_sei_html = (
+        f" — <span style='font-size:1.7em; font-weight:900; color:#ff3b30;'>Your SEI : {(_sei_cur_display if _sei_cur_display is not None else 0):.2f}</span>"
+        if _sei_cur_display is not None else ""
+    )
     st.markdown(f"""
     <div style='font-size:1.1em; font-weight:700; color:#fff; margin-bottom:0.5em;'>
         🏆 Global Leaderboard (Top 3 by SEI) - {leaderboard_category.title() if leaderboard_category != 'All Categories' else 'All Categories'}{_your_sei_html}
