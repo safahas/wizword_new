@@ -1591,6 +1591,8 @@ def display_game():
             st.session_state['_dbg_prev_state'] = {'mode': _md, 'beat_started': _bs}
     except Exception:
         pass
+    # Ensure per-render guard for Skip button (defensive against duplicate blocks)
+    st.session_state['_skip_btn_rendered'] = False
     
     import time
     from streamlit_app import save_game_to_user_profile
@@ -1642,14 +1644,7 @@ def display_game():
     # --- Hamburger menu now at the bottom of the game page ---
     with st.container():
         with st.expander('☰ Menu', expanded=False):
-            # Remove Skip button for Beat mode from menu
-            if not (game.mode == 'Beat'):
-                if st.button('Skip', key='skip_word_btn_menu'):
-                    game = st.session_state.game
-                    st.session_state['last_mode'] = st.session_state.game.mode
-                    st.session_state['game_over'] = True
-                    st.session_state['game_summary'] = game.get_game_summary()
-                    st.rerun()
+            # Skip button removed from menu to avoid duplication; use the main Skip on the game page
             if st.button('View Rules / How to Play', key='view_rules_btn_menu'):
                 st.session_state['show_rules'] = not st.session_state.get('show_rules', False)
             if st.button('User Profile', key='user_profile_btn_menu'):
@@ -2110,14 +2105,80 @@ def display_game():
         st.markdown(stats_html, unsafe_allow_html=True)
 
     # --- Hints and questions section (now above letter boxes) ---
+    # --- Prevent rendering gameplay UI until Beat has started ---
+    if game.mode == 'Beat' and not st.session_state.get('beat_started', False):
+        return
     # --- Automatically show the first hint for Beat mode when a new word is loaded ---
-    if game.mode == 'Beat' and len(game.hints_given) == 0:
+    if game.mode == 'Beat' and len(game.hints_given) == 0 and st.session_state.get('beat_started', False):
         first_hint, _ = game.get_hint()
         st.info(f"💡 First Hint (free): {first_hint}")
 
     display_hint_section(game)
 
+    # --- Early Skip handling to avoid rendering stale letter boxes/input ---
+    if game.mode == 'Beat':
+        try:
+            import time as _t
+            # Default overlay flag to False each run
+            st.session_state['skip_overlay_active'] = False
+            if st.session_state.get('skip_pending'):
+                _now = _t.time()
+                _until = st.session_state.get('skip_show_until', 0)
+                _word_to_show = (st.session_state.get('skip_word', '') or '')
+                # Abort showing if round changed or current word differs
+                if st.session_state.get('skip_round_id') != st.session_state.get('current_round_id') or (getattr(game, 'selected_word', '') and getattr(game, 'selected_word', '') != st.session_state.get('skip_word', '')):
+                    st.session_state['skip_pending'] = False
+                    st.session_state['skip_show_until'] = 0
+                    st.session_state['skip_word'] = ''
+                    st.session_state.pop('skip_round_id', None)
+                elif _now < _until and _word_to_show:
+                    # Mark overlay active and ensure input is cleared/disabled downstream
+                    st.session_state['skip_overlay_active'] = True
+                    st.session_state['clear_guess_field'] = True
+                else:
+                    # Time elapsed: load next word and clear flags BEFORE rendering boxes
+                    try:
+                        username = game.nickname if hasattr(game, 'nickname') and game.nickname else 'global'
+                        if hasattr(game, 'selected_word') and game.selected_word:
+                            game.word_selector.mark_word_played(game.selected_word, username, game.subject)
+                    except Exception:
+                        pass
+                    new_word_length = 5
+                    new_subject = game.subject
+                    st.session_state.game = GameLogic(
+                        word_length=new_word_length,
+                        subject=new_subject,
+                        mode=game.mode,
+                        nickname=game.nickname,
+                        difficulty=game.difficulty,
+                        initial_score=game.score
+                    )
+                    # Clear UI/session for new round
+                    st.session_state['show_prev_questions'] = False
+                    st.session_state['feedback'] = ''
+                    st.session_state['feedback_time'] = 0
+                    st.session_state['revealed_letters'] = set()
+                    st.session_state['used_letters'] = set()
+                    st.session_state['show_word'] = False
+                    st.session_state['show_word_round_id'] = None
+                    st.session_state['show_final_word'] = False
+                    st.session_state['final_word_time'] = 0
+                    st.session_state['current_round_id'] = str(uuid.uuid4())
+                    st.session_state['last_displayed_word'] = getattr(st.session_state.game, 'selected_word', None)
+                    st.session_state['clear_guess_field'] = True
+                    # Clear skip flags and rerun
+                    st.session_state['skip_pending'] = False
+                    st.session_state['skip_show_until'] = 0
+                    st.session_state['skip_word'] = ''
+                    st.session_state.pop('skip_round_id', None)
+                    st.rerun()
+                    return
+        except Exception:
+            pass
+
     # --- Letter boxes and input ---
+    # Reserve a fixed container just above the Skip area for displaying the skipped word
+    skip_word_display_container = st.empty()
     revealed_letters = st.session_state.get('revealed_letters', set())
     word = game.selected_word if hasattr(game, 'selected_word') else ''
     if not word:
@@ -2140,6 +2201,17 @@ def display_game():
         content = letter.upper() if is_revealed else "_"
         boxes.append(f"<span style='{style}'>{content}</span>")
     st.markdown(f"<div style='display:flex;flex-direction:row;justify-content:center;gap:0.2em;margin-bottom:1.2em;'>{''.join(boxes)}</div>", unsafe_allow_html=True)
+    # If skip overlay is active, render the frozen word directly above the Skip button area
+    if game.mode == 'Beat' and st.session_state.get('skip_overlay_active') and st.session_state.get('skip_word'):
+        frozen = str(st.session_state.get('skip_word', '')).upper()
+        with skip_word_display_container:
+            st.markdown(
+                f"<div style='text-align:center;margin:0.25em 0 0.25em 0;font-size:1.6em;color:#7c3aed;font-weight:800;'>The word is: {frozen}</div>",
+                unsafe_allow_html=True
+            )
+    else:
+        skip_word_display_container.empty()
+
     # Letter input below the container
     if 'clear_guess_field' not in st.session_state:
         st.session_state['clear_guess_field'] = False
@@ -2147,7 +2219,7 @@ def display_game():
         st.session_state['letter_guess_input'] = ''
         st.session_state['clear_guess_field'] = False
     # Disable input if showing final word
-    input_disabled = st.session_state.get('show_final_word', False)
+    input_disabled = st.session_state.get('show_final_word', False) or st.session_state.get('skip_overlay_active', False)
     guess = st.text_input(f'Type up to {len(word)} letters and press Enter:', max_chars=len(word), key='letter_guess_input', disabled=input_disabled)
     # --- Show final word before win logic ---
     if st.session_state.get('show_final_word', False):
@@ -2402,68 +2474,25 @@ def display_game():
 
     # --- Skip button for Beat mode, directly below Show Word ---
     if game.mode == 'Beat':
-        # If a skip is pending, show the word above the Skip button until the timer elapses
-        try:
-            import time as _t
-            if st.session_state.get('skip_pending'):
-                _now = _t.time()
-                _until = st.session_state.get('skip_show_until', 0)
-                # Only show the frozen word captured at skip time, never the current round's word
-                _word_to_show = (st.session_state.get('skip_word', '') or '')
-                # If the round has changed or the game's current word differs from the frozen skip word, stop showing
-                if st.session_state.get('skip_round_id') != st.session_state.get('current_round_id') or (getattr(game, 'selected_word', '') and getattr(game, 'selected_word', '') != st.session_state.get('skip_word', '')):
-                    st.session_state['skip_pending'] = False
-                    st.session_state['skip_show_until'] = 0
-                    st.session_state['skip_word'] = ''
-                    st.session_state.pop('skip_round_id', None)
-                    _word_to_show = ''
-                if _now < _until and _word_to_show:
-                    st.markdown(
-                        f"<div style='text-align:center;margin:0.5em 0;font-size:1.6em;color:#7c3aed;font-weight:700;'>The word is: {str(_word_to_show).upper()}</div>",
-                        unsafe_allow_html=True
-                    )
-                else:
-                    # Time elapsed: load next word and clear flags
-                    try:
-                        username = game.nickname if hasattr(game, 'nickname') and game.nickname else 'global'
-                        if hasattr(game, 'selected_word') and game.selected_word:
-                            game.word_selector.mark_word_played(game.selected_word, username, game.subject)
-                    except Exception:
-                        pass
-                    new_word_length = 5
-                    new_subject = game.subject
-                    st.session_state.game = GameLogic(
-                        word_length=new_word_length,
-                        subject=new_subject,
-                        mode=game.mode,
-                        nickname=game.nickname,
-                        difficulty=game.difficulty,
-                        initial_score=game.score
-                    )
-                    st.session_state['show_prev_questions'] = False
-                    st.session_state['feedback'] = ''
-                    st.session_state['feedback_time'] = 0
-                    st.session_state['revealed_letters'] = set()
-                    st.session_state['used_letters'] = set()
-                    st.session_state['show_word'] = False
-                    st.session_state['show_word_round_id'] = None
-                    # Clear skip flags and continue
-                    st.session_state['skip_pending'] = False
-                    st.session_state['skip_show_until'] = 0
-                    st.session_state['skip_word'] = ''
-                    st.session_state.pop('skip_round_id', None)
-                    st.rerun()
-        except Exception:
-            pass
-        # Skip button
-        if st.button('Skip', key='skip_word_btn_main'):
-            import time as _t
-            st.session_state['skip_pending'] = True
-            st.session_state['skip_word'] = getattr(game, 'selected_word', '')
-            st.session_state['skip_show_until'] = _t.time() + 2.0  # show word for 2 seconds
-            # Track the round we initiated skip on, so we can stop showing after the round changes
-            st.session_state['skip_round_id'] = st.session_state.get('current_round_id')
-            st.rerun()
+        col_a, col_b, col_c = st.columns([1,2,1])
+        with col_b:
+            if (not st.session_state.get('_skip_btn_rendered', False)) and st.button('Skip', key='skip_word_btn_main', use_container_width=True):
+                import time as _t
+                st.session_state['skip_pending'] = True
+                st.session_state['skip_word'] = getattr(game, 'selected_word', '')
+                st.session_state['skip_show_until'] = _t.time() + 2.0  # show word for 2 seconds
+                # Track the round we initiated skip on, so we can stop showing after the round changes
+                st.session_state['skip_round_id'] = st.session_state.get('current_round_id')
+                st.session_state['_skip_btn_rendered'] = True
+                st.rerun()
+        # Show skipped word directly below the centered Skip button
+        if st.session_state.get('skip_overlay_active') and st.session_state.get('skip_word'):
+            with col_b:
+                frozen = str(st.session_state.get('skip_word', '')).upper()
+                st.markdown(
+                    f"<div style='text-align:center;margin:0.25em 0 0.25em 0;font-size:1.6em;color:#7c3aed;font-weight:800;'>The word is: {frozen}</div>",
+                    unsafe_allow_html=True
+                )
 
     # --- Timer auto-refresh for Beat mode ---
     if game.mode == 'Beat' and not st.session_state.get('game_over', False):
