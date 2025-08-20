@@ -1632,6 +1632,11 @@ def display_game():
         st.session_state['current_round_id'] = str(uuid.uuid4())
         st.session_state['last_displayed_word'] = current_word
         st.session_state['show_prev_questions'] = False
+        # Reset any reveal/guess state to avoid leaking letters into the new round
+        st.session_state['revealed_letters'] = set()
+        st.session_state['used_letters'] = set()
+        st.session_state['letter_guess_input'] = ''
+        st.session_state['clear_guess_field'] = True
         if game and hasattr(game, 'questions_asked'):
             game.questions_asked.clear()
         st.rerun()
@@ -2207,12 +2212,22 @@ def display_game():
     skip_word_display_container = st.empty()
     revealed_letters = st.session_state.get('revealed_letters', set())
     word = game.selected_word if hasattr(game, 'selected_word') else ''
+    # Defensive clamp: never reveal letters beyond user's used_letters and current word letters
+    try:
+        used_letters = set((l or '').lower() for l in st.session_state.get('used_letters', set()))
+        word_letters = set((word or '').lower())
+        allowed_reveals = used_letters.intersection(word_letters)
+        if allowed_reveals != set(revealed_letters):
+            revealed_letters = allowed_reveals
+            st.session_state['revealed_letters'] = allowed_reveals
+    except Exception:
+        pass
     if not word:
         st.error('No word was selected for this round. Please restart the game or contact support.')
         return
     boxes = []
     for i, letter in enumerate(word):
-        is_revealed = letter.lower() in revealed_letters
+        is_revealed = (letter.lower() in revealed_letters)
         style = (
             "display:inline-block;width:2.5em;height:2.5em;margin:0 0.2em;"
             "font-size:2em;text-align:center;line-height:2.5em;"

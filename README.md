@@ -100,6 +100,19 @@ streamlit run streamlit_app.py
       - Wrong guesses cost 10 points
       - Correct guesses always earn 100 points per word
 
+### New Hint Experience (Mobile‑friendly)
+
+- Single, colorful hint card replaces the old two buttons.
+- The card displays the latest hint text in a large, high‑contrast banner.
+- Click/tap the hint card to request the next hint.
+- First hint each round is shown automatically for free (no penalty).
+- Up to two additional hints are available per word with the same penalty (‑10 points each).
+- Designed for phones: fluid text sizing and proper wrapping prevent truncation; the card uses full width and breaks long lines gracefully.
+
+Implementation notes (for developers):
+- The visual card is rendered as a gradient banner; a full‑size overlay button captures clicks while keeping the visual intact.
+- Styles use CSS clamp() and wrapping rules (overflow‑wrap/word‑break/white‑space) to ensure readability on small screens.
+
 ## Score Efficiency Index (SEI)
 SEI is a performance metric that combines your average score per word and your average time per word:
 
