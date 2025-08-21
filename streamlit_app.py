@@ -2418,7 +2418,21 @@ def display_game():
             st.session_state['clear_guess_field'] = True
             st.rerun()
 
-    # --- Ask Yes/No Question section (now below letter boxes) ---
+    # --- Skip button for Beat mode (moved above the question section) ---
+    if game.mode == 'Beat':
+        col_a, col_b, col_c = st.columns([1,2,1])
+        with col_b:
+            if (not st.session_state.get('_skip_btn_rendered', False)) and st.button('Skip', key='skip_word_btn_main', use_container_width=True):
+                import time as _t
+                st.session_state['skip_pending'] = True
+                st.session_state['skip_word'] = getattr(game, 'selected_word', '')
+                st.session_state['skip_show_until'] = _t.time() + 2.0  # show word for 2 seconds
+                # Track the round we initiated skip on, so we can stop showing after the round changes
+                st.session_state['skip_round_id'] = st.session_state.get('current_round_id')
+                st.session_state['_skip_btn_rendered'] = True
+                st.rerun()
+
+    # --- Ask Yes/No Question section (now below letter boxes and Skip) ---
     clear_field = st.session_state.get('clear_question_field', False)
     if clear_field:
         st.session_state['yes_no_question_input'] = ""
@@ -2513,21 +2527,6 @@ def display_game():
             st.session_state['feedback'] = ''
             st.session_state['feedback_time'] = 0
 
-
-    # --- Skip button for Beat mode, directly below Show Word ---
-    if game.mode == 'Beat':
-        col_a, col_b, col_c = st.columns([1,2,1])
-        with col_b:
-            if (not st.session_state.get('_skip_btn_rendered', False)) and st.button('Skip', key='skip_word_btn_main', use_container_width=True):
-                import time as _t
-                st.session_state['skip_pending'] = True
-                st.session_state['skip_word'] = getattr(game, 'selected_word', '')
-                st.session_state['skip_show_until'] = _t.time() + 2.0  # show word for 2 seconds
-                # Track the round we initiated skip on, so we can stop showing after the round changes
-                st.session_state['skip_round_id'] = st.session_state.get('current_round_id')
-                st.session_state['_skip_btn_rendered'] = True
-                st.rerun()
-        # Removed separate skipped word text; boxes display it during overlay
 
     # --- Timer auto-refresh for Beat mode ---
     if game.mode == 'Beat' and not st.session_state.get('game_over', False):
