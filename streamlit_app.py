@@ -2214,26 +2214,29 @@ def display_game():
             pass
 
     # --- Letter boxes and input ---
-    # Reserve a fixed container just above the Skip area for displaying the skipped word
+    # Reserve a fixed container just above the Skip area (unused now; we show skipped word in boxes)
     skip_word_display_container = st.empty()
     revealed_letters = st.session_state.get('revealed_letters', set())
     word = game.selected_word if hasattr(game, 'selected_word') else ''
-    # Defensive clamp: never reveal letters beyond user's used_letters and current word letters
-    try:
-        used_letters = set((l or '').lower() for l in st.session_state.get('used_letters', set()))
-        word_letters = set((word or '').lower())
-        allowed_reveals = used_letters.intersection(word_letters)
-        if allowed_reveals != set(revealed_letters):
-            revealed_letters = allowed_reveals
-            st.session_state['revealed_letters'] = allowed_reveals
-    except Exception:
-        pass
-    if not word:
+    overlay_active = bool(st.session_state.get('skip_overlay_active') and st.session_state.get('skip_word'))
+    # Defensive clamp only when not showing skip overlay
+    if not overlay_active:
+        try:
+            used_letters = set((l or '').lower() for l in st.session_state.get('used_letters', set()))
+            word_letters = set((word or '').lower())
+            allowed_reveals = used_letters.intersection(word_letters)
+            if allowed_reveals != set(revealed_letters):
+                revealed_letters = allowed_reveals
+                st.session_state['revealed_letters'] = allowed_reveals
+        except Exception:
+            pass
+    render_word = (st.session_state.get('skip_word', '') if overlay_active else word) or ''
+    if not render_word:
         st.error('No word was selected for this round. Please restart the game or contact support.')
         return
     boxes = []
-    for i, letter in enumerate(word):
-        is_revealed = (letter.lower() in revealed_letters)
+    for i, letter in enumerate(render_word):
+        is_revealed = overlay_active or (letter.lower() in revealed_letters)
         style = (
             "display:inline-block;width:2.5em;height:2.5em;margin:0 0.2em;"
             "font-size:2em;text-align:center;line-height:2.5em;"
@@ -2248,9 +2251,8 @@ def display_game():
         content = letter.upper() if is_revealed else "_"
         boxes.append(f"<span style='{style}'>{content}</span>")
     st.markdown(f"<div style='display:flex;flex-direction:row;justify-content:center;gap:0.2em;margin-bottom:1.2em;'>{''.join(boxes)}</div>", unsafe_allow_html=True)
-    # Skipped word rendering is handled near the Skip button (below it) to avoid duplicates
-    if not (game.mode == 'Beat' and st.session_state.get('skip_overlay_active') and st.session_state.get('skip_word')):
-        skip_word_display_container.empty()
+    # Ensure no separate skipped word text is shown below Skip button
+    skip_word_display_container.empty()
 
     # Letter input below the container
     if 'clear_guess_field' not in st.session_state:
