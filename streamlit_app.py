@@ -2527,14 +2527,7 @@ def display_game():
                 st.session_state['skip_round_id'] = st.session_state.get('current_round_id')
                 st.session_state['_skip_btn_rendered'] = True
                 st.rerun()
-        # Show skipped word directly below the centered Skip button
-        if st.session_state.get('skip_overlay_active') and st.session_state.get('skip_word'):
-            with col_b:
-                frozen = str(st.session_state.get('skip_word', '')).upper()
-                st.markdown(
-                    f"<div style='text-align:center;margin:0.25em 0 0.25em 0;font-size:1.6em;color:#7c3aed;font-weight:800;'>The skipped word is: {frozen}</div>",
-                    unsafe_allow_html=True
-                )
+        # Removed separate skipped word text; boxes display it during overlay
 
     # --- Timer auto-refresh for Beat mode ---
     if game.mode == 'Beat' and not st.session_state.get('game_over', False):
