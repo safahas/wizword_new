@@ -134,6 +134,27 @@ def send_email_with_attachment(to_emails, subject, body, attachment_path=None, c
 # Initialize user store for demo (replace with real DB in production)
 if 'users' not in st.session_state:
     st.session_state['users'] = load_users()
+    # One-time backfill of games_count from existing game_results.json
+    try:
+        existing = st.session_state['users'] if isinstance(st.session_state.get('users'), dict) else {}
+        # Lazy import to avoid forward reference
+        from streamlit_app import get_all_game_results as _get_all_game_results  # type: ignore
+        all_games = _get_all_game_results()
+        counts = {}
+        for g in all_games:
+            uname = str(g.get('nickname', '')).lower()
+            if uname:
+                counts[uname] = counts.get(uname, 0) + 1
+        changed = False
+        for uname, u in list(existing.items()):
+            if isinstance(u, dict):
+                if not isinstance(u.get('games_count'), int):
+                    u['games_count'] = counts.get(str(uname).lower(), 0)
+                    changed = True
+        if changed:
+            save_users(existing)
+    except Exception:
+        pass
 # Configure Streamlit page with custom theme
 st.set_page_config(
     page_title="WizWord - Word Guessing Game",
@@ -1169,7 +1190,13 @@ def main():
         # Admin dashboard counters (sidebar)
         counters = _load_global_counters()
         st.sidebar.markdown("### Admin Stats")
-        st.sidebar.metric("Users", counters.get('users_count', 0))
+        # Show the actual number of registered accounts from users.json (authoritative)
+        actual_users = len(st.session_state.get('users', {}))
+        # Reconcile the persisted counter if it drifted
+        if counters.get('users_count') != actual_users:
+            counters['users_count'] = actual_users
+            _save_global_counters(counters)
+        st.sidebar.metric("Users", actual_users)
         total_secs = counters.get('total_game_time_seconds', 0)
         hours = total_secs // 3600
         minutes = (total_secs % 3600) // 60
@@ -1956,24 +1983,65 @@ def display_game():
                     if st.session_state.get('show_all_users_profiles'):
                         st.markdown("### All User Profiles")
                         users_obj = load_all_users()
+                        # Build per-user game counts and last timestamps from game_results.json (authoritative)
+                        try:
+                            all_games_flat = get_all_game_results()
+                        except Exception:
+                            all_games_flat = []
+                        games_by_user = {}
+                        last_time_by_user = {}
+                        for gg in all_games_flat:
+                            uname = str(gg.get('nickname', '')).lower()
+                            if uname:
+                                games_by_user[uname] = games_by_user.get(uname, 0) + 1
+                                ts = gg.get('timestamp')
+                                if ts:
+                                    try:
+                                        # Keep the max timestamp
+                                        prev = last_time_by_user.get(uname)
+                                        if (prev is None) or (str(ts) > str(prev)):
+                                            last_time_by_user[uname] = str(ts)
+                                    except Exception:
+                                        pass
+                        # Also read games_count directly from users.json if present
+                        try:
+                            users_map = load_all_users()
+                        except Exception:
+                            users_map = {}
                         rows = []
                         # Support both dict-based and list-based user stores
                         if isinstance(users_obj, dict):
                             for username, u in users_obj.items():
                                 if isinstance(u, dict):
+                                    uname_l = str(username).lower()
+                                    games_count = u.get('games_count') if isinstance(u, dict) else None
+                                    if not isinstance(games_count, int):
+                                        games_count = games_by_user.get(uname_l, 0)
+                                    # Last game date preference: users.json last_game_time, fallback to derived last_time_by_user
+                                    last_ts = (u.get('last_game_time') if isinstance(u, dict) else None) or last_time_by_user.get(uname_l)
+                                    if isinstance(last_ts, str) and 'T' in last_ts:
+                                        last_ts = last_ts.split('T')[0]
                                     rows.append({
                                         'Username': username,
                                         'Email': u.get('email', ''),
-                                        'Games': len(u.get('games', [])) if isinstance(u.get('games'), list) else 0
+                                        'Games': games_count,
+                                        'Last Game': last_ts or ''
                                     })
                                 else:
                                     rows.append({'Username': str(username), 'Email': '', 'Games': 0})
                         elif isinstance(users_obj, list):
                             for u in users_obj:
+                                _uname = (u.get('username') if isinstance(u, dict) else '')
                                 rows.append({
-                                    'Username': (u.get('username') if isinstance(u, dict) else ''),
+                                    'Username': _uname,
                                     'Email': (u.get('email') if isinstance(u, dict) else ''),
-                                    'Games': 0
+                                    'Games': (u.get('games_count') if isinstance(u, dict) and isinstance(u.get('games_count'), int) else games_by_user.get(str(_uname).lower(), 0)),
+                                    'Last Game': (
+                                        ((u.get('last_game_time') or '') if isinstance(u, dict) else '')
+                                        or (last_time_by_user.get(str(_uname).lower()) or '')
+                                    ).split('T')[0] if (
+                                        (isinstance(u, dict) and isinstance(u.get('last_game_time'), str)) or isinstance(last_time_by_user.get(str(_uname).lower()), str)
+                                    ) else ''
                                 })
                         if rows:
                             st.table(rows)
@@ -3655,6 +3723,43 @@ def save_game_to_user_profile(game_summary):
         import logging
         logging.info(f"[DEBUG] game_results.json path: {abs_path}, last modified: {mtime_str}")
         print(f"[DEBUG] game_results.json path: {abs_path}, last modified: {mtime_str}")
+
+    # Also persist per-user games count in users.json for admin scalability
+    try:
+        users_path = USERS_FILE
+        users_data = {}
+        if os.path.exists(users_path):
+            with open(users_path, 'r', encoding='utf-8') as uf:
+                users_data = json.load(uf)
+        username = str(game_summary.get('nickname', '')).lower()
+        if username:
+            if username not in users_data:
+                users_data[username] = { 'username': username }
+            # Initialize and increment games_count
+            current = users_data[username].get('games_count', 0)
+            users_data[username]['games_count'] = int(current) + 1
+            # Keep only the last game timestamp (do not store all dates to avoid file bloat)
+            last_ts = game_summary.get('timestamp')
+            users_data[username]['last_game_time'] = last_ts
+            # If an old array exists from earlier versions, collapse it to last item
+            if isinstance(users_data[username].get('recent_game_times'), list):
+                hist = users_data[username]['recent_game_times']
+                users_data[username]['last_game_time'] = hist[-1] if hist else last_ts
+                users_data[username].pop('recent_game_times', None)
+            with open(users_path, 'w', encoding='utf-8') as uf:
+                json.dump(users_data, uf, indent=2)
+            # Sync in-memory session users map so admin view reflects immediately
+            try:
+                if 'users' in st.session_state and isinstance(st.session_state['users'], dict):
+                    if username not in st.session_state['users']:
+                        st.session_state['users'][username] = {}
+                    st.session_state['users'][username]['games_count'] = users_data[username]['games_count']
+                    st.session_state['users'][username]['last_game_time'] = users_data[username].get('last_game_time')
+            except Exception:
+                pass
+    except Exception as e:
+        import logging
+        logging.warning(f"[USERS.GAMES_COUNT] failed to update users.json: {e}")
 
 def load_all_users():
     with open("users.json", "r", encoding="utf-8") as f:
