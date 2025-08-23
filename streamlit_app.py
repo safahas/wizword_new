@@ -2029,7 +2029,13 @@ def display_game():
             <div class='beat-start-btn' style='display:inline-block;'></div>
             """
             st.markdown(start_btn_html, unsafe_allow_html=True)
-            if st.button('Click to Start Game', key='beat_start_btn'):
+            _uname = (
+                (st.session_state.get('user') or {}).get('username')
+                or st.session_state.get('nickname')
+                or 'Player'
+            )
+            _start_label = f"{_uname} .. Click to Start Game"
+            if st.button(_start_label, key='beat_start_btn'):
                 st.session_state['beat_started'] = True
                 st.session_state['beat_start_time'] = _time.time()
                 st.rerun()
@@ -2185,7 +2191,7 @@ def display_game():
         # Normal banner and timer logic follows as before
         stats_html = f"""
         <div class='wizword-banner'>
-          <div class='wizword-banner-title'>WizWord</div>
+          <div class='wizword-banner-title'>WizWord <span style="font-size:0.6em; padding:0.25em 0.6em; margin-left:0.4em; border-radius:0.6em; background:rgba(255,255,255,0.18); box-shadow: inset 0 0 0 1px rgba(255,255,255,0.25);">Beat</span></div>
           <div class='wizword-banner-stats'>
             <span class='wizword-stat wizword-beat-category'><b>📚</b> {game.subject.replace('_', ' ').title()}</span>
             <span class='wizword-stat wizword-beat-timer'><b>⏰</b> {time_left}s</span>
@@ -3004,7 +3010,12 @@ def display_game_over(game_summary):
     """
     st.markdown(stats_html, unsafe_allow_html=True)
     # --- END FLEX BANNER ---
-    st.markdown("## 🎉 Game Over!")
+    _uname_go = (
+        (st.session_state.get('user') or {}).get('username')
+        or game_summary.get('nickname')
+        or 'Player'
+    )
+    st.markdown(f"## 🎉 Game Over .. {_uname_go}")
     # (Block displaying last_word at the top for Beat mode has been deleted)
 
     # Show last chosen word in Beat mode
@@ -3046,7 +3057,12 @@ def display_game_over(game_summary):
     
     with stats_tab:
         # Performance graphs
-        st.markdown("### Your Performance")
+        _uname_stats = (
+            (st.session_state.get('user') or {}).get('username')
+            or game_summary.get('nickname')
+            or 'Player'
+        )
+        st.markdown(f"### {_uname_stats} performance")
         username = game_summary.get('nickname', '').lower()
         all_games = get_all_game_results()
         user_games = [g for g in all_games if g.get('nickname', '').lower() == username]
