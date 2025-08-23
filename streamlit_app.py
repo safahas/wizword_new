@@ -21,8 +21,9 @@ logging.getLogger('matplotlib.category').setLevel(logging.WARNING)
 
 USERS_FILE = os.environ.get("USERS_FILE", "users.json")
 
-# Global counters file (users count, total game time, total sessions)
+# Global counters file (users count, total game time, total sessions, live sessions)
 GLOBAL_COUNTERS_PATH = os.environ.get('GLOBAL_COUNTERS_PATH', 'game_data/global_counters.json')
+LIVE_SESSIONS_PATH = os.environ.get('LIVE_SESSIONS_PATH', 'game_data/live_sessions.json')
 
 def _ensure_global_counters_file() -> None:
     try:
@@ -32,8 +33,18 @@ def _ensure_global_counters_file() -> None:
                 json.dump({
                     'users_count': 0,
                     'total_game_time_seconds': 0,
-                    'total_sessions': 0
+                    'total_sessions': 0,
+                    'live_sessions': 0
                 }, f, indent=2)
+    except Exception:
+        pass
+
+def _ensure_live_sessions_file() -> None:
+    try:
+        os.makedirs(os.path.dirname(LIVE_SESSIONS_PATH) or '.', exist_ok=True)
+        if not os.path.exists(LIVE_SESSIONS_PATH):
+            with open(LIVE_SESSIONS_PATH, 'w', encoding='utf-8') as f:
+                json.dump({}, f)
     except Exception:
         pass
 
@@ -41,7 +52,17 @@ def _load_global_counters() -> dict:
     _ensure_global_counters_file()
     try:
         with open(GLOBAL_COUNTERS_PATH, 'r', encoding='utf-8') as f:
-            return json.load(f)
+            data = json.load(f)
+            # Backfill missing keys for older files
+            if 'live_sessions' not in data:
+                data['live_sessions'] = 0
+            if 'total_sessions' not in data:
+                data['total_sessions'] = 0
+            if 'total_game_time_seconds' not in data:
+                data['total_game_time_seconds'] = 0
+            if 'users_count' not in data:
+                data['users_count'] = 0
+            return data
     except Exception:
         return {'users_count': 0, 'total_game_time_seconds': 0, 'total_sessions': 0}
 
@@ -52,11 +73,72 @@ def _save_global_counters(counters: dict) -> None:
     except Exception:
         pass
 
-def update_global_counters(users_delta: int = 0, time_seconds_delta: int = 0, sessions_delta: int = 0) -> None:
+def _read_live_sessions() -> dict:
+    _ensure_live_sessions_file()
+    try:
+        with open(LIVE_SESSIONS_PATH, 'r', encoding='utf-8') as f:
+            return json.load(f)
+    except Exception:
+        return {}
+
+def _write_live_sessions(data: dict) -> None:
+    try:
+        with open(LIVE_SESSIONS_PATH, 'w', encoding='utf-8') as f:
+            json.dump(data, f)
+    except Exception:
+        pass
+
+def heartbeat_live_session(session_id: str, username: str) -> None:
+    """Record/refresh a heartbeat for a live Beat session."""
+    try:
+        import time as _t
+        data = _read_live_sessions()
+        data[session_id] = {
+            'username': str(username).lower(),
+            'ts': int(_t.time())
+        }
+        _write_live_sessions(data)
+    except Exception:
+        pass
+
+def count_active_live_sessions(window_seconds: int = 120) -> int:
+    """Count sessions with a heartbeat within the given window (default 2 minutes)."""
+    try:
+        import time as _t
+        now = int(_t.time())
+        data = _read_live_sessions()
+        active = 0
+        pruned = False
+        for sid, info in list(data.items()):
+            ts = int(info.get('ts', 0))
+            if (now - ts) <= window_seconds:
+                active += 1
+            else:
+                # prune stale
+                data.pop(sid, None)
+                pruned = True
+        if pruned:
+            _write_live_sessions(data)
+        return active
+    except Exception:
+        return 0
+
+def end_live_session(session_id: str) -> None:
+    """Remove a live session entry immediately (called on game over)."""
+    try:
+        data = _read_live_sessions()
+        if session_id in data:
+            data.pop(session_id, None)
+            _write_live_sessions(data)
+    except Exception:
+        pass
+
+def update_global_counters(users_delta: int = 0, time_seconds_delta: int = 0, sessions_delta: int = 0, live_sessions_delta: int = 0) -> None:
     counters = _load_global_counters()
     counters['users_count'] = max(0, counters.get('users_count', 0) + users_delta)
     counters['total_game_time_seconds'] = max(0, counters.get('total_game_time_seconds', 0) + int(time_seconds_delta))
     counters['total_sessions'] = max(0, counters.get('total_sessions', 0) + sessions_delta)
+    counters['live_sessions'] = max(0, counters.get('live_sessions', 0) + live_sessions_delta)
     _save_global_counters(counters)
 
 def load_users():
@@ -1192,11 +1274,28 @@ def main():
         st.sidebar.markdown("### Admin Stats")
         # Show the actual number of registered accounts from users.json (authoritative)
         actual_users = len(st.session_state.get('users', {}))
-        # Reconcile the persisted counter if it drifted
         if counters.get('users_count') != actual_users:
             counters['users_count'] = actual_users
             _save_global_counters(counters)
         st.sidebar.metric("Users", actual_users)
+        # Live sessions = active sessions by heartbeat in last 2 minutes
+        try:
+            _live = count_active_live_sessions(window_seconds=120)
+        except Exception:
+            _live = 0
+        st.sidebar.metric("Live Sessions", _live)
+        # Optional auto-refresh for admin stats
+        auto_refresh = st.sidebar.checkbox("Auto-refresh stats", value=True, key="admin_auto_refresh")
+        if auto_refresh:
+            try:
+                import time as _t
+                last = float(st.session_state.get('_admin_refresh_ts', 0))
+                now = _t.time()
+                if now - last >= 5:
+                    st.session_state['_admin_refresh_ts'] = now
+                    st.experimental_rerun()
+            except Exception:
+                pass
         total_secs = counters.get('total_game_time_seconds', 0)
         hours = total_secs // 3600
         minutes = (total_secs % 3600) // 60
@@ -1233,8 +1332,14 @@ def main():
             nickname=st.session_state.user['username'],
             difficulty='Medium'
         )
-        # Increment total_sessions when a new Beat game is instantiated
-        update_global_counters(sessions_delta=1)
+        # Increment total sessions (lifetime) and current live sessions
+        update_global_counters(sessions_delta=1, live_sessions_delta=1)
+        # Create a stable live session id for heartbeats
+        try:
+            import uuid as _uuid
+            st.session_state['live_session_id'] = st.session_state.get('live_session_id') or str(_uuid.uuid4())
+        except Exception:
+            pass
         st.session_state.game_over = False
         st.session_state.game_summary = None
         st.session_state.beat_word_count = 0
@@ -1244,6 +1349,21 @@ def main():
         st.session_state['beat_total_points'] = 0
         st.session_state['beat_total_penalty'] = 0
     # Always go directly to the game page
+    # Heartbeat for live session tracking (throttled ~10s); skip admin
+    try:
+        import time as _t
+        sid = st.session_state.get('live_session_id') or st.session_state.get('current_round_id')
+        if not sid:
+            import uuid as _uuid
+            sid = str(_uuid.uuid4())
+            st.session_state['live_session_id'] = sid
+        if st.session_state.get('user', {}).get('username', '').lower() != 'admin':
+            last_hb = st.session_state.get('_last_live_hb', 0)
+            if _t.time() - float(last_hb) >= 10:
+                heartbeat_live_session(session_id=sid, username=st.session_state.user['username'])
+                st.session_state['_last_live_hb'] = _t.time()
+    except Exception:
+        pass
     display_game()
 
 def display_welcome():
@@ -2778,6 +2898,13 @@ def display_game_over(game_summary):
         except Exception:
             pass
 
+    # End the heartbeat session immediately on game over to avoid lingering counts
+    try:
+        sid = st.session_state.get('live_session_id') or st.session_state.get('current_round_id')
+        if sid:
+            end_live_session(sid)
+    except Exception:
+        pass
     # --- NEW: Save game result to user profile only once ---
     if not st.session_state.get('game_saved', False):
         save_game_to_user_profile(game_summary)
