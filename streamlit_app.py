@@ -915,15 +915,19 @@ def display_login():
     <style>
     /* Improved: Target both expander header and parent for background and border */
     div[role="button"]:has(.streamlit-expanderHeader:has-text('Welcome to WizWord!')),
-    div[role="button"]:has(.streamlit-expanderHeader:has-text('How to Play')) {
-        background: rgba(255,255,255,0.18) !important;
-        border: 1.5px solid #FFD93D !important;
-        box-shadow: 0 2px 8px rgba(255,217,61,0.10), 0 1px 4px rgba(0,0,0,0.07) !important;
+    div[role="button"]:has(.streamlit-expanderHeader:has-text('How to Play')),
+    div[role="button"]:has(.streamlit-expanderHeader:has-text('📖 How to Play')),
+    div[role="button"]:has(.st-expanderHeader:has-text('📖 How to Play')) {
+        background: linear-gradient(135deg, #ffffff 0%, #e8f0ff 100%) !important;
+        border: 1.5px solid #3b82f6 !important; /* blue border to differentiate */
+        box-shadow: 0 3px 10px rgba(59,130,246,0.18), 0 1px 5px rgba(0,0,0,0.08) !important;
     }
     div[role="button"]:has(.streamlit-expanderHeader:has-text('Welcome to WizWord!')) .streamlit-expanderHeader,
     div[role="button"]:has(.streamlit-expanderHeader:has-text('How to Play')) .streamlit-expanderHeader,
+    div[role="button"]:has(.streamlit-expanderHeader:has-text('📖 How to Play')) .streamlit-expanderHeader,
     div[role="button"]:has(.st-expanderHeader:has-text('Welcome to WizWord!')) .st-expanderHeader,
-    div[role="button"]:has(.st-expanderHeader:has-text('How to Play')) .st-expanderHeader {
+    div[role="button"]:has(.st-expanderHeader:has-text('How to Play')) .st-expanderHeader,
+    div[role="button"]:has(.st-expanderHeader:has-text('📖 How to Play')) .st-expanderHeader {
         font-size: 1em !important;
         font-weight: 700 !important;
         color: #fff !important;
@@ -936,10 +940,11 @@ def display_login():
     </style>
     """, unsafe_allow_html=True)
     # --- Introductory Section ---
+    st.markdown("<div id='login-expander-group'>", unsafe_allow_html=True)
     with st.expander("👋 Welcome to WizWord!", expanded=False):
         st.markdown("""
         <div style='max-width: 700px; margin: 0 auto 2em auto; background: rgba(255,255,255,0.40); border-radius: 1.2em; padding: 1.5em 2em; box-shadow: 0 1px 8px rgba(255,255,255,0.08);'>
-            <h2 style="text-align:center; color:#FF6B6B; margin-bottom:0.5em; font-size:3.8em;">Welcome to WizWord!</h2>
+            <h2 style="text-align:center; color:#FF6B6B; margin-bottom:0.5em; font-size:1.8em;">Welcome to WizWord!</h2>
             <p style="text-align:center; color:#333; font-size:1.45em;">
                 <b>WizWord</b> is a modern, AI-powered word guessing game that challenges your deduction skills and vocabulary. 
                 Compete under different categories, ask clever questions, use hints, and race against the clock in Beat mode!
@@ -983,10 +988,10 @@ def display_login():
         st.markdown(f"""
         ### Game Instructions:
         - Choose your game mode:
-            - **Fun**: Unlimited play, no timer, just for fun.
+    
             - **Wiz**: Classic mode with stats and leaderboards.
-            - **Beat**: Timed challenge—solve as many words as possible before time runs out.
-        - Select a word category, or pick 'any' for a random challenge.
+            - **Beat**: Default mode. Timed challenge—solve as many words as possible before time runs out.
+        - Click Start to begin  or change word category , pick 'any' for a random challenge.
         - Ask yes/no questions or request hints to help you guess the word.
         - Enter your guess at any time.
         **Beat Mode Details:**
@@ -1014,6 +1019,7 @@ def display_login():
           - Share: Generate and download a share card (with QR) and share to social networks.
           - My Stats & Leaderboard: Personal historical stats and per‑category leaderboard.
         """)
+    st.markdown("</div>", unsafe_allow_html=True)
 
     # State for which form to show
     if 'auth_mode' not in st.session_state:
@@ -1664,7 +1670,7 @@ def display_welcome():
             - Choose your game mode:
                 - **Fun**: Unlimited play, no timer, just for fun.
                 - **Wiz**: Classic mode with stats and leaderboards.
-                - **Beat**: Timed challenge—solve as many words as possible before time runs out.
+                - **Beat**: The default  mode. Timed challenge—solve as many words as possible before time runs out.
             - Select a word category, or pick 'any' for a random challenge.
             - Ask yes/no questions or request hints to help you guess the word.
             - Enter your guess at any time.
@@ -2048,7 +2054,6 @@ def display_game():
                 if _cache.get('cat') == chosen_cat and 'rows' in _cache:
                     top3_rows = _cache.get('rows', [])
                 else:
-                    # Compute and cache
                     top3_rows = get_top10_from_aggregates(chosen_cat)[:3]
                 if (not top3_rows) and chosen_cat != 'any':
                     top3_rows = get_top10_from_aggregates('any')[:3]
