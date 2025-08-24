@@ -939,9 +939,24 @@ def display_login():
     }
     </style>
     """, unsafe_allow_html=True)
-    # --- Introductory Section ---
-    st.markdown("<div id='login-expander-group'>", unsafe_allow_html=True)
-    with st.expander("👋 Welcome to WizWord!", expanded=False):
+    # --- Top Menu (three-bar style) for login page ---
+    if 'login_show_welcome' not in st.session_state:
+        st.session_state['login_show_welcome'] = False
+    if 'login_show_howto' not in st.session_state:
+        st.session_state['login_show_howto'] = False
+    with st.expander("☰ Menu", expanded=False):
+        c1, c2 = st.columns(2)
+        with c1:
+            if st.button("Welcome to WizWord!", key="login_menu_welcome"):
+                st.session_state['login_show_welcome'] = not st.session_state['login_show_welcome']
+                st.rerun()
+        with c2:
+            if st.button("How to Play", key="login_menu_howto"):
+                st.session_state['login_show_howto'] = not st.session_state['login_show_howto']
+                st.rerun()
+
+    # --- Introductory Section (conditional) ---
+    if st.session_state['login_show_welcome']:
         st.markdown("""
         <div style='max-width: 700px; margin: 0 auto 2em auto; background: rgba(255,255,255,0.40); border-radius: 1.2em; padding: 1.5em 2em; box-shadow: 0 1px 8px rgba(255,255,255,0.08);'>
             <h2 style="text-align:center; color:#FF6B6B; margin-bottom:0.5em; font-size:1.8em;">Welcome to WizWord!</h2>
@@ -982,13 +997,12 @@ def display_login():
         </div>
         """, unsafe_allow_html=True)
 
-    # --- How to Play as collapsible section ---
-    
-    with st.expander("📖 How to Play", expanded=False):
+    # --- How to Play (conditional) ---
+    if st.session_state['login_show_howto']:
         st.markdown(f"""
         ### Game Instructions:
         - Choose your game mode:
-    
+        
             - **Wiz**: Classic mode with stats and leaderboards.
             - **Beat**: Default mode. Timed challenge—solve as many words as possible before time runs out.
         - Click Start to begin  or change word category , pick 'any' for a random challenge.
@@ -1019,7 +1033,6 @@ def display_login():
           - Share: Generate and download a share card (with QR) and share to social networks.
           - My Stats & Leaderboard: Personal historical stats and per‑category leaderboard.
         """)
-    st.markdown("</div>", unsafe_allow_html=True)
 
     # State for which form to show
     if 'auth_mode' not in st.session_state:
@@ -1027,6 +1040,13 @@ def display_login():
 
     # --- LOGIN FORM ---
     if st.session_state['auth_mode'] == 'login':
+        # Quick access Create Account button above the login card
+        c_top = st.columns([1,1,1])
+        with c_top[1]:
+            if st.button("Create Account", key="create_account_top"):
+                st.session_state['auth_mode'] = 'register'
+                st.session_state['login_error'] = ""
+                st.rerun()
         # Modern login card UI
         st.markdown("""
         <style>
