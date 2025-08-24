@@ -20,6 +20,8 @@ logging.getLogger('matplotlib.font_manager').setLevel(logging.WARNING)
 logging.getLogger('matplotlib.category').setLevel(logging.WARNING)
 
 USERS_FILE = os.environ.get("USERS_FILE", "users.json")
+BIO_MAX_CHARS = int(os.environ.get("BIO_MAX_CHARS", "10000"))
+PROFILE_BIO_KEY = "profile_bio"
 
 # Global counters file (users count, total game time, total sessions, live sessions)
 GLOBAL_COUNTERS_PATH = os.environ.get('GLOBAL_COUNTERS_PATH', 'game_data/global_counters.json')
@@ -1188,6 +1190,21 @@ def display_login():
             'Student', 'High School', 'Bachelor', 'Master', 'PhD', 'Other'
         ]
         education = st.selectbox('Education (required)', education_options, key="register_education")
+        bio = st.text_area(
+            f"Bio (optional – up to {BIO_MAX_CHARS} characters)",
+            key="register_bio_v2",
+            help="Tell others a little about yourself; interests, background, etc.",
+            max_chars=BIO_MAX_CHARS,
+            placeholder=f"Up to {BIO_MAX_CHARS} characters"
+        )
+        _bio_len = len(bio or "")
+        st.caption(f"{_bio_len}/{BIO_MAX_CHARS} characters")
+        if _bio_len > BIO_MAX_CHARS:
+            st.warning(f"Bio exceeds {BIO_MAX_CHARS} characters; please shorten it.")
+        elif _bio_len >= BIO_MAX_CHARS:
+            st.warning(f"Bio reached the {BIO_MAX_CHARS}-character limit.")
+        elif _bio_len >= int(BIO_MAX_CHARS * 0.9):
+            st.info("Approaching the 90% character limit.")
         register_btn = st.button("Register", key="register_btn")
         if st.button("Back to Login", key="back_to_login_from_register"):
             st.session_state['auth_mode'] = 'login'
@@ -1199,6 +1216,7 @@ def display_login():
             u_email = (new_email or "").strip()
             u_pass = (new_password or "").strip()
             u_edu = (education or "").strip()
+            u_bio = (bio or "").strip()
             new_username_lower = u_name.lower()
             # Per-field validation
             missing = []
@@ -1218,7 +1236,8 @@ def display_login():
                     'password': u_pass,
                     'email': u_email,
                     'birthday': str(birthday),
-                    'education': u_edu
+                    'education': u_edu,
+                    'bio': u_bio
                 }
                 st.session_state['users'] = users
                 save_users(users)
@@ -1883,6 +1902,15 @@ def display_game():
         if occupation == 'Other':
             occupation_other = st.text_input('Please specify your occupation', value=user.get('occupation', '') if user.get('occupation', '') not in occupation_options else '')
         address = st.text_input('Address', value=user.get('address', ''))
+        bio_value = st.text_area(f"Bio (optional – up to {BIO_MAX_CHARS} characters)", value=user.get('bio', ''), max_chars=BIO_MAX_CHARS, key=PROFILE_BIO_KEY)
+        _bio_len = len(bio_value or "")
+        st.caption(f"{_bio_len}/{BIO_MAX_CHARS} characters")
+        if _bio_len > BIO_MAX_CHARS:
+            st.warning(f"Bio exceeds {BIO_MAX_CHARS} characters; please shorten it.")
+        elif _bio_len >= BIO_MAX_CHARS:
+            st.warning(f"Bio reached the {BIO_MAX_CHARS}-character limit.")
+        elif _bio_len >= int(BIO_MAX_CHARS * 0.9):
+            st.info("Approaching the 90% character limit.")
         min_birthday = datetime.date(1900, 1, 1)
         raw_birthday = user.get('birthday', None)
         birthday_value = None  # Always define before use
@@ -1902,21 +1930,42 @@ def display_game():
         if not birthday_value:
             birthday_value = datetime.date.today()
         birthday = st.date_input('Birthday', value=birthday_value, min_value=min_birthday)
+        # Debug: show current username and users dict keys (first 10)
+        st.caption(f"Debug: current username={user.get('username')}, lower={(user.get('username') or '').lower()}")
+        st.caption(f"Debug: users keys={list(st.session_state.get('users', {}).keys())[:10]}")
+        # One-time normalization: if users dict has a mixed-case key for this user, migrate it to lowercase
+        _users_dict = st.session_state.get('users', {})
+        _username = user.get('username') or ''
+        _username_lower = _username.lower()
+        if _username in _users_dict and _username != _username_lower:
+            _users_dict[_username_lower] = _users_dict.pop(_username)
+            save_users(_users_dict)
+        # Confirm guard will pass
+        _ok_guard = bool(_username_lower and 'users' in st.session_state and _username_lower in st.session_state['users'])
+        st.caption(f"Debug: save guard ok={_ok_guard}")
+        st.caption(f"Debug: bio_in_state={st.session_state.get(PROFILE_BIO_KEY, None) is not None}")
         if st.button('Save Profile', key='save_profile_btn'):
             username = user.get('username')
             final_education = education_other if education == 'Other' else education
             final_occupation = occupation_other if occupation == 'Other' else occupation
-            if username and 'users' in st.session_state and username in st.session_state['users']:
-                st.session_state['users'][username]['education'] = final_education
-                st.session_state['users'][username]['address'] = address
-                st.session_state['users'][username]['birthday'] = str(birthday)
-                st.session_state['users'][username]['occupation'] = final_occupation
+            username_lower = (username or '').lower()
+            bio_to_save = st.session_state.get(PROFILE_BIO_KEY, None)
+            if bio_to_save is None:
+                bio_to_save = st.session_state.get('profile_bio_v6', user.get('bio', ''))
+            if username_lower and 'users' in st.session_state and username_lower in st.session_state['users']:
+                st.session_state['users'][username_lower]['education'] = final_education
+                st.session_state['users'][username_lower]['address'] = address
+                st.session_state['users'][username_lower]['bio'] = bio_to_save
+                st.session_state['users'][username_lower]['birthday'] = str(birthday)
+                st.session_state['users'][username_lower]['occupation'] = final_occupation
                 st.session_state['user']['education'] = final_education
                 st.session_state['user']['address'] = address
+                st.session_state['user']['bio'] = bio_to_save
                 st.session_state['user']['birthday'] = str(birthday)
                 st.session_state['user']['occupation'] = final_occupation
                 save_users(st.session_state['users'])
                 st.success('Profile updated!')
+                st.rerun()
 
     # Show rules if toggled
     if st.session_state.get('show_rules', False):
