@@ -774,7 +774,7 @@ def validate_word_length(length: int) -> tuple[bool, str]:
 def validate_subject(subject: str) -> tuple[bool, str]:
     """Validate the selected subject."""
     valid_categories = ["general", "animals", "food", "places", "science", "tech", "sports",
-                       "movies", "music", "brands", "history", "random", "4th_grade"]
+                       "movies", "music", "brands", "history", "random", "4th_grade", "8th_grade"]
     subject = subject.lower()  # Convert to lowercase for comparison
     if subject not in valid_categories:
         return False, f"Invalid subject. Must be one of: {', '.join(valid_categories)}"
@@ -1536,15 +1536,25 @@ def display_welcome():
             with cols[1]:
                 subject = st.selectbox(
                     "Category",
-                    options=["any", "4th_grade", "anatomy", "animals", "brands", "cities", "food", "general", "gre", "medicines", "places", "psat", "sat", "science", "sports", "tech"],
-                    index=["any", "4th_grade", "anatomy", "animals", "brands", "cities", "food", "general", "gre", "medicines", "places", "psat", "sat", "science", "sports", "tech"].index("general"),  # default to 'general'
+                    options=["any", "4th_grade", "8th_grade", "anatomy", "animals", "brands", "cities", "food", "general", "gre", "medicines", "places", "psat", "sat", "science", "sports", "tech"],
+                    index=["any", "4th_grade", "8th_grade", "anatomy", "animals", "brands", "cities", "food", "general", "gre", "medicines", "places", "psat", "sat", "science", "sports", "tech"].index("general"),  # default to 'general'
                     help="Word category (select 'any' for random category)",
                     format_func=lambda x: (
-                        'Any' if x == 'any' else ('SAT' if x == 'sat' else ('PSAT' if x == 'psat' else ('GRE' if x == 'gre' else x.replace('_', ' ').title())))
+                        'Any' if x == 'any' else (
+                            'SAT' if x == 'sat' else (
+                                'PSAT' if x == 'psat' else (
+                                    'GRE' if x == 'gre' else (
+                                        '4th Grade' if x == '4th_grade' else (
+                                            '8th Grade' if x == '8th_grade' else x.replace('_', ' ').title()
+                                        )
+                                    )
+                                )
+                            )
+                        )
                     )
                 )
                 st.session_state['original_category_choice'] = subject
-                resolved_subject = random.choice(["general", "animals", "food", "places", "science", "tech", "sports", "brands", "4th_grade", "cities", "medicines", "anatomy", "psat", "sat", "gre"]) if subject == "any" else subject
+                resolved_subject = random.choice(["general", "animals", "food", "places", "science", "tech", "sports", "brands", "4th_grade", "8th_grade", "cities", "medicines", "anatomy", "psat", "sat", "gre"]) if subject == "any" else subject
                 # --- Global Top 3 by SEI for chosen category (start page) ---
                 try:
                     all_games = get_all_game_results()
@@ -1980,7 +1990,7 @@ def display_game():
 
     # Handle change category
     if st.session_state.get('change_category', False):
-        categories = ["any", "anatomy", "animals", "aviation", "brands", "cities", "food", "general", "gre", "history", "medicines", "movies", "music", "places", "psat", "sat", "science", "sports", "tech", "4th_grade"]
+        categories = ["any", "anatomy", "animals", "aviation", "brands", "cities", "food", "general", "gre", "history", "medicines", "movies", "music", "places", "psat", "sat", "science", "sports", "tech", "4th_grade", "8th_grade"]
         new_category = st.selectbox("Select a new category:", categories, format_func=lambda x: ('Any' if x=='any' else ('GRE' if x=='gre' else ('SAT' if x=='sat' else ('PSAT' if x=='psat' else x.replace('_',' ').title())))), key='category_select_box')
         if st.button("Confirm Category Change", key='change_category_btn'):
             game = st.session_state.game

@@ -4775,7 +4775,7 @@
       "Viking": [
         "Norse seafarers from Scandinavia.",
         "Known for raids and exploration.",
-        "Active from the 8th to the 11th century."
+        "Active from the 8th to the 11th century."  
       ],
       "Congo": [
         "A large river in central Africa.",
@@ -17160,6 +17160,1018 @@
         "Used worldwide for standardization.",
         "Avoids confusion across time zones."
       ]      
+    },
+    "8th_grade": {
+      "Able": [
+        "Having the power or skill to do something.",
+        "Often used when describing capability.",
+        "Synonyms include capable and competent."
+      ],
+      "Adapt": [
+        "To adjust to new conditions or environments.",
+        "Animals and humans often do this for survival.",
+        "Related to flexibility and change."
+      ],
+      "Argue": [
+        "To give reasons for or against something.",
+        "Often done in debates or essays.",
+        "Related to persuasion."
+      ],
+      "Brave": [
+        "Showing courage in the face of danger.",
+        "Used to describe heroes or soldiers.",
+        "Opposite of fearful."
+      ],
+      "Clear": [
+        "Easy to see or understand.",
+        "Often used when giving explanations.",
+        "Can also mean transparent."
+      ],
+      "Curve": [
+        "A line that bends smoothly without angles.",
+        "Found in math, art, and nature.",
+        "Examples include arcs and circles."
+      ],
+      "Data": [
+        "Facts and information collected for study.",
+        "Used in science, math, and technology.",
+        "Plural of datum."
+      ],
+      "Essay": [
+        "A short piece of writing on a topic.",
+        "Often assigned in school.",
+        "Includes introduction, body, and conclusion."
+      ],
+      "Fact": [
+        "Something that can be proven true.",
+        "Opposite of opinion.",
+        "Examples include dates in history or math truths."
+      ],
+      "Fair": [
+        "Treating everyone equally.",
+        "Can also describe events with games and rides.",
+        "Opposite of unjust."
+      ],
+      "Fame": [
+        "Being well known by many people.",
+        "Often achieved by artists, athletes, or leaders.",
+        "Related to popularity."
+      ],
+      "Fate": [
+        "A force believed to control future events.",
+        "Often used in myths and literature.",
+        "Related to destiny."
+      ],
+      "Focus": [
+        "To concentrate on one thing.",
+        "Used in studying or science experiments.",
+        "Opposite of distraction."
+      ],
+      "Globe": [
+        "A model of the Earth.",
+        "Used to study geography.",
+        "Can also mean worldwide."
+      ],
+      "Grace": [
+        "Elegance and smoothness in movement.",
+        "Also means kindness or goodwill.",
+        "Often linked to dance or polite behavior."
+      ],
+      "Great": [
+        "Very large in size or importance.",
+        "Used to describe people, places, or achievements.",
+        "Opposite of small or ordinary."
+      ],
+      "Hero": [
+        "A person admired for courage or noble deeds.",
+        "Often found in stories and history.",
+        "Opposite of villain."
+      ],
+      "Hope": [
+        "A feeling of expectation for something good.",
+        "Often linked to optimism.",
+        "Common theme in literature and speeches."
+      ],
+      "Idea": [
+        "A thought or suggestion for action.",
+        "Used in creativity and problem solving.",
+        "Can lead to inventions."
+      ],
+      "Judge": [
+        "A person who decides cases in court.",
+        "Also means to form an opinion.",
+        "Synonym for evaluate."
+      ],
+      "Kind": [
+        "Showing friendliness and generosity.",
+        "Also a type or category of something.",
+        "Opposite of cruel."
+      ],
+      "Learn": [
+        "To gain knowledge or skill.",
+        "Done in school, at home, or anywhere.",
+        "Related to studying and practice."
+      ],
+      "Logic": [
+        "Reasoning based on facts and principles.",
+        "Used in math, science, and debate.",
+        "Opposite of nonsense."
+      ],
+      "Major": [
+        "Very important or large.",
+        "Also a main field of study in college.",
+        "Opposite of minor."
+      ],
+      "Map": [
+        "A drawing of an area showing locations.",
+        "Used in geography and travel.",
+        "Can be political, physical, or digital."
+      ],
+      "Moral": [
+        "A lesson about right and wrong.",
+        "Often found at the end of fables.",
+        "Related to ethics."
+      ],
+      "Novel": [
+        "A long fictional story in book form.",
+        "Popular in literature classes.",
+        "Also means new or unusual."
+      ],
+      "Peace": [
+        "A state of calm or absence of conflict.",
+        "Opposite of war.",
+        "Often symbolized by a dove."
+      ],
+      "Plan": [
+        "A detailed proposal for doing something.",
+        "Used in school projects and daily life.",
+        "Synonym for strategy."
+      ],
+      "Proof": [
+        "Evidence showing something is true.",
+        "Used in science and math.",
+        "Synonyms include confirmation and verification."
+      ],
+      "Quote": [
+        "To repeat someone else’s exact words.",
+        "Used in essays and speeches.",
+        "Famous lines often become inspirational."
+      ],
+      "Range": [
+        "The distance between two points or limits.",
+        "Used in math, science, and geography.",
+        "Examples include mountain ranges."
+      ],
+      "Rebel": [
+        "A person who resists authority or control.",
+        "Often linked to revolutions in history.",
+        "Opposite of follower."
+      ],
+      "Reform": [
+        "To make changes for improvement.",
+        "Used in politics, education, and law.",
+        "Opposite of decline."
+      ],
+      "Ruler": [
+        "A tool for measuring straight lines.",
+        "Also means a leader of a country.",
+        "Often 12 inches or 30 cm long."
+      ],
+      "Scale": [
+        "A system of measurement or comparison.",
+        "Also refers to marks on a measuring tool.",
+        "Found in science and math."
+      ],
+      "Scene": [
+        "A part of a play, movie, or story.",
+        "Also means a view or picture.",
+        "Writers use it to build atmosphere."
+      ],
+      "Scope": [
+        "The extent of something’s range or view.",
+        "Used in planning and projects.",
+        "Can also mean a device for looking at things."
+      ],
+      "Share": [
+        "To divide and give part to others.",
+        "Also a term in finance.",
+        "Opposite of keep."
+      ],
+      "Skill": [
+        "The ability to do something well.",
+        "Developed through practice.",
+        "Examples include writing and drawing."
+      ],
+      "Solve": [
+        "To find an answer to a problem.",
+        "Used in math, puzzles, and science.",
+        "Opposite of confuse."
+      ],
+      "Study": [
+        "To devote time to learning.",
+        "Can also mean a room for reading and writing.",
+        "Synonym for review or learn."
+      ],
+      "Theme": [
+        "The central idea of a story or essay.",
+        "Found in literature and speeches.",
+        "Examples include love, courage, and justice."
+      ],
+      "Thesis": [
+        "A statement to be proved or supported.",
+        "Often used in essays or research.",
+        "Forms the main argument."
+      ],
+      "Trust": [
+        "Belief in someone’s reliability or truth.",
+        "Important in friendships and agreements.",
+        "Opposite of doubt."
+      ],
+      "Value": [
+        "The worth or importance of something.",
+        "Used in math, economics, and ethics.",
+        "Synonyms include worth and principle."
+      ],
+      "Voice": [
+        "The sound made when speaking or singing.",
+        "Also refers to expressing opinions.",
+        "Can be active or passive in grammar."
+      ],
+      "Wise": [
+        "Having knowledge and good judgment.",
+        "Often associated with elders and leaders.",
+        "Opposite of foolish."
+      ],
+      "Write": [
+        "To put words on paper or screen.",
+        "Used for stories, essays, and notes.",
+        "Opposite of erase."
+      ],
+      "Young": [
+        "At an early stage of life.",
+        "Often used to describe children or animals.",
+        "Opposite of old."
+      ],
+      "Honor": [
+        "High respect or recognition.",
+        "Can also mean fulfilling a promise.",
+        "Opposite of disgrace."
+      ],
+      "Unity": [
+        "The state of being joined as one.",
+        "Important in groups and communities.",
+        "Opposite of division."
+      ],
+      "Civic": [
+        "Relating to a city or citizenship.",
+        "Often linked to duties and responsibilities.",
+        "Example: voting is a civic duty."
+      ],
+      "Debate": [
+        "A formal discussion with opposing views.",
+        "Often held in schools and politics.",
+        "Related to argument and persuasion."
+      ],
+      "Empire": [
+        "A group of countries under one ruler.",
+        "Found throughout world history.",
+        "Examples include Roman and Ottoman."
+      ],
+      "Faith": [
+        "Strong belief or trust in something.",
+        "Often connected to religion or values.",
+        "Opposite of doubt."
+      ],
+      "Glory": [
+        "High honor or praise.",
+        "Often linked to achievements in battle or sport.",
+        "Synonym for fame or honor."
+      ],
+      "Ideal": [
+        "A standard of perfection.",
+        "Can also mean a perfect example.",
+        "Opposite of flawed."
+      ],
+      "Jury": [
+        "A group of citizens deciding a court case.",
+        "Part of the justice system.",
+        "Opposite of judge alone."
+      ],
+      "Motto": [
+        "A short phrase expressing beliefs or goals.",
+        "Used by schools, teams, or families.",
+        "Example: 'In God We Trust.'"
+      ],
+      "Novelty": [
+        "Something new, original, or unusual.",
+        "Often describes creative ideas or inventions.",
+        "Opposite of tradition."
+      ],
+      "Proud": [
+        "Feeling deep satisfaction for achievements.",
+        "Can describe self or others.",
+        "Opposite of ashamed."
+      ],
+      "Quest": [
+        "A long search for something.",
+        "Common in stories and legends.",
+        "Synonym for journey or mission."
+      ],
+      "Spirit": [
+        "The nonphysical part of a person.",
+        "Also means enthusiasm and energy.",
+        "Often connected to culture and belief."
+      ],
+      "Talent": [
+        "A natural ability or skill.",
+        "Common in art, music, or sports.",
+        "Can be developed with practice."
+      ],
+      "Accept": [
+        "To receive something willingly.",
+        "Can mean agreeing to an offer or idea.",
+        "Opposite of refuse."
+      ],
+      "Accuse": [
+        "To blame someone for a wrongdoing.",
+        "Common in legal or school situations.",
+        "Opposite of defend."
+      ],
+      "Active": [
+        "Taking part in action or movement.",
+        "Can describe sports, exercise, or involvement.",
+        "Opposite of passive."
+      ],
+      "Advice": [
+        "Helpful guidance about what to do.",
+        "Given by friends, teachers, or parents.",
+        "Synonym for suggestion."
+      ],
+      "Affair": [
+        "An event or matter of concern.",
+        "Often used for politics or personal issues.",
+        "Synonym for issue or event."
+      ],
+      "Agree": [
+        "To have the same opinion as someone else.",
+        "Often used in teamwork or discussion.",
+        "Opposite of disagree."
+      ],
+      "Alert": [
+        "Quick to notice and respond.",
+        "Also a warning signal in emergencies.",
+        "Synonym for watchful."
+      ],
+      "Alike": [
+        "Similar in appearance or character.",
+        "Often used to compare people or objects.",
+        "Opposite of different."
+      ],
+      "Allow": [
+        "To give permission for something.",
+        "Teachers or parents often do this.",
+        "Opposite of forbid."
+      ],
+      "Amuse": [
+        "To entertain or make someone laugh.",
+        "Often done with jokes or stories.",
+        "Synonym for entertain."
+      ],
+      "Angle": [
+        "The space between two lines that meet.",
+        "Common in math and geometry.",
+        "Measured in degrees."
+      ],
+      "Annoy": [
+        "To bother or irritate someone.",
+        "Can happen with noise or teasing.",
+        "Synonym for irritate."
+      ],
+      "Apart": [
+        "Separated by distance or time.",
+        "Can describe space or relationships.",
+        "Opposite of together."
+      ],
+      "Apply": [
+        "To make a request or put something to use.",
+        "Often used for jobs, schools, or rules.",
+        "Synonym for use or request."
+      ],
+      "Arise": [
+        "To come up or begin to exist.",
+        "Often used for problems or opportunities.",
+        "Synonym for appear."
+      ],
+      "Aside": [
+        "To one side or out of the way.",
+        "Can also mean a quiet remark.",
+        "Opposite of center."
+      ],
+      "Assist": [
+        "To help someone do something.",
+        "Common in teamwork or sports.",
+        "Synonym for help or aid."
+      ],
+      "Avoid": [
+        "To keep away from something.",
+        "Can refer to danger, mistakes, or people.",
+        "Opposite of seek."
+      ],
+      "Balance": [
+        "An even distribution of weight or importance.",
+        "Needed in walking, sports, and life.",
+        "Opposite of imbalance."
+      ],
+      "Behave": [
+        "To act in a proper or expected way.",
+        "Often taught in schools and homes.",
+        "Opposite of misbehave."
+      ],
+      "Belief": [
+        "Confidence in an idea or truth.",
+        "Often linked to religion or values.",
+        "Synonym for conviction."
+      ],
+      "Benefit": [
+        "An advantage or positive result.",
+        "Can describe health, education, or work rewards.",
+        "Opposite of disadvantage."
+      ],
+      "Beyond": [
+        "Farther away in distance or time.",
+        "Can also mean outside of limits.",
+        "Synonym for further."
+      ],
+      "Bother": [
+        "To cause trouble or annoyance.",
+        "Can also mean to take the effort to do something.",
+        "Synonym for annoy."
+      ],
+      "Bright": [
+        "Giving off much light.",
+        "Can also describe intelligence.",
+        "Opposite of dull."
+      ],
+      "Cancel": [
+        "To stop something from happening.",
+        "Common for events or plans.",
+        "Opposite of continue."
+      ],
+      "Career": [
+        "A person’s chosen job path.",
+        "Can last many years.",
+        "Synonym for profession."
+      ],
+      "Cause": [
+        "Something that brings about an effect.",
+        "Often linked to science or history.",
+        "Opposite of result."
+      ],
+      "Center": [
+        "The exact middle of something.",
+        "Common in geometry and maps.",
+        "Opposite of edge."
+      ],
+      "Choice": [
+        "An option among possibilities.",
+        "Everyone makes these daily.",
+        "Synonym for decision."
+      ],
+      "Climb": [
+        "To go upward using effort.",
+        "Done with mountains, stairs, or ladders.",
+        "Opposite of descend."
+      ],
+      "Common": [
+        "Happening often or shared by many.",
+        "Opposite of rare.",
+        "Synonym for usual."
+      ],
+      "Custom": [
+        "A tradition or usual way of acting.",
+        "Often part of culture or religion.",
+        "Synonym for practice."
+      ],
+      "Danger": [
+        "The possibility of harm or injury.",
+        "Can describe weather, animals, or risks.",
+        "Opposite of safety."
+      ],
+      "Demand": [
+        "A strong request or need.",
+        "Used in economics and daily life.",
+        "Opposite of supply."
+      ],
+      "Detail": [
+        "A small part of a larger whole.",
+        "Important in reading, art, and science.",
+        "Opposite of general."
+      ],
+      "Dinner": [
+        "The main meal of the day.",
+        "Often eaten in the evening.",
+        "Synonym for supper."
+      ],
+      "Divide": [
+        "To separate into parts or groups.",
+        "Common in math and social studies.",
+        "Opposite of unite."
+      ],
+      "Effort": [
+        "Hard work or energy used to do something.",
+        "Needed for success in school and sports.",
+        "Synonym for attempt."
+      ],
+      "Enemy": [
+        "A person or group that opposes you.",
+        "Common in war, games, or stories.",
+        "Opposite of friend."
+      ],
+      "Escape": [
+        "To break free or get away.",
+        "Used in emergencies or games.",
+        "Synonym for flee."
+      ],
+      "Expect": [
+        "To think something will happen.",
+        "Often used for plans or predictions.",
+        "Synonym for anticipate."
+      ],
+      "Famous": [
+        "Known by many people.",
+        "Often describes celebrities or leaders.",
+        "Opposite of unknown."
+      ],
+      "Favor": [
+        "A kind or helpful act.",
+        "Can also mean preference.",
+        "Synonym for kindness."
+      ],
+      "Fear": [
+        "An unpleasant emotion caused by danger.",
+        "Often appears in scary stories.",
+        "Opposite of courage."
+      ],
+      "Field": [
+        "An open area of land.",
+        "Can also mean a subject of study.",
+        "Example: field of science."
+      ],
+      "Final": [
+        "Last in a series.",
+        "Common in tests, games, and sports.",
+        "Opposite of first."
+      ],
+      "Flame": [
+        "A hot glowing part of fire.",
+        "Often used in science experiments.",
+        "Opposite of smoke."
+      ],
+      "Funny": [
+        "Causing laughter or amusement.",
+        "Common in jokes and comedy.",
+        "Opposite of serious."
+      ],
+      "Future": [
+        "The time yet to come.",
+        "Opposite of past.",
+        "Common topic in essays and goals."
+      ],
+      "Gather": [
+        "To bring things or people together.",
+        "Opposite of scatter.",
+        "Often used in meetings or events."
+      ],
+      "Giant": [
+        "Something very large.",
+        "Also a mythical creature in stories.",
+        "Opposite of tiny."
+      ],
+      "Goal": [
+        "An aim or desired result.",
+        "Also used in sports.",
+        "Synonym for objective."
+      ],
+      "Habit": [
+        "A regular practice or behavior.",
+        "Can be good or bad.",
+        "Synonym for routine."
+      ],
+      "Happy": [
+        "Feeling pleasure or joy.",
+        "Common in celebrations and daily life.",
+        "Opposite of sad."
+      ],
+      "Heavy": [
+        "Having much weight.",
+        "Opposite of light.",
+        "Can also mean serious in tone."
+      ],
+      "Human": [
+        "A person or member of the species Homo sapiens.",
+        "Distinguished by intelligence and language.",
+        "Opposite of animal in casual use."
+      ],
+      "Hurry": [
+        "To move quickly.",
+        "Often used when late or rushed.",
+        "Synonym for rush."
+      ],
+      "Image": [
+        "A picture or likeness of something.",
+        "Common in art and media.",
+        "Synonym for photo."
+      ],
+      "Inside": [
+        "The inner part of something.",
+        "Opposite of outside.",
+        "Common in directions and locations."
+      ],
+      "Issue": [
+        "An important topic or problem.",
+        "Often discussed in debates or essays.",
+        "Synonym for matter."
+      ],
+      "Join": [
+        "To bring two or more things together.",
+        "Often used in teamwork or activities.",
+        "Opposite of separate."
+      ],
+      "Joy": [
+        "A strong feeling of happiness.",
+        "Often felt during celebrations.",
+        "Opposite of sorrow."
+      ],
+      "Judge": [
+        "A person who decides cases in court.",
+        "Also means to form an opinion.",
+        "Synonym for evaluate."
+      ],
+      "Keep": [
+        "To continue to have or hold something.",
+        "Opposite of give away.",
+        "Can also mean to maintain."
+      ],
+      "Late": [
+        "Happening after the expected time.",
+        "Opposite of early.",
+        "Often used with deadlines."
+      ],
+      "Lead": [
+        "To guide or direct others.",
+        "Also a heavy metal element.",
+        "Opposite of follow."
+      ],
+      "Level": [
+        "A position on a scale or stage.",
+        "Used in games, school, and tools.",
+        "Opposite of uneven."
+      ],
+      "Light": [
+        "A form of energy visible to the eye.",
+        "Also means not heavy.",
+        "Opposite of dark."
+      ],
+      "Listen": [
+        "To pay attention to sound.",
+        "Important skill in school.",
+        "Opposite of ignore."
+      ],
+      "Lucky": [
+        "Having good fortune.",
+        "Often linked to chance.",
+        "Opposite of unlucky."
+      ],
+      "Magic": [
+        "The use of mysterious powers in stories.",
+        "Also used for special tricks.",
+        "Opposite of ordinary."
+      ],
+      "Manage": [
+        "To direct or handle something.",
+        "Used for time, people, or projects.",
+        "Synonym for control."
+      ],
+      "Mighty": [
+        "Having great strength or power.",
+        "Common in myths and legends.",
+        "Opposite of weak."
+      ],
+      "Model": [
+        "A representation or example of something.",
+        "Used in science, art, and design.",
+        "Can also mean a role model."
+      ],
+      "Moment": [
+        "A very short period of time.",
+        "Also a significant event.",
+        "Synonym for instant."
+      ],
+      "Narrow": [
+        "Small in width.",
+        "Opposite of wide.",
+        "Can also mean limited."
+      ],
+      "Nation": [
+        "A country with its own government.",
+        "Can also mean people united by culture.",
+        "Synonym for country."
+      ],
+      "Native": [
+        "Belonging to a place by birth.",
+        "Can describe plants, animals, or people.",
+        "Opposite of foreign."
+      ],
+      "Notice": [
+        "To observe or become aware of something.",
+        "Can also mean a written announcement.",
+        "Synonym for observe."
+      ],
+      "Offer": [
+        "To present something for acceptance.",
+        "Common in sales or negotiations.",
+        "Opposite of withdraw."
+      ],
+      "Order": [
+        "A command or arrangement of things.",
+        "Opposite of disorder.",
+        "Can also mean a purchase request."
+      ],
+      "Own": [
+        "To possess something.",
+        "Opposite of borrow.",
+        "Can also mean personal."
+      ],
+      "Pair": [
+        "Two items that go together.",
+        "Examples include shoes or twins.",
+        "Synonym for couple."
+      ],
+      "Peace": [
+        "A state of calm or absence of conflict.",
+        "Often contrasted with war.",
+        "Symbolized by a dove."
+      ],
+      "Place": [
+        "A specific location or position.",
+        "Used in geography and directions.",
+        "Synonym for spot."
+      ],
+      "Plain": [
+        "Simple or clear without decoration.",
+        "Can also mean a flat area of land.",
+        "Opposite of fancy."
+      ],
+      "Point": [
+        "A dot or position in space.",
+        "Also means the main idea in speech.",
+        "Opposite of unclear."
+      ],
+      "Power": [
+        "The ability to do something or control others.",
+        "Measured in science as energy per time.",
+        "Opposite of weakness."
+      ],
+      "Press": [
+        "To push something with force.",
+        "Can also mean printed news media.",
+        "Synonym for push."
+      ],
+      "Pride": [
+        "A sense of satisfaction in achievements.",
+        "Can also mean arrogance if excessive.",
+        "Opposite of shame."
+      ],
+      "Prove": [
+        "To show something is true with evidence.",
+        "Common in math and science.",
+        "Opposite of disprove."
+      ],
+      "Quick": [
+        "Moving fast.",
+        "Opposite of slow.",
+        "Synonym for speedy."
+      ],
+      "Quiet": [
+        "Making little or no noise.",
+        "Opposite of loud.",
+        "Synonym for silent."
+      ],
+      "Reach": [
+        "To extend or arrive at something.",
+        "Often used in goals or distances.",
+        "Opposite of withdraw."
+      ],
+      "Ready": [
+        "Prepared for something.",
+        "Often used before action.",
+        "Opposite of unprepared."
+      ],
+      "Reply": [
+        "To answer a question or statement.",
+        "Common in conversations and emails.",
+        "Synonym for respond."
+      ],
+      "Result": [
+        "The outcome of an action or event.",
+        "Common in science experiments.",
+        "Opposite of cause."
+      ],
+      "Right": [
+        "Correct or morally good.",
+        "Also refers to direction.",
+        "Opposite of wrong."
+      ],
+      "Rise": [
+        "To move upward.",
+        "Often used for the Sun in the morning.",
+        "Opposite of fall."
+      ],
+      "Rule": [
+        "A guideline or law to follow.",
+        "Common in schools and sports.",
+        "Opposite of chaos."
+      ],
+      "Safe": [
+        "Free from harm or danger.",
+        "Opposite of unsafe.",
+        "Can also mean a locked box."
+      ],
+      "Save": [
+        "To keep from harm or store for later.",
+        "Used in sports, computers, and money.",
+        "Opposite of waste."
+      ],
+      "Seek": [
+        "To try to find something.",
+        "Often used in stories and goals.",
+        "Synonym for search."
+      ],
+      "Self": [
+        "One’s own being or personality.",
+        "Often used in psychology.",
+        "Opposite of others."
+      ],
+      "Send": [
+        "To cause something to go from one place to another.",
+        "Common with letters or emails.",
+        "Opposite of receive."
+      ],
+      "Short": [
+        "Having little length or height.",
+        "Opposite of tall or long.",
+        "Can also mean brief."
+      ],
+      "Show": [
+        "To let something be seen.",
+        "Also means a performance or program.",
+        "Synonym for display."
+      ],
+      "Side": [
+        "A surface or position to the left or right.",
+        "Often used in geometry and sports.",
+        "Opposite of center."
+      ],
+      "Simple": [
+        "Easy to understand or not complicated.",
+        "Opposite of complex.",
+        "Synonym for basic."
+      ],
+      "Slow": [
+        "Not fast.",
+        "Opposite of quick.",
+        "Synonym for sluggish."
+      ],
+      "Small": [
+        "Not large in size.",
+        "Opposite of big.",
+        "Synonym for tiny."
+      ],
+      "Smart": [
+        "Showing intelligence or cleverness.",
+        "Also used for neat appearance.",
+        "Opposite of foolish."
+      ],
+      "Smile": [
+        "A facial expression showing happiness.",
+        "Often used in greetings.",
+        "Opposite of frown."
+      ],
+      "Sound": [
+        "Vibrations heard by the ear.",
+        "Can also mean healthy or reliable.",
+        "Opposite of silence."
+      ],
+      "Space": [
+        "The area beyond Earth’s atmosphere.",
+        "Also means open area or room.",
+        "Explored by astronauts."
+      ],
+      "Stay": [
+        "To remain in one place.",
+        "Opposite of leave.",
+        "Common in instructions or hotels."
+      ],
+      "Step": [
+        "A movement by lifting and placing a foot.",
+        "Also part of a process.",
+        "Synonym for stage."
+      ],
+      "Stone": [
+        "A hard solid mineral material.",
+        "Found in nature and used for building.",
+        "Synonym for rock."
+      ],
+      "Story": [
+        "A tale of real or imagined events.",
+        "Found in books, movies, and oral tradition.",
+        "Synonym for narrative."
+      ],
+      "Strong": [
+        "Having great power or force.",
+        "Opposite of weak.",
+        "Can describe people, objects, or ideas."
+      ],
+      "Study": [
+        "To spend time learning about a subject.",
+        "Common in school and research.",
+        "Synonym for review."
+      ],
+      "Table": [
+        "A piece of furniture with a flat top.",
+        "Also a way to organize data.",
+        "Common in math and science."
+      ],
+      "Teach": [
+        "To show or explain how to do something.",
+        "Role of teachers and mentors.",
+        "Opposite of ignore."
+      ],
+      "Thank": [
+        "To express gratitude.",
+        "Often said after receiving help or gifts.",
+        "Opposite of ignore."
+      ],
+      "Thing": [
+        "An object or item not named specifically.",
+        "Common in daily language.",
+        "Synonym for object."
+      ],
+      "Think": [
+        "To use the mind to consider ideas.",
+        "Common in problem solving.",
+        "Synonym for reflect."
+      ],
+      "Tough": [
+        "Strong or able to handle difficulty.",
+        "Often used in sports or challenges.",
+        "Opposite of weak."
+      ],
+      "Trial": [
+        "A test of performance or ability.",
+        "Also a legal case in court.",
+        "Synonym for test."
+      ],
+      "Trip": [
+        "A journey or travel experience.",
+        "Can also mean to stumble.",
+        "Synonym for voyage."
+      ],
+      "Truth": [
+        "That which is in accordance with fact or reality.",
+        "Opposite of lie.",
+        "Synonym for fact."
+      ],
+      "Turn": [
+        "To move in a different direction.",
+        "Also means a person’s chance in order.",
+        "Synonym for rotate."
+      ],
+      "Whole": [
+        "Complete or entire.",
+        "Opposite of part.",
+        "Synonym for total."
+      ],
+      "Wish": [
+        "A desire or hope for something to happen.",
+        "Common in stories and celebrations.",
+        "Synonym for hope."
+      ],
+      "Work": [
+        "Effort done to achieve a result.",
+        "Also means employment.",
+        "Opposite of rest."
+      ],
+      "World": [
+        "The Earth and all its people.",
+        "Also means human society as a whole.",
+        "Synonym for globe."
+      ],
+      "Wrong": [
+        "Not correct or mistaken.",
+        "Opposite of right.",
+        "Synonym for false."
+      ]
     },
     "4th_grade": {
       "bag": [
