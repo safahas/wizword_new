@@ -239,6 +239,12 @@ if 'users' not in st.session_state:
             save_users(existing)
     except Exception:
         pass
+    # Run once-per-day miss-you email check
+    try:
+        from streamlit_app import run_daily_miss_you_check as _miss_you  # type: ignore
+        _miss_you()
+    except Exception:
+        pass
 # Configure Streamlit page with custom theme
 st.set_page_config(
     page_title="WizWord - Word Guessing Game",
@@ -4139,6 +4145,72 @@ def ensure_aggregates_bootstrap() -> None:
         games = get_all_game_results()
         for g in games:
             update_aggregates_with_game(g)
+    except Exception:
+        pass
+
+def send_miss_you_email(to_email: str, username: str) -> bool:
+    SMTP_SERVER = os.environ.get("SMTP_HOST")
+    SMTP_PORT = int(os.environ.get("SMTP_PORT", "587"))
+    SMTP_USER = os.environ.get("SMTP_USER")
+    SMTP_PASSWORD = os.environ.get("SMTP_PASS")
+    if not (SMTP_SERVER and SMTP_USER and SMTP_PASSWORD and to_email):
+        return False
+    subject = "We miss you at WizWord!"
+    body = f"Hi {username},\n\nIt's been a while since your last game. Come back and beat your best SEI!\n\nPlay now: https://wizword.example\n\n— WizWord Team"
+    try:
+        msg = MIMEText(body)
+        msg["Subject"] = subject
+        msg["From"] = SMTP_USER
+        msg["To"] = to_email
+        with smtplib.SMTP(SMTP_SERVER, SMTP_PORT) as server:
+            server.starttls()
+            server.login(SMTP_USER, SMTP_PASSWORD)
+            server.sendmail(SMTP_USER, [to_email], msg.as_string())
+        return True
+    except Exception:
+        return False
+
+def run_daily_miss_you_check() -> None:
+    # Run once per day using a stamp file
+    try:
+        stamp_path = os.path.join("game_data", "last_miss_you_check.json")
+        os.makedirs("game_data", exist_ok=True)
+        today_str = datetime.date.today().isoformat()
+        last_run = None
+        if os.path.exists(stamp_path):
+            try:
+                with open(stamp_path, "r", encoding="utf-8") as f:
+                    last_run = (json.load(f) or {}).get("last_run")
+            except Exception:
+                last_run = None
+        if last_run == today_str:
+            return
+        # Threshold: 7 days without a game
+        threshold_days = int(os.getenv("MISS_YOU_THRESHOLD_DAYS", "7"))
+        now = datetime.datetime.now(datetime.UTC)
+        # Load from users.json each day to ensure we use on-disk data
+        users = load_users()
+        for uname, u in (users or {}).items():
+            try:
+                email = (u or {}).get("email")
+                last_game = (u or {}).get("last_game_time")
+                if not (email and last_game):
+                    continue
+                # Parse last_game_time (ISO)
+                last_dt = None
+                try:
+                    last_dt = datetime.datetime.fromisoformat(str(last_game))
+                    if last_dt.tzinfo is None:
+                        last_dt = last_dt.replace(tzinfo=datetime.UTC)
+                except Exception:
+                    continue
+                days = (now - last_dt).days
+                if days >= threshold_days:
+                    send_miss_you_email(email, uname)
+            except Exception:
+                continue
+        with open(stamp_path, "w", encoding="utf-8") as f:
+            json.dump({"last_run": today_str}, f)
     except Exception:
         pass
 
