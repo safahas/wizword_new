@@ -1055,6 +1055,13 @@ def display_login():
                 st.session_state['auth_mode'] = 'register'
                 st.session_state['login_error'] = ""
                 st.rerun()
+        # Tighten spacing below the top button
+        st.markdown("""
+        <style>
+        /* Pull the login form up further */
+        div[data-testid=\"stForm\"] { margin-top: -58px !important; }
+        </style>
+        """, unsafe_allow_html=True)
         # Modern login card UI
         st.markdown("""
         <style>
