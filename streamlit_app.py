@@ -1187,6 +1187,12 @@ def display_login():
         st.markdown("## Register")
         new_username = st.text_input("Choose a username", key="register_username")
         new_email = st.text_input("Email", key="register_email")
+        # Live email format feedback
+        _entered_email = (new_email or "").strip()
+        if _entered_email:
+            import re as _re
+            if not _re.match(r"^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$", _entered_email):
+                st.warning("Please enter a valid email address (e.g., name@example.com).")
         new_password = st.text_input("Choose a password", type="password", key="register_password")
         # Add compulsory birthday and education fields
         import datetime
@@ -1233,26 +1239,32 @@ def display_login():
             if not u_edu: missing.append("education")
             if missing:
                 st.error("Please enter: " + ", ".join(missing) + ".")
-            elif new_username_lower in users:
-                st.error("Username already exists.")
-            elif any((u.get('email') or '').lower() == u_email.lower() for u in users.values()):
-                st.error("Email already registered.")
             else:
-                users[new_username_lower] = {
-                    'password': u_pass,
-                    'email': u_email,
-                    'birthday': str(birthday),
-                    'education': u_edu,
-                    'bio': u_bio
-                }
-                st.session_state['users'] = users
-                save_users(users)
-                # Increment users_count on successful registration
-                update_global_counters(users_delta=1)
-                st.success("Registration successful! Please log in.")
-                st.session_state['auth_mode'] = 'login'
-                save_users(st.session_state['users'])
-                st.rerun()
+                # Basic email format validation
+                import re as _re
+                email_ok = bool(_re.match(r"^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$", u_email))
+                if not email_ok:
+                    st.error("Please enter a valid email address (e.g., name@example.com).")
+                elif new_username_lower in users:
+                    st.error("Username already exists.")
+                elif any((u.get('email') or '').lower() == u_email.lower() for u in users.values()):
+                    st.error("Email already registered.")
+                else:
+                    users[new_username_lower] = {
+                        'password': u_pass,
+                        'email': u_email,
+                        'birthday': str(birthday),
+                        'education': u_edu,
+                        'bio': u_bio
+                    }
+                    st.session_state['users'] = users
+                    save_users(users)
+                    # Increment users_count on successful registration
+                    update_global_counters(users_delta=1)
+                    st.success("Registration successful! Please log in.")
+                    st.session_state['auth_mode'] = 'login'
+                    save_users(st.session_state['users'])
+                    st.rerun()
 
     # --- FORGOT PASSWORD FORM ---
 
