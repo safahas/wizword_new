@@ -27,6 +27,19 @@ PROFILE_BIO_KEY = "profile_bio"
 GLOBAL_COUNTERS_PATH = os.environ.get('GLOBAL_COUNTERS_PATH', 'game_data/global_counters.json')
 LIVE_SESSIONS_PATH = os.environ.get('LIVE_SESSIONS_PATH', 'game_data/live_sessions.json')
 
+# Helper: normalize category under admin gating for Personal
+def _normalize_category(category_value):
+    try:
+        enabled = os.getenv('ENABLE_PERSONAL_CATEGORY', 'true').strip().lower() in ('1','true','yes','on')
+    except Exception:
+        enabled = True
+    try:
+        if (not enabled) and str(category_value).lower() == 'personal':
+            return 'general'
+    except Exception:
+        pass
+    return category_value
+
 def _ensure_global_counters_file() -> None:
     try:
         os.makedirs(os.path.dirname(GLOBAL_COUNTERS_PATH) or '.', exist_ok=True)
@@ -89,6 +102,33 @@ def _write_live_sessions(data: dict) -> None:
             json.dump(data, f)
     except Exception:
         pass
+
+# Factory to create a GameLogic instance with Personal category gating
+def create_game_with_env_guard(*, word_length, subject, mode, nickname, difficulty, initial_score=None):
+    try:
+        subject = _normalize_category(subject)
+    except Exception:
+        try:
+            subject = 'general' if str(subject).lower() == 'personal' else subject
+        except Exception:
+            subject = 'general'
+    if initial_score is None:
+        return GameLogic(
+            word_length=word_length,
+            subject=subject,
+            mode=mode,
+            nickname=nickname,
+            difficulty=difficulty
+        )
+    else:
+        return GameLogic(
+            word_length=word_length,
+            subject=subject,
+            mode=mode,
+            nickname=nickname,
+            difficulty=difficulty,
+            initial_score=initial_score
+        )
 
 def heartbeat_live_session(session_id: str, username: str) -> None:
     """Record/refresh a heartbeat for a live Beat session."""
@@ -1029,9 +1069,7 @@ def display_login():
         - Only Medium difficulty is available for all modes.
             - Note: Some categories (e.g., Movies, Music, Aviation) may include alphanumeric titles like "Se7en" or "Rio2". Only letters count toward vowel/uniqueness checks.
         
-        #### Personal Category (Profile‑aware)
-        - When you choose **Personal**, the game uses your profile (Bio, Occupation, Education) to ask the LLM for a single, personally relevant noun and a set of tailored hints.
-        - The UI blocks with “Generating personal hints…” until at least 3 hints are available. If not enough hints are ready in time, you’ll see a clear warning and a **Retry generating hints** button.
+        {('#### Personal Category (Profile‑aware)\n- When you choose **Personal**, the game uses your profile (Bio, Occupation, Education) to ask the LLM for a single, personally relevant noun and a set of tailored hints.\n- The UI blocks with “Generating personal hints…” until at least 3 hints are available. If not enough hints are ready in time, you’ll see a clear warning and a **Retry generating hints** button.\n' if os.getenv('ENABLE_PERSONAL_CATEGORY','true').strip().lower() in ('1','true','yes','on') else '')}
         
         #### Top SEI Achievements
         - Achieve (or tie) the highest SEI in a category (with SEI > 0) to unlock:
@@ -1416,7 +1454,7 @@ def main():
                 pass
         subject = default_category if default_category else 'general'
         
-        st.session_state.game = GameLogic(
+        st.session_state.game = create_game_with_env_guard(
             word_length=random_length,  # Use random length between 3 and 10
             subject=subject,
             mode='Beat',
@@ -1581,11 +1619,17 @@ def display_welcome():
                 ]
                 if enable_personal:
                     category_options.insert(1, "Personal")
+                # Normalize previously selected Personal to General before rendering the widget
+                _k = 'start_category_select'
+                _prev = st.session_state.get(_k)
+                if (not enable_personal) and str(_prev or '').lower() == 'personal':
+                    st.session_state[_k] = 'general'
                 subject = st.selectbox(
                     "Category",
                     options=category_options,
                     index=category_options.index("general"),  # default to 'general'
                     help="Word category (select 'any' for random category)",
+                    key='start_category_select',
                     format_func=lambda x: (
                         'Any' if x == 'any' else (
                             'Personal' if x == 'Personal' else (
@@ -1604,10 +1648,11 @@ def display_welcome():
                 )
                 st.session_state['original_category_choice'] = subject
                 # Enforce env gate in case subject came from stale state (do this BEFORE resolving)
-                _enable_personal_login = os.getenv('ENABLE_PERSONAL_CATEGORY', 'true').strip().lower() in ('1','true','yes','on')
-                if not _enable_personal_login and str(subject).lower() == 'personal':
-                    subject = 'general'
-                    st.session_state['original_category_choice'] = subject
+                try:
+                    subject = _normalize_category(subject)
+                except Exception:
+                    subject = 'general' if str(subject).lower() == 'personal' else subject
+                st.session_state['original_category_choice'] = subject
                 # Now resolve the effective subject for this run
                 resolved_subject = random.choice(["general", "animals", "food", "places", "science", "tech", "sports", "brands", "4th_grade", "8th_grade", "cities", "medicines", "anatomy", "psat", "sat", "gre"]) if subject == "any" else subject
                 # --- Global Top 3 by SEI for chosen category (start page) ---
@@ -1650,7 +1695,7 @@ def display_welcome():
             st.session_state['original_word_length_choice'] = word_length
             if start_pressed:
                 selected_mode = st.session_state.get("game_mode", mode)
-                st.session_state.game = GameLogic(
+                st.session_state.game = create_game_with_env_guard(
                     word_length=word_length,
                     subject=resolved_subject,
                     mode=selected_mode,
@@ -1863,6 +1908,17 @@ def display_game():
     
     import time
     from streamlit_app import save_game_to_user_profile
+    def _normalize_category(category_value):
+        try:
+            _enabled = os.getenv('ENABLE_PERSONAL_CATEGORY', 'true').strip().lower() in ('1','true','yes','on')
+        except Exception:
+            _enabled = True
+        try:
+            if (not _enabled) and str(category_value).lower() == 'personal':
+                return 'general'
+        except Exception:
+            pass
+        return category_value
     # Ensure beat_total_points is always initialized for Beat mode
     if 'beat_total_points' not in st.session_state:
         st.session_state['beat_total_points'] = 0
@@ -1873,7 +1929,7 @@ def display_game():
     # If game is not initialized, always use user's default_category for Beat mode
     if 'game' not in st.session_state or not st.session_state.game:
         user_profile = st.session_state.get('user', {})
-        default_category = user_profile.get('default_category', 'general')
+        default_category = _normalize_category(user_profile.get('default_category', 'general'))
         # Enforce env gate: if Personal is disabled, do not allow default_category to be Personal
         enable_personal = os.getenv('ENABLE_PERSONAL_CATEGORY', 'true').strip().lower() in ('1', 'true', 'yes', 'on')
         if not enable_personal and str(default_category).lower() == 'personal':
@@ -1892,10 +1948,10 @@ def display_game():
                     save_users(users_db)
             except Exception:
                 pass
-        subject = default_category if default_category else 'general'
+        subject = _normalize_category(default_category if default_category else 'general')
         random_length = random.randint(3, 10)
         
-        st.session_state.game = GameLogic(
+        st.session_state.game = create_game_with_env_guard(
             word_length=random_length,
             subject=subject,
             mode='Beat',
@@ -1910,6 +1966,41 @@ def display_game():
     if 'last_displayed_word' not in st.session_state:
         st.session_state['last_displayed_word'] = None
     game = st.session_state.get('game', None)
+    # Enforce env gate even if a game already exists (e.g., stale Personal subject)
+    try:
+        _enable_personal_live = os.getenv('ENABLE_PERSONAL_CATEGORY', 'true').strip().lower() in ('1','true','yes','on')
+        if game and getattr(game, 'subject', '') and (str(game.subject).lower() == 'personal') and (not _enable_personal_live):
+            # Rebuild the game with general subject while preserving state
+            preserved = {
+                'mode': getattr(game, 'mode', 'Beat'),
+                'difficulty': getattr(game, 'difficulty', 'Medium'),
+                'nickname': getattr(game, 'nickname', (st.session_state.get('user') or {}).get('username', '')),
+                'score': getattr(game, 'score', 0)
+            }
+            st.session_state.game = create_game_with_env_guard(
+                word_length=5,
+                subject='general',
+                mode=preserved['mode'],
+                nickname=preserved['nickname'],
+                difficulty=preserved['difficulty'],
+                initial_score=preserved['score']
+            )
+            # Update user defaults if present
+            if 'user' in st.session_state and st.session_state['user']:
+                st.session_state['user']['default_category'] = 'general'
+            users_db = st.session_state.get('users', {})
+            uname = (st.session_state.get('user', {}) or {}).get('username') or ''
+            if uname in users_db:
+                users_db[uname]['default_category'] = 'general'
+                save_users(users_db)
+            elif uname.lower() in users_db:
+                users_db[uname.lower()]['default_category'] = 'general'
+                save_users(users_db)
+            # Keep UI selections consistent
+            st.session_state['original_category_choice'] = 'general'
+            game = st.session_state.game
+    except Exception:
+        pass
     current_word = getattr(game, 'selected_word', None) if game else None
     if st.session_state['last_displayed_word'] != current_word:
         st.session_state['show_word'] = False
@@ -2076,10 +2167,10 @@ def display_game():
             # Enforce env gate: if Personal is disabled, do not allow selection of Personal
             _enable_personal = os.getenv('ENABLE_PERSONAL_CATEGORY', 'true').strip().lower() in ('1','true','yes','on')
             if not _enable_personal and str(new_category).lower() == 'personal':
-                st.warning("Personal category is currently disabled by admin settings. Using 'general' instead.")
+                st.warning("Personal category is currently disabled by admin settings. Using 'General' instead.")
                 new_category = 'general'
             game = st.session_state.game
-            st.session_state.game = GameLogic(
+            st.session_state.game = create_game_with_env_guard(
                 word_length=5,
                 subject=new_category,
                 mode=game.mode,
@@ -2551,6 +2642,10 @@ def display_game():
                         pass
                     new_word_length = 5
                     new_subject = game.subject
+                    # Enforce env gate on skip-driven next word
+                    _enable_personal_skip = os.getenv('ENABLE_PERSONAL_CATEGORY', 'true').strip().lower() in ('1','true','yes','on')
+                    if not _enable_personal_skip and str(new_subject).lower() == 'personal':
+                        new_subject = 'general'
                     st.session_state.game = GameLogic(
                         word_length=new_word_length,
                         subject=new_subject,
@@ -2759,7 +2854,7 @@ def display_game():
                 if not _enable_personal_round and str(new_subject).lower() == 'personal':
                     new_subject = 'general'
 
-                st.session_state.game = GameLogic(
+                st.session_state.game = create_game_with_env_guard(
                     word_length=new_word_length,
                     subject=new_subject,
                     mode=game.mode,
@@ -3842,7 +3937,7 @@ def display_game_over(game_summary):
                 # Reset Beat penalty/session accumulators
                 st.session_state['beat_total_points'] = 0
                 st.session_state['beat_total_penalty'] = 0
-                st.session_state.game = GameLogic(
+                st.session_state.game = create_game_with_env_guard(
                     word_length=new_word_length,
                     subject=new_subject,
                     mode='Beat',

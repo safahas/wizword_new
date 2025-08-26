@@ -50,6 +50,10 @@ SMTP_PORT=587
 SMTP_USER=bot@example.com
 SMTP_PASS=app_password
 ADMIN_EMAIL=admin@example.com  # optional; falls back to SMTP_USER if not set
+
+# Feature flags
+# Controls visibility and usage of the profile‑aware Personal category
+ENABLE_PERSONAL_CATEGORY=true  # set false to hide Personal and force General instead
 ```
 
 5. Run the game:
@@ -66,6 +70,14 @@ streamlit run streamlit_app.py
   - The UI blocks with “Generating personal hints…” and retries for up to ~15 seconds until at least 3 hints are available.
   - If it can’t obtain 3 hints in time, you’ll see a clear warning and a “Retry generating hints” button to try again without losing the current word.
   - If the LLM returns hints with the word selection, those are used immediately.
+
+Note on admin control:
+- You can disable the Personal category across the app by setting `ENABLE_PERSONAL_CATEGORY=false` in `.env` and restarting the app.
+- When disabled:
+  - “Personal” is removed from category pickers.
+  - Any existing or default “Personal” category is normalized to `general` at runtime.
+  - The “How to Play” sections hide the Personal subsection.
+  - Accepted values: `true/1/yes/on` to enable, `false/0/no/off` to disable.
 
 
 1. Configure your game:
