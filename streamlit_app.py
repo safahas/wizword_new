@@ -1029,6 +1029,10 @@ def display_login():
         - Only Medium difficulty is available for all modes.
             - Note: Some categories (e.g., Movies, Music, Aviation) may include alphanumeric titles like "Se7en" or "Rio2". Only letters count toward vowel/uniqueness checks.
         
+        #### Personal Category (Profile‑aware)
+        - When you choose **Personal**, the game uses your profile (Bio, Occupation, Education) to ask the LLM for a single, personally relevant noun and a set of tailored hints.
+        - The UI blocks with “Generating personal hints…” until at least 3 hints are available. If not enough hints are ready in time, you’ll see a clear warning and a **Retry generating hints** button.
+        
         #### Top SEI Achievements
         - Achieve (or tie) the highest SEI in a category (with SEI > 0) to unlock:
           - An emailed congratulations card (with trophy, your username, category, SEI, and UTC timestamp)
@@ -1393,6 +1397,23 @@ def main():
         random_length = random.randint(3, 10)
         user_profile = st.session_state.get('user', {})
         default_category = user_profile.get('default_category', 'general')
+        # Enforce env gate here, too (start page auto-initialization)
+        _enable_personal_gate = os.getenv('ENABLE_PERSONAL_CATEGORY', 'true').strip().lower() in ('1','true','yes','on')
+        if not _enable_personal_gate and str(default_category).lower() == 'personal':
+            default_category = 'general'
+            try:
+                if 'user' in st.session_state and st.session_state['user']:
+                    st.session_state['user']['default_category'] = 'general'
+                users_db = st.session_state.get('users', {})
+                uname = (st.session_state.get('user', {}) or {}).get('username') or ''
+                if uname in users_db:
+                    users_db[uname]['default_category'] = 'general'
+                    save_users(users_db)
+                elif uname.lower() in users_db:
+                    users_db[uname.lower()]['default_category'] = 'general'
+                    save_users(users_db)
+            except Exception:
+                pass
         subject = default_category if default_category else 'general'
         
         st.session_state.game = GameLogic(
@@ -1553,18 +1574,27 @@ def display_welcome():
                 )
             difficulty = "Medium"
             with cols[1]:
+                enable_personal = os.getenv('ENABLE_PERSONAL_CATEGORY', 'true').strip().lower() in ('1', 'true', 'yes', 'on')
+                category_options = [
+                    "any", "4th_grade", "8th_grade", "anatomy", "animals", "brands", "cities", "food",
+                    "general", "gre", "medicines", "places", "psat", "sat", "science", "sports", "tech"
+                ]
+                if enable_personal:
+                    category_options.insert(1, "Personal")
                 subject = st.selectbox(
                     "Category",
-                    options=["any", "4th_grade", "8th_grade", "anatomy", "animals", "brands", "cities", "food", "general", "gre", "medicines", "places", "psat", "sat", "science", "sports", "tech"],
-                    index=["any", "4th_grade", "8th_grade", "anatomy", "animals", "brands", "cities", "food", "general", "gre", "medicines", "places", "psat", "sat", "science", "sports", "tech"].index("general"),  # default to 'general'
+                    options=category_options,
+                    index=category_options.index("general"),  # default to 'general'
                     help="Word category (select 'any' for random category)",
                     format_func=lambda x: (
                         'Any' if x == 'any' else (
-                            'SAT' if x == 'sat' else (
-                                'PSAT' if x == 'psat' else (
-                                    'GRE' if x == 'gre' else (
-                                        '4th Grade' if x == '4th_grade' else (
-                                            '8th Grade' if x == '8th_grade' else x.replace('_', ' ').title()
+                            'Personal' if x == 'Personal' else (
+                                'SAT' if x == 'sat' else (
+                                    'PSAT' if x == 'psat' else (
+                                        'GRE' if x == 'gre' else (
+                                            '4th Grade' if x == '4th_grade' else (
+                                                '8th Grade' if x == '8th_grade' else x.replace('_', ' ').title()
+                                            )
                                         )
                                     )
                                 )
@@ -1573,6 +1603,12 @@ def display_welcome():
                     )
                 )
                 st.session_state['original_category_choice'] = subject
+                # Enforce env gate in case subject came from stale state (do this BEFORE resolving)
+                _enable_personal_login = os.getenv('ENABLE_PERSONAL_CATEGORY', 'true').strip().lower() in ('1','true','yes','on')
+                if not _enable_personal_login and str(subject).lower() == 'personal':
+                    subject = 'general'
+                    st.session_state['original_category_choice'] = subject
+                # Now resolve the effective subject for this run
                 resolved_subject = random.choice(["general", "animals", "food", "places", "science", "tech", "sports", "brands", "4th_grade", "8th_grade", "cities", "medicines", "anatomy", "psat", "sat", "gre"]) if subject == "any" else subject
                 # --- Global Top 3 by SEI for chosen category (start page) ---
                 try:
@@ -1760,6 +1796,10 @@ def display_welcome():
             - Try to solve as many words as possible and maximize your score before time runs out!
             - Only Medium difficulty is available for all modes.
             - Note: Some categories (e.g., Movies, Music, Aviation) may include alphanumeric titles like "Se7en" or "Rio2". Only letters count toward vowel/uniqueness checks.
+
+            #### Personal Category (Profile‑aware)
+            - When you choose **Personal**, the game uses your profile (Bio, Occupation, Education) to ask the LLM for a single, personally relevant noun and a set of tailored hints.
+            - The UI blocks with “Generating personal hints…” until at least 3 hints are available. If not enough hints are ready in time, you’ll see a clear warning and a **Retry generating hints** button.
             
             #### Top SEI Achievements
             - Achieve (or tie) the highest SEI in a category (with SEI > 0) to unlock:
@@ -1834,6 +1874,24 @@ def display_game():
     if 'game' not in st.session_state or not st.session_state.game:
         user_profile = st.session_state.get('user', {})
         default_category = user_profile.get('default_category', 'general')
+        # Enforce env gate: if Personal is disabled, do not allow default_category to be Personal
+        enable_personal = os.getenv('ENABLE_PERSONAL_CATEGORY', 'true').strip().lower() in ('1', 'true', 'yes', 'on')
+        if not enable_personal and str(default_category).lower() == 'personal':
+            default_category = 'general'
+            # Persist the correction to both in-memory user and users database if available
+            try:
+                if 'user' in st.session_state and st.session_state['user']:
+                    st.session_state['user']['default_category'] = 'general'
+                users_db = st.session_state.get('users', {})
+                uname = (st.session_state.get('user', {}) or {}).get('username') or ''
+                if uname in users_db:
+                    users_db[uname]['default_category'] = 'general'
+                    save_users(users_db)
+                elif uname.lower() in users_db:
+                    users_db[uname.lower()]['default_category'] = 'general'
+                    save_users(users_db)
+            except Exception:
+                pass
         subject = default_category if default_category else 'general'
         random_length = random.randint(3, 10)
         
@@ -2005,13 +2063,21 @@ def display_game():
     # Show rules if toggled
     if st.session_state.get('show_rules', False):
         st.info("""
-        **How to Play:**\n- Guess the word by revealing letters.\n- Use hints or ask yes/no questions.\n- In Beat mode, solve as many words as possible before time runs out!\n- Use the menu to skip, reveal, or change category.\n        """)
+        **How to Play:**\n- Guess the word by revealing letters.\n- Use hints or ask yes/no questions.\n- In Beat mode, solve as many words as possible before time runs out!\n- Use the menu to skip, reveal, or change category.\n- Personal: profile‑aware category that may show “Generating personal hints…” and a Retry button until 3+ hints are ready.\n        """)
 
     # Handle change category
     if st.session_state.get('change_category', False):
+        enable_personal = os.getenv('ENABLE_PERSONAL_CATEGORY', 'true').strip().lower() in ('1', 'true', 'yes', 'on')
         categories = ["any", "anatomy", "animals", "aviation", "brands", "cities", "food", "general", "gre", "history", "medicines", "movies", "music", "places", "psat", "sat", "science", "sports", "tech", "4th_grade", "8th_grade"]
+        if enable_personal:
+            categories.insert(1, "Personal")
         new_category = st.selectbox("Select a new category:", categories, format_func=lambda x: ('Any' if x=='any' else ('GRE' if x=='gre' else ('SAT' if x=='sat' else ('PSAT' if x=='psat' else x.replace('_',' ').title())))), key='category_select_box')
         if st.button("Confirm Category Change", key='change_category_btn'):
+            # Enforce env gate: if Personal is disabled, do not allow selection of Personal
+            _enable_personal = os.getenv('ENABLE_PERSONAL_CATEGORY', 'true').strip().lower() in ('1','true','yes','on')
+            if not _enable_personal and str(new_category).lower() == 'personal':
+                st.warning("Personal category is currently disabled by admin settings. Using 'general' instead.")
+                new_category = 'general'
             game = st.session_state.game
             st.session_state.game = GameLogic(
                 word_length=5,
@@ -2554,6 +2620,41 @@ def display_game():
         content = letter.upper() if is_revealed else "_"
         boxes.append(f"<span style='{style}'>{content}</span>")
     st.markdown(f"<div style='display:flex;flex-direction:row;justify-content:center;gap:0.2em;margin-bottom:1.2em;'>{''.join(boxes)}</div>", unsafe_allow_html=True)
+    # If Personal category and not enough hints yet, block and fetch
+    try:
+        game = st.session_state.game
+        if str(getattr(game, 'original_subject', game.subject)).lower() == 'personal':
+            needed = 3
+            have = len(getattr(game, 'available_hints', []) or [])
+            if have < needed:
+                with st.spinner('Generating personal hints…'):
+                    import time as _t
+                    deadline = _t.time() + 15  # allow up to 15s of retries
+                    while have < needed and _t.time() < deadline:
+                        try:
+                            api_hints = game.word_selector.get_api_hints_force(game.selected_word, 'personal', n=needed)
+                            api_hints = list(dict.fromkeys((api_hints or [])[:needed]))
+                            if api_hints:
+                                # Merge into available_hints
+                                merged = list(dict.fromkeys((getattr(game, 'available_hints', []) or []) + api_hints))
+                                game.available_hints = merged[:max(needed, len(merged))]
+                                have = len(game.available_hints)
+                                if have >= needed:
+                                    break
+                        except Exception:
+                            pass
+                        _t.sleep(1.0)
+                have = len(getattr(game, 'available_hints', []) or [])
+                if have < needed:
+                    st.warning('Could not generate enough personal hints. You can retry.')
+                    if st.button('Retry generating hints', key='retry_personal_hints'):
+                        st.session_state['retry_personal_hints'] = True
+                        st.rerun()
+            elif st.session_state.pop('retry_personal_hints', False):
+                # Clear flag if hints are now sufficient
+                pass
+    except Exception:
+        pass
     # Ensure no separate skipped word text is shown below Skip button
     skip_word_display_container.empty()
 
@@ -2653,6 +2754,10 @@ def display_game():
                         new_word_length = 5
                 categories = ["general", "animals", "food", "places", "science", "tech", "sports", "brands", "4th_grade", "cities", "medicines", "anatomy"]
                 new_subject = random.choice(categories) if orig_category == "any" else game.subject
+                # Enforce env gate when rolling next word too
+                _enable_personal_round = os.getenv('ENABLE_PERSONAL_CATEGORY', 'true').strip().lower() in ('1','true','yes','on')
+                if not _enable_personal_round and str(new_subject).lower() == 'personal':
+                    new_subject = 'general'
 
                 st.session_state.game = GameLogic(
                     word_length=new_word_length,
@@ -3711,6 +3816,22 @@ def display_game_over(game_summary):
                 new_word_length = random.randint(3, 10)
                 user_profile = st.session_state.get('user', {})
                 default_category = user_profile.get('default_category', 'general')
+                _enable_personal_again = os.getenv('ENABLE_PERSONAL_CATEGORY', 'true').strip().lower() in ('1','true','yes','on')
+                if not _enable_personal_again and str(default_category).lower() == 'personal':
+                    default_category = 'general'
+                    try:
+                        if 'user' in st.session_state and st.session_state['user']:
+                            st.session_state['user']['default_category'] = 'general'
+                        users_db = st.session_state.get('users', {})
+                        uname = (st.session_state.get('user', {}) or {}).get('username') or ''
+                        if uname in users_db:
+                            users_db[uname]['default_category'] = 'general'
+                            save_users(users_db)
+                        elif uname.lower() in users_db:
+                            users_db[uname.lower()]['default_category'] = 'general'
+                            save_users(users_db)
+                    except Exception:
+                        pass
                 new_subject = default_category if default_category else 'general'
                 print(f"[DEBUG][Another Beat] Restarting Beat mode with subject: {new_subject}")
                 st.session_state.beat_word_count = 0

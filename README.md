@@ -58,10 +58,19 @@ streamlit run streamlit_app.py
 ```
 
 ## How to Play
+### Personal Category (profile‑aware)
+
+- When you choose **Personal**, the game uses your profile (Bio, Occupation, Education, Address in `users.json`) to ask the LLM for a single, personally relevant noun and a set of tailored hints.
+- With `BYPASS_API_WORD_SELECTION=true`, all other categories use the local dictionary, but Personal still calls the LLM.
+- Hint generation behavior:
+  - The UI blocks with “Generating personal hints…” and retries for up to ~15 seconds until at least 3 hints are available.
+  - If it can’t obtain 3 hints in time, you’ll see a clear warning and a “Retry generating hints” button to try again without losing the current word.
+  - If the LLM returns hints with the word selection, those are used immediately.
+
 
 1. Configure your game:
    - Choose word length (3-15 letters)
-   - Select a category (General, Animals, Food, etc.)
+   - Select a category (General, Animals, Food, Personal, etc.)
    - Pick game mode (Fun or Challenge)
    - Enter an optional nickname
 
