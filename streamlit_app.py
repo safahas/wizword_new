@@ -1204,10 +1204,7 @@ def display_login():
                 st.markdown("<div class='auth-sep'></div>", unsafe_allow_html=True)
                 c1, c2 = st.columns(2)
                 with c1:
-                    if st.form_submit_button("Create account", use_container_width=True):
-                        st.session_state['auth_mode'] = 'register'
-                        st.session_state['login_error'] = ""
-                        st.rerun()
+                    pass
                 with c2:
                     if st.form_submit_button("Forgot password?", use_container_width=True):
                         st.session_state['auth_mode'] = 'forgot'
