@@ -2022,25 +2022,87 @@ def display_game():
         display_game_over(st.session_state.get('game_summary', {}))
         return
 
-    # --- Hamburger menu now at the bottom of the game page ---
+    # --- Hamburger menu now at the bottom of the game page (collapsed by default) ---
     with st.container():
         with st.expander('☰ Menu', expanded=False):
-            # Skip button removed from menu to avoid duplication; use the main Skip on the game page
-            if st.button('View Rules / How to Play', key='view_rules_btn_menu'):
-                st.session_state['show_rules'] = not st.session_state.get('show_rules', False)
-            if st.button('User Profile', key='user_profile_btn_menu'):
-                st.session_state['show_user_profile'] = not st.session_state.get('show_user_profile', False)
-            if st.button('Toggle Sound/Music', key='toggle_sound_btn'):
-                st.session_state['sound_on'] = not st.session_state.get('sound_on', True)
-            # Support button under menu tab
-            if 'show_support' not in st.session_state:
-                st.session_state['show_support'] = False
-            if st.button('Contact Support', key='contact_support_btn_menu'):
-                st.session_state['show_support'] = not st.session_state['show_support']
-            if st.session_state.get('show_support'):
-                with st.form('support_form_menu', clear_on_submit=True):
-                    support_subject = st.text_input('Subject', key='support_subject_input_menu')
-                    support_message = st.text_area('Message', key='support_message_input_menu')
+            # View Rules / How to Play (expands inline)
+            with st.expander('View Rules / How to Play', expanded=False):
+                st.info("""
+                **How to Play:**\n- Guess the word by revealing letters.\n- Use hints or ask yes/no questions.\n- In Beat mode, solve as many words as possible before time runs out!\n- Use the menu to skip, reveal, or change category.\n- Personal: profile‑aware category that may show “Generating personal hints…” and a Retry button until 3+ hints are ready.\n                """)
+            # User Profile (expands inline)
+            with st.expander('User Profile', expanded=False):
+                st.markdown('## User Profile')
+                user = st.session_state.get('user', {})
+                education_options = [
+                    'High School', 'Associate Degree', 'Bachelor\'s Degree', 'Master\'s Degree', 'PhD', 'Other'
+                ]
+                education = st.selectbox('Education', education_options, index=education_options.index(user.get('education', '')) if user.get('education', '') in education_options else len(education_options)-1, key='profile_education_inline')
+                education_other = ''
+                if education == 'Other':
+                    education_other = st.text_input('Please specify your education', value=user.get('education', '') if user.get('education', '') not in education_options else '', key='profile_education_other_inline')
+                occupation_options = [
+                    'Student', 'Teacher', 'Engineer', 'Doctor', 'Researcher', 'Artist', 'Business', 'Retired', 'Other'
+                ]
+                occupation = st.selectbox('Occupation', occupation_options, index=occupation_options.index(user.get('occupation', '')) if user.get('occupation', '') in occupation_options else len(occupation_options)-1, key='profile_occupation_inline')
+                occupation_other = ''
+                if occupation == 'Other':
+                    occupation_other = st.text_input('Please specify your occupation', value=user.get('occupation', '') if user.get('occupation', '') not in occupation_options else '', key='profile_occupation_other_inline')
+                address = st.text_input('Address', value=user.get('address', ''), key='profile_address_inline')
+                bio_value = st.text_area(f"Bio (optional – up to {BIO_MAX_CHARS} characters)", value=user.get('bio', ''), max_chars=BIO_MAX_CHARS, key=PROFILE_BIO_KEY)
+                _bio_len = len(bio_value or "")
+                st.caption(f"{_bio_len}/{BIO_MAX_CHARS} characters")
+                if _bio_len > BIO_MAX_CHARS:
+                    st.warning(f"Bio exceeds {BIO_MAX_CHARS} characters; please shorten it.")
+                elif _bio_len >= BIO_MAX_CHARS:
+                    st.warning(f"Bio reached the {BIO_MAX_CHARS}-character limit.")
+                elif _bio_len >= int(BIO_MAX_CHARS * 0.9):
+                    st.info("Approaching the 90% character limit.")
+                min_birthday = datetime.date(1900, 1, 1)
+                raw_birthday = user.get('birthday', None)
+                birthday_value = None
+                if isinstance(raw_birthday, datetime.date):
+                    birthday_value = raw_birthday
+                elif isinstance(raw_birthday, datetime.datetime):
+                    birthday_value = raw_birthday.date()
+                elif isinstance(raw_birthday, str) and raw_birthday:
+                    try:
+                        birthday_value = datetime.date.fromisoformat(raw_birthday)
+                    except Exception:
+                        try:
+                            birthday_value = datetime.datetime.fromisoformat(raw_birthday).date()
+                        except Exception:
+                            birthday_value = None
+                if not birthday_value:
+                    birthday_value = datetime.date.today()
+                birthday = st.date_input('Birthday', value=birthday_value, min_value=min_birthday, key='profile_birthday_inline')
+                # Save button
+                if st.button('Save Profile', key='save_profile_btn_inline'):
+                    final_education = education_other if education == 'Other' else education
+                    final_occupation = occupation_other if occupation == 'Other' else occupation
+                    username = user.get('username')
+                    username_lower = (username or '').lower()
+                    bio_to_save = st.session_state.get(PROFILE_BIO_KEY, user.get('bio', ''))
+                    if username_lower and 'users' in st.session_state and username_lower in st.session_state['users']:
+                        st.session_state['users'][username_lower]['education'] = final_education
+                        st.session_state['users'][username_lower]['address'] = address
+                        st.session_state['users'][username_lower]['bio'] = bio_to_save
+                        st.session_state['users'][username_lower]['birthday'] = str(birthday)
+                        st.session_state['users'][username_lower]['occupation'] = final_occupation
+                        st.session_state['user']['education'] = final_education
+                        st.session_state['user']['address'] = address
+                        st.session_state['user']['bio'] = bio_to_save
+                        st.session_state['user']['birthday'] = str(birthday)
+                        st.session_state['user']['occupation'] = final_occupation
+                        save_users(st.session_state['users'])
+                        st.success('Profile updated!')
+                        st.rerun()
+            # Toggle Sound/Music (simple inline toggle)
+            st.checkbox('Sound/Music', key='sound_on', value=st.session_state.get('sound_on', True))
+            # Contact Support (expands inline)
+            with st.expander('Contact Support', expanded=False):
+                with st.form('support_form_menu_inline', clear_on_submit=True):
+                    support_subject = st.text_input('Subject', key='support_subject_input_menu_inline')
+                    support_message = st.text_area('Message', key='support_message_input_menu_inline')
                     submitted = st.form_submit_button('Send Support Message')
                     if submitted:
                         admin_email = os.getenv('ADMIN_EMAIL') or os.getenv('SMTP_USER')
@@ -2057,8 +2119,8 @@ def display_game():
                                 st.success('Support request sent!')
                             else:
                                 st.error('Failed to send. Please try again later.')
+            # Log out button remains
             if st.button('Log Out', key='logout_btn'):
-                # Only remove session/user/game state, NOT the users database
                 keys_to_keep = ['users']
                 for key in list(st.session_state.keys()):
                     if key != 'users':
