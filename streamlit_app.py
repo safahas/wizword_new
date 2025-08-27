@@ -1069,7 +1069,10 @@ def display_login():
         - Only Medium difficulty is available for all modes.
             - Note: Some categories (e.g., Movies, Music, Aviation) may include alphanumeric titles like "Se7en" or "Rio2". Only letters count toward vowel/uniqueness checks.
         
-        {('#### Personal Category (Profile‑aware)\n- When you choose **Personal**, the game uses your profile (Bio, Occupation, Education) to ask the LLM for a single, personally relevant noun and a set of tailored hints.\n- The UI blocks with “Generating personal hints…” until at least 3 hints are available. If not enough hints are ready in time, you\'ll see a clear warning and a **Retry generating hints** button.\n' if os.getenv('ENABLE_PERSONAL_CATEGORY','true').strip().lower() in ('1','true','yes','on') else '')}
+        {('''#### Personal Category (Profile‑aware)
+When you choose **Personal**, the game uses your profile (Bio, Occupation, Education) to ask the LLM for a single, personally relevant noun and a set of tailored hints.
+The UI blocks with “Generating personal hints…” until at least 3 hints are available. If not enough hints are ready in time, you\'ll see a clear warning and a **Retry generating hints** button.
+''' if os.getenv('ENABLE_PERSONAL_CATEGORY','true').strip().lower() in ('1','true','yes','on') else '')}
         
         #### Top SEI Achievements
         - Achieve (or tie) the highest SEI in a category (with SEI > 0) to unlock:
