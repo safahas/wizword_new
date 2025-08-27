@@ -1692,6 +1692,9 @@ def display_welcome():
             st.session_state['original_word_length_choice'] = word_length
             if start_pressed:
                 selected_mode = st.session_state.get("game_mode", mode)
+                # Reset time-over flags when starting a fresh game from the start form
+                st.session_state.pop('time_over', None)
+                st.session_state.pop('time_over_at', None)
                 st.session_state.game = create_game_with_env_guard(
                     word_length=word_length,
                     subject=resolved_subject,
@@ -2229,6 +2232,9 @@ def display_game():
                 st.warning("Personal category is currently disabled by admin settings. Using 'General' instead.")
                 new_category = 'general'
             game = st.session_state.game
+            # Reset time-over flags when changing category starts a new game
+            st.session_state.pop('time_over', None)
+            st.session_state.pop('time_over_at', None)
             st.session_state.game = create_game_with_env_guard(
                 word_length=5,
                 subject=new_category,
@@ -2272,20 +2278,29 @@ def display_game():
         elapsed = int(_time.time() - st.session_state['beat_start_time'])
         time_left = max(0, BEAT_MODE_TIMEOUT_SECONDS - elapsed)
         st.session_state['beat_time_left'] = time_left
-        # End game if time is up
-        if time_left <= 0 and not st.session_state.get('game_over', False):
-            # --- FIX: If the current word was just solved, increment beat_word_count ---
-            # If all letters are revealed, count as solved
-            word = game.selected_word if hasattr(game, 'selected_word') else ''
-            revealed_letters = st.session_state.get('revealed_letters', set())
-            if word and set(letter.lower() for letter in word) == revealed_letters:
-                st.session_state.beat_word_count += 1
-            st.session_state['last_mode'] = st.session_state.game.mode
-            st.session_state['game_over'] = True
-            st.session_state['game_summary'] = game.get_game_summary()
-            st.session_state['show_word'] = False  # <-- Clear show_word for new word
-            st.session_state['show_word_round_id'] = None  # <-- Clear show_word_round_id for new word
-            st.rerun()
+        # Time is up: if game already started, finalize to Game Over; otherwise show idle Time Over panel
+        if time_left <= 0:
+            st.session_state['beat_time_left'] = 0
+            if st.session_state.get('beat_started', False):
+                # Auto-navigate to Game Over for an active run
+                try:
+                    # Optional: if all letters are revealed, count as solved
+                    word = game.selected_word if hasattr(game, 'selected_word') else ''
+                    revealed_letters = st.session_state.get('revealed_letters', set())
+                    if word and set(letter.lower() for letter in word) == revealed_letters:
+                        st.session_state.beat_word_count = int(st.session_state.get('beat_word_count', 0)) + 1
+                except Exception:
+                    pass
+                st.session_state['last_mode'] = st.session_state.game.mode
+                st.session_state['game_over'] = True
+                st.session_state['game_summary'] = game.get_game_summary()
+                st.session_state['show_word'] = False
+                st.session_state['show_word_round_id'] = None
+                st.rerun()
+            else:
+                if not st.session_state.get('time_over', False):
+                    st.session_state['time_over'] = True
+                    st.session_state['time_over_at'] = _time.time()
         # --- Banner with timer and score (MATCH GAME OVER STYLE) ---
         if game.mode == 'Beat' and 'beat_started' not in st.session_state:
             st.session_state['beat_started'] = False
@@ -2362,6 +2377,9 @@ def display_game():
             )
             _start_label = f"{_uname} .. Click to Start Game"
             if st.button(_start_label, key='beat_start_btn'):
+                # Clear any lingering time-over flags before (re)starting timer
+                st.session_state.pop('time_over', None)
+                st.session_state.pop('time_over_at', None)
                 st.session_state['beat_started'] = True
                 st.session_state['beat_start_time'] = _time.time()
                 st.rerun()
@@ -2669,6 +2687,48 @@ def display_game():
     if game.mode == 'Beat' and not st.session_state.get('beat_started', False):
         return
 
+    # If time over, show an overlay with actions and optional auto-logout on inactivity
+    if st.session_state.get('time_over') and not st.session_state.get('beat_started', False):
+        # Auto-logout after inactivity window (defaults to BEAT_MODE_TIME seconds)
+        try:
+            _now = _time.time()
+            _started = float(st.session_state.get('time_over_at', _now))
+            _idle_limit = int(os.getenv('INACTIVITY_LOGOUT_SECONDS', os.getenv('BEAT_MODE_TIME', '300')))
+            if _now - _started > _idle_limit:
+                keys_to_keep = ['users']
+                for key in list(st.session_state.keys()):
+                    if key not in keys_to_keep:
+                        del st.session_state[key]
+                st.rerun()
+        except Exception:
+            pass
+
+        st.markdown("""
+        <div style='padding:16px; border:2px dashed #eab308; background:#fffbe6; border-radius:12px; margin:8px 0;'>
+          <div style='font-weight:800; font-size:1.2em; color:#b45309;'>⏰ Time Over</div>
+          <div style='margin-top:6px; color:#92400e;'>Your Beat session time has ended. You can view your Game Over summary or log out.</div>
+        </div>
+        """, unsafe_allow_html=True)
+        c_to, c_go = st.columns(2)
+        with c_go:
+            if st.button('View Game Over', key='btn_view_game_over'):
+                # Finalize and navigate to Game Over
+                st.session_state['last_mode'] = st.session_state.game.mode
+                st.session_state['game_over'] = True
+                st.session_state['game_summary'] = game.get_game_summary()
+                st.session_state['show_word'] = False
+                st.session_state['show_word_round_id'] = None
+                st.rerun()
+        with c_to:
+            if st.button('Log Out Now', key='btn_logout_now'):
+                keys_to_keep = ['users']
+                for key in list(st.session_state.keys()):
+                    if key not in keys_to_keep:
+                        del st.session_state[key]
+                st.rerun()
+        # Stop rendering gameplay UI when time is over
+        return
+
     display_hint_section(game)
 
     # --- Early Skip handling to avoid rendering stale letter boxes/input ---
@@ -2913,6 +2973,9 @@ def display_game():
                 if not _enable_personal_round and str(new_subject).lower() == 'personal':
                     new_subject = 'general'
 
+                # Reset time-over flags on next-round create as we are continuing play
+                st.session_state.pop('time_over', None)
+                st.session_state.pop('time_over_at', None)
                 st.session_state.game = create_game_with_env_guard(
                     word_length=new_word_length,
                     subject=new_subject,
@@ -3996,6 +4059,9 @@ def display_game_over(game_summary):
                 # Reset Beat penalty/session accumulators
                 st.session_state['beat_total_points'] = 0
                 st.session_state['beat_total_penalty'] = 0
+                # Reset time-over flags before Another Beat restarts
+                st.session_state.pop('time_over', None)
+                st.session_state.pop('time_over_at', None)
                 st.session_state.game = create_game_with_env_guard(
                     word_length=new_word_length,
                     subject=new_subject,
