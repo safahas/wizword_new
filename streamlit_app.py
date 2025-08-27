@@ -1069,7 +1069,7 @@ def display_login():
         - Only Medium difficulty is available for all modes.
             - Note: Some categories (e.g., Movies, Music, Aviation) may include alphanumeric titles like "Se7en" or "Rio2". Only letters count toward vowel/uniqueness checks.
         
-        {('#### Personal Category (Profile‑aware)\n- When you choose **Personal**, the game uses your profile (Bio, Occupation, Education) to ask the LLM for a single, personally relevant noun and a set of tailored hints.\n- The UI blocks with “Generating personal hints…” until at least 3 hints are available. If not enough hints are ready in time, you’ll see a clear warning and a **Retry generating hints** button.\n' if os.getenv('ENABLE_PERSONAL_CATEGORY','true').strip().lower() in ('1','true','yes','on') else '')}
+        {('#### Personal Category (Profile‑aware)\n- When you choose **Personal**, the game uses your profile (Bio, Occupation, Education) to ask the LLM for a single, personally relevant noun and a set of tailored hints.\n- The UI blocks with “Generating personal hints…” until at least 3 hints are available. If not enough hints are ready in time, you\'ll see a clear warning and a **Retry generating hints** button.\n' if os.getenv('ENABLE_PERSONAL_CATEGORY','true').strip().lower() in ('1','true','yes','on') else '')}
         
         #### Top SEI Achievements
         - Achieve (or tie) the highest SEI in a category (with SEI > 0) to unlock:
@@ -1844,7 +1844,7 @@ def display_welcome():
 
             #### Personal Category (Profile‑aware)
             - When you choose **Personal**, the game uses your profile (Bio, Occupation, Education) to ask the LLM for a single, personally relevant noun and a set of tailored hints.
-            - The UI blocks with “Generating personal hints…” until at least 3 hints are available. If not enough hints are ready in time, you’ll see a clear warning and a **Retry generating hints** button.
+            - The UI blocks with "Generating personal hints…" until at least 3 hints are available. If not enough hints are ready in time, you'll see a clear warning and a **Retry generating hints** button.
             
             #### Top SEI Achievements
             - Achieve (or tie) the highest SEI in a category (with SEI > 0) to unlock:
@@ -2028,7 +2028,7 @@ def display_game():
             # View Rules / How to Play (expands inline)
             with st.expander('View Rules / How to Play', expanded=False):
                 st.info("""
-                **How to Play:**\n- Guess the word by revealing letters.\n- Use hints or ask yes/no questions.\n- In Beat mode, solve as many words as possible before time runs out!\n- Use the menu to skip, reveal, or change category.\n- Personal: profile‑aware category that may show “Generating personal hints…” and a Retry button until 3+ hints are ready.\n                """)
+                **How to Play:**\n- Guess the word by revealing letters.\n- Use hints or ask yes/no questions.\n- In Beat mode, solve as many words as possible before time runs out!\n- Use the menu to skip, reveal, or change category.\n- Personal: profile‑aware category that may show "Generating personal hints…" and a Retry button until 3+ hints are ready.\n                """)
             # User Profile (expands inline)
             with st.expander('User Profile', expanded=False):
                 st.markdown('## User Profile')
@@ -2095,7 +2095,7 @@ def display_game():
                         st.session_state['user']['occupation'] = final_occupation
                         save_users(st.session_state['users'])
                         st.success('Profile updated!')
-                        st.rerun()
+                    st.rerun()
             # Toggle Sound/Music (simple inline toggle)
             st.checkbox('Sound/Music', key='sound_on', value=st.session_state.get('sound_on', True))
             # Contact Support (expands inline)
@@ -2216,7 +2216,7 @@ def display_game():
     # Show rules if toggled
     if st.session_state.get('show_rules', False):
         st.info("""
-        **How to Play:**\n- Guess the word by revealing letters.\n- Use hints or ask yes/no questions.\n- In Beat mode, solve as many words as possible before time runs out!\n- Use the menu to skip, reveal, or change category.\n- Personal: profile‑aware category that may show “Generating personal hints…” and a Retry button until 3+ hints are ready.\n        """)
+        **How to Play:**\n- Guess the word by revealing letters.\n- Use hints or ask yes/no questions.\n- In Beat mode, solve as many words as possible before time runs out!\n- Use the menu to skip, reveal, or change category.\n- Personal: profile‑aware category that may show "Generating personal hints…" and a Retry button until 3+ hints are ready.\n        """)
 
     # Handle change category
     if st.session_state.get('change_category', False):
@@ -2278,6 +2278,53 @@ def display_game():
         elapsed = int(_time.time() - st.session_state['beat_start_time'])
         time_left = max(0, BEAT_MODE_TIMEOUT_SECONDS - elapsed)
         st.session_state['beat_time_left'] = time_left
+        # Idle tracking on start screen (before Beat begins)
+        if not st.session_state.get('beat_started', False):
+            now_idle = _time.time()
+            if 'start_idle_at' not in st.session_state:
+                st.session_state['start_idle_at'] = now_idle
+            idle_elapsed = int(now_idle - st.session_state.get('start_idle_at', now_idle))
+            try:
+                _idle_logout = int(os.getenv('INACTIVITY_LOGOUT_SECONDS', '0'))
+            except Exception:
+                _idle_logout = 0
+            # Trigger the Time Over panel if idle has exceeded the Beat time budget
+            try:
+                _panel_after = int(os.getenv('TIME_OVER_PANEL_SECONDS', os.getenv('BEAT_MODE_TIME', str(BEAT_MODE_TIMEOUT_SECONDS))))
+            except Exception:
+                _panel_after = BEAT_MODE_TIMEOUT_SECONDS
+            if idle_elapsed >= _panel_after and not st.session_state.get('time_over', False):
+                st.session_state['time_over'] = True
+                st.session_state['time_over_at'] = now_idle
+            # Auto-logout if idle exceeds configured limit: clear immediately
+            if _idle_logout > 0 and idle_elapsed >= _idle_logout:
+                keys_to_keep = ['users']
+                for key in list(st.session_state.keys()):
+                    if key not in keys_to_keep:
+                        del st.session_state[key]
+                st.rerun()
+            # Ensure periodic refresh while on start screen so timers can advance
+            try:
+                _raw = int(os.getenv('INACTIVITY_REFRESH_MS', '5000'))
+            except Exception:
+                _raw = 5000
+            # Minimum refresh 2000ms to guarantee timer progression
+            _ms = max(2000, (_raw if _raw >= 1000 else _raw * 1000))
+            # Optional debug of idle (disabled)
+            # try:
+            #     if os.getenv('DEBUG_IDLE', '').strip().lower() in ('1','true','yes','on'):
+            #         st.caption(f"DEBUG IDLE: idle_elapsed={idle_elapsed}s, start_idle_at={int(st.session_state.get('start_idle_at', 0))}, panel_after={_panel_after}s, idle_logout={_idle_logout}s, refresh_ms={_ms}")
+            # except Exception:
+            #     pass
+            st.markdown(f"""
+            <script>
+            (function(){{
+              if (window && window.setTimeout) {{
+                window.setTimeout(function(){{ window.location.reload(); }}, {_ms});
+              }}
+            }})();
+            </script>
+            """, unsafe_allow_html=True)
         # Time is up: if game already started, finalize to Game Over; otherwise show idle Time Over panel
         if time_left <= 0:
             st.session_state['beat_time_left'] = 0
@@ -2376,10 +2423,36 @@ def display_game():
                 or 'Player'
             )
             _start_label = f"{_uname} .. Click to Start Game"
-            if st.button(_start_label, key='beat_start_btn'):
+            # If session already expired due to idle, block the button and offer logout
+            _idle_block = bool(st.session_state.get('session_expired'))
+            if _idle_block:
+                st.warning('Session expired due to inactivity. Please log in again.')
+                if st.button('Log In', key='btn_login_redirect'):
+                    keys_to_keep = ['users']
+                    for key in list(st.session_state.keys()):
+                        if key not in keys_to_keep:
+                            del st.session_state[key]
+                    st.rerun()
+            elif st.button(_start_label, key='beat_start_btn'):
+                # If user was idle too long on start screen, force logout instead of starting
+                try:
+                    _idle_limit = int(os.getenv('INACTIVITY_LOGOUT_SECONDS', '0'))
+                except Exception:
+                    _idle_limit = 0
+                try:
+                    _idle_elapsed = (_time.time() - float(st.session_state.get('start_idle_at', _time.time())))
+                except Exception:
+                    _idle_elapsed = 0
+                if _idle_limit > 0 and _idle_elapsed >= _idle_limit:
+                    keys_to_keep = ['users']
+                    for key in list(st.session_state.keys()):
+                        if key not in keys_to_keep:
+                            del st.session_state[key]
+                    st.rerun()
                 # Clear any lingering time-over flags before (re)starting timer
                 st.session_state.pop('time_over', None)
                 st.session_state.pop('time_over_at', None)
+                st.session_state.pop('start_idle_at', None)
                 st.session_state['beat_started'] = True
                 st.session_state['beat_start_time'] = _time.time()
                 st.rerun()
@@ -2691,6 +2764,21 @@ def display_game():
     if st.session_state.get('time_over') and not st.session_state.get('beat_started', False):
         # Auto-logout after inactivity window (defaults to BEAT_MODE_TIME seconds)
         try:
+            # Periodically refresh this panel so inactivity timer can elapse without user actions (JS only)
+            try:
+                _raw = int(os.getenv('INACTIVITY_REFRESH_MS', '2000'))
+            except Exception:
+                _raw = 2000
+            _ms = _raw if _raw >= 1000 else _raw * 1000
+            st.markdown(f"""
+            <script>
+            (function(){{
+              if (window && window.setTimeout) {{
+                window.setTimeout(function(){{ window.location.reload(); }}, {_ms});
+              }}
+            }})();
+            </script>
+            """, unsafe_allow_html=True)
             _now = _time.time()
             _started = float(st.session_state.get('time_over_at', _now))
             _idle_limit = int(os.getenv('INACTIVITY_LOGOUT_SECONDS', os.getenv('BEAT_MODE_TIME', '300')))
