@@ -2296,11 +2296,10 @@ def display_game():
                                 existing_words = [it.get('word') for it in current_pool]
                             else:
                                 attempts += 1
-                        if len(current_pool) < len(existing) + batch_size:
-                            st.error('Could not prepare enough personal words. Please select a different category and try again later.')
-                            st.session_state['change_category'] = False
-                            st.stop()
-                        # Save updated pool
+                        added_total = len(current_pool) - len(existing)
+                        if added_total <= 0:
+                            st.warning('Personal pool not expanded; proceeding with existing items. You can retry later.')
+                        # Save updated pool regardless of how many were added (accept partial/none)
                         st.session_state.game.word_selector.set_user_personal_pool(un, current_pool[:target_total])
             except Exception:
                 st.error('Personal pool generation encountered an issue; please select a different category.')
