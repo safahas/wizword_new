@@ -2278,6 +2278,13 @@ class WordSelector:
     def add_or_update_personal_hint(self, username: str, word: str, hint: str) -> None:
         """Ensure the user's personal_pool contains the word with a hint (update or append)."""
         try:
+            # Skip writes in guest demo mode
+            import streamlit as _st  # type: ignore
+            if _st.session_state.get('guest_mode'):
+                return
+        except Exception:
+            pass
+        try:
             from backend import bio_store
             pool = bio_store.get_personal_pool(username)
             updated = False

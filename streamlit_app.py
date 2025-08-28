@@ -1204,11 +1204,15 @@ def display_login():
                 username = st.text_input(" ", key="login_username", placeholder="Username")
                 password = st.text_input(" ", type="password", key="login_password", placeholder="Password")
                 st.markdown("<div class='auth-spacer'></div>", unsafe_allow_html=True)
-                # Primary action
+                # Primary action + Guest demo
                 with st.container():
                     with st.container():
-                        login_btn = st.form_submit_button("Sign In", use_container_width=True)
-                                # Secondary actions
+                        col_login, col_guest = st.columns([2,1])
+                        with col_login:
+                            login_btn = st.form_submit_button("Sign In", use_container_width=True)
+                        with col_guest:
+                            guest_btn = st.form_submit_button("Try as Guest", use_container_width=True)
+                # Secondary actions
                 st.markdown("<div class='auth-sep'></div>", unsafe_allow_html=True)
                 c1, c2 = st.columns(2)
                 with c1:
@@ -1232,6 +1236,17 @@ def display_login():
                     st.session_state['login_error'] = "Invalid username or password."
                     st.session_state['login_failed'] = True
                     st.rerun()
+            # Guest demo mode (no writes)
+            if 'guest_btn' in locals() and guest_btn:
+                st.session_state['user'] = {
+                    'username': 'guest',
+                    'email': '',
+                    'default_category': 'general'
+                }
+                st.session_state['logged_in'] = True
+                st.session_state['auth_mode'] = 'login'
+                st.session_state['guest_mode'] = True
+                st.rerun()
             # Reset the login_failed flag after displaying the error
             if st.session_state.get('login_failed', False):
                 st.session_state['login_failed'] = False
@@ -1285,6 +1300,10 @@ def display_login():
             u_edu = (education or "").strip()
             u_bio = (bio or "").strip()
             new_username_lower = u_name.lower()
+            # Reserved username guard first
+            if new_username_lower == 'guest':
+                st.error("Username 'guest' is reserved for demo access. Please choose a different username.")
+                st.stop()
             # Per-field validation
             missing = []
             if not u_name: missing.append("username")
@@ -1303,6 +1322,8 @@ def display_login():
                     st.error("Please enter a valid email address (e.g., name@example.com).")
                 elif u_pass != (confirm_password or "").strip():
                     st.error("Passwords do not match.")
+                elif new_username_lower == 'guest':
+                    st.error("Username 'guest' is reserved for demo access. Please choose a different username.")
                 elif new_username_lower in users:
                     st.error("Username already exists.")
                 elif any((u.get('email') or '').lower() == u_email.lower() for u in users.values()):
@@ -4419,6 +4440,10 @@ AGGREGATES_PATH = os.environ.get('AGGREGATES_PATH', 'game_data/aggregates.json')
 
 def save_game_to_user_profile(game_summary):
     import os, json
+    import streamlit as st
+    # Skip writes entirely in guest mode
+    if st.session_state.get('guest_mode'):
+        return
     game_file = GAME_RESULTS_PATH
     # Ensure timestamp exists
     if 'timestamp' not in game_summary:
