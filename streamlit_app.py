@@ -1248,6 +1248,7 @@ def display_login():
             if not _re.match(r"^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$", _entered_email):
                 st.warning("Please enter a valid email address (e.g., name@example.com).")
         new_password = st.text_input("Choose a password", type="password", key="register_password")
+        confirm_password = st.text_input("Re-enter password", type="password", key="register_password_confirm")
         # Add compulsory birthday and education fields
         import datetime
         min_birthday = datetime.date(1900, 1, 1)
@@ -1289,6 +1290,7 @@ def display_login():
             if not u_name: missing.append("username")
             if not u_email: missing.append("email")
             if not u_pass: missing.append("password")
+            if not (confirm_password or "").strip(): missing.append("confirm password")
             if not birthday: missing.append("birthday")
             if not u_edu: missing.append("education")
             if missing:
@@ -1299,6 +1301,8 @@ def display_login():
                 email_ok = bool(_re.match(r"^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$", u_email))
                 if not email_ok:
                     st.error("Please enter a valid email address (e.g., name@example.com).")
+                elif u_pass != (confirm_password or "").strip():
+                    st.error("Passwords do not match.")
                 elif new_username_lower in users:
                     st.error("Username already exists.")
                 elif any((u.get('email') or '').lower() == u_email.lower() for u in users.values()):
