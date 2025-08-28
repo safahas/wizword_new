@@ -43,7 +43,25 @@ def update_user_record(username: str, updates: Dict[str, Any]) -> None:
 
 def get_bio(username: str) -> str:
     rec = get_user_record(username)
-    return str(rec.get('bio') or '')
+    bio = str(rec.get('bio') or '')
+    if bio:
+        return bio
+    # Fallback: attempt to import from users.json once if missing
+    try:
+        users_file = os.getenv('USERS_FILE', 'users.json')
+        if os.path.exists(users_file):
+            import json as _json
+            with open(users_file, 'r', encoding='utf-8') as f:
+                users = _json.load(f)
+            key = (username or '').lower()
+            if isinstance(users, dict) and key in users and isinstance(users[key], dict):
+                legacy_bio = users[key].get('bio')
+                if legacy_bio:
+                    set_bio(username, legacy_bio)
+                    return str(legacy_bio)
+    except Exception:
+        pass
+    return ''
 
 
 def set_bio(username: str, bio: str) -> None:

@@ -2265,10 +2265,19 @@ def display_game():
                         # Load existing pool and compute avoidance list
                         existing = st.session_state.game.word_selector.get_user_personal_pool(un)
                         existing_words = [it.get('word') for it in existing]
-                        target_total = 60
-                        batch_size = 10
+                        try:
+                            target_total = int(os.getenv('PERSONAL_POOL_MAX', '60'))
+                        except Exception:
+                            target_total = 60
+                        try:
+                            batch_size = int(os.getenv('PERSONAL_POOL_BATCH_SIZE', '10'))
+                        except Exception:
+                            batch_size = 10
                         attempts = 0
-                        max_attempts = 3
+                        try:
+                            max_attempts = int(os.getenv('PERSONAL_POOL_API_ATTEMPTS', '3'))
+                        except Exception:
+                            max_attempts = 3
                         current_pool = list(existing)
                         while len(current_pool) < target_total and attempts < max_attempts:
                             pool = st.session_state.game.word_selector.generate_personal_pool(un, n=batch_size, avoid=existing_words)

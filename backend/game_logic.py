@@ -26,6 +26,17 @@ class GameLogic:
         self.original_subject = subject
         self.mode = mode
         self.nickname = nickname
+        # Derive account username from Streamlit session if available
+        self.account_username = None
+        try:
+            import streamlit as st  # type: ignore
+            self.account_username = (st.session_state.get('user') or {}).get('username') or None
+        except Exception:
+            self.account_username = None
+
+        def _pool_username() -> str:
+            return (self.account_username or self.nickname or "global")
+        self._pool_username = _pool_username
         self.score = initial_score
         self.difficulty = difficulty
         self.difficulty_settings = {
@@ -37,6 +48,9 @@ class GameLogic:
         # For Beat mode, always limit hints to 3
         if self.mode == "Beat":
             self.current_settings["max_hints"] = 3
+        # If Personal category, limit to 1 hint per word
+        if str(self.subject).lower() == 'personal':
+            self.current_settings["max_hints"] = 1
         self.total_points = 0
         # New: track only penalty points (sum of absolute negative deductions)
         self.total_penalty_points = 0
@@ -50,56 +64,109 @@ class GameLogic:
         self.guesses_made = 0
         self.show_word_penalty_applied = False
         try:
-            # Instead of selecting a word without username, always use nickname for recent word tracking
-            username = self.nickname if self.nickname else "global"
+            # Use account username if available for per-user tracking, else nickname, else 'global'
+            username = self._pool_username()
             
             self.selected_word = self.word_selector.select_word(word_length, subject, username=username)
             
             if not self.selected_word:
                 raise ValueError("Failed to select a word")
             all_hints = []
-            try:
-                hints_file = os.path.join('backend', 'data', 'hints.json')
-                logger.info(f"Looking for hints in: {hints_file}")
-                # Remove forced mapping of tech/movies/music/brands/history to general for hint lookup
-                # if subject in ["tech", "movies", "music", "brands", "history"]:
-                #     subject = "general"
-                with open(hints_file, 'r', encoding='utf-8') as f:
-                    hints_data = json.load(f)
-                    # Try the original subject first (case-insensitive against hints.json keys)
-                    lookup_subject = subject
-                    templates = hints_data.get("templates", {})
-                    ci_key_map = {k.lower(): k for k in templates.keys()}
-                    subject_key = ci_key_map.get(str(lookup_subject).lower())
-                    general_key = ci_key_map.get("general") if "general" in ci_key_map else "general"
-                    if subject_key and self.selected_word in templates.get(subject_key, {}):
-                        logger.info(f"Found hints in hints.json for '{self.selected_word}' in category '{subject_key}'")
-                        all_hints = templates[subject_key][self.selected_word]
-                        logger.info(f"Using {len(all_hints)} hints from hints.json")
-                    elif general_key and self.selected_word in templates.get(general_key, {}):
-                        logger.info(f"Falling back to 'general' for hints for '{self.selected_word}'")
-                        all_hints = templates[general_key][self.selected_word]
-                        logger.info(f"Using {len(all_hints)} hints from hints.json (general)")
-                    else:
-                        logger.warning(f"Word '{self.selected_word}' not found in hints.json templates for category '{lookup_subject}' or 'general'")
-            except FileNotFoundError:
-                logger.warning(f"hints.json file not found at {hints_file}")
-            except json.JSONDecodeError:
-                logger.warning("Error decoding hints.json")
-            except Exception as e:
-                logger.warning(f"Error reading hints.json: {e}")
+            # For 'Personal' category, prefer API-generated hints and skip hints.json lookup
+            if str(self.original_subject).lower() != 'personal':
+                try:
+                    hints_file = os.path.join('backend', 'data', 'hints.json')
+                    logger.info(f"Looking for hints in: {hints_file}")
+                    with open(hints_file, 'r', encoding='utf-8') as f:
+                        hints_data = json.load(f)
+                        # Try the original subject first (case-insensitive against hints.json keys)
+                        lookup_subject = subject
+                        templates = hints_data.get("templates", {})
+                        ci_key_map = {k.lower(): k for k in templates.keys()}
+                        subject_key = ci_key_map.get(str(lookup_subject).lower())
+                        general_key = ci_key_map.get("general") if "general" in ci_key_map else "general"
+                        if subject_key and self.selected_word in templates.get(subject_key, {}):
+                            logger.info(f"Found hints in hints.json for '{self.selected_word}' in category '{subject_key}'")
+                            all_hints = templates[subject_key][self.selected_word]
+                            logger.info(f"Using {len(all_hints)} hints from hints.json")
+                        elif general_key and self.selected_word in templates.get(general_key, {}):
+                            logger.info(f"Falling back to 'general' for hints for '{self.selected_word}'")
+                            all_hints = templates[general_key][self.selected_word]
+                            logger.info(f"Using {len(all_hints)} hints from hints.json (general)")
+                        else:
+                            logger.warning(f"Word '{self.selected_word}' not found in hints.json templates for category '{lookup_subject}' or 'general'")
+                except FileNotFoundError:
+                    logger.warning(f"hints.json file not found at {hints_file}")
+                except json.JSONDecodeError:
+                    logger.warning("Error decoding hints.json")
+                except Exception as e:
+                    logger.warning(f"Error reading hints.json: {e}")
             if not all_hints:
                 # Use API-generated hints if available, otherwise fallback
-                api_hints = self.word_selector.get_api_hints(self.selected_word, subject, n=self.current_settings["max_hints"])
+                api_hints = getattr(self.word_selector, "_last_api_hints", None)
+                if api_hints:
+                    logger.info("[HINT REQUEST] Using cached API hints from WordSelector")
+                    self.word_selector._last_api_hints = None
+                else:
+                    if str(self.original_subject).lower() == 'personal':
+                        # Try user-specific pool first (one hint)
+                        pool = self.word_selector.get_user_personal_pool(self._pool_username())
+                        hint_from_pool = None
+                        try:
+                            if pool:
+                                matched = next((it for it in pool if str(it.get('word','')).lower() == str(self.selected_word or '').lower()), None)
+                                if matched and matched.get('hint'):
+                                    hint_from_pool = matched['hint']
+                                elif pool[0].get('hint'):
+                                    hint_from_pool = pool[0]['hint']
+                        except Exception:
+                            hint_from_pool = None
+                        if hint_from_pool:
+                            all_hints = [hint_from_pool]
+                        else:
+                            api_hints = self.word_selector.get_api_hints_force(self.selected_word, 'personal', n=1)
+                    else:
+                        api_hints = self.word_selector.get_api_hints(self.selected_word, subject, n=self.current_settings["max_hints"])
                 if api_hints:
                     all_hints = api_hints
                     logger.info(f"[HINT REQUEST] Using {len(all_hints)} API-generated hints for '{self.selected_word}'")
-                else:
-                    all_hints = [f"This {subject} term has specific characteristics"] * self.current_settings["max_hints"]
+                    # Persist first hint into user's personal pool for future runs
+                    try:
+                        first_hint = str(all_hints[0]) if isinstance(all_hints, list) and all_hints else None
+                        if first_hint and str(self.original_subject).lower() == 'personal':
+                            self.word_selector.add_or_update_personal_hint(self._pool_username(), self.selected_word, first_hint)
+                    except Exception:
+                        pass
+                if not all_hints:
+                    fallback_hint = (
+                        f"This {subject} term has specific characteristics"
+                        if str(self.original_subject).lower() != 'personal'
+                        else "This Personal term has specific characteristics"
+                    )
+                    all_hints = [fallback_hint] * self.current_settings["max_hints"]
                     logger.warning(f"[HINT REQUEST] Using fallback hints for '{self.selected_word}'")
+            # Sanitize and de-duplicate hints (do not reveal the word itself)
+            def _mask_word_in_hint(h: str, word: str) -> str:
+                try:
+                    if not h or not word:
+                        return h
+                    letters = ''.join([c for c in (word or '') if c.isalpha()])
+                    if not letters:
+                        return h
+                    import re as _re
+                    pat = _re.compile(rf"\b{_re.escape(letters)}\b", _re.IGNORECASE)
+                    if pat.search(h):
+                        return pat.sub('[redacted]', h)
+                    return h
+                except Exception:
+                    return h
+            safe_hints = []
+            for h in (all_hints or []):
+                m = _mask_word_in_hint(str(h), str(self.selected_word or ''))
+                if m and m not in safe_hints:
+                    safe_hints.append(m)
+            all_hints = safe_hints
             logger.info(f"Generated {len(all_hints)} total hints for word '{self.selected_word}'")
-            # Deduplicate all_hints
-            all_hints = list(dict.fromkeys(all_hints))
             self.available_hints = all_hints[:self.current_settings["max_hints"]]
             logger.info(f"Using {len(self.available_hints)} hints for '{self.selected_word}'")
         except Exception as e:
@@ -211,7 +278,7 @@ class GameLogic:
             message = f"Correct! You guessed the word '{self.selected_word}'. Current score: {self.score}"
             # Mark word as played to update recent list (avoid repeats per user+category)
             try:
-                username = self.nickname if self.nickname else "global"
+                username = self._pool_username()
                 self.word_selector.mark_word_played(self.selected_word, username, self.subject)
             except Exception:
                 pass
@@ -334,7 +401,7 @@ class GameLogic:
                     self.total_penalty_points += abs(penalty)
                 self.show_word_penalty_applied = True
                 # Mark the word as played (add to recent list)
-                username = self.nickname if self.nickname else "global"
+                username = self._pool_username()
                 self.word_selector.mark_word_played(self.selected_word, username, self.subject)
             else:
                 penalty = 0  # No penalty if already applied
