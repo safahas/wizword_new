@@ -2239,6 +2239,46 @@ def display_game():
             if not _enable_personal and str(new_category).lower() == 'personal':
                 st.warning("Personal category is currently disabled by admin settings. Using 'General' instead.")
                 new_category = 'general'
+            # If switching to Personal, pre-generate personal pool (20 words, 1 hint each) per user
+            try:
+                if str(new_category).lower() == 'personal':
+                    with st.spinner('Preparing your personal word pool...'):
+                        un = (st.session_state.get('user') or {}).get('username') or ''
+                        # Load existing pool and compute avoidance list
+                        existing = st.session_state.game.word_selector.get_user_personal_pool(un)
+                        existing_words = [it.get('word') for it in existing]
+                        target_total = 60
+                        batch_size = 10
+                        attempts = 0
+                        max_attempts = 3
+                        current_pool = list(existing)
+                        while len(current_pool) < target_total and attempts < max_attempts:
+                            pool = st.session_state.game.word_selector.generate_personal_pool(un, n=batch_size, avoid=existing_words)
+                            if pool:
+                                # Merge new items, avoiding duplicates
+                                seen = { (it.get('word') or '').lower() for it in current_pool }
+                                added = 0
+                                for it in pool:
+                                    w = (it.get('word') or '').lower()
+                                    if w and w not in seen:
+                                        current_pool.append(it)
+                                        seen.add(w)
+                                        added += 1
+                                if added == 0:
+                                    attempts += 1
+                                existing_words = [it.get('word') for it in current_pool]
+                            else:
+                                attempts += 1
+                        if len(current_pool) < len(existing) + batch_size:
+                            st.error('Could not prepare enough personal words. Please select a different category and try again later.')
+                            st.session_state['change_category'] = False
+                            st.stop()
+                        # Save updated pool
+                        st.session_state.game.word_selector.set_user_personal_pool(un, current_pool[:target_total])
+            except Exception:
+                st.error('Personal pool generation encountered an issue; please select a different category.')
+                st.session_state['change_category'] = False
+                st.stop()
             game = st.session_state.game
             # Reset time-over flags when changing category starts a new game
             st.session_state.pop('time_over', None)
@@ -2930,39 +2970,11 @@ def display_game():
         content = letter.upper() if is_revealed else "_"
         boxes.append(f"<span style='{style}'>{content}</span>")
     st.markdown(f"<div style='display:flex;flex-direction:row;justify-content:center;gap:0.2em;margin-bottom:1.2em;'>{''.join(boxes)}</div>", unsafe_allow_html=True)
-    # If Personal category and not enough hints yet, block and fetch
+    # Personal category: do not auto-fetch more hints. One pre-generated hint per word.
     try:
         game = st.session_state.game
         if str(getattr(game, 'original_subject', game.subject)).lower() == 'personal':
-            needed = 3
-            have = len(getattr(game, 'available_hints', []) or [])
-            if have < needed:
-                with st.spinner('Generating personal hints…'):
-                    import time as _t
-                    deadline = _t.time() + 15  # allow up to 15s of retries
-                    while have < needed and _t.time() < deadline:
-                        try:
-                            api_hints = game.word_selector.get_api_hints_force(game.selected_word, 'personal', n=needed)
-                            api_hints = list(dict.fromkeys((api_hints or [])[:needed]))
-                            if api_hints:
-                                # Merge into available_hints
-                                merged = list(dict.fromkeys((getattr(game, 'available_hints', []) or []) + api_hints))
-                                game.available_hints = merged[:max(needed, len(merged))]
-                                have = len(game.available_hints)
-                                if have >= needed:
-                                    break
-                        except Exception:
-                            pass
-                        _t.sleep(1.0)
-                have = len(getattr(game, 'available_hints', []) or [])
-                if have < needed:
-                    st.warning('Could not generate enough personal hints. You can retry.')
-                    if st.button('Retry generating hints', key='retry_personal_hints'):
-                        st.session_state['retry_personal_hints'] = True
-                        st.rerun()
-            elif st.session_state.pop('retry_personal_hints', False):
-                # Clear flag if hints are now sufficient
-                pass
+            pass
     except Exception:
         pass
     # Ensure no separate skipped word text is shown below Skip button
