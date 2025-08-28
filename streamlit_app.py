@@ -1208,7 +1208,10 @@ def display_login():
             unsafe_allow_html=True,
         )
 
-        # Show error if present (ALWAYS before the form)
+        # Show transient info and errors (ALWAYS before the form)
+        _login_info = st.session_state.pop('login_info_message', None)
+        if _login_info:
+            st.info(_login_info)
         if st.session_state.get('login_error'):
             st.error(st.session_state['login_error'])
         with st.form("login_form", clear_on_submit=False):
@@ -3764,9 +3767,12 @@ def display_game_over(game_summary):
     """, unsafe_allow_html=True)
     # If exceeded inactivity threshold, clear session and return to login
     if (now_ts - last_ts) >= inactivity_secs:
+        msg = 'Session expired due to inactivity.'
         st.session_state.clear()
-        st.info('Session expired due to inactivity.')
-        st.stop()
+        st.session_state['auth_mode'] = 'login'
+        st.session_state['logged_in'] = False
+        st.session_state['login_info_message'] = msg
+        st.rerun()
     # (Block displaying last_word at the top for Beat mode has been deleted)
 
     # Show last chosen word in Beat mode
