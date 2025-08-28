@@ -11,6 +11,8 @@ WizWord is an AI-powered word guessing game where players try to guess a hidden 
 - Local and cloud storage support
 - Mobile and desktop friendly UI
 - New: Category Top SEI achievements with email + share card + in‑app celebration
+- Registration with password confirmation
+- Guest demo mode (Try as Guest) — no data is written to user files
 
 ## Setup
 
@@ -63,6 +65,14 @@ streamlit run streamlit_app.py
 
 ## How to Play
 ### Personal Category (profile‑aware)
+
+## Authentication & Guest Demo
+
+- Registration requires: username, valid email, birthday, education, password, and password confirmation.
+- The username 'guest' is reserved for demo access and cannot be registered.
+- Login page includes a "Try as Guest" button to explore the app without creating an account.
+  - In guest mode, the app avoids writing to user data files (e.g., `users.json`, `users_bio.json`, `game_results.json`).
+  - Use this for safe demos without leaving any persistent user data.
 
 - When you choose **Personal**, the game uses your profile Bio (bio‑only, not other fields) from `users_bio.json` to request personally relevant words and hints.
 - If API calls fail or are disabled, Personal falls back to a deterministic offline generator that samples from your Bio with allow/deny lists and relevance scoring.

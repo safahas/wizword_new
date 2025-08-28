@@ -1064,6 +1064,7 @@ def display_login():
         - Click Start to begin  or change word category , pick 'any' for a random challenge.
         - Ask yes/no questions or request hints to help you guess the word.
         - Enter your guess at any time.
+        - Want to explore without an account? Use the **Try as Guest** button on the login form (no data is saved).
         **Beat Mode Details:**
         - You have {int(os.getenv('BEAT_MODE_TIME', 300))} seconds to play.
         - For each word, you can:
@@ -1101,10 +1102,23 @@ def display_login():
         # Quick access Create Account button above the login card
         c_top = st.columns([1,1,1])
         with c_top[1]:
-            if st.button("Create Account", key="create_account_top"):
-                st.session_state['auth_mode'] = 'register'
-                st.session_state['login_error'] = ""
-                st.rerun()
+            col_left, col_right = st.columns([1,1])
+            with col_left:
+                if st.button("Create Account", key="create_account_top"):
+                    st.session_state['auth_mode'] = 'register'
+                    st.session_state['login_error'] = ""
+                    st.rerun()
+            with col_right:
+                if st.button("Try as Guest", key="try_guest_top"):
+                    st.session_state['user'] = {
+                        'username': 'guest',
+                        'email': '',
+                        'default_category': 'general'
+                    }
+                    st.session_state['logged_in'] = True
+                    st.session_state['auth_mode'] = 'login'
+                    st.session_state['guest_mode'] = True
+                    st.rerun()
         # Tighten spacing below the top button
         st.markdown("""
         <style>
