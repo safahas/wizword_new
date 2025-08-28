@@ -3744,6 +3744,29 @@ def display_game_over(game_summary):
         or 'Player'
     )
     st.markdown(f"## 🎉 Game Over .. {_uname_go}")
+    # Auto-logout on inactivity while on Game Over page
+    try:
+        inactivity_secs = int(os.getenv('INACTIVITY_LOGOUT_SECONDS', '600'))
+    except Exception:
+        inactivity_secs = 600
+    # Track last interaction time stamp
+    now_ts = _time.time() if ' _time' in globals() else __import__('time').time()
+    last_ts = st.session_state.get('_game_over_last_interaction', now_ts)
+    if '_game_over_last_interaction' not in st.session_state:
+        st.session_state['_game_over_last_interaction'] = now_ts
+    # Lightweight auto-refresh to count idle time
+    st.markdown(f"""
+    <script>
+    (function(){{
+      setTimeout(function(){{ location.reload(); }}, 1000);
+    }})();
+    </script>
+    """, unsafe_allow_html=True)
+    # If exceeded inactivity threshold, clear session and return to login
+    if (now_ts - last_ts) >= inactivity_secs:
+        st.session_state.clear()
+        st.info('Session expired due to inactivity.')
+        st.stop()
     # (Block displaying last_word at the top for Beat mode has been deleted)
 
     # Show last chosen word in Beat mode
