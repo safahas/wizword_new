@@ -64,12 +64,13 @@ streamlit run streamlit_app.py
 ## How to Play
 ### Personal Category (profile‑aware)
 
-- When you choose **Personal**, the game uses your profile (Bio, Occupation, Education, Address in `users.json`) to ask the LLM for a single, personally relevant noun and a set of tailored hints.
-- With `BYPASS_API_WORD_SELECTION=true`, all other categories use the local dictionary, but Personal still calls the LLM.
-- Hint generation behavior:
-  - The UI blocks with “Generating personal hints…” and retries for up to ~15 seconds until at least 3 hints are available.
-  - If it can’t obtain 3 hints in time, you’ll see a clear warning and a “Retry generating hints” button to try again without losing the current word.
-  - If the LLM returns hints with the word selection, those are used immediately.
+- When you choose **Personal**, the game uses your profile Bio (bio‑only, not other fields) from `users_bio.json` to request personally relevant words and hints.
+- If API calls fail or are disabled, Personal falls back to a deterministic offline generator that samples from your Bio with allow/deny lists and relevance scoring.
+- With `BYPASS_API_WORD_SELECTION=true`, all other categories use the local dictionary; Personal still attempts the API and falls back offline as needed.
+- Hint experience for Personal:
+  - Personal words show only 1 hint per word.
+  - If a contextual hint isn’t available, a helpful fallback like “Starts with ‘X’” is used.
+  - The UI blocks with “Generating personal hints…” and retries until at least 3 hints exist for the current non‑Personal words (general hint system). If it can’t, a warning and a Retry button are shown.
 
 Note on admin control:
 - You can disable the Personal category across the app by setting `ENABLE_PERSONAL_CATEGORY=false` in `.env` and restarting the app.
@@ -217,6 +218,66 @@ word_guess_contest_ai/
 ├── requirements.txt                  # Dependencies
 └── README.md                         # This file
 ```
+
+## Personal Pool (Bio‑only)
+
+- Storage: `users_bio.json` (see Data Files). The file is auto‑created on first access if missing.
+- Source: Only tokens from the user’s Bio are considered. Occupation/Education/Address are not used for pool selection.
+- Size and top‑ups:
+  - Target size is configurable via `.env` (`PERSONAL_POOL_MAX`, default 60).
+  - When entering Personal, the app auto‑tops up in batches until the pool reaches the target size, avoiding duplicates.
+  - Batch size and API attempt limits are configurable.
+- API vs Offline:
+  - API is attempted first (unless no/invalid key), with robust JSON repair.
+  - If API returns fewer than requested items, partial results are kept and only the remainder is requested on subsequent retries.
+  - If still short, the offline generator fills the remainder.
+- Biasing and filtering:
+  - Deny‑lists remove generic tokens (e.g., “have”, “since”, numbers, common verbs like “watch”).
+  - Name‑to‑role mapping requires proper capitalization in Bio (e.g., “Zina”).
+  - Location terms from the Bio (e.g., “San Jose”, “Almaden”) map to “Related to where you live.”
+- Hints:
+  - Contextual one‑liners are generated from Bio; otherwise fallback to first‑letter hints.
+  - Generic “Related to your profile” hints are avoided and cleaned via a migration.
+
+### Environment Variables (Personal Pool)
+
+Add these to `.env` as needed:
+
+```env
+# Personal pool knobs
+PERSONAL_POOL_MAX=60              # Max items per user pool
+PERSONAL_POOL_BATCH_SIZE=10       # Items requested per top‑up
+PERSONAL_POOL_API_ATTEMPTS=3      # Consecutive API retries per top‑up
+
+# Enable/disable Personal in UI and logic
+ENABLE_PERSONAL_CATEGORY=true
+
+# Optional: bypass API for non‑Personal categories
+BYPASS_API_WORD_SELECTION=true
+
+# Paths
+USERS_BIO_FILE=users_bio.json
+```
+
+## Data Files
+
+- `users.json`: authentication and non‑bio profile basics (e.g., username, email, counters).
+- `users_bio.json`: stores per‑user `bio` and `personal_pool` only. Auto‑created on first access.
+- `game_results.json`: append‑only game logs.
+- `game_data/aggregates.json`: derived stats for UI.
+
+## Migrations
+
+- Split bio/pool out of users.json:
+  - `python backend/migrations/split_users_bio.py`
+  - Moves `bio` and `personal_pool` to `users_bio.json` and strips them from `users.json`.
+- Rewrite generic personal hints to clearer ones:
+  - `python backend/migrations/rewrite_personal_hints.py`
+  - Rewrites “From your bio”/generic hints to contextual or first‑letter hints; also removes generic tokens.
+
+Notes:
+- Fresh deployments: `users_bio.json` is created automatically when first accessed.
+- Personal pool capacity guard prevents API calls once the pool reaches `PERSONAL_POOL_MAX`.
 
 ## Contributing
 

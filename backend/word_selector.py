@@ -2081,12 +2081,26 @@ class WordSelector:
         self._recently_used_words_by_user = {}
         self._max_recent_words = int(os.getenv("RECENT_WORDS_LIMIT", "50"))  # Set by .env or default to 50
 
+        # Personal pool env knobs
+        try:
+            self.personal_pool_max = int(os.getenv("PERSONAL_POOL_MAX", "60"))
+        except Exception:
+            self.personal_pool_max = 60
+        try:
+            self.personal_pool_batch_size = int(os.getenv("PERSONAL_POOL_BATCH_SIZE", "10"))
+        except Exception:
+            self.personal_pool_batch_size = 10
+        try:
+            self.personal_pool_api_attempts = int(os.getenv("PERSONAL_POOL_API_ATTEMPTS", "3"))
+        except Exception:
+            self.personal_pool_api_attempts = 3
+
         # Check for .env variable to bypass API word selection
         self.bypass_api_word_selection = os.getenv("BYPASS_API_WORD_SELECTION", "false").lower() == "true"
         logger.info(f"BYPASS_API_WORD_SELECTION is set to: {self.bypass_api_word_selection}")
         if self.bypass_api_word_selection:
-            logger.info("Bypassing API for word selection due to BYPASS_API_WORD_SELECTION setting. Using fallback/dictionary only.")
-            self.use_fallback = True
+            logger.info("Bypassing API for word selection due to BYPASS_API_WORD_SELECTION setting. Using fallback/dictionary only (except 'personal').")
+            self.use_fallback = True  # default to fallback
 
         self._api_hint_cache = {}
 
@@ -2095,6 +2109,496 @@ class WordSelector:
         self.fallback_model = os.getenv("OPENROUTER_MODEL_FALLBACK", "openai/gpt-4o")
         # Available models in order of preference (for other uses)
         self.models = [self.primary_model, self.fallback_model]
+
+    def _load_users_db(self) -> dict:
+        try:
+            from streamlit_app import load_users  # local import to avoid cycles
+            users = load_users()
+            return users if isinstance(users, dict) else {}
+        except Exception:
+            return {}
+
+    def _save_users_db(self, users: dict) -> None:
+        try:
+            from streamlit_app import save_users  # local import to avoid cycles
+            if isinstance(users, dict):
+                save_users(users)
+        except Exception:
+            pass
+
+    def _infer_role_for_name(self, word: str, bio_text: str) -> str:
+        try:
+            w = (word or '').strip()
+            if not w:
+                return ''
+            # Reject obvious generic/function words for name inference
+            wl = w.lower()
+            generic = {
+                'have','since','and','the','this','that','these','those','with','without','about','into','onto',
+                'from','by','for','as','at','to','in','of','on','a','an','is','are','was','were','be','been','am',
+                'i','you','your','my','our','their','his','her','it','they','we','me','him','her','them'
+            }
+            if wl in generic:
+                return ''
+            idx = bio_text.lower().find(w.lower())
+            if idx == -1:
+                return ''
+            # Require likely proper name capitalization in original text segment
+            orig_seg = bio_text[idx: idx + len(w)]
+            if not (orig_seg[:1].isupper() and (len(orig_seg) == 1 or not orig_seg[1:].isupper())):
+                # Not titlecased like a proper name → avoid mapping to family role
+                return ''
+            window = bio_text[max(0, idx - 80): idx + 80]
+            if 'wife' in window:
+                return 'your wife'
+            if 'daughter' in window:
+                return 'your daughter'
+            if 'son' in window or 'sons' in window:
+                return 'your son'
+            if 'teacher' in window:
+                return 'a teacher'
+            if 'pharmacist' in window:
+                return 'a pharmacist'
+            if 'marketing' in window:
+                return 'in digital marketing'
+            if 'student' in window:
+                return 'a student'
+            return ''
+        except Exception:
+            return ''
+
+    def _make_profile_hint(self, word: str, rec: dict) -> str:
+        """Create a clearer one-line hint based on profile context rather than a generic label."""
+        try:
+            wl = (word or '').strip().lower()
+            bio_text = str(rec.get('bio') or '')
+            def _first_letter_hint(w: str) -> str:
+                try:
+                    for c in (w or ''):
+                        if c.isalpha():
+                            return f"Starts with '{c.upper()}'"
+                    return "Starts with a letter"
+                except Exception:
+                    return "Starts with a letter"
+            # Early guard for generic tokens
+            generic = {
+                'have','since','and','the','this','that','these','those','with','without','about','into','onto',
+                'from','by','for','as','at','to','in','of','on','a','an','is','are','was','were','be','been','am',
+                'i','you','your','my','our','their','his','her','it','they','we','me','him','her','them'
+            }
+            if wl in generic:
+                return _first_letter_hint(word)
+            # Location first (avoid misclassifying 'Jose')
+            addr_str = str(rec.get('address') or '')
+            if wl in {'almaden','jose','san','california'} or (addr_str and wl in addr_str.lower()):
+                if wl == 'jose' and 'san jose' in (bio_text or '').lower():
+                    return 'Related to where you live'
+                return 'Related to where you live'
+            # Specific token 'high' → prefer first-letter hint to avoid awkward phrasing
+            if wl == 'high':
+                return _first_letter_hint(word)
+            # Named entities from bio (family members)
+            role = self._infer_role_for_name(word, bio_text)
+            if role:
+                if role.startswith('your'):
+                    return f"Name of {role}"
+                return f"Related to {role}"
+            # Occupation keywords
+            if wl in {'engineer','teacher','pharmacist'}:
+                if wl == 'engineer':
+                    return 'Your profession'
+                return 'A family occupation'
+            # Work and apps
+            if wl in {'software','ai','wizword','powered','developing','develop'}:
+                if wl == 'wizword':
+                    return 'An app you develop'
+                if wl == 'ai':
+                    return 'A field you work with'
+                if wl in {'powered'}:
+                    return 'About the AI-powered apps you build'
+                if wl in {'develop','developing'}:
+                    return 'About building apps you work on'
+                return 'Your field of work'
+            # Company / networks
+            if wl in {'juniper','network','networks'}:
+                return 'Related to your previous company'
+            # Location
+            if wl in {'almaden','jose','san'} or (rec.get('address') and wl in rec.get('address','').lower()):
+                return 'Related to where you live'
+            # High-tech phrase
+            if wl == 'high' and 'high tech' in (bio_text or '').lower():
+                return "From 'high tech' in your bio"
+            # Sports
+            if wl in {'soccer','basketball'}:
+                return 'A sport you like to watch'
+            # Family roles
+            if wl in {'wife','daughter','son','sons','family'}:
+                return 'A family relationship'
+            # Education
+            if wl in {'student','study','college','school'}:
+                return 'Tied to education'
+            # Default to a helpful first-letter hint
+            return _first_letter_hint(word)
+        except Exception:
+            return "Starts with a letter"
+
+    def get_user_personal_pool(self, username: str) -> list:
+        # Prefer users_bio.json store
+        try:
+            from backend import bio_store
+            pool = bio_store.get_personal_pool(username)
+        except Exception:
+            users = self._load_users_db()
+            rec = users.get((username or '').lower(), {}) if isinstance(users, dict) else {}
+            pool = rec.get('personal_pool') or []
+        # Normalize to list of {word, hint}
+        norm = []
+        for item in pool:
+            try:
+                w = str(item.get('word', '')).strip()
+                h = str(item.get('hint', '')).strip()
+                if w:
+                    norm.append({'word': w, 'hint': h})
+            except Exception:
+                continue
+        return norm
+
+    def set_user_personal_pool(self, username: str, pool: list) -> None:
+        try:
+            from backend import bio_store
+            bio_store.set_personal_pool(username, pool)
+        except Exception:
+            users = self._load_users_db()
+            key = (username or '').lower()
+            if key not in users or not isinstance(users[key], dict):
+                users[key] = {}
+            users[key]['personal_pool'] = pool
+            self._save_users_db(users)
+
+    def add_or_update_personal_hint(self, username: str, word: str, hint: str) -> None:
+        """Ensure the user's personal_pool contains the word with a hint (update or append)."""
+        try:
+            from backend import bio_store
+            pool = bio_store.get_personal_pool(username)
+            updated = False
+            wl = (word or '').strip().lower()
+            for it in pool:
+                if (it.get('word') or '').strip().lower() == wl:
+                    if hint and hint.strip():
+                        it['hint'] = hint.strip()
+                    updated = True
+                    break
+            if not updated and wl:
+                pool.append({'word': word, 'hint': (hint or '').strip()})
+            bio_store.set_personal_pool(username, pool)
+        except Exception:
+            pass
+
+    def generate_personal_pool(self, username: str, n: int = 10, avoid: list = None) -> list:
+        """Generate a list of personal words with a single hint each for a user.
+        Optionally avoid words already present in the user's pool. When API returns fewer than
+        requested, keep partial results and request only the remainder up to 3 short attempts,
+        then top-up with the offline generator. Filters remove low-value tokens (e.g., 'since', 'have').
+        """
+        # Normalize avoidance set (lowercased words)
+        avoid_set = {str(w).strip().lower() for w in (avoid or []) if str(w).strip()}
+        # Early capacity guard: if pool already at or above 60, do not call API
+        try:
+            existing_pool = self.get_user_personal_pool(username or 'global')
+            if existing_pool and len(existing_pool) >= self.personal_pool_max:
+                logger.info("[PERSONAL] Pool at capacity (>=60); skipping API/offline generation")
+                return []
+        except Exception:
+            pass
+        # If API key is missing/invalid, use offline generator directly
+        if not getattr(self, 'api_key_valid', False) or not getattr(self, 'api_key', None):
+            logger.warning("[PERSONAL] Using offline generator for personal pool (no valid API key)")
+            return self._generate_personal_pool_offline(username, n=n, avoid_set=avoid_set)
+        profile_parts = []
+        try:
+            # Bio-only persona from users_bio.json
+            from backend import bio_store
+            bio_text = bio_store.get_bio(username)
+            if bio_text:
+                profile_parts.append(f"bio: {bio_text.strip()}")
+        except Exception:
+            try:
+                users = self._load_users_db()
+                rec = users.get((username or '').lower(), {})
+                val = (rec.get("bio") or '').strip()
+                if val:
+                    profile_parts.append(f"bio: {val}")
+            except Exception:
+                pass
+        persona = "; ".join(profile_parts) or f"username: {username}"
+        avoid_list = ", ".join(sorted({w for w in (avoid_set or set())}))
+        prompt = (
+            "Generate a JSON array of {n} items for a personal word pool based on this profile: '" + persona + "'. "
+            "Each item must be an object with keys 'word' (single alphanumeric noun) and 'hint' (a short one-line clue). "
+            + (f"Avoid these words: [{avoid_list}]. " if avoid_list else "") +
+            "Return STRICT JSON only (no prose)."
+        )
+        # Build allowed terms from profile tokens (bio-only)
+        def _tok(s: str) -> list:
+            import re
+            return [t.lower() for t in re.findall(r"[A-Za-z0-9]+", s or "") if t]
+        try:
+            from backend import bio_store
+            allowed_terms = set(_tok(bio_store.get_bio(username)))
+        except Exception:
+            allowed_terms = set()
+        
+        def _parse_json_array_safely(raw: str):
+            """Attempt to parse a JSON array from raw text with best-effort repairs.
+            Returns a Python list or [].
+            """
+            import json, re, logging
+            log = logging.getLogger("backend.word_selector")
+            if not isinstance(raw, str):
+                return []
+            text = raw.strip()
+            # Strip code fences
+            if text.startswith('```'):
+                text = text.lstrip('`').strip()
+                if text.startswith('json'):
+                    text = text[4:].strip()
+            # Normalize newlines and smart quotes
+            text = text.replace('\r', ' ').replace('\n', ' ')
+            text = text.replace('\u201c', '"').replace('\u201d', '"').replace('\u2018', '"').replace('\u2019', '"')
+            text = text.replace('“', '"').replace('”', '"').replace('’', '"').replace('‘', '"')
+            # Fix trailing commas
+            text = text.replace(', ]', ']').replace(',]', ']')
+            # If the whole array is quoted like "[ {...} ]", unquote it
+            if text.startswith('"[') and text.endswith(']"'):
+                text = text[1:-1]
+            # Remove empty string elements in array like ["", {...}] or [{...}, ""]
+            text = re.sub(r'\[\s*""\s*,', '[', text)
+            text = re.sub(r',\s*""\s*\]', ']', text)
+            text = re.sub(r',\s*""\s*,', ',', text)
+            # Unwrap accidentally quoted objects inside the array: "{...}" -> {...}
+            # Common malformed pattern seen in provider payloads
+            text = text.replace('""{', '{').replace('}""', '}')
+            text = text.replace('"{', '{').replace('}"', '}')
+            # Extract array region if possible
+            m = re.search(r'\[[\s\S]*\]', text)
+            candidate = m.group(0).strip() if m else text
+            # Try direct load
+            try:
+                return json.loads(candidate)
+            except Exception:
+                pass
+            # Attempt to convert single quotes to double quotes in a targeted way
+            try:
+                # Replace single-quoted keys: 'key': -> "key":
+                candidate2 = re.sub(r"'([A-Za-z0-9_]+)'\s*:\s*", r'"\1": ', candidate)
+                # Replace single-quoted string values after colon or comma
+                candidate2 = re.sub(r":\s*'([^']*)'", r': "\1"', candidate2)
+                candidate2 = re.sub(r",\s*'([^']*)'\s*([,\]])", r', "\1"\2', candidate2)
+                return json.loads(candidate2)
+            except Exception:
+                pass
+            # As a last resort, build array from object snippets
+            try:
+                objs = re.findall(r'\{[^{}]*\}', text)
+                if objs:
+                    arr = '[' + ','.join(objs) + ']'
+                    return json.loads(arr)
+            except Exception:
+                pass
+            # Log truncated payload for diagnostics and return []
+            try:
+                log.warning(f"[PERSONAL] JSON repair failed. Raw payload (truncated): {text[:200]}")
+            except Exception:
+                pass
+            return []
+        try:
+            import json, re
+            collected = []
+            collected_set = set()
+            remaining = n
+            attempt = 0
+            max_attempts = 3
+            # Common validity checks (avoid low-value words)
+            stop = {"and","the","with","for","you","your","at","to","in","of","on","a","an","is","are","was","were","be","been","am","from","by","or","as","have","since"}
+            deny = {"people","person","thing","things","stuff","place","time","year","years","work","works","worked","working","life","day","days","good","bad","nice","great","hello","thanks","team","many","most"}
+            def _valid_api_word(wl: str) -> bool:
+                if not wl or len(wl) < 3 or len(wl) > 15:
+                    return False
+                if wl in stop or wl in deny:
+                    return False
+                if wl.isdigit():
+                    return False
+                letters = ''.join([c for c in wl if c.isalpha()])
+                if len(letters) < 2 or not any(c in 'aeiou' for c in letters):
+                    return False
+                return True
+            while remaining > 0 and attempt < max_attempts:
+                req = remaining
+                msg = prompt.replace("{n}", str(req))
+                messages = {"messages": [
+                    {"role": "system", "content": "You are a helpful assistant."},
+                    {"role": "user", "content": msg}
+                ]}
+                response = self._make_api_request_with_retry(messages, max_retries=1, base_delay=0.5, max_delay=1.0)
+                content = response["choices"][0]["message"]["content"].strip()
+                data = _parse_json_array_safely(content)
+                added = 0
+                for it in (data or []):
+                    try:
+                        w = str(it.get('word', '')).strip()
+                        h = str(it.get('hint', '')).strip()
+                        wl = w.lower()
+                        if not w or wl in avoid_set or wl in collected_set:
+                            continue
+                        if allowed_terms and wl not in allowed_terms:
+                            continue
+                        if not _valid_api_word(wl):
+                            continue
+                        if not h:
+                            h = 'From your bio'
+                        collected.append({'word': w, 'hint': h})
+                        collected_set.add(wl)
+                        added += 1
+                        if added >= remaining:
+                            break
+                    except Exception:
+                        continue
+                if added == 0:
+                    attempt += 1
+                remaining = max(0, n - len(collected))
+            if remaining > 0:
+                logger.info(f"[PERSONAL] API returned {len(collected)} items; topping up offline to reach {n}.")
+                offline = self._generate_personal_pool_offline(username, n=remaining, avoid_set=avoid_set.union(collected_set))
+                if offline:
+                    collected.extend(offline)
+            return collected[:n]
+        except Exception as e:
+            logger.warning(f"[PERSONAL] Pool generation failed: {e}")
+            return self._generate_personal_pool_offline(username, n=n, avoid_set=avoid_set)
+
+    def _generate_personal_pool_offline(self, username: str, n: int = 10, avoid_set: set = None) -> list:
+        """Deterministically synthesize a personal pool from users.json profile fields (offline),
+        with source weighting, basic allow/deny lists, and a relevance score to the profile topics.
+        """
+        avoid_set = avoid_set or set()
+        users = self._load_users_db()
+        rec = users.get((username or '').lower(), {}) if isinstance(users, dict) else {}
+        # Extract tokens (bio-only)
+        import re
+        def tokenize(text: str) -> list:
+            if not text:
+                return []
+            toks = re.findall(r"[A-Za-z0-9]+", str(text))
+            return [t for t in toks if t]
+        bio_toks = tokenize(rec.get('bio', ''))
+        occ_toks = []
+        edu_toks = []
+        addr_toks = []
+        # Derive age token and location short token for weighting
+        age_tok = []
+        try:
+            import datetime as _dt
+            b = rec.get('birthday')
+            if isinstance(b, str) and b:
+                try:
+                    dob = _dt.date.fromisoformat(b)
+                except Exception:
+                    try:
+                        dob = _dt.datetime.fromisoformat(b).date()
+                    except Exception:
+                        dob = None
+                if dob:
+                    today = _dt.date.today()
+                    age_val = today.year - dob.year - ((today.month, today.day) < (dob.month, dob.day))
+                    if 5 <= age_val <= 120:
+                        age_tok = [str(age_val)]
+        except Exception:
+            pass
+        loc_tok = []
+        try:
+            addr = (rec.get('address') or '').strip()
+            if addr:
+                loc_short = addr.split(',')[0].strip()
+                if loc_short and len(loc_short) > 2:
+                    loc_tok = tokenize(loc_short)
+        except Exception:
+            pass
+        # Scoring and selection
+        stop = {"and","the","with","for","you","your","at","to","in","of","on","a","an","is","are","was","were","be","been","am","from","by","or","as"}
+        # Deny-list of overly-generic words and common verbs/numbers
+        number_words = {"zero","one","two","three","four","five","six","seven","eight","nine","ten","eleven","twelve","thirteen","fourteen","fifteen","sixteen","seventeen","eighteen","nineteen","twenty"}
+        deny = {"people","person","thing","things","stuff","place","time","year","years","work","works","worked","working","live","lived","living","like","likes","liked","watch","watched","watching","join","joined","joining","use","used","using","since","have","been","most","many","life","day","days","good","bad","nice","great","hello","thanks","team"} | number_words
+        def valid_word(w: str) -> bool:
+            if not w or len(w) < 3 or len(w) > 15:
+                return False
+            wl = w.lower()
+            if wl in stop:
+                return False
+            if wl in deny:
+                return False
+            if wl.isdigit():
+                return False
+            letters = ''.join([c for c in wl if c.isalpha()])
+            if len(letters) < 2 or not any(c in 'aeiou' for c in letters):
+                return False
+            return True
+        # Build profile topic keywords (weighted by source)
+        topic_weights = {}
+        def bump(tokens, weight):
+            for t in tokens:
+                tl = t.lower()
+                if valid_word(tl):
+                    topic_weights[tl] = topic_weights.get(tl, 0.0) + weight
+        # Bio-only weighting
+        bump(bio_toks, 2.0)
+        # Age token is numeric, not a candidate word itself, but influences topic proximity implicitly
+        # Candidate list with source preference order
+        candidates = []
+        def add_candidates(tokens, source, base_weight):
+            for t in tokens:
+                if not valid_word(t):
+                    continue
+                tl = t.lower()
+                if tl in avoid_set:
+                    continue
+                # Relevance heuristic: base weight + topic match + length normalization
+                rel = base_weight + topic_weights.get(tl, 0.0)
+                # Slight bonus for mid-length words (5-9 chars)
+                L = len(tl)
+                if 5 <= L <= 9:
+                    rel += 0.5
+                candidates.append((t, source, rel))
+        add_candidates(bio_toks, 'bio', 1.5)
+        # De-duplicate keeping best score per word
+        best = {}
+        for t, src, score in candidates:
+            tl = t.lower()
+            if (tl not in best) or (score > best[tl][1]):
+                best[tl] = (src, score)
+        # Sort by score descending
+        ranked = sorted([(w, src, sc) for w, (src, sc) in best.items()], key=lambda x: x[2], reverse=True)
+        unique = [(w, src) for (w, src, _) in ranked]
+        # If still short, add from a small fixed vocabulary
+        fallback_vocab = [
+            ('family', 'From your bio'), ('project', 'From your bio'), ('health', 'From your bio'),
+            ('finance', 'From your bio'), ('music', 'From your bio'), ('teacher', 'From your bio')
+        ]
+        for w, src in fallback_vocab:
+            if len(unique) >= n:
+                break
+            wl = w.lower()
+            if wl not in best and wl not in avoid_set and valid_word(wl):
+                unique.append((w, 'fallback'))
+        # Build pool with one-line hints based on source
+        pool = []
+        for w, src in unique[:n]:
+            if src == 'fallback':
+                hint = 'From a general theme'
+            else:
+                # Generate a clearer, contextual hint based on the user's profile
+                hint = self._make_profile_hint(w, rec)
+            pool.append({'word': w, 'hint': hint})
+        return pool
 
     def _validate_api_key(self) -> bool:
         """Validate the API key format."""
@@ -2208,15 +2712,147 @@ class WordSelector:
         if recent_key not in self._recently_used_words_by_combo:
             self._recently_used_words_by_combo[recent_key] = []
         recent = self._recently_used_words_by_combo[recent_key]
-        if word in recent:
-            recent.remove(word)
-        recent.insert(0, word)
+        wl = (word or '').strip().lower()
+        # Normalize existing list to lower once
+        self._recently_used_words_by_combo[recent_key] = [str(w).strip().lower() for w in recent]
+        recent = self._recently_used_words_by_combo[recent_key]
+        if wl in recent:
+            recent.remove(wl)
+        recent.insert(0, wl)
         max_recent = getattr(self, "_max_recent_words", 50)
         self._recently_used_words_by_combo[recent_key] = recent[:max_recent]
 
     def select_word(self, word_length: int = 5, subject: str = "general", username: str = "global") -> str:
         """Select a word based on subject, using per-user recent word tracking. Ignores word length for repeat logic. Blocks immediate repeats."""
         self.current_category = subject.lower()
+
+        # Personal category: prefer user's saved personal_pool; fallback to generating a batch
+        if self.current_category == "personal":
+            try:
+                pool = self.get_user_personal_pool(username or 'global')
+                # Auto top-up: if pool exists but < max, add batch more (API or offline) avoiding duplicates
+                try:
+                    if pool and len(pool) < self.personal_pool_max:
+                        existing_words = [str(it.get('word','')).strip() for it in pool]
+                        target_total = min(self.personal_pool_max, len(pool) + self.personal_pool_batch_size)
+                        attempts = 0
+                        while len(pool) < target_total and attempts < self.personal_pool_api_attempts:
+                            batch = self.generate_personal_pool(username or 'global', n=self.personal_pool_batch_size, avoid=existing_words)
+                            added = 0
+                            if batch:
+                                seen = { (it.get('word') or '').strip().lower() for it in pool }
+                                for it in batch:
+                                    w = (it.get('word') or '').strip()
+                                    if w and w.lower() not in seen:
+                                        pool.append(it)
+                                        seen.add(w.lower())
+                                        added += 1
+                            if added == 0:
+                                attempts += 1
+                            existing_words = [str(it.get('word','')).strip() for it in pool]
+                        if added > 0:
+                            self.set_user_personal_pool(username or 'global', pool[: self.personal_pool_max])
+                except Exception:
+                    pass
+                # Rank pool words with keyword boosts
+                if pool:
+                    import random as _r
+                    recent_key = f"{username}:{self.current_category}"
+                    recent = set(getattr(self, "_recently_used_words_by_combo", {}).get(recent_key, []))
+                    last_word = getattr(self, "_last_word_by_combo", {}).get(recent_key)
+                    # Custom boosts
+                    boost_keywords = {"juniper": 3.0, "software": 2.5, "engineer": 2.0, "san": 1.5, "jose": 1.5, "almaden": 2.0}
+                    candidates = []
+                    for it in pool:
+                        w = str(it.get('word','')).strip()
+                        wl = w.lower()
+                        if not w or not wl.isalnum():
+                            continue
+                        if wl in recent or wl == (last_word or '').lower():
+                            continue
+                        score = 1.0
+                        for k, b in boost_keywords.items():
+                            if k in wl:
+                                score += b
+                        # Bonus for mid-length
+                        if 5 <= len(wl) <= 9:
+                            score += 0.3
+                        candidates.append((w, score))
+                    if not candidates:
+                        # If all were filtered by recency, relax to any pool item not equal to last_word
+                        for it in pool:
+                            w = str(it.get('word','')).strip()
+                            if w and w.lower() != (last_word or '').lower():
+                                candidates.append((w, 1.0))
+                    if candidates:
+                        candidates.sort(key=lambda x: x[1], reverse=True)
+                        # Add small variability: sample among top 5 if available
+                        top_k = candidates[:max(1, min(5, len(candidates)))]
+                        chosen = _r.choice(top_k)[0]
+                        # Soft-mark as last word to avoid immediate repeats even if not played yet
+                        try:
+                            if not hasattr(self, "_last_word_by_combo"):
+                                self._last_word_by_combo = {}
+                            self._last_word_by_combo[recent_key] = chosen
+                            if not hasattr(self, "_recently_used_words_by_combo"):
+                                self._recently_used_words_by_combo = {}
+                            lst = self._recently_used_words_by_combo.get(recent_key, [])
+                            if chosen.lower() not in lst:
+                                lst.insert(0, chosen.lower())
+                                # Clamp size
+                                self._recently_used_words_by_combo[recent_key] = lst[: self._max_recent_words]
+                        except Exception:
+                            pass
+                        return chosen
+                # If pool empty, try to generate a new batch offline (or API if available)
+                batch = self.generate_personal_pool(username or 'global', n=self.personal_pool_batch_size, avoid=[it.get('word') for it in pool] if pool else [])
+                if batch:
+                    self.set_user_personal_pool(username or 'global', (pool or []) + batch)
+                    # Pick best from new batch
+                    # Re-run selection from the updated pool (will apply boosts and recency)
+                    pool2 = self.get_user_personal_pool(username or 'global')
+                    if pool2:
+                        import random as _r
+                        recent_key = f"{username}:{self.current_category}"
+                        recent = set(getattr(self, "_recently_used_words_by_combo", {}).get(recent_key, []))
+                        last_word = getattr(self, "_last_word_by_combo", {}).get(recent_key)
+                        boost_keywords = {"juniper": 3.0, "software": 2.5, "engineer": 2.0, "san": 1.5, "jose": 1.5, "almaden": 2.0}
+                        candidates2 = []
+                        for it in pool2:
+                            w = str(it.get('word','')).strip()
+                            wl = w.lower()
+                            if not w or not wl.isalnum():
+                                continue
+                            if wl in recent or wl == (last_word or '').lower():
+                                continue
+                            score = 1.0
+                            for k, b in boost_keywords.items():
+                                if k in wl:
+                                    score += b
+                            if 5 <= len(wl) <= 9:
+                                score += 0.3
+                            candidates2.append((w, score))
+                        if candidates2:
+                            candidates2.sort(key=lambda x: x[1], reverse=True)
+                            # Reduce bias: sample among top 5 if available
+                            chosen2 = _r.choice(candidates2[:max(1, min(5, len(candidates2)))])[0]
+                            # Soft-mark selection
+                            if not hasattr(self, "_last_word_by_combo"):
+                                self._last_word_by_combo = {}
+                            self._last_word_by_combo[recent_key] = chosen2
+                            if not hasattr(self, "_recently_used_words_by_combo"):
+                                self._recently_used_words_by_combo = {}
+                            lst = self._recently_used_words_by_combo.get(recent_key, [])
+                            if chosen2.lower() not in lst:
+                                lst.insert(0, chosen2.lower())
+                                self._recently_used_words_by_combo[recent_key] = lst[: self._max_recent_words]
+                            return chosen2
+                    # Fallback to first new batch word
+                    return batch[0].get('word')
+            except Exception as e:
+                logger.warning(f"[PERSONAL] Pool selection failed: {e}")
+            # As a last resort, fall back to general selection
+            self.current_category = "general"
 
         # Map tech to science and other categories to general
       #  if self.current_category == "tech":
@@ -2254,8 +2890,8 @@ class WordSelector:
                 return False
             return True
 
-        # Try API first if not in fallback mode
-        if not self.use_fallback:
+        # Try API first if not in fallback mode, or if category is personal (always allow)
+        if (not self.use_fallback) or (self.current_category == "personal"):
             max_api_retries = 3
             for attempt in range(max_api_retries):
                 try:
@@ -2726,6 +3362,17 @@ class WordSelector:
         if last_warning:
             raise RuntimeError(last_warning['message'])
         raise RuntimeError("API request failed after multiple retries")
+
+    def get_api_hints_force(self, word: str, subject: str, n: int = 10) -> list:
+        """Force API hint generation regardless of fallback flag (used for Personal)."""
+        saved = getattr(self, 'use_fallback', False)
+        try:
+            self.use_fallback = False
+            return self.get_api_hints(word, subject, n)
+        except Exception:
+            return []
+        finally:
+            self.use_fallback = saved
 
     def get_quota_warning_for_ui(self):
         """Get the current quota warning for the UI/frontend to display."""

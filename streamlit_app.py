@@ -2056,7 +2056,12 @@ def display_game():
                 if occupation == 'Other':
                     occupation_other = st.text_input('Please specify your occupation', value=user.get('occupation', '') if user.get('occupation', '') not in occupation_options else '', key='profile_occupation_other_inline')
                 address = st.text_input('Address', value=user.get('address', ''), key='profile_address_inline')
-                bio_value = st.text_area(f"Bio (optional – up to {BIO_MAX_CHARS} characters)", value=user.get('bio', ''), max_chars=BIO_MAX_CHARS, key=PROFILE_BIO_KEY)
+                try:
+                    from backend.bio_store import get_bio
+                    _bio_init_inline = get_bio(user.get('username',''))
+                except Exception:
+                    _bio_init_inline = user.get('bio', '')
+                bio_value = st.text_area(f"Bio (optional – up to {BIO_MAX_CHARS} characters)", value=_bio_init_inline, max_chars=BIO_MAX_CHARS, key=PROFILE_BIO_KEY)
                 _bio_len = len(bio_value or "")
                 st.caption(f"{_bio_len}/{BIO_MAX_CHARS} characters")
                 if _bio_len > BIO_MAX_CHARS:
@@ -2089,11 +2094,15 @@ def display_game():
                     final_occupation = occupation_other if occupation == 'Other' else occupation
                     username = user.get('username')
                     username_lower = (username or '').lower()
-                    bio_to_save = st.session_state.get(PROFILE_BIO_KEY, user.get('bio', ''))
+                    bio_to_save = st.session_state.get(PROFILE_BIO_KEY, _bio_init_inline)
                     if username_lower and 'users' in st.session_state and username_lower in st.session_state['users']:
                         st.session_state['users'][username_lower]['education'] = final_education
                         st.session_state['users'][username_lower]['address'] = address
-                        st.session_state['users'][username_lower]['bio'] = bio_to_save
+                        try:
+                            from backend.bio_store import set_bio
+                            set_bio(username_lower, bio_to_save)
+                        except Exception:
+                            st.session_state['users'][username_lower]['bio'] = bio_to_save
                         st.session_state['users'][username_lower]['birthday'] = str(birthday)
                         st.session_state['users'][username_lower]['occupation'] = final_occupation
                         st.session_state['user']['education'] = final_education
@@ -2156,7 +2165,12 @@ def display_game():
         if occupation == 'Other':
             occupation_other = st.text_input('Please specify your occupation', value=user.get('occupation', '') if user.get('occupation', '') not in occupation_options else '')
         address = st.text_input('Address', value=user.get('address', ''))
-        bio_value = st.text_area(f"Bio (optional – up to {BIO_MAX_CHARS} characters)", value=user.get('bio', ''), max_chars=BIO_MAX_CHARS, key=PROFILE_BIO_KEY)
+        try:
+            from backend.bio_store import get_bio
+            _bio_init_profile = get_bio(user.get('username',''))
+        except Exception:
+            _bio_init_profile = user.get('bio', '')
+        bio_value = st.text_area(f"Bio (optional – up to {BIO_MAX_CHARS} characters)", value=_bio_init_profile, max_chars=BIO_MAX_CHARS, key=PROFILE_BIO_KEY)
         _bio_len = len(bio_value or "")
         st.caption(f"{_bio_len}/{BIO_MAX_CHARS} characters")
         if _bio_len > BIO_MAX_CHARS:
@@ -2205,11 +2219,15 @@ def display_game():
             username_lower = (username or '').lower()
             bio_to_save = st.session_state.get(PROFILE_BIO_KEY, None)
             if bio_to_save is None:
-                bio_to_save = st.session_state.get('profile_bio_v6', user.get('bio', ''))
+                bio_to_save = st.session_state.get('profile_bio_v6', _bio_init_profile)
             if username_lower and 'users' in st.session_state and username_lower in st.session_state['users']:
                 st.session_state['users'][username_lower]['education'] = final_education
                 st.session_state['users'][username_lower]['address'] = address
-                st.session_state['users'][username_lower]['bio'] = bio_to_save
+                try:
+                    from backend.bio_store import set_bio
+                    set_bio(username_lower, bio_to_save)
+                except Exception:
+                    st.session_state['users'][username_lower]['bio'] = bio_to_save
                 st.session_state['users'][username_lower]['birthday'] = str(birthday)
                 st.session_state['users'][username_lower]['occupation'] = final_occupation
                 st.session_state['user']['education'] = final_education
