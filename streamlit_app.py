@@ -2080,6 +2080,7 @@ def display_game():
             with st.expander('User Profile', expanded=False):
                 st.markdown('## User Profile')
                 user = st.session_state.get('user', {})
+                is_guest = (str(user.get('username','')).lower() == 'guest') or st.session_state.get('guest_mode', False)
                 education_options = [
                     'High School', 'Associate Degree', 'Bachelor\'s Degree', 'Master\'s Degree', 'PhD', 'Other'
                 ]
@@ -2128,7 +2129,9 @@ def display_game():
                     birthday_value = datetime.date.today()
                 birthday = st.date_input('Birthday', value=birthday_value, min_value=min_birthday, key='profile_birthday_inline')
                 # Save button
-                if st.button('Save Profile', key='save_profile_btn_inline'):
+                if is_guest:
+                    st.info('Guest demo cannot edit profile. Create an account to save changes.')
+                elif st.button('Save Profile', key='save_profile_btn_inline'):
                     final_education = education_other if education == 'Other' else education
                     final_occupation = occupation_other if occupation == 'Other' else occupation
                     username = user.get('username')
