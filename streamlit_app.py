@@ -1226,7 +1226,7 @@ def display_login():
                             login_btn = st.form_submit_button("Sign In", use_container_width=True)
                         with col_guest:
                             guest_btn = st.form_submit_button("Try as Guest", use_container_width=True)
-                # Secondary actions
+                                # Secondary actions
                 st.markdown("<div class='auth-sep'></div>", unsafe_allow_html=True)
                 c1, c2 = st.columns(2)
                 with c1:
@@ -1336,8 +1336,6 @@ def display_login():
                     st.error("Please enter a valid email address (e.g., name@example.com).")
                 elif u_pass != (confirm_password or "").strip():
                     st.error("Passwords do not match.")
-                elif new_username_lower == 'guest':
-                    st.error("Username 'guest' is reserved for demo access. Please choose a different username.")
                 elif new_username_lower in users:
                     st.error("Username already exists.")
                 elif any((u.get('email') or '').lower() == u_email.lower() for u in users.values()):
@@ -2110,6 +2108,18 @@ def display_game():
                     st.warning(f"Bio reached the {BIO_MAX_CHARS}-character limit.")
                 elif _bio_len >= int(BIO_MAX_CHARS * 0.9):
                     st.info("Approaching the 90% character limit.")
+                # Bio tips and example (read-only)
+                with st.expander('Bio tips and example', expanded=False):
+                    st.markdown("- Include many specific nouns: roles, tools, brands, hobbies, places.\n- Add proper nouns (cities, parks, teams) and unique interests.\n- Avoid filler; aim for 30–60 distinct nouns.")
+                    _bio_example_text_inline = (
+                        "I’m a senior software engineer and AI researcher in San Jose, California. I build Python, Django, FastAPI, and React applications, "
+                        "focusing on cybersecurity, networking, and cloud systems at Juniper Networks and a local startup incubator. I mentor students at a robotics club "
+                        "and volunteer at the public library. I enjoy hiking in Almaden Quicksilver, trail running at Los Gatos Creek, and cycling to Santa Cruz. "
+                        "On weekends I practice photography, astronomy with a backyard telescope, and cooking Mediterranean dishes; I also roast coffee and garden tomatoes, basil, and citrus. "
+                        "I follow soccer and basketball and support the Earthquakes and Warriors. I travel to Seattle, Portland, Denver, Austin, and New York for conferences. "
+                        "My family—partner Lina and kids Maya and Omar—join me for camping in Yosemite and Big Sur. I contribute to open‑source, write tech blogs, and present at meetups on APIs, data science, LLMs, and prompt engineering."
+                    )
+                    st.text_area('Example (read-only)', value=_bio_example_text_inline, height=180, disabled=True)
                 min_birthday = datetime.date(1900, 1, 1)
                 raw_birthday = user.get('birthday', None)
                 birthday_value = None
@@ -2153,7 +2163,118 @@ def display_game():
                         st.session_state['user']['birthday'] = str(birthday)
                         st.session_state['user']['occupation'] = final_occupation
                         save_users(st.session_state['users'])
-                        st.success('Profile updated!')
+                        # Refresh personal pool ONLY if the bio actually changed
+                        try:
+                            if (bio_to_save or '').strip() != (_bio_init_inline or '').strip():
+                                from backend.bio_store import set_personal_pool
+                                from backend.word_selector import WordSelector
+                                import time as _t
+                                # Preserve old pool in case generation fails
+                                old_pool = []
+                                try:
+                                    from backend.bio_store import get_personal_pool
+                                    old_pool = get_personal_pool(username_lower)
+                                except Exception:
+                                    pass
+                                # Ignore capacity; we are rebuilding from scratch on bio change
+                                try:
+                                    from backend.bio_store import set_personal_pool
+                                    set_personal_pool(username_lower, [])
+                                except Exception:
+                                    pass
+                                # Knobs
+                                try:
+                                    target_total = int(os.getenv('PERSONAL_POOL_MAX', '60'))
+                                except Exception:
+                                    target_total = 60
+                                try:
+                                    batch_size = int(os.getenv('PERSONAL_POOL_BATCH_SIZE', '10'))
+                                except Exception:
+                                    batch_size = 10
+                                try:
+                                    max_attempts = int(os.getenv('PERSONAL_POOL_API_ATTEMPTS', '3'))
+                                except Exception:
+                                    max_attempts = 3
+                                # Optional wall time budget (seconds) before falling back offline hard
+                                try:
+                                    api_budget_secs = float(os.getenv('PERSONAL_POOL_REBUILD_MAX_SECS', '5'))
+                                except Exception:
+                                    api_budget_secs = 5.0
+                                ws = getattr(st.session_state.get('game'), 'word_selector', None) or WordSelector()
+                                new_pool = []
+                                # First, try API-assisted generation within a small time budget
+                                start_ts = _t.time()
+                                attempts = 0
+                                existing_words = []
+                                while len(new_pool) < target_total and attempts < max_attempts and (_t.time() - start_ts) < api_budget_secs:
+                                    batch = ws.generate_personal_pool(username_lower, n=batch_size, avoid=existing_words)
+                                    added = 0
+                                    if batch:
+                                        seen = { (it.get('word') or '').lower() for it in new_pool }
+                                        for it in batch:
+                                            w = (it.get('word') or '').lower()
+                                            if w and w not in seen:
+                                                new_pool.append(it)
+                                                seen.add(w)
+                                                added += 1
+                                    if added == 0:
+                                        attempts += 1
+                                    existing_words = [it.get('word') for it in new_pool]
+                                # Then, top up offline to reach target if still short
+                                while len(new_pool) < target_total:
+                                    try:
+                                        avoid_set = { (it.get('word') or '').lower() for it in new_pool }
+                                        offline_batch = ws._generate_personal_pool_offline(username_lower, n=batch_size, avoid_set=avoid_set)
+                                    except Exception:
+                                        offline_batch = []
+                                    if not offline_batch:
+                                        break
+                                    seen2 = { (it.get('word') or '').lower() for it in new_pool }
+                                    for it in offline_batch:
+                                        w = (it.get('word') or '').lower()
+                                        if w and w not in seen2:
+                                            new_pool.append(it)
+                                            seen2.add(w)
+                                # If still short, top up from previous pool (non-duplicates)
+                                if len(new_pool) < target_total and old_pool:
+                                    seen3 = { (it.get('word') or '').lower() for it in new_pool }
+                                    for it in old_pool:
+                                        w = (it.get('word') or '').lower()
+                                        if w and w not in seen3:
+                                            new_pool.append(it)
+                                            seen3.add(w)
+                                        if len(new_pool) >= target_total:
+                                            break
+                                # If still short after top-ups, fill from bio tokens deterministically
+                                if len(new_pool) < target_total:
+                                    try:
+                                        from backend.bio_store import get_bio
+                                        import re as _re
+                                        bio_text_fill = get_bio(username_lower)
+                                        toks = [t for t in _re.findall(r"[A-Za-z0-9]+", bio_text_fill or "") if t]
+                                        deny_fill = {
+                                            'she','her','hers','he','him','his','they','them','their','theirs','about','since','with','without','into','onto','from','for','and','the','this','that','these','those'
+                                        }
+                                        seen4 = { (it.get('word') or '').lower() for it in new_pool }
+                                        for t in toks:
+                                            tl = t.lower()
+                                            letters = ''.join([c for c in tl if c.isalpha()])
+                                            if tl in deny_fill:
+                                                continue
+                                            if len(letters) >= 3 and any(v in letters for v in 'aeiou') and tl not in seen4:
+                                                new_pool.append({'word': t, 'hint': f"Starts with '{t[:1].upper()}'"})
+                                                seen4.add(tl)
+                                            if len(new_pool) >= target_total:
+                                                break
+                                    except Exception:
+                                        pass
+                                final_pool = new_pool[:target_total] if new_pool else old_pool
+                                set_personal_pool(username_lower, final_pool)
+                                st.success('Profile updated! Your personal word pool has been refreshed based on your new bio.')
+                            else:
+                                st.success('Profile updated!')
+                        except Exception:
+                            st.success('Profile updated!')
                     st.rerun()
             # Toggle Sound/Music (simple inline toggle)
             st.checkbox('Sound/Music', key='sound_on', value=st.session_state.get('sound_on', True))

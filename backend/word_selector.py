@@ -2313,7 +2313,7 @@ class WordSelector:
         try:
             existing_pool = self.get_user_personal_pool(username or 'global')
             if existing_pool and len(existing_pool) >= self.personal_pool_max:
-                logger.info("[PERSONAL] Pool at capacity (>=60); skipping API/offline generation")
+                logger.info(f"[PERSONAL] Pool at capacity (>={self.personal_pool_max}); skipping API/offline generation")
                 return []
         except Exception:
             pass
