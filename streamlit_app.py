@@ -1221,14 +1221,10 @@ def display_login():
                 username = st.text_input(" ", key="login_username", placeholder="Username")
                 password = st.text_input(" ", type="password", key="login_password", placeholder="Password")
                 st.markdown("<div class='auth-spacer'></div>", unsafe_allow_html=True)
-                # Primary action + Guest demo
+                # Primary action
                 with st.container():
                     with st.container():
-                        col_login, col_guest = st.columns([2,1])
-                        with col_login:
-                            login_btn = st.form_submit_button("Sign In", use_container_width=True)
-                        with col_guest:
-                            guest_btn = st.form_submit_button("Try as Guest", use_container_width=True)
+                        login_btn = st.form_submit_button("Sign In", use_container_width=True)
                                 # Secondary actions
                 st.markdown("<div class='auth-sep'></div>", unsafe_allow_html=True)
                 c1, c2 = st.columns(2)
@@ -1253,17 +1249,7 @@ def display_login():
                     st.session_state['login_error'] = "Invalid username or password."
                     st.session_state['login_failed'] = True
                     st.rerun()
-            # Guest demo mode (no writes)
-            if 'guest_btn' in locals() and guest_btn:
-                st.session_state['user'] = {
-                    'username': 'guest',
-                    'email': '',
-                    'default_category': 'general'
-                }
-                st.session_state['logged_in'] = True
-                st.session_state['auth_mode'] = 'login'
-                st.session_state['guest_mode'] = True
-                st.rerun()
+            # Guest demo handled by top-level button
             # Reset the login_failed flag after displaying the error
             if st.session_state.get('login_failed', False):
                 st.session_state['login_failed'] = False
