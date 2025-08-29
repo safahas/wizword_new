@@ -887,6 +887,11 @@ def display_login():
         50% { background-position: 100% 50%; }
         100% { background-position: 0% 50%; }
     }
+    @keyframes glow-pulse {
+        0%   { filter: drop-shadow(0 0 10px #FFD93D66) drop-shadow(0 0 8px #4ECDC466); text-shadow: 0 0 14px #FFD93D88, 0 0 10px #FF6B6B66, 0 0 8px #4ECDC466; }
+        50%  { filter: drop-shadow(0 0 16px #FFD93DB0) drop-shadow(0 0 14px #4ECDC4AA); text-shadow: 0 0 22px #FFD93DCC, 0 0 18px #FF6B6BCC, 0 0 14px #4ECDC4AA; }
+        100% { filter: drop-shadow(0 0 10px #FFD93D66) drop-shadow(0 0 8px #4ECDC466); text-shadow: 0 0 14px #FFD93D88, 0 0 10px #FF6B6B66, 0 0 8px #4ECDC466; }
+    }
     @keyframes pop {
         0% { transform: scale(1); }
         20% { transform: scale(1.12); }
@@ -932,9 +937,10 @@ def display_login():
         -webkit-background-clip: text;
         color: transparent;
         -webkit-text-fill-color: transparent;
-        filter: drop-shadow(0 0 8px #FFD93D88) drop-shadow(0 0 6px #4ECDC488);
-        text-shadow: 0 0 12px #FFD93D, 0 0 16px #FF6B6B, 0 0 6px #4ECDC4, 1px 1px 6px rgba(0,0,0,0.13);
-        animation: gradient-move 4s linear infinite, pop 2.5s cubic-bezier(.36,1.56,.64,1) infinite;
+        -webkit-text-stroke: 1px rgba(255,255,255,0.65); /* readable outline when gradient is faint */
+        filter: drop-shadow(0 0 10px #FFD93D99) drop-shadow(0 0 8px #4ECDC499);
+        text-shadow: 0 0 14px #FFD93D99, 0 0 18px #FF6B6B99, 0 0 10px #4ECDC488, 1px 1px 6px rgba(0,0,0,0.18);
+        animation: gradient-move 4s linear infinite, pop 2.5s cubic-bezier(.36,1.56,.64,1) infinite, glow-pulse 2.2s ease-in-out infinite;
         text-align: center;
         margin: 0 auto;
         padding: 0 0.05em;
