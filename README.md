@@ -90,6 +90,22 @@ Gameplay statistics and share card examples:
 
 ![Share Card Template](assets/share_card_template.png)
 
+### UI Walkthrough
+
+- Account Options (Login)
+
+  Place a screenshot at `assets/ui/account_options.png` and it will render here:
+
+  ![Account Options](assets/ui/account_options.png)
+
+- How to Play (Login)
+
+  Place a screenshot at `assets/ui/how_to_play.png` and it will render here:
+
+  ![How to Play](assets/ui/how_to_play.png)
+
+Tip: In Streamlit, you can capture screenshots via your OS or a browser extension. Save them into `assets/ui/` to keep the repo organized.
+
 ## Authentication & Guest Demo
 - Account Options on Login: Delete Account (enter username, email, password, type DELETE) or Reactivate (paste emailed token). The token field is hidden and cleared for safety.
 
