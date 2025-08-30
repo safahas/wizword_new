@@ -192,6 +192,56 @@ def load_users():
 def save_users(users):
     with open(USERS_FILE, "w", encoding="utf-8") as f:
         json.dump(users, f, indent=2)
+DELETED_USERS_FILE = os.environ.get("DELETED_USERS_FILE", "deleted_users.json")
+USERS_BIO_FILE = os.environ.get('USERS_BIO_FILE', 'users_bio.json')
+
+def _load_deleted_users():
+    try:
+        if not os.path.exists(DELETED_USERS_FILE):
+            with open(DELETED_USERS_FILE, 'w', encoding='utf-8') as f:
+                f.write('{}')
+            return {}
+        with open(DELETED_USERS_FILE, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+            return data if isinstance(data, dict) else {}
+    except Exception:
+        return {}
+
+def _save_deleted_users(data: dict) -> None:
+    with open(DELETED_USERS_FILE, 'w', encoding='utf-8') as f:
+        json.dump(data or {}, f, ensure_ascii=False, indent=2)
+
+def _remove_user_bio(username: str) -> None:
+    try:
+        if not os.path.exists(USERS_BIO_FILE):
+            return
+        with open(USERS_BIO_FILE, 'r', encoding='utf-8') as f:
+            bio_data = json.load(f)
+        if isinstance(bio_data, dict):
+            key = (username or '').lower()
+            if key in bio_data:
+                bio_data.pop(key, None)
+                with open(USERS_BIO_FILE, 'w', encoding='utf-8') as wf:
+                    json.dump(bio_data, wf, ensure_ascii=False, indent=2)
+    except Exception:
+        pass
+
+def _purge_user_games(username: str) -> None:
+    try:
+        games_path = 'game_results.json'
+        if not os.path.exists(games_path):
+            return
+        with open(games_path, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+        if not isinstance(data, list):
+            return
+        uname = (username or '').lower()
+        filtered = [g for g in data if (str(g.get('nickname','')).lower() != uname)]
+        if len(filtered) != len(data):
+            with open(games_path, 'w', encoding='utf-8') as wf:
+                json.dump(filtered, wf, ensure_ascii=False, indent=2)
+    except Exception:
+        pass
 def send_reset_email(to_email, reset_code):
     # Configure your SMTP server here
     SMTP_SERVER = os.environ.get("SMTP_HOST")
@@ -255,6 +305,117 @@ def send_email_with_attachment(to_emails, subject, body, attachment_path=None, c
     except Exception as e:
         print(f"Failed to send email with attachment: {e}")
         return False
+
+def _send_basic_email(to_email: str, subject: str, body: str) -> bool:
+    SMTP_SERVER = os.environ.get("SMTP_HOST")
+    SMTP_PORT = int(os.environ.get("SMTP_PORT", "587"))
+    SMTP_USER = os.environ.get("SMTP_USER")
+    SMTP_PASSWORD = os.environ.get("SMTP_PASS")
+    try:
+        msg = MIMEText(body)
+        msg["Subject"] = subject
+        msg["From"] = SMTP_USER or ""
+        msg["To"] = to_email
+        with smtplib.SMTP(SMTP_SERVER, SMTP_PORT) as server:
+            server.starttls()
+            if SMTP_USER and SMTP_PASSWORD:
+                server.login(SMTP_USER, SMTP_PASSWORD)
+            server.sendmail(SMTP_USER, [to_email], msg.as_string())
+        return True
+    except Exception as e:
+        print(f"Failed to send email: {e}")
+        return False
+
+def delete_account(username: str) -> bool:
+    try:
+        users = st.session_state.get('users', {})
+        uname = (username or '').lower()
+        if uname not in users:
+            return False
+        # Move to deleted store with timestamp and reactivation token
+        deleted = _load_deleted_users()
+        import uuid as _uuid
+        token = str(_uuid.uuid4())
+        record = dict(users[uname])
+        record['deleted_at_utc'] = datetime.datetime.utcnow().isoformat()
+        record['reactivation_token'] = token
+        deleted[uname] = record
+        _save_deleted_users(deleted)
+        # Remove from active users
+        users.pop(uname, None)
+        save_users(users)
+        st.session_state['users'] = users
+        try:
+            update_global_counters(users_delta=-1)
+        except Exception:
+            pass
+        # Purge ancillary data
+        _remove_user_bio(uname)
+        _purge_user_games(uname)
+        # Send confirmation with reactivation link info
+        to_email = record.get('email')
+        if to_email:
+            _site_url = os.getenv('WIZWORD_SITE') or os.getenv('APP_BASE_URL', 'https://example.com')
+            body = (
+                f"Your WizWord account for '{uname}' has been deleted.\n\n"
+                f"If this was a mistake, you can reactivate your account within 30 days "
+                f"using this token: {token}.\n\n"
+                f"Visit {_site_url} and open Account Options → Reactivate Account, then paste the token.\n\n"
+                f"Time: {datetime.datetime.utcnow().isoformat()}Z"
+            )
+            _send_basic_email(to_email, "WizWord Account Deletion Confirmation", body)
+        return True
+    except Exception as e:
+        print(f"Delete account failed: {e}")
+        return False
+
+def reactivate_account(token: str) -> tuple[bool, str]:
+    try:
+        token = (token or '').strip()
+        if not token:
+            return False, "Missing token"
+        deleted = _load_deleted_users()
+        # Find user by token
+        target_user = None
+        for uname, rec in (deleted or {}).items():
+            if str(rec.get('reactivation_token', '')).strip() == token:
+                target_user = (uname, rec)
+                break
+        if not target_user:
+            return False, "Invalid token"
+        uname, rec = target_user
+        # Optional: enforce 30-day window
+        try:
+            ts = rec.get('deleted_at_utc')
+            if ts:
+                dt = datetime.datetime.fromisoformat(ts)
+                if (datetime.datetime.utcnow() - dt).days > int(os.getenv('REACTIVATION_WINDOW_DAYS', '30')):
+                    return False, "Reactivation window expired"
+        except Exception:
+            pass
+        users = st.session_state.get('users', {})
+        if uname in users:
+            return False, "Username already active"
+        # Restore minimal profile
+        restored = {k: v for k, v in rec.items() if k not in ('deleted_at_utc', 'reactivation_token')}
+        users[uname] = restored
+        save_users(users)
+        st.session_state['users'] = users
+        try:
+            update_global_counters(users_delta=1)
+        except Exception:
+            pass
+        # Remove from deleted store
+        deleted.pop(uname, None)
+        _save_deleted_users(deleted)
+        # Notify user
+        to_email = restored.get('email')
+        if to_email:
+            _site_url = os.getenv('WIZWORD_SITE') or os.getenv('APP_BASE_URL', 'https://example.com')
+            _send_basic_email(to_email, "WizWord Account Reactivated", f"Your account '{uname}' has been reactivated.\n\nVisit {_site_url} to sign in.")
+        return True, "Account reactivated"
+    except Exception as e:
+        return False, f"Failed: {e}"
 # Initialize user store for demo (replace with real DB in production)
 if 'users' not in st.session_state:
     st.session_state['users'] = load_users()
@@ -342,7 +503,6 @@ document.addEventListener('click', function(e) {
 
 # Initialize ShareUtils
 share_utils = ShareUtils()
-
 # Custom CSS for better UI
 st.markdown(
     """
@@ -871,7 +1031,6 @@ def display_player_stats():
                         f"- {game['subject']} ({game['word_length']} letters): "
                         f"Score {game['score']} ({format_duration(game['time_taken'])})"
                     )
-
 def display_login():
     # --- Modern, Centered, Animated WizWord Banner ---
     st.markdown("""
@@ -1059,44 +1218,33 @@ def display_login():
             personal_section = (
                 "#### Personal Category (Profile‑aware)\n"
                 "- When you choose **Personal**, the game uses your profile (Bio, Occupation, Education) to ask the LLM for a single, personally relevant noun and a set of tailored hints.\n"
-                "- The UI blocks with “Generating personal hints…” until at least 3 hints are available. If not enough hints are ready in time, you'll see a clear warning and a **Retry generating hints** button.\n\n"
+                "- The UI blocks with 'Generating personal hints…' until at least 3 hints are available. If not enough hints are ready in time, you'll see a clear warning and a **Retry generating hints** button.\n\n"
             )
         st.markdown(f"""
-        ### Game Instructions:
-        - Choose your game mode:
-        
-            - **Wiz**: Classic mode with stats and leaderboards.
-            - **Beat**: Default mode. Timed challenge—solve as many words as possible before time runs out.
-        - Click Start to begin  or change word category , pick 'any' for a random challenge.
-        - Ask yes/no questions or request hints to help you guess the word.
-        - Enter your guess at any time.
-        - Want to explore without an account? Use the **Try as Guest** button on the login form (no data is saved).
-        **Beat Mode Details:**
-        - You have {int(os.getenv('BEAT_MODE_TIME', 300))} seconds to play.
-        - For each word, you can:
-            - **Guess the word:**
-                - Correct: **+100**
-                - Wrong: **-10**
-            - **Ask yes/no questions:** **-1** each
-            - **Request hints:** **-10** each (max 3 per word)
-            - Skip: reveals the word for 2 seconds, then loads the next word (no additional penalty)
-        - Try to solve as many words as possible and maximize your score before time runs out!
-        - Only Medium difficulty is available for all modes.
-            - Note: Some categories (e.g., Movies, Music, Aviation) may include alphanumeric titles like "Se7en" or "Rio2". Only letters count toward vowel/uniqueness checks.
-        
-        {personal_section}
-        
-        #### Top SEI Achievements
-        - Achieve (or tie) the highest SEI in a category (with SEI > 0) to unlock:
-          - An emailed congratulations card (with trophy, your username, category, SEI, and UTC timestamp)
-          - An in-app celebration: a flying trophy, rising banner, and balloons that auto‑dismiss
+        ### How to Play
+        - Choose a mode:
+          - **Fun**: No timer, unlimited practice.
+          - **Wiz**: Track stats and leaderboards.
+          - **Beat**: Timed sprint — {int(os.getenv('BEAT_MODE_TIME', 300))} seconds.
+        - Pick a category or **any** for random.
+        - Interact:
+          - Ask yes/no questions (−1)
+          - Request up to 3 hints (−10 each)
+          - Guess the word any time (wrong −10, correct +20 × word length)
+          - Skip word (−10) to reveal and continue
+        - SEI (Scoring Efficiency Index) measures efficiency and powers leaderboards.
 
-          #### Game Over Page
-          - Summary: Final score, time taken, and total penalty points.
-          - Statistics: Running Avg Score/Word and Time/Word vs game date; SEI line graph; includes the current game's point.
-          - Leaderboard: Global Top 10 by SEI (with dates) for the current category; header shows your SEI.
-          - Share: Generate and download a share card (with QR) and share to social networks.
-          - My Stats & Leaderboard: Personal historical stats and per‑category leaderboard.
+        {personal_section}
+
+        #### Tips
+        - Start with vowels/common letters.
+        - Use questions to narrow the space before spending hints.
+        - In Beat mode, skip quickly if stuck.
+        - Personal may need a brief moment to generate tailored hints.
+
+        #### Account Management
+        - Use Login to Register or Sign In.
+        - Account Options: Delete Account (username, email, password, type DELETE) or Reactivate (paste emailed token). Token field is hidden and cleared for safety.
         """)
 
     # State for which form to show
@@ -1235,12 +1383,16 @@ def display_login():
                 st.markdown("<div class='auth-sep'></div>", unsafe_allow_html=True)
                 c1, c2 = st.columns(2)
                 with c1:
-                    pass
+                    if st.form_submit_button("Account Options", use_container_width=True):
+                        st.session_state['auth_mode'] = 'account_options'
+                        st.session_state['login_error'] = ""
+                        st.rerun()
                 with c2:
                     if st.form_submit_button("Forgot password?", use_container_width=True):
                         st.session_state['auth_mode'] = 'forgot'
                         st.session_state['login_error'] = ""
                         st.rerun()
+                st.markdown("<div class='auth-sep'></div>", unsafe_allow_html=True)
             if login_btn:
                 users = st.session_state['users']
                 username_lower = (username or "").strip().lower()
@@ -1402,6 +1554,83 @@ def display_login():
             st.session_state['auth_mode'] = 'login'
             st.session_state.pop('reset_code', None)
             st.session_state.pop('reset_user', None)
+            st.rerun()
+
+    elif st.session_state['auth_mode'] == 'account_options':
+        st.markdown("## Account Options")
+        # Initialize page state once and clear any stale reactivation token
+        if not st.session_state.get('_account_options_initialized'):
+            try:
+                st.session_state['reactivate_token_input'] = ''
+            except Exception:
+                pass
+            st.session_state['_account_options_initialized'] = True
+        _msg = st.session_state.pop('account_options_success', None)
+        if _msg:
+            st.success(_msg)
+        st.caption("Permanently delete your account. You can reactivate within 30 days using the emailed token.")
+        def _clear_react_token_on_username_change():
+            try:
+                st.session_state['reactivate_token_input'] = ''
+                st.session_state['_reactivate_token_force_clear'] = True
+            except Exception:
+                pass
+        del_user = st.text_input("Username", key="delete_username_confirm", placeholder="Your username", on_change=_clear_react_token_on_username_change)
+        del_email = st.text_input("Email", key="delete_email_confirm", placeholder="Your account email")
+        del_password = st.text_input("Password", type="password", key="delete_password_confirm", placeholder="Your account password")
+        del_confirm = st.text_input("Type DELETE to confirm", key="delete_confirm_text", placeholder="DELETE")
+        cols = st.columns(2)
+        with cols[0]:
+            if st.button("Delete Account", key="delete_account_btn"):
+                try:
+                    st.session_state['reactivate_token_input'] = ''
+                except Exception:
+                    pass
+                _u = (del_user or '').strip().lower()
+                _e = (del_email or '').strip().lower()
+                _p = (del_password or '').strip()
+                _c = (del_confirm or '').strip()
+                if not _u or not _e or not _p or not _c:
+                    st.warning("Please enter username, email, password, and confirmation text.")
+                elif _c != "DELETE":
+                    st.warning("Please type DELETE exactly to confirm.")
+                else:
+                    users_db = st.session_state.get('users', {})
+                    if _u not in users_db:
+                        st.error("Username not found.")
+                    else:
+                        reg_email = str(users_db[_u].get('email') or '').strip().lower()
+                        reg_password = str(users_db[_u].get('password') or '')
+                        if reg_email != _e:
+                            st.error("Email does not match our records.")
+                        elif reg_password != _p:
+                            st.error("Incorrect password.")
+                        else:
+                            ok = delete_account(_u)
+                            if ok:
+                                try:
+                                    st.session_state['reactivate_token_input'] = ''
+                                except Exception:
+                                    pass
+                                st.session_state['account_options_success'] = "Your account has been deleted. A confirmation email was sent with reactivation instructions."
+                                st.rerun()
+                            else:
+                                st.error("Failed to delete account. Please try again later.")
+        with cols[1]:
+            # Force-clear token on render if set by change handlers
+            if st.session_state.get('_reactivate_token_force_clear'):
+                st.session_state['reactivate_token_input'] = ''
+                st.session_state.pop('_reactivate_token_force_clear', None)
+            react_token = st.text_input("Reactivation token", key="reactivate_token_input", placeholder="Paste token from your email", type="password", autocomplete="off")
+            if st.button("Reactivate Account", key="reactivate_account_btn"):
+                ok, msg = reactivate_account(react_token)
+                if ok:
+                    st.success(msg)
+                else:
+                    st.error(msg)
+        st.markdown("---")
+        if st.button("Back to Login", key="back_to_login_from_account_options"):
+            st.session_state['auth_mode'] = 'login'
             st.rerun()
 
 def main():
@@ -1861,43 +2090,31 @@ def display_welcome():
         """)
         with st.expander("📖 How to Play", expanded=False):
             st.markdown(f"""
-            ### Game Instructions:
-            - Choose your game mode:
-                - **Fun**: Unlimited play, no timer, just for fun.
-                - **Wiz**: Classic mode with stats and leaderboards.
-                - **Beat**: The default  mode. Timed challenge—solve as many words as possible before time runs out.
-            - Select a word category, or pick 'any' for a random challenge.
-            - Ask yes/no questions or request hints to help you guess the word.
-            - Enter your guess at any time.
-            **Beat Mode Details:**
-            - You have {int(os.getenv('BEAT_MODE_TIME', 300))} seconds to play.
-            - For each word, you can:
-                - **Guess the word:**
-                    - Correct: **+100**
-                    - Wrong: **-10**
-                - **Ask yes/no questions:** **-1** each
-                - **Request hints:** **-10** each (max 3 per word)
-                - Skip: reveals the word for 2 seconds, then loads the next word (no additional penalty)
-            - Try to solve as many words as possible and maximize your score before time runs out!
-            - Only Medium difficulty is available for all modes.
-            - Note: Some categories (e.g., Movies, Music, Aviation) may include alphanumeric titles like "Se7en" or "Rio2". Only letters count toward vowel/uniqueness checks.
+            ### How to Play
+            - Choose a mode:
+              - **Fun**: No timer, unlimited practice.
+              - **Wiz**: Track stats and leaderboards.
+              - **Beat**: Timed sprint — {int(os.getenv('BEAT_MODE_TIME', 300))} seconds.
+            - Pick a category or **any** for random.
+            - Interact:
+              - Ask yes/no questions (−1)
+              - Request up to 3 hints (−10 each)
+              - Guess the word any time (wrong −10, correct +20 × word length)
+              - Skip word (−10) to reveal and continue
+            - SEI (Scoring Efficiency Index) measures efficiency and powers leaderboards.
 
-            #### Personal Category (Profile‑aware)
-            - When you choose **Personal**, the game uses your profile (Bio, Occupation, Education) to ask the LLM for a single, personally relevant noun and a set of tailored hints.
-            - The UI blocks with "Generating personal hints…" until at least 3 hints are available. If not enough hints are ready in time, you'll see a clear warning and a **Retry generating hints** button.
-            
-            #### Top SEI Achievements
-            - Achieve (or tie) the highest SEI in a category (with SEI > 0) to unlock:
-              - An emailed congratulations card (with trophy, your username, category, SEI, and UTC timestamp)
-                        - An in-app celebration: a flying trophy, rising banner, and balloons that auto‑dismiss
+            {personal_section}
 
-        #### Game Over Page
-        - Summary: Final score, time taken, and total penalty points.
-        - Statistics: Running Avg Score/Word and Time/Word vs game date; SEI line graph; includes the current game's point.
-        - Leaderboard: Global Top 10 by SEI (with dates) for the current category; header shows your SEI.
-        - Share: Generate and download a share card (with QR) and share to social networks.
-        - My Stats & Leaderboard: Personal historical stats and per‑category leaderboard.
-        """)
+            #### Tips
+            - Start with vowels/common letters.
+            - Use questions to narrow the space before spending hints.
+            - In Beat mode, skip quickly if stuck.
+            - Personal may need a brief moment to generate tailored hints.
+
+            #### Account Management
+            - Use Login to Register or Sign In.
+            - Account Options: Delete Account (username, email, password, type DELETE) or Reactivate (paste emailed token). Token field is hidden and cleared for safety.
+            """)
         with st.expander("💡 Hints System", expanded=False):
             st.markdown("""
             - Easy Mode: Up to 10 hints available (-5 points each)
@@ -1924,8 +2141,6 @@ def display_welcome():
             - Keep track of your score before making guesses
             - Questions are cheaper than wrong guesses
             """)
-
-
 def display_game():
     # Early debug: confirm we entered display_game and show Beat state
     try:
@@ -2107,7 +2322,7 @@ def display_game():
                 with st.expander('Bio tips and example', expanded=False):
                     st.markdown("- Include many specific nouns: roles, tools, brands, hobbies, places.\n- Add proper nouns (cities, parks, teams) and unique interests.\n- Avoid filler; aim for 30–60 distinct nouns.")
                     _bio_example_text_inline = (
-                        "I’m a senior software engineer and AI researcher in San Jose, California. I build Python, Django, FastAPI, and React applications, "
+                        "I'm a senior software engineer and AI researcher in San Jose, California. I build Python, Django, FastAPI, and React applications, "
                         "focusing on cybersecurity, networking, and cloud systems at Juniper Networks and a local startup incubator. I mentor students at a robotics club "
                         "and volunteer at the public library. I enjoy hiking in Almaden Quicksilver, trail running at Los Gatos Creek, and cycling to Santa Cruz. "
                         "On weekends I practice photography, astronomy with a backyard telescope, and cooking Mediterranean dishes; I also roast coffee and garden tomatoes, basil, and citrus. "
@@ -2500,7 +2715,6 @@ def display_game():
     game = st.session_state.game
     user_name = st.session_state.user['username'] if st.session_state.get('user') else ''
     max_hints = game.current_settings["max_hints"]
-
     # --- Banner and stats ---
     import time as _time
     if game.mode == 'Beat':
@@ -3030,7 +3244,7 @@ def display_game():
         </div>
         """, unsafe_allow_html=True)
         c_to, c_go = st.columns(2)
-        with c_go:
+        with c_to:
             if st.button('View Game Over', key='btn_view_game_over'):
                 # Finalize and navigate to Game Over
                 st.session_state['last_mode'] = st.session_state.game.mode
@@ -3039,7 +3253,7 @@ def display_game():
                 st.session_state['show_word'] = False
                 st.session_state['show_word_round_id'] = None
                 st.rerun()
-        with c_to:
+        with c_go:
             if st.button('Log Out Now', key='btn_logout_now'):
                 keys_to_keep = ['users']
                 for key in list(st.session_state.keys()):
@@ -3142,7 +3356,7 @@ def display_game():
         is_revealed = overlay_active or (letter.lower() in revealed_letters)
         style = (
             "display:inline-block;width:2.5em;height:2.5em;margin:0 0.2em;"
-            "font-size:2em;text-align:center;line-height:2.5em;"
+            "font-size:2.5em;text-align:center;line-height:2.5em;"
             "border-radius:0.4em;box-shadow:0 2px 8px rgba(0,0,0,0.10);"
             "transition:background 0.3s, color 0.3s, transform 0.4s;"
             f"background:{'#7c3aed' if is_revealed else '#f3e8ff'};"
@@ -3471,7 +3685,6 @@ def display_game():
     """, unsafe_allow_html=True)
 
     st.markdown("</div>", unsafe_allow_html=True)
-
 def display_game_over(game_summary):
     """Display game over screen with statistics and sharing options."""
     # Use the current game mode from session state if available, then last_mode, then game_summary
@@ -4062,7 +4275,6 @@ def display_game_over(game_summary):
             if st.button("Copy Link", key="share_copy_btn_sharetab"):
                 st.code(share_url)
                 st.success("Link copied to clipboard!")
-    
     with stats_leader_tab:
         st.markdown("## 📈 My Historical Stats")
         username = game_summary.get('nickname', '').lower()
@@ -4704,7 +4916,6 @@ def get_global_leaderboard(top_n=10, mode=None, category=None):
         games = [g for g in games if g.get("subject") == category]
     games.sort(key=lambda g: g.get("score", 0), reverse=True)
     return games[:top_n]
-
 def get_user_stats(username):
     users = load_all_users()
     user = users.get(username.lower())

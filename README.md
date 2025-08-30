@@ -64,9 +64,34 @@ streamlit run streamlit_app.py
 ```
 
 ## How to Play
+
+- Choose a mode:
+  - Fun: No timer, unlimited practice
+  - Wiz: Track stats and leaderboards
+  - Beat: Timed sprint — default {int(os.getenv('BEAT_MODE_TIME', 300)) if False else 300}s
+- Pick a category or any for random
+- Interact during play:
+  - Ask yes/no questions (−1)
+  - Request up to 3 hints (−10 each)
+  - Guess any time (wrong −10, correct +20 × word length)
+  - Skip word (−10) reveals the word then continues
+- SEI (Scoring Efficiency Index) measures efficiency; used in leaderboards/achievements.
+
 ### Personal Category (profile‑aware)
+If enabled (see ENABLE_PERSONAL_CATEGORY), Personal uses your Bio to request a personally relevant word and tailored hints. The UI may briefly show “Generating personal hints…” until 3+ hints are ready; a Retry button appears if needed.
+
+## Screenshots
+
+Gameplay statistics and share card examples:
+
+![Score Trend](score_trend.png)
+
+![Score Distribution](score_distribution.png)
+
+![Share Card Template](assets/share_card_template.png)
 
 ## Authentication & Guest Demo
+- Account Options on Login: Delete Account (enter username, email, password, type DELETE) or Reactivate (paste emailed token). The token field is hidden and cleared for safety.
 
 - Registration requires: username, valid email, birthday, education, password, and password confirmation.
 - The username 'guest' is reserved for demo access and cannot be registered.
