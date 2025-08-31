@@ -2158,6 +2158,59 @@ def display_game():
             st.session_state['_dbg_prev_state'] = {'mode': _md, 'beat_started': _bs}
     except Exception:
         pass
+    # Anchor at top for reliable scrollIntoView
+    try:
+        st.markdown("<div id='app-top'></div>", unsafe_allow_html=True)
+    except Exception:
+        pass
+    # One-time scroll to top if requested
+    try:
+        if st.session_state.pop('_scroll_to_top_once', False) or st.session_state.pop('_from_another_beat', False):
+            try:
+                import streamlit.components.v1 as components
+                components.html(
+                    """
+                    <script>
+                      (function(){
+                        function toTop(){
+                          try { document.getElementById('app-top')?.scrollIntoView({behavior:'auto', block:'start'}); } catch(e){}
+                          try { window.scrollTo(0,0); } catch(e){}
+                          try { window.parent && window.parent.scrollTo(0,0); } catch(e){}
+                          try { window.top && window.top.scrollTo(0,0); } catch(e){}
+                        }
+                        requestAnimationFrame(toTop);
+                        setTimeout(toTop, 0);
+                        setTimeout(toTop, 60);
+                        setTimeout(toTop, 140);
+                        setTimeout(toTop, 280);
+                      })();
+                    </script>
+                    """,
+                    height=0,
+                )
+            except Exception:
+                st.markdown(
+                    """
+                    <script>
+                    (function(){
+                      function toTop(){
+                        try { document.getElementById('app-top')?.scrollIntoView({behavior:'auto', block:'start'}); } catch(e){}
+                        try { window.scrollTo(0,0); } catch(e){}
+                        try { window.parent && window.parent.scrollTo(0,0); } catch(e){}
+                        try { window.top && window.top.scrollTo(0,0); } catch(e){}
+                      }
+                      requestAnimationFrame(toTop);
+                      setTimeout(toTop, 0);
+                      setTimeout(toTop, 60);
+                      setTimeout(toTop, 140);
+                      setTimeout(toTop, 280);
+                    })();
+                    </script>
+                    """,
+                    unsafe_allow_html=True,
+                )
+    except Exception:
+        pass
     # Ensure per-render guard for Skip button (defensive against duplicate blocks)
     st.session_state['_skip_btn_rendered'] = False
     
@@ -2213,6 +2266,36 @@ def display_game():
             nickname=st.session_state.user['username'],
             difficulty='Medium'
         )
+        # Ensure next render starts at top
+        try:
+            st.session_state['_scroll_to_top_once'] = True
+        except Exception:
+            pass
+        # Also attempt immediate scroll on the same render for hosts that ignore next-render flags
+        try:
+            import streamlit.components.v1 as components
+            components.html(
+                """
+                <script>
+                  (function(){
+                    function toTop(){
+                      try { document.getElementById('app-top')?.scrollIntoView({behavior:'auto', block:'start'}); } catch(e){}
+                      try { window.scrollTo(0,0); } catch(e){}
+                      try { window.parent && window.parent.scrollTo(0,0); } catch(e){}
+                      try { window.top && window.top.scrollTo(0,0); } catch(e){}
+                    }
+                    requestAnimationFrame(toTop);
+                    setTimeout(toTop, 0);
+                    setTimeout(toTop, 60);
+                    setTimeout(toTop, 140);
+                    setTimeout(toTop, 280);
+                  })();
+                </script>
+                """,
+                height=0,
+            )
+        except Exception:
+            pass
         st.session_state.game_over = False
         st.session_state.game_summary = None
         st.session_state.beat_word_count = 0
@@ -4588,6 +4671,8 @@ def display_game_over(game_summary):
                 # Reset time-over flags before Another Beat restarts
                 st.session_state.pop('time_over', None)
                 st.session_state.pop('time_over_at', None)
+                # Mark that we are transitioning from Game Over via Another Beat
+                st.session_state['_from_another_beat'] = True
                 st.session_state.game = create_game_with_env_guard(
                     word_length=new_word_length,
                     subject=new_subject,
@@ -4599,6 +4684,36 @@ def display_game_over(game_summary):
                 st.session_state.game_summary = None
                 st.session_state['play_again'] = False
                 st.session_state['just_finished_game'] = False
+                # Ensure the next render starts at top
+                try:
+                    st.session_state['_scroll_to_top_once'] = True
+                except Exception:
+                    pass
+                # Also attempt immediate scroll on this render
+                try:
+                    import streamlit.components.v1 as components
+                    components.html(
+                        """
+                        <script>
+                          (function(){
+                            function toTop(){
+                              try { document.getElementById('app-top')?.scrollIntoView({behavior:'auto', block:'start'}); } catch(e){}
+                              try { window.scrollTo(0,0); } catch(e){}
+                              try { window.parent && window.parent.scrollTo(0,0); } catch(e){}
+                              try { window.top && window.top.scrollTo(0,0); } catch(e){}
+                            }
+                            requestAnimationFrame(toTop);
+                            setTimeout(toTop, 0);
+                            setTimeout(toTop, 60);
+                            setTimeout(toTop, 140);
+                            setTimeout(toTop, 280);
+                          })();
+                        </script>
+                        """,
+                        height=0,
+                    )
+                except Exception:
+                    pass
                 st.rerun()
             else:
                 st.session_state['play_again'] = True
