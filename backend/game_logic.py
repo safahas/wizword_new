@@ -48,8 +48,8 @@ class GameLogic:
         # For Beat mode, always limit hints to 3
         if self.mode == "Beat":
             self.current_settings["max_hints"] = 3
-        # If Personal category, limit to 1 hint per word
-        if str(self.subject).lower() == 'personal':
+        # If Personal or FlashCard category, limit to 1 hint per word
+        if str(self.subject).lower() in ('personal', 'flashcard'):
             self.current_settings["max_hints"] = 1
         self.total_points = 0
         # New: track only penalty points (sum of absolute negative deductions)
@@ -72,8 +72,8 @@ class GameLogic:
             if not self.selected_word:
                 raise ValueError("Failed to select a word")
             all_hints = []
-            # For 'Personal' category, prefer API-generated hints and skip hints.json lookup
-            if str(self.original_subject).lower() != 'personal':
+            # For 'Personal' and 'FlashCard' categories, skip hints.json lookup
+            if str(self.original_subject).lower() not in ('personal', 'flashcard'):
                 try:
                     hints_file = os.path.join('backend', 'data', 'hints.json')
                     logger.info(f"Looking for hints in: {hints_file}")
@@ -101,6 +101,18 @@ class GameLogic:
                     logger.warning("Error decoding hints.json")
                 except Exception as e:
                     logger.warning(f"Error reading hints.json: {e}")
+            # Prefer pre-generated pool hints for Personal and FlashCard before API/local
+            if not all_hints and str(self.original_subject).lower() == 'flashcard':
+                try:
+                    from backend.bio_store import get_flash_pool
+                    pool_fc = get_flash_pool(self._pool_username())
+                    if pool_fc:
+                        match_fc = next((it for it in pool_fc if str(it.get('word','')).lower() == str(self.selected_word or '').lower()), None)
+                        if match_fc and match_fc.get('hint'):
+                            all_hints = [str(match_fc['hint'])]
+                except Exception:
+                    pass
+
             if not all_hints:
                 # Use API-generated hints if available, otherwise fallback
                 api_hints = getattr(self.word_selector, "_last_api_hints", None)
@@ -108,7 +120,8 @@ class GameLogic:
                     logger.info("[HINT REQUEST] Using cached API hints from WordSelector")
                     self.word_selector._last_api_hints = None
                 else:
-                    if str(self.original_subject).lower() == 'personal':
+                    subj_lower = str(self.original_subject).lower()
+                    if subj_lower == 'personal':
                         # Try user-specific pool first (one hint)
                         pool = self.word_selector.get_user_personal_pool(self._pool_username())
                         hint_from_pool = None
@@ -125,6 +138,36 @@ class GameLogic:
                             all_hints = [hint_from_pool]
                         else:
                             api_hints = self.word_selector.get_api_hints_force(self.selected_word, 'personal', n=1)
+                    elif subj_lower == 'flashcard':
+                        # Use same env gating as Personal hints: rely on API if available; otherwise local context
+                        use_api = True  # mirror personal behavior (no separate flag)
+                        if use_api:
+                            # Thread attempts from Personal knob
+                            try:
+                                _att = int(os.getenv('PERSONAL_POOL_API_ATTEMPTS', '3'))
+                            except Exception:
+                                _att = 3
+                            api_hints = self.word_selector.get_api_hints_force(
+                                self.selected_word,
+                                'flashcard',
+                                n=self.current_settings["max_hints"],
+                                attempts=_att
+                            )
+                        else:
+                            # Create contextual hint from flash text (local-only)
+                            try:
+                                from backend.bio_store import get_flash_text
+                                flash_text = get_flash_text(self._pool_username())
+                            except Exception:
+                                flash_text = ''
+                            try:
+                                hint_local = self.word_selector._make_flash_hint(self.selected_word, flash_text)
+                            except Exception:
+                                hint_local = None
+                            if hint_local:
+                                all_hints = [hint_local] * self.current_settings["max_hints"]
+                            else:
+                                api_hints = []
                     else:
                         api_hints = self.word_selector.get_api_hints(self.selected_word, subject, n=self.current_settings["max_hints"])
                 if api_hints:

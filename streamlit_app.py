@@ -974,7 +974,7 @@ def validate_word_length(length: int) -> tuple[bool, str]:
 def validate_subject(subject: str) -> tuple[bool, str]:
     """Validate the selected subject."""
     valid_categories = ["general", "animals", "food", "places", "science", "tech", "sports",
-                       "movies", "music", "brands", "history", "random", "4th_grade", "8th_grade"]
+                       "movies", "music", "brands", "history", "random", "4th_grade", "8th_grade", "flashcard"]
     subject = subject.lower()  # Convert to lowercase for comparison
     if subject not in valid_categories:
         return False, f"Invalid subject. Must be one of: {', '.join(valid_categories)}"
@@ -1881,7 +1881,7 @@ def display_welcome():
                 enable_personal = os.getenv('ENABLE_PERSONAL_CATEGORY', 'true').strip().lower() in ('1', 'true', 'yes', 'on')
                 category_options = [
                     "any", "4th_grade", "8th_grade", "anatomy", "animals", "brands", "cities", "food",
-                    "general", "gre", "medicines", "places", "psat", "sat", "science", "sports", "tech"
+                    "general", "gre", "medicines", "places", "psat", "sat", "science", "sports", "tech", "flashcard"
                 ]
                 if enable_personal:
                     category_options.insert(1, "Personal")
@@ -2413,6 +2413,23 @@ def display_game():
                         "My family—partner Lina and kids Maya and Omar—join me for camping in Yosemite and Big Sur. I contribute to open‑source, write tech blogs, and present at meetups on APIs, data science, LLMs, and prompt engineering."
                     )
                     st.text_area('Example (read-only)', value=_bio_example_text_inline, height=180, disabled=True)
+                # FlashCard text input (env-gated length)
+                try:
+                    _flash_max_inline = int(os.getenv('FLASHCARD_TEXT_MAX', '500'))
+                except Exception:
+                    _flash_max_inline = 500
+                try:
+                    from backend.bio_store import get_flash_text
+                    _flash_init_inline = get_flash_text(user.get('username',''))
+                except Exception:
+                    _flash_init_inline = ''
+                st.text_area(
+                    f"FlashCard Text (up to {_flash_max_inline} characters)",
+                    value=_flash_init_inline,
+                    max_chars=_flash_max_inline,
+                    key='profile_flash_text_inline'
+                )
+                st.caption("FlashCard generates words and hints from this text. Env: FLASHCARD_TEXT_MAX, FLASHCARD_WORDS_COUNT, FLASHCARD_USE_API.")
                 min_birthday = datetime.date(1900, 1, 1)
                 raw_birthday = user.get('birthday', None)
                 birthday_value = None
@@ -2448,6 +2465,18 @@ def display_game():
                             set_bio(username_lower, bio_to_save)
                         except Exception:
                             st.session_state['users'][username_lower]['bio'] = bio_to_save
+                        # Save FlashCard text and clear pool on change (lazy rebuild on next selection)
+                        try:
+                            from backend.bio_store import set_flash_text, set_flash_pool
+                            _new_flash_inline = st.session_state.get('profile_flash_text_inline', '')
+                            set_flash_text(username_lower, _new_flash_inline)
+                            try:
+                                if (_new_flash_inline or '').strip() != (_flash_init_inline or '').strip():
+                                    set_flash_pool(username_lower, [])
+                            except Exception:
+                                pass
+                        except Exception:
+                            pass
                         st.session_state['users'][username_lower]['birthday'] = str(birthday)
                         st.session_state['users'][username_lower]['occupation'] = final_occupation
                         st.session_state['user']['education'] = final_education
@@ -2703,7 +2732,7 @@ def display_game():
     # Handle change category
     if st.session_state.get('change_category', False):
         enable_personal = os.getenv('ENABLE_PERSONAL_CATEGORY', 'true').strip().lower() in ('1', 'true', 'yes', 'on')
-        categories = ["any", "anatomy", "animals", "aviation", "brands", "cities", "food", "general", "gre", "history", "medicines", "movies", "music", "places", "psat", "sat", "science", "sports", "tech", "4th_grade", "8th_grade"]
+        categories = ["any", "anatomy", "animals", "aviation", "brands", "cities", "food", "general", "gre", "history", "medicines", "movies", "music", "places", "psat", "sat", "science", "sports", "tech", "4th_grade", "8th_grade", "flashcard"]
         if enable_personal:
             categories.insert(1, "Personal")
         new_category = st.selectbox("Select a new category:", categories, format_func=lambda x: ('Any' if x=='any' else ('GRE' if x=='gre' else ('SAT' if x=='sat' else ('PSAT' if x=='psat' else x.replace('_',' ').title())))), key='category_select_box')
@@ -3372,6 +3401,14 @@ def display_game():
                     # Time elapsed: load next word and clear flags BEFORE rendering boxes
                     # Do NOT mark skipped word as played.
                     # Intentionally avoid adding it to recents or updating 'last word'
+                    # Treat Skip completion as activity to avoid idle logout
+                    try:
+                        st.session_state['start_idle_at'] = _t.time()
+                        st.session_state.pop('session_expired', None)
+                        st.session_state.pop('time_over', None)
+                        st.session_state.pop('time_over_at', None)
+                    except Exception:
+                        pass
                     new_word_length = 5
                     new_subject = game.subject
                     # Enforce env gate on skip-driven next word
@@ -3640,6 +3677,14 @@ def display_game():
                 # Track the round we initiated skip on, so we can stop showing after the round changes
                 st.session_state['skip_round_id'] = st.session_state.get('current_round_id')
                 st.session_state['_skip_btn_rendered'] = True
+                # Treat Skip click as activity
+                try:
+                    st.session_state['start_idle_at'] = _t.time()
+                    st.session_state.pop('session_expired', None)
+                    st.session_state.pop('time_over', None)
+                    st.session_state.pop('time_over_at', None)
+                except Exception:
+                    pass
                 st.rerun()
 
     # --- Ask Yes/No Question section (now below letter boxes and Skip) ---

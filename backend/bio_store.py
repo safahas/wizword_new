@@ -80,3 +80,25 @@ def set_personal_pool(username: str, pool: List[Dict[str, Any]]) -> None:
     update_user_record(username, {'personal_pool': pool})
 
 
+# --- FlashCard support (text + pool) ---
+def get_flash_text(username: str) -> str:
+    rec = get_user_record(username)
+    return str(rec.get('flash_text') or '')
+
+
+def set_flash_text(username: str, text: str) -> None:
+    update_user_record(username, {'flash_text': str(text or '')})
+
+
+def get_flash_pool(username: str) -> List[Dict[str, Any]]:
+    rec = get_user_record(username)
+    pool = rec.get('flash_pool')
+    return pool if isinstance(pool, list) else []
+
+
+def set_flash_pool(username: str, pool: List[Dict[str, Any]]) -> None:
+    if not isinstance(pool, list):
+        pool = []
+    update_user_record(username, {'flash_pool': pool})
+
+

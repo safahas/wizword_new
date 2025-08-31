@@ -1941,7 +1941,8 @@ class WordSelector:
         "brands",
         "history",
         "random",
-        "4th_grade"
+        "4th_grade",
+        "flashcard"
     ]
 
     # Available models in order of preference
@@ -2019,6 +2020,86 @@ class WordSelector:
         logger.debug(f"Selected fallback word: {word}")
         # Do NOT update last word here
         return word
+
+    def _select_word_from_flashcard(self, username: str) -> str:
+        """Pick a word from the user's FlashCard pool, building it from flash_text if needed."""
+        try:
+            from backend.bio_store import get_flash_text, get_flash_pool, set_flash_pool
+        except Exception:
+            return None
+        try:
+            text = (get_flash_text(username) or '')[: self.flash_text_max]
+            pool = get_flash_pool(username)
+            if not pool or len(pool) < self.flash_words_count:
+                import time as _t
+                _start = _t.time()
+                words = self._extract_flash_words(text, max_items=self.flash_words_count)
+                lst = []
+                for w in words:
+                    if not w:
+                        continue
+                    hint = self._make_flash_hint(w, text)
+                    lst.append({"word": w, "hint": hint})
+                    if (_t.time() - _start) >= getattr(self, 'flash_rebuild_max_secs', 5.0):
+                        break
+                set_flash_pool(username, lst)
+                pool = lst
+            recent_key = f"{username}:flashcard"
+            if not hasattr(self, "_recently_used_words_by_combo"):
+                self._recently_used_words_by_combo = {}
+            recent = set(self._recently_used_words_by_combo.get(recent_key, []))
+            candidates = [it for it in (pool or []) if str(it.get('word','')).lower() not in recent]
+            if not candidates:
+                candidates = pool or []
+            if not candidates:
+                return None
+            import random as _rnd
+            choice = _rnd.choice(candidates)
+            return str(choice.get('word') or '')
+        except Exception:
+            return None
+
+    def _extract_flash_words(self, text: str, max_items: int = 10) -> list:
+        """Extract distinct candidate words from text; simple noun-like heuristic."""
+        try:
+            import re as _re
+            toks = _re.findall(r"[A-Za-z]{3,}", text or "")
+            seen = set()
+            out = []
+            # Stopwords/generic tokens to exclude (mirror Personal rules)
+            stop = {
+                'the','a','an','and','or','but','if','then','else','for','with','without','about','into','onto','from','by','for','as','at','to','in','of','on','this','that','these','those',
+                'have','has','had','be','been','being','am','is','are','was','were','do','does','did','can','could','should','would','may','might','must',
+                'i','you','your','my','our','their','his','her','it','they','we','me','him','them','us',
+            }
+            for t in toks:
+                tl = t.lower()
+                if tl in stop:
+                    continue
+                if tl in seen:
+                    continue
+                seen.add(tl)
+                out.append(tl)
+                if len(out) >= max_items:
+                    break
+            return out
+        except Exception:
+            return []
+
+    def _make_flash_hint(self, word: str, text: str) -> str:
+        """Create a related hint from the flash text context or fallback to first-letter."""
+        try:
+            idx = (text or '').lower().find((word or '').lower())
+            if idx != -1:
+                start = max(0, idx - 40)
+                end = min(len(text), idx + 40)
+                ctx = ' '.join((text[start:end] or '').split())
+                if ctx:
+                    return f"Appears in: …{ctx}…"
+            c = next((ch for ch in (word or '') if ch.isalpha()), None)
+            return f"Starts with '{c.upper()}'" if c else "Starts with a letter"
+        except Exception:
+            return "Related to your flash text"
 
     def __init__(self):
         """Initialize the word selector."""
@@ -2099,7 +2180,7 @@ class WordSelector:
         self.bypass_api_word_selection = os.getenv("BYPASS_API_WORD_SELECTION", "false").lower() == "true"
         logger.info(f"BYPASS_API_WORD_SELECTION is set to: {self.bypass_api_word_selection}")
         if self.bypass_api_word_selection:
-            logger.info("Bypassing API for word selection due to BYPASS_API_WORD_SELECTION setting. Using fallback/dictionary only (except 'personal').")
+            logger.info("Bypassing API for word selection due to BYPASS_API_WORD_SELECTION setting. Using fallback/dictionary only (except 'personal' and 'flashcard').")
             self.use_fallback = True  # default to fallback
 
         self._api_hint_cache = {}
@@ -2109,6 +2190,29 @@ class WordSelector:
         self.fallback_model = os.getenv("OPENROUTER_MODEL_FALLBACK", "openai/gpt-4o")
         # Available models in order of preference (for other uses)
         self.models = [self.primary_model, self.fallback_model]
+        # FlashCard env knobs (aligned with Personal)
+        try:
+            self.flash_text_max = int(os.getenv("FLASHCARD_TEXT_MAX", "500"))
+        except Exception:
+            self.flash_text_max = 500
+        try:
+            # Prefer PERSONAL_POOL_MAX to keep same target size semantics
+            self.flash_words_count = int(os.getenv("PERSONAL_POOL_MAX", os.getenv("FLASHCARD_WORDS_COUNT", "10")))
+        except Exception:
+            self.flash_words_count = 10
+        try:
+            self.flash_rebuild_max_secs = float(os.getenv("PERSONAL_POOL_REBUILD_MAX_SECS", "5"))
+        except Exception:
+            self.flash_rebuild_max_secs = 5.0
+        try:
+            # Use Personal's batch size/attempts for FlashCard, for symmetry
+            self.flash_batch_size = int(os.getenv("PERSONAL_POOL_BATCH_SIZE", "10"))
+        except Exception:
+            self.flash_batch_size = 10
+        try:
+            self.flash_api_attempts = int(os.getenv("PERSONAL_POOL_API_ATTEMPTS", "3"))
+        except Exception:
+            self.flash_api_attempts = 3
 
     def _load_users_db(self) -> dict:
         try:
@@ -2733,6 +2837,12 @@ class WordSelector:
         """Select a word based on subject, using per-user recent word tracking. Ignores word length for repeat logic. Blocks immediate repeats."""
         self.current_category = subject.lower()
 
+        # FlashCard category: pull from user's flash text pool
+        if self.current_category == "flashcard":
+            word = self._select_word_from_flashcard(username or 'global')
+            if word:
+                return word
+
         # Personal category: prefer user's saved personal_pool; fallback to generating a batch
         if self.current_category == "personal":
             try:
@@ -2897,8 +3007,8 @@ class WordSelector:
                 return False
             return True
 
-        # Try API first if not in fallback mode, or if category is personal (always allow)
-        if (not self.use_fallback) or (self.current_category == "personal"):
+        # Try API first if not in fallback mode, or if category is personal/flashcard (always allow)
+        if (not self.use_fallback) or (self.current_category in ("personal", "flashcard")):
             max_api_retries = 3
             for attempt in range(max_api_retries):
                 try:
@@ -3370,12 +3480,14 @@ class WordSelector:
             raise RuntimeError(last_warning['message'])
         raise RuntimeError("API request failed after multiple retries")
 
-    def get_api_hints_force(self, word: str, subject: str, n: int = 10) -> list:
-        """Force API hint generation regardless of fallback flag (used for Personal)."""
+    def get_api_hints_force(self, word: str, subject: str, n: int = 10, attempts: int | None = None) -> list:
+        """Force API hint generation regardless of fallback flag (used for Personal/FlashCard).
+        Optional 'attempts' allows callers to override the retry count.
+        """
         saved = getattr(self, 'use_fallback', False)
         try:
             self.use_fallback = False
-            return self.get_api_hints(word, subject, n)
+            return self.get_api_hints(word, subject, n, attempts=attempts)
         except Exception:
             return []
         finally:
@@ -3389,8 +3501,10 @@ class WordSelector:
             return warning['message']
         return None
 
-    def get_api_hints(self, word: str, subject: str, n: int = 10) -> list:
-        """Use the API to generate n meaningful, diverse hints about the word, with improved prompt and post-processing."""
+    def get_api_hints(self, word: str, subject: str, n: int = 10, attempts: int | None = None) -> list:
+        """Use the API to generate n meaningful, diverse hints about the word, with improved prompt and post-processing.
+        Optional 'attempts' controls retry loops (default 3).
+        """
         if self.use_fallback:
             return []
         import time
@@ -3398,7 +3512,7 @@ class WordSelector:
         import re
         import json
         logger = logging.getLogger("backend.word_selector")
-        max_attempts = 3
+        max_attempts = attempts if isinstance(attempts, int) and attempts > 0 else 3
         blacklist = [
             'crime', 'assail', 'attack', 'stance', 'deficit', 'direction a signal',
             'contentious verbal exchange', 'successfully', 'assuming a stance',
