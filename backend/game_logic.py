@@ -276,7 +276,7 @@ class GameLogic:
         
         if is_correct:
             message = f"Correct! You guessed the word '{self.selected_word}'. Current score: {self.score}"
-            # Mark word as played to update recent list (avoid repeats per user+category)
+            # Only mark as played on correct guess (not on Skip)
             try:
                 username = self._pool_username()
                 self.word_selector.mark_word_played(self.selected_word, username, self.subject)
@@ -400,9 +400,7 @@ class GameLogic:
                 if penalty < 0:
                     self.total_penalty_points += abs(penalty)
                 self.show_word_penalty_applied = True
-                # Mark the word as played (add to recent list)
-                username = self._pool_username()
-                self.word_selector.mark_word_played(self.selected_word, username, self.subject)
+                # Do NOT mark Show Word as played to avoid blocking repeats after reveal/skip
             else:
                 penalty = 0  # No penalty if already applied
         return penalty

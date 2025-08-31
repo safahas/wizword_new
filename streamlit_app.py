@@ -3287,12 +3287,8 @@ def display_game():
                     st.session_state['clear_guess_field'] = True
                 else:
                     # Time elapsed: load next word and clear flags BEFORE rendering boxes
-                    try:
-                        username = game.nickname if hasattr(game, 'nickname') and game.nickname else 'global'
-                        if hasattr(game, 'selected_word') and game.selected_word:
-                            game.word_selector.mark_word_played(game.selected_word, username, game.subject)
-                    except Exception:
-                        pass
+                    # Do NOT mark skipped word as played.
+                    # Intentionally avoid adding it to recents or updating 'last word'
                     new_word_length = 5
                     new_subject = game.subject
                     # Enforce env gate on skip-driven next word

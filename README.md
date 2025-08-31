@@ -224,6 +224,44 @@ Your **Favorite Category** is the word category (such as Tech, Brands, Science, 
 - Separate SEI trend per game
 - Leaderboard filtered to the active category
 
+## Recent Words and Repeat Prevention
+
+- Storage: Kept in-memory inside the `WordSelector` singleton. Not written to disk.
+- Scope: Tracked per user and per user+subject to avoid immediate repeats.
+- Capacity: Controlled by env `RECENT_WORDS_LIMIT` (default 50).
+- Persistence: Persists across logout (same server process), resets on server restart or when cleared explicitly.
+- Updates:
+  - Added on correct guess
+  - Not added on Skip or Show Word (so skips/reveals do not block future selection)
+
+Debugging (optional, temporary)
+
+Add this snippet to `streamlit_app.py` near the gameplay area to inspect the combo list and last word:
+
+```python
+# DEBUG: verify recents for current user+subject
+with st.expander("Debug: Recent words (per user+subject)", expanded=False):
+    try:
+        ws = st.session_state.game.word_selector
+        uname = (st.session_state.get('user') or {}).get('username', 'global')
+        subj = getattr(st.session_state.game, 'subject', 'general')
+        key = f"{uname}:{subj}"
+        st.write("recent combo list:", getattr(ws, "_recently_used_words_by_combo", {}).get(key, []))
+        st.write("last word for combo:", getattr(ws, "_last_word_by_combo", {}).get(key))
+    except Exception as e:
+        st.write("debug error:", e)
+```
+
+Verification steps
+
+1. Start a game and note the current word W.
+2. Press Skip and then open the expander:
+   - W should not be listed in the recent combo list
+   - The last-word entry should be unchanged (not set to W)
+3. Solve a word correctly (G) and open the expander again:
+   - G appears at the head of the list
+   - Last-word updates to G
+
 ## Aggregates and Performance
 
 To avoid rescanning `game_results.json` on every render, the app maintains a compact aggregates store:
