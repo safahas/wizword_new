@@ -972,8 +972,11 @@ def validate_word_length(length: int) -> tuple[bool, str]:
 
 def validate_subject(subject: str) -> tuple[bool, str]:
     """Validate the selected subject."""
+    _enable_flashcard = os.getenv('ENABLE_FLASHCARD_CATEGORY', 'true').strip().lower() in ('1','true','yes','on')
     valid_categories = ["general", "animals", "food", "places", "science", "tech", "sports",
-                       "movies", "music", "brands", "history", "random", "4th_grade", "8th_grade", "flashcard"]
+                       "movies", "music", "brands", "history", "random", "4th_grade", "8th_grade"]
+    if _enable_flashcard:
+        valid_categories.append("flashcard")
     subject = subject.lower()  # Convert to lowercase for comparison
     if subject not in valid_categories:
         return False, f"Invalid subject. Must be one of: {', '.join(valid_categories)}"
@@ -1219,11 +1222,12 @@ def display_login():
                 "- Uses your profile (Bio, Occupation, Education, Address) to request personally relevant words and tailored hints.\n"
                 "- Shows 'Generating personal hints…' until enough hints are ready; a Retry button appears if needed.\n\n"
             )
+        _enable_flashcard_htp = os.getenv('ENABLE_FLASHCARD_CATEGORY', 'true').strip().lower() in ('1','true','yes','on')
         flashcard_section = (
             "#### FlashCard Category (Your Text)\n"
             "- Paste your own text in Profile → FlashCard Text. The game extracts meaningful words (excludes stopwords) and generates one concise hint per word.\n"
             "- API‑first for hints, with fallback to local; saves generated hints into your flash pool. Auto‑regenerates when you change and save the text.\n\n"
-        )
+        ) if _enable_flashcard_htp else ""
         st.markdown(f"""
         ### How to Play
         - Choose a mode:
@@ -1933,10 +1937,13 @@ def display_welcome():
             difficulty = "Medium"
             with cols[1]:
                 enable_personal = os.getenv('ENABLE_PERSONAL_CATEGORY', 'true').strip().lower() in ('1', 'true', 'yes', 'on')
+                _enable_flashcard = os.getenv('ENABLE_FLASHCARD_CATEGORY', 'true').strip().lower() in ('1','true','yes','on')
                 category_options = [
                     "any", "4th_grade", "8th_grade", "anatomy", "animals", "brands", "cities", "food",
-                    "general", "gre", "medicines", "places", "psat", "sat", "science", "sports", "tech", "flashcard"
+                    "general", "gre", "medicines", "places", "psat", "sat", "science", "sports", "tech"
                 ]
+                if _enable_flashcard:
+                    category_options.append("flashcard")
                 if enable_personal:
                     category_options.insert(1, "Personal")
                 # Normalize previously selected Personal to General before rendering the widget
@@ -2152,11 +2159,12 @@ def display_welcome():
                     "- Uses your profile (Bio, Occupation, Education, Address) to request personally relevant words and tailored hints.\n"
                     "- Shows 'Generating personal hints…' until enough hints are ready; a Retry button appears if needed.\n\n"
                 )
+            _enable_flashcard_htp2 = os.getenv('ENABLE_FLASHCARD_CATEGORY', 'true').strip().lower() in ('1','true','yes','on')
             _flashcard_section = (
                 "#### FlashCard Category (Your Text)\n"
                 "- Paste your own text in Profile → FlashCard Text. The game extracts meaningful words (excludes stopwords) and generates one concise hint per word.\n"
                 "- API‑first for hints, with fallback to local; saves generated hints into your flash pool. Auto‑regenerates when you change and save the text.\n\n"
-            )
+            ) if _enable_flashcard_htp2 else ""
             st.markdown(f"""
             ### How to Play
             - Choose a mode:
@@ -2433,6 +2441,7 @@ def display_game():
         with st.expander('☰ Menu', expanded=False):
             # View Rules / How to Play (expands inline)
             with st.expander('View Rules / How to Play', expanded=False):
+                _enable_flashcard_rules = os.getenv('ENABLE_FLASHCARD_CATEGORY', 'true').strip().lower() in ('1','true','yes','on')
                 st.info("""
                 **How to Play:**
                 - Guess the word by revealing letters.
@@ -2440,7 +2449,7 @@ def display_game():
                 - In Beat mode, solve as many words as possible before time runs out!
                 - Use the menu to skip, reveal, or change category.
                 - Personal: profile‑aware category; may show "Generating personal hints…" and a Retry button until hints are ready.
-                - FlashCard: uses your Profile → FlashCard Text to build a pool; one hint per word; auto‑regenerates on save; API‑first with local fallback.
+                """ + ("- FlashCard: uses your Profile → FlashCard Text to build a pool; one hint per word; auto‑regenerates on save; API‑first with local fallback.\n" if _enable_flashcard_rules else "") + """
                 """)
             # User Profile (expands inline)
             with st.expander('User Profile', expanded=False):
@@ -2493,17 +2502,19 @@ def display_game():
                     _flash_max_inline = int(os.getenv('FLASHCARD_TEXT_MAX', '500'))
                 except Exception:
                     _flash_max_inline = 500
-                try:
-                    from backend.bio_store import get_flash_text
-                    _flash_init_inline = get_flash_text(user.get('username',''))
-                except Exception:
-                    _flash_init_inline = ''
-                st.text_area(
-                    f"FlashCard Text (up to {_flash_max_inline} characters)",
-                    value=_flash_init_inline,
-                    max_chars=_flash_max_inline,
-                    key='profile_flash_text_inline'
-                )
+                _enable_flashcard_ui = os.getenv('ENABLE_FLASHCARD_CATEGORY', 'true').strip().lower() in ('1','true','yes','on')
+                if _enable_flashcard_ui:
+                    try:
+                        from backend.bio_store import get_flash_text
+                        _flash_init_inline = get_flash_text(user.get('username',''))
+                    except Exception:
+                        _flash_init_inline = ''
+                    st.text_area(
+                        f"FlashCard Text (up to {_flash_max_inline} characters)",
+                        value=_flash_init_inline,
+                        max_chars=_flash_max_inline,
+                        key='profile_flash_text_inline'
+                    )
                 # FlashCard info removed per request
                 min_birthday = datetime.date(1900, 1, 1)
                 raw_birthday = user.get('birthday', None)
@@ -2867,6 +2878,7 @@ def display_game():
 
     # Show rules if toggled
     if st.session_state.get('show_rules', False):
+        _enable_flashcard_rules2 = os.getenv('ENABLE_FLASHCARD_CATEGORY', 'true').strip().lower() in ('1','true','yes','on')
         st.info("""
         **How to Play:**
         - Guess the word by revealing letters.
@@ -2874,12 +2886,15 @@ def display_game():
         - In Beat mode, solve as many words as possible before time runs out!
         - Use the menu to skip, reveal, or change category.
         - Personal: profile‑aware category; may show "Generating personal hints…" and a Retry button until hints are ready.
-        - FlashCard: uses your Profile → FlashCard Text to build a pool; one hint per word; auto‑regenerates on save; API‑first with local fallback.
+        """ + ("- FlashCard: uses your Profile → FlashCard Text to build a pool; one hint per word; auto‑regenerates on save; API‑first with local fallback.\n" if _enable_flashcard_rules2 else "") + """
         """)
     # Handle change category
     if st.session_state.get('change_category', False):
         enable_personal = os.getenv('ENABLE_PERSONAL_CATEGORY', 'true').strip().lower() in ('1', 'true', 'yes', 'on')
-        categories = ["any", "anatomy", "animals", "aviation", "brands", "cities", "food", "general", "gre", "history", "medicines", "movies", "music", "places", "psat", "sat", "science", "sports", "tech", "4th_grade", "8th_grade", "flashcard"]
+        enable_flashcard = os.getenv('ENABLE_FLASHCARD_CATEGORY', 'true').strip().lower() in ('1', 'true', 'yes', 'on')
+        categories = ["any", "anatomy", "animals", "aviation", "brands", "cities", "food", "general", "gre", "history", "medicines", "movies", "music", "places", "psat", "sat", "science", "sports", "tech", "4th_grade", "8th_grade"]
+        if enable_flashcard:
+            categories.append("flashcard")
         if enable_personal:
             categories.insert(1, "Personal")
         new_category = st.selectbox("Select a new category:", categories, format_func=lambda x: ('Any' if x=='any' else ('GRE' if x=='gre' else ('SAT' if x=='sat' else ('PSAT' if x=='psat' else x.replace('_',' ').title())))), key='category_select_box')
