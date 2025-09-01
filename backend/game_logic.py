@@ -101,18 +101,6 @@ class GameLogic:
                     logger.warning("Error decoding hints.json")
                 except Exception as e:
                     logger.warning(f"Error reading hints.json: {e}")
-            # Prefer pre-generated pool hints for Personal and FlashCard before API/local
-            if not all_hints and str(self.original_subject).lower() == 'flashcard':
-                try:
-                    from backend.bio_store import get_flash_pool
-                    pool_fc = get_flash_pool(self._pool_username())
-                    if pool_fc:
-                        match_fc = next((it for it in pool_fc if str(it.get('word','')).lower() == str(self.selected_word or '').lower()), None)
-                        if match_fc and match_fc.get('hint'):
-                            all_hints = [str(match_fc['hint'])]
-                except Exception:
-                    pass
-
             if not all_hints:
                 # Use API-generated hints if available, otherwise fallback
                 api_hints = getattr(self.word_selector, "_last_api_hints", None)
@@ -139,10 +127,18 @@ class GameLogic:
                         else:
                             api_hints = self.word_selector.get_api_hints_force(self.selected_word, 'personal', n=1)
                     elif subj_lower == 'flashcard':
-                        # Use same env gating as Personal hints: rely on API if available; otherwise local context
-                        use_api = True  # mirror personal behavior (no separate flag)
-                        if use_api:
-                            # Thread attempts from Personal knob
+                        # Prefer pre-generated flash_pool hint first
+                        try:
+                            from backend.bio_store import get_flash_pool
+                            pool_fc = get_flash_pool(self._pool_username())
+                        except Exception:
+                            pool_fc = []
+                        if pool_fc:
+                            match_fc = next((it for it in pool_fc if str(it.get('word','')).lower() == str(self.selected_word or '').lower()), None)
+                            if match_fc and match_fc.get('hint'):
+                                all_hints = [str(match_fc['hint'])]
+                        # If no saved hint, try API; else skip API to avoid extra calls
+                        if not all_hints:
                             try:
                                 _att = int(os.getenv('PERSONAL_POOL_API_ATTEMPTS', '3'))
                             except Exception:
@@ -153,8 +149,8 @@ class GameLogic:
                                 n=self.current_settings["max_hints"],
                                 attempts=_att
                             )
-                        else:
-                            # Create contextual hint from flash text (local-only)
+                        # If API still empty, generate a local contextual hint
+                        if not all_hints and not api_hints:
                             try:
                                 from backend.bio_store import get_flash_text
                                 flash_text = get_flash_text(self._pool_username())
@@ -166,18 +162,33 @@ class GameLogic:
                                 hint_local = None
                             if hint_local:
                                 all_hints = [hint_local] * self.current_settings["max_hints"]
-                            else:
-                                api_hints = []
                     else:
                         api_hints = self.word_selector.get_api_hints(self.selected_word, subject, n=self.current_settings["max_hints"])
                 if api_hints:
                     all_hints = api_hints
                     logger.info(f"[HINT REQUEST] Using {len(all_hints)} API-generated hints for '{self.selected_word}'")
-                    # Persist first hint into user's personal pool for future runs
+                    # Persist first hint into user's pools for future runs (Personal/FlashCard)
                     try:
                         first_hint = str(all_hints[0]) if isinstance(all_hints, list) and all_hints else None
-                        if first_hint and str(self.original_subject).lower() == 'personal':
+                        subj_lower2 = str(self.original_subject).lower()
+                        if first_hint and subj_lower2 == 'personal':
                             self.word_selector.add_or_update_personal_hint(self._pool_username(), self.selected_word, first_hint)
+                        elif first_hint and subj_lower2 == 'flashcard':
+                            try:
+                                from backend.bio_store import get_flash_pool, set_flash_pool
+                                uname = self._pool_username()
+                                pool_fc = get_flash_pool(uname) or []
+                                updated = False
+                                for it in pool_fc:
+                                    if str(it.get('word','')).lower() == str(self.selected_word or '').lower():
+                                        it['hint'] = first_hint
+                                        updated = True
+                                        break
+                                if not updated:
+                                    pool_fc.append({'word': self.selected_word, 'hint': first_hint})
+                                set_flash_pool(uname, pool_fc)
+                            except Exception:
+                                pass
                     except Exception:
                         pass
                 if not all_hints:

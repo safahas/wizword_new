@@ -500,7 +500,6 @@ document.addEventListener('click', function(e) {
 }, true);
 </script>
 """, unsafe_allow_html=True)
-
 # Initialize ShareUtils
 share_utils = ShareUtils()
 # Custom CSS for better UI
@@ -1322,7 +1321,14 @@ def display_login():
         .auth-secondary .stButton>button {
             background: rgba(0,0,0,0.06) !important; color:#222 !important; border: 1px solid rgba(0,0,0,0.12) !important;
         }
-        .auth-card .stTextInput>div>div>input { padding: 0.45em 0.55em; margin-top: -2px; }
+        .auth-card .stTextInput>div>div>input {
+            padding: 0.45em 0.55em; margin-top: -2px;
+            background-color: #ffffff !important;
+            color: #000000 !important;
+            -webkit-appearance: none !important;
+            appearance: none !important;
+            caret-color: #000000 !important;
+        }
         .auth-spacer { height: 6px; }
         </style>
         """, unsafe_allow_html=True)
@@ -1356,6 +1362,50 @@ def display_login():
             }
             div[data-testid="stForm"] form button:not(:first-of-type):hover {
               background: rgba(255,255,255,0.10) !important;
+            }
+            </style>
+            """,
+            unsafe_allow_html=True,
+        )
+
+        # Force light backgrounds for inputs on older mobile (iOS/Android) and override autofill darkening
+        st.markdown(
+            """
+            <style>
+            :root { color-scheme: light; }
+            /* General input overrides */
+            input, textarea, select {
+              background-color: #ffffff !important;
+              color: #000000 !important;
+              -webkit-appearance: none !important;
+              appearance: none !important;
+              caret-color: #000000 !important;
+            }
+            input::placeholder { color: rgba(0,0,0,0.55) !important; }
+            /* iOS/Android autofill */
+            input:-webkit-autofill,
+            textarea:-webkit-autofill,
+            select:-webkit-autofill {
+              -webkit-box-shadow: 0 0 0px 1000px #ffffff inset !important;
+              box-shadow: 0 0 0px 1000px #ffffff inset !important;
+              -webkit-text-fill-color: #000000 !important;
+              transition: background-color 9999s ease-in-out 0s !important;
+            }
+            /* Some Android WebView variants */
+            input:-internal-autofill-selected {
+              background-color: #ffffff !important;
+              color: #000000 !important;
+            }
+            /* Streamlit input specifically */
+            .stTextInput>div>div>input {
+              background-color: #ffffff !important;
+              color: #000000 !important;
+            }
+            @media (prefers-color-scheme: dark) {
+              .stTextInput>div>div>input {
+                background-color: #ffffff !important;
+                color: #000000 !important;
+              }
             }
             </style>
             """,
@@ -1632,7 +1682,6 @@ def display_login():
         if st.button("Back to Login", key="back_to_login_from_account_options"):
             st.session_state['auth_mode'] = 'login'
             st.rerun()
-
 def main():
     """Main application entry point."""
     # Bootstrap aggregates on first run
@@ -2429,7 +2478,7 @@ def display_game():
                     max_chars=_flash_max_inline,
                     key='profile_flash_text_inline'
                 )
-                st.caption("FlashCard generates words and hints from this text. Env: FLASHCARD_TEXT_MAX, FLASHCARD_WORDS_COUNT, FLASHCARD_USE_API.")
+                # FlashCard info removed per request
                 min_birthday = datetime.date(1900, 1, 1)
                 raw_birthday = user.get('birthday', None)
                 birthday_value = None
@@ -2465,16 +2514,35 @@ def display_game():
                             set_bio(username_lower, bio_to_save)
                         except Exception:
                             st.session_state['users'][username_lower]['bio'] = bio_to_save
-                        # Save FlashCard text and clear pool on change (lazy rebuild on next selection)
+                        # Save FlashCard text and (if changed) rebuild flash_pool with API hints if available
                         try:
                             from backend.bio_store import set_flash_text, set_flash_pool
                             _new_flash_inline = st.session_state.get('profile_flash_text_inline', '')
                             set_flash_text(username_lower, _new_flash_inline)
-                            try:
-                                if (_new_flash_inline or '').strip() != (_flash_init_inline or '').strip():
-                                    set_flash_pool(username_lower, [])
-                            except Exception:
-                                pass
+                            if (_new_flash_inline or '').strip() != (_flash_init_inline or '').strip():
+                                # Rebuild pool with progress message
+                                with st.spinner('Generating FlashCard hints…'):
+                                    from backend.word_selector import WordSelector
+                                    ws = getattr(GameLogic, 'word_selector', None) or WordSelector()
+                                    words = ws._extract_flash_words(_new_flash_inline, max_items=getattr(ws, 'flash_words_count', 10))
+                                    rebuilt = []
+                                    try:
+                                        _att = int(os.getenv('PERSONAL_POOL_API_ATTEMPTS', '3'))
+                                    except Exception:
+                                        _att = 3
+                                    for w in words:
+                                        if not w:
+                                            continue
+                                        try:
+                                            api_h = ws.get_api_hints_force(w, 'flashcard', n=1, attempts=_att)
+                                            hint_text = str(api_h[0]) if api_h else None
+                                        except Exception:
+                                            hint_text = None
+                                        if not hint_text:
+                                            hint_text = ws._make_flash_hint(w, _new_flash_inline)
+                                        rebuilt.append({'word': w, 'hint': hint_text or ''})
+                                    set_flash_pool(username_lower, rebuilt)
+                                    st.success('FlashCard hints regenerated and saved.')
                         except Exception:
                             pass
                         st.session_state['users'][username_lower]['birthday'] = str(birthday)
@@ -2713,6 +2781,53 @@ def display_game():
                     set_bio(username_lower, bio_to_save)
                 except Exception:
                     st.session_state['users'][username_lower]['bio'] = bio_to_save
+                # If Bio changed, rebuild Personal pool (API first, with time budget)
+                try:
+                    if (bio_to_save or '').strip() != (_bio_init_profile or '').strip():
+                        import time as _t
+                        from backend.bio_store import set_personal_pool, get_personal_pool
+                        from backend.word_selector import WordSelector
+                        with st.spinner('Regenerating Personal word pool…'):
+                            # Clear current pool
+                            try:
+                                set_personal_pool(username_lower, [])
+                            except Exception:
+                                pass
+                            ws = getattr(GameLogic, 'word_selector', None) or WordSelector()
+                            try:
+                                target_total = int(os.getenv('PERSONAL_POOL_MAX', '60'))
+                            except Exception:
+                                target_total = 60
+                            try:
+                                batch_size = int(os.getenv('PERSONAL_POOL_BATCH_SIZE', '10'))
+                            except Exception:
+                                batch_size = 10
+                            try:
+                                max_secs = float(os.getenv('PERSONAL_POOL_REBUILD_MAX_SECS', '5'))
+                            except Exception:
+                                max_secs = 5.0
+                            avoid = []
+                            try:
+                                avoid = [it.get('word') for it in (get_personal_pool(username_lower) or [])]
+                            except Exception:
+                                avoid = []
+                            start_ts = _t.time()
+                            pool_accum = []
+                            while len(pool_accum) < target_total and (_t.time() - start_ts) < max_secs:
+                                batch = ws.generate_personal_pool(username_lower, n=batch_size, avoid=avoid)
+                                if not batch:
+                                    break
+                                for it in batch:
+                                    w = (it.get('word') or '').strip()
+                                    if w and all((w.lower() != (x.get('word') or '').lower()) for x in pool_accum):
+                                        pool_accum.append(it)
+                                        if len(pool_accum) >= target_total:
+                                            break
+                                avoid = [it.get('word') for it in pool_accum]
+                            set_personal_pool(username_lower, pool_accum[:target_total])
+                            st.success('Personal pool regenerated.')
+                except Exception:
+                    pass
                 st.session_state['users'][username_lower]['birthday'] = str(birthday)
                 st.session_state['users'][username_lower]['occupation'] = final_occupation
                 st.session_state['user']['education'] = final_education
@@ -2728,7 +2843,6 @@ def display_game():
     if st.session_state.get('show_rules', False):
         st.info("""
         **How to Play:**\n- Guess the word by revealing letters.\n- Use hints or ask yes/no questions.\n- In Beat mode, solve as many words as possible before time runs out!\n- Use the menu to skip, reveal, or change category.\n- Personal: profile‑aware category that may show "Generating personal hints…" and a Retry button until 3+ hints are ready.\n        """)
-
     # Handle change category
     if st.session_state.get('change_category', False):
         enable_personal = os.getenv('ENABLE_PERSONAL_CATEGORY', 'true').strip().lower() in ('1', 'true', 'yes', 'on')
@@ -3328,15 +3442,21 @@ def display_game():
             except Exception:
                 _raw = 2000
             _ms = _raw if _raw >= 1000 else _raw * 1000
-            st.markdown(f"""
-            <script>
-            (function(){{
-              if (window && window.setTimeout) {{
-                window.setTimeout(function(){{ window.location.reload(); }}, {_ms});
-              }}
-            }})();
-            </script>
-            """, unsafe_allow_html=True)
+            if not st.session_state.get('_time_over_reload_injected'):
+                st.session_state['_time_over_reload_injected'] = True
+                st.markdown("""
+                <script>
+                (function(){
+                  if (window && !window._wizword_reload_scheduled) {
+                    window._wizword_reload_scheduled = true;
+                    var delay = """ + str(_ms) + """;
+                    var t = window.setTimeout(function(){ try { window.location.reload(); } catch(e){} }, parseInt(delay, 10));
+                    window.addEventListener('beforeunload', function(){ try { clearTimeout(t); } catch(e){} });
+                    document.addEventListener('visibilitychange', function(){ if (document.hidden) { try { clearTimeout(t); } catch(e){} } });
+                  }
+                })();
+                </script>
+                """, unsafe_allow_html=True)
             _now = _time.time()
             _started = float(st.session_state.get('time_over_at', _now))
             _idle_limit = int(os.getenv('INACTIVITY_LOGOUT_SECONDS', os.getenv('BEAT_MODE_TIME', '300')))
@@ -3376,7 +3496,6 @@ def display_game():
         return
 
     display_hint_section(game)
-
     # --- Early Skip handling to avoid rendering stale letter boxes/input ---
     if game.mode == 'Beat':
         try:
@@ -5047,7 +5166,6 @@ def save_game_to_user_profile(game_summary):
 def load_all_users():
     with open("users.json", "r", encoding="utf-8") as f:
         return json.load(f)
-
 def get_all_game_results():
     import os, json
     game_file = GAME_RESULTS_PATH

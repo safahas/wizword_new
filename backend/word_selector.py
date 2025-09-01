@@ -2089,14 +2089,52 @@ class WordSelector:
     def _make_flash_hint(self, word: str, text: str) -> str:
         """Create a related hint from the flash text context or fallback to first-letter."""
         try:
-            idx = (text or '').lower().find((word or '').lower())
+            w = (word or '').strip()
+            src = (text or '')
+            idx = src.lower().find(w.lower())
+            # Helper: choose up to 2 meaningful keywords near the word
+            def _keywords(window: str, target: str) -> list:
+                import re as _re
+                stop = {
+                    'the','a','an','and','or','but','if','then','else','for','with','without','about','into','onto','from','by','for','as','at','to','in','of','on','this','that','these','those',
+                    'have','has','had','be','been','being','am','is','are','was','were','do','does','did','can','could','should','would','may','might','must',
+                    'i','you','your','my','our','their','his','her','it','they','we','me','him','them','us',
+                }
+                toks = _re.findall(r"[A-Za-z]{3,}", window)
+                scores = []
+                for t in toks:
+                    tl = t.lower()
+                    if tl == target.lower() or tl in stop:
+                        continue
+                    score = 1
+                    if tl.endswith(('tion','sion','ment','ness','ity','ism','ing','ed','ship','ance','ence')):
+                        score += 1
+                    if t[:1].isupper():
+                        score += 1
+                    scores.append((t, score))
+                scores.sort(key=lambda x: x[1], reverse=True)
+                out = []
+                for t,_ in scores:
+                    if t.lower() not in {o.lower() for o in out}:
+                        out.append(t)
+                    if len(out) >= 2:
+                        break
+                return out
+
             if idx != -1:
-                start = max(0, idx - 40)
-                end = min(len(text), idx + 40)
-                ctx = ' '.join((text[start:end] or '').split())
-                if ctx:
-                    return f"Appears in: …{ctx}…"
-            c = next((ch for ch in (word or '') if ch.isalpha()), None)
+                start = max(0, idx - 80)
+                end = min(len(src), idx + 80)
+                ctx = src[start:end]
+                kws = _keywords(ctx, w)
+                first = next((ch for ch in w if ch.isalpha()), None)
+                if kws and first:
+                    if len(kws) == 1:
+                        return f"Starts with '{first.upper()}'. Related to {kws[0]}"
+                    return f"Starts with '{first.upper()}'. Related to {kws[0]} and {kws[1]}"
+                if first:
+                    return f"Starts with '{first.upper()}'"
+            # Fallback first letter
+            c = next((ch for ch in w if ch.isalpha()), None)
             return f"Starts with '{c.upper()}'" if c else "Starts with a letter"
         except Exception:
             return "Related to your flash text"
