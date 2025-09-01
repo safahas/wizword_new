@@ -78,7 +78,12 @@ streamlit run streamlit_app.py
 - SEI (Scoring Efficiency Index) measures efficiency; used in leaderboards/achievements.
 
 ### Personal Category (profile‑aware)
-If enabled (see ENABLE_PERSONAL_CATEGORY), Personal uses your Bio to request a personally relevant word and tailored hints. The UI may briefly show “Generating personal hints…” until 3+ hints are ready; a Retry button appears if needed.
+If enabled (see ENABLE_PERSONAL_CATEGORY), Personal uses your profile (Bio, Occupation, Education, Address) to request personally relevant words and tailored hints. The UI may briefly show “Generating personal hints…” until 3+ hints are ready; a Retry button appears if needed.
+
+### FlashCard Category (your text)
+- Add your own text in Profile → FlashCard Text. The game extracts meaningful words (stopwords excluded) and generates one concise hint per word.
+- API‑first for hint generation with local fallback; generated hints are saved into your `flash_pool` and reused.
+- The pool auto‑regenerates when you change and save the FlashCard text. Pool size is independent from Personal via `FLASHCARD_POOL_MAX` (or `FLASHCARD_WORDS_COUNT`).
 
 ## Screenshots
 
@@ -115,7 +120,7 @@ Tip: In Streamlit, you can capture screenshots via your OS or a browser extensio
   - In guest mode, the app avoids writing to user data files (e.g., `users.json`, `users_bio.json`, `game_results.json`).
   - Use this for safe demos without leaving any persistent user data.
 
-- When you choose **Personal**, the game uses your profile Bio (bio‑only, not other fields) from `users_bio.json` to request personally relevant words and hints.
+- When you choose **Personal**, the game uses your profile (Bio + Occupation + Education + Address) from `users_bio.json` / `users.json` to request personally relevant words and hints.
 - If API calls fail or are disabled, Personal falls back to a deterministic offline generator that samples from your Bio with allow/deny lists and relevance scoring.
 - With `BYPASS_API_WORD_SELECTION=true`, all other categories use the local dictionary; Personal still attempts the API and falls back offline as needed.
 - Hint experience for Personal:
@@ -311,7 +316,7 @@ word_guess_contest_ai/
 ## Personal Pool (Bio‑only)
 
 - Storage: `users_bio.json` (see Data Files). The file is auto‑created on first access if missing.
-- Source: Only tokens from the user’s Bio are considered. Occupation/Education/Address are not used for pool selection.
+- Source: Tokens from the user’s Bio, Occupation, Education, and Address are considered for pool selection.
 - Size and top‑ups:
   - Target size is configurable via `.env` (`PERSONAL_POOL_MAX`, default 60).
   - When entering Personal, the app auto‑tops up in batches until the pool reaches the target size, avoiding duplicates.
@@ -346,6 +351,41 @@ BYPASS_API_WORD_SELECTION=true
 
 # Paths
 USERS_BIO_FILE=users_bio.json
+```
+
+## FlashCard Category (profile‑provided text)
+
+- Purpose: Create a study/focus deck from your own text. You paste text in your profile, and the system extracts meaningful words and generates one concise hint per word.
+- Input Field: “FlashCard Text” in Profile.
+- Pool behavior:
+  - Pool is built from your FlashCard text and auto‑regenerates when the text changes and you save your profile.
+  - Hints are API‑first (if enabled); if API fails, falls back to locally generated hints. API‑generated hints are saved back to your `flash_pool` in `users_bio.json`.
+  - Only one hint per word (same as Personal).
+  - Stopwords (e.g., “the”, “been”) are excluded.
+- API bypass parity: Even if `BYPASS_API_WORD_SELECTION=true`, FlashCard behaves like Personal — allowed to call the API for hints/selection while other categories use local dictionary.
+- Pool sizing:
+  - Controlled independently from Personal via `FLASHCARD_POOL_MAX` (preferred) or `FLASHCARD_WORDS_COUNT`.
+  - Personal continues to use `PERSONAL_POOL_MAX`.
+- Regeneration UX: On profile save with changed FlashCard text, the UI shows a progress spinner and a success message when generation completes.
+
+### Environment Variables (FlashCard)
+
+```env
+# FlashCard text limits
+FLASHCARD_TEXT_MAX=2000            # Max characters allowed in FlashCard Text input
+
+# FlashCard pool size (independent of Personal)
+FLASHCARD_POOL_MAX=60              # Preferred; controls flash_pool target size
+# Backward‑compat: used if FLASHCARD_POOL_MAX is unset
+FLASHCARD_WORDS_COUNT=60
+
+# Reuse Personal knobs for generation cadence
+PERSONAL_POOL_BATCH_SIZE=10        # Batch size when topping up flash_pool
+PERSONAL_POOL_API_ATTEMPTS=3       # API attempts during FlashCard hint generation
+PERSONAL_POOL_REBUILD_MAX_SECS=8   # Time budget for rebuilding pools
+
+# API behavior
+BYPASS_API_WORD_SELECTION=true     # FlashCard/Personal may still use API; others bypass
 ```
 
 ## Data Files

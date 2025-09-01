@@ -1216,9 +1216,14 @@ def display_login():
         if show_personal:
             personal_section = (
                 "#### Personal Category (Profile‑aware)\n"
-                "- When you choose **Personal**, the game uses your profile (Bio, Occupation, Education) to ask the LLM for a single, personally relevant noun and a set of tailored hints.\n"
-                "- The UI blocks with 'Generating personal hints…' until at least 3 hints are available. If not enough hints are ready in time, you'll see a clear warning and a **Retry generating hints** button.\n\n"
+                "- Uses your profile (Bio, Occupation, Education, Address) to request personally relevant words and tailored hints.\n"
+                "- Shows 'Generating personal hints…' until enough hints are ready; a Retry button appears if needed.\n\n"
             )
+        flashcard_section = (
+            "#### FlashCard Category (Your Text)\n"
+            "- Paste your own text in Profile → FlashCard Text. The game extracts meaningful words (excludes stopwords) and generates one concise hint per word.\n"
+            "- API‑first for hints, with fallback to local; saves generated hints into your flash pool. Auto‑regenerates when you change and save the text.\n\n"
+        )
         st.markdown(f"""
         ### How to Play
         - Choose a mode:
@@ -1233,7 +1238,7 @@ def display_login():
           - Skip word (−10) to reveal and continue
         - SEI (Scoring Efficiency Index) measures efficiency and powers leaderboards.
         
-        {personal_section}
+        {personal_section}{flashcard_section}
         
         #### Tips
         - Start with vowels/common letters.
@@ -2138,6 +2143,20 @@ def display_welcome():
         3. Click 'Start Game' to begin!
         """)
         with st.expander("📖 How to Play", expanded=False):
+            # Define sections locally to avoid linter warnings when not set above
+            _show_personal = os.getenv('ENABLE_PERSONAL_CATEGORY', 'true').strip().lower() in ('1','true','yes','on')
+            _personal_section = ""
+            if _show_personal:
+                _personal_section = (
+                    "#### Personal Category (Profile‑aware)\n"
+                    "- Uses your profile (Bio, Occupation, Education, Address) to request personally relevant words and tailored hints.\n"
+                    "- Shows 'Generating personal hints…' until enough hints are ready; a Retry button appears if needed.\n\n"
+                )
+            _flashcard_section = (
+                "#### FlashCard Category (Your Text)\n"
+                "- Paste your own text in Profile → FlashCard Text. The game extracts meaningful words (excludes stopwords) and generates one concise hint per word.\n"
+                "- API‑first for hints, with fallback to local; saves generated hints into your flash pool. Auto‑regenerates when you change and save the text.\n\n"
+            )
             st.markdown(f"""
             ### How to Play
             - Choose a mode:
@@ -2152,7 +2171,7 @@ def display_welcome():
               - Skip word (−10) to reveal and continue
             - SEI (Scoring Efficiency Index) measures efficiency and powers leaderboards.
 
-            {personal_section}
+            {_personal_section}{_flashcard_section}
 
             #### Tips
             - Start with vowels/common letters.
@@ -2415,7 +2434,14 @@ def display_game():
             # View Rules / How to Play (expands inline)
             with st.expander('View Rules / How to Play', expanded=False):
                 st.info("""
-                **How to Play:**\n- Guess the word by revealing letters.\n- Use hints or ask yes/no questions.\n- In Beat mode, solve as many words as possible before time runs out!\n- Use the menu to skip, reveal, or change category.\n- Personal: profile‑aware category that may show "Generating personal hints…" and a Retry button until 3+ hints are ready.\n                """)
+                **How to Play:**
+                - Guess the word by revealing letters.
+                - Use hints or ask yes/no questions.
+                - In Beat mode, solve as many words as possible before time runs out!
+                - Use the menu to skip, reveal, or change category.
+                - Personal: profile‑aware category; may show "Generating personal hints…" and a Retry button until hints are ready.
+                - FlashCard: uses your Profile → FlashCard Text to build a pool; one hint per word; auto‑regenerates on save; API‑first with local fallback.
+                """)
             # User Profile (expands inline)
             with st.expander('User Profile', expanded=False):
                 st.markdown('## User Profile')
@@ -2842,7 +2868,14 @@ def display_game():
     # Show rules if toggled
     if st.session_state.get('show_rules', False):
         st.info("""
-        **How to Play:**\n- Guess the word by revealing letters.\n- Use hints or ask yes/no questions.\n- In Beat mode, solve as many words as possible before time runs out!\n- Use the menu to skip, reveal, or change category.\n- Personal: profile‑aware category that may show "Generating personal hints…" and a Retry button until 3+ hints are ready.\n        """)
+        **How to Play:**
+        - Guess the word by revealing letters.
+        - Use hints or ask yes/no questions.
+        - In Beat mode, solve as many words as possible before time runs out!
+        - Use the menu to skip, reveal, or change category.
+        - Personal: profile‑aware category; may show "Generating personal hints…" and a Retry button until hints are ready.
+        - FlashCard: uses your Profile → FlashCard Text to build a pool; one hint per word; auto‑regenerates on save; API‑first with local fallback.
+        """)
     # Handle change category
     if st.session_state.get('change_category', False):
         enable_personal = os.getenv('ENABLE_PERSONAL_CATEGORY', 'true').strip().lower() in ('1', 'true', 'yes', 'on')
