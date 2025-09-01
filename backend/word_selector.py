@@ -2465,20 +2465,24 @@ class WordSelector:
             return self._generate_personal_pool_offline(username, n=n, avoid_set=avoid_set)
         profile_parts = []
         try:
-            # Bio-only persona from users_bio.json
+            # Bio + occupation + education + address from users_bio/users.json
             from backend import bio_store
             bio_text = bio_store.get_bio(username)
             if bio_text:
                 profile_parts.append(f"bio: {bio_text.strip()}")
+            users = self._load_users_db()
+            rec = users.get((username or '').lower(), {})
+            occ = (rec.get('occupation') or '').strip()
+            edu = (rec.get('education') or '').strip()
+            addr = (rec.get('address') or '').strip()
+            if occ:
+                profile_parts.append(f"occupation: {occ}")
+            if edu:
+                profile_parts.append(f"education: {edu}")
+            if addr:
+                profile_parts.append(f"address: {addr}")
         except Exception:
-            try:
-                users = self._load_users_db()
-                rec = users.get((username or '').lower(), {})
-                val = (rec.get("bio") or '').strip()
-                if val:
-                    profile_parts.append(f"bio: {val}")
-            except Exception:
-                pass
+            pass
         persona = "; ".join(profile_parts) or f"username: {username}"
         avoid_list = ", ".join(sorted({w for w in (avoid_set or set())}))
         prompt = (
@@ -2493,7 +2497,12 @@ class WordSelector:
             return [t.lower() for t in re.findall(r"[A-Za-z0-9]+", s or "") if t]
         try:
             from backend import bio_store
-            allowed_terms = set(_tok(bio_store.get_bio(username)))
+            users = self._load_users_db()
+            rec = users.get((username or '').lower(), {})
+            occ = (rec.get('occupation') or '')
+            edu = (rec.get('education') or '')
+            addr = (rec.get('address') or '')
+            allowed_terms = set(_tok(bio_store.get_bio(username))) | set(_tok(occ)) | set(_tok(edu)) | set(_tok(addr))
         except Exception:
             allowed_terms = set()
         
@@ -2632,7 +2641,7 @@ class WordSelector:
         avoid_set = avoid_set or set()
         users = self._load_users_db()
         rec = users.get((username or '').lower(), {}) if isinstance(users, dict) else {}
-        # Extract tokens (bio-only)
+        # Extract tokens (bio + occupation + education + address)
         import re
         def tokenize(text: str) -> list:
             if not text:
@@ -2640,9 +2649,9 @@ class WordSelector:
             toks = re.findall(r"[A-Za-z0-9]+", str(text))
             return [t for t in toks if t]
         bio_toks = tokenize(rec.get('bio', ''))
-        occ_toks = []
-        edu_toks = []
-        addr_toks = []
+        occ_toks = tokenize(rec.get('occupation', ''))
+        edu_toks = tokenize(rec.get('education', ''))
+        addr_toks = tokenize(rec.get('address', ''))
         # Derive age token and location short token for weighting
         age_tok = []
         try:
