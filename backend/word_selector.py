@@ -2234,8 +2234,8 @@ class WordSelector:
         except Exception:
             self.flash_text_max = 500
         try:
-            # Prefer PERSONAL_POOL_MAX to keep same target size semantics
-            self.flash_words_count = int(os.getenv("PERSONAL_POOL_MAX", os.getenv("FLASHCARD_WORDS_COUNT", "10")))
+            # Independent FlashCard pool size
+            self.flash_words_count = int(os.getenv("FLASHCARD_POOL_MAX", os.getenv("FLASHCARD_WORDS_COUNT", "10")))
         except Exception:
             self.flash_words_count = 10
         try:

@@ -1232,9 +1232,9 @@ def display_login():
           - Guess the word any time (wrong −10, correct +20 × word length)
           - Skip word (−10) to reveal and continue
         - SEI (Scoring Efficiency Index) measures efficiency and powers leaderboards.
-
+        
         {personal_section}
-
+        
         #### Tips
         - Start with vowels/common letters.
         - Use questions to narrow the space before spending hints.
@@ -2163,7 +2163,7 @@ def display_welcome():
             #### Account Management
             - Use Login to Register or Sign In.
             - Account Options: Delete Account (username, email, password, type DELETE) or Reactivate (paste emailed token). Token field is hidden and cleared for safety.
-            """)
+        """)
         with st.expander("💡 Hints System", expanded=False):
             st.markdown("""
             - Easy Mode: Up to 10 hints available (-5 points each)
@@ -3445,7 +3445,7 @@ def display_game():
             if not st.session_state.get('_time_over_reload_injected'):
                 st.session_state['_time_over_reload_injected'] = True
                 st.markdown("""
-                <script>
+            <script>
                 (function(){
                   if (window && !window._wizword_reload_scheduled) {
                     window._wizword_reload_scheduled = true;
@@ -3455,8 +3455,8 @@ def display_game():
                     document.addEventListener('visibilitychange', function(){ if (document.hidden) { try { clearTimeout(t); } catch(e){} } });
                   }
                 })();
-                </script>
-                """, unsafe_allow_html=True)
+            </script>
+            """, unsafe_allow_html=True)
             _now = _time.time()
             _started = float(st.session_state.get('time_over_at', _now))
             _idle_limit = int(os.getenv('INACTIVITY_LOGOUT_SECONDS', os.getenv('BEAT_MODE_TIME', '300')))
