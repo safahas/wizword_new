@@ -54,6 +54,15 @@ def _improve_flashcard_hints_once() -> None:
                     updated_pool.extend(pool[len(updated_pool):])
                     break
                 if not isinstance(item, dict):
+                    # normalize missing metadata
+                    if isinstance(item, dict) and 'hint_source' not in item:
+                        item['hint_source'] = 'api' if str(item.get('hint','')).strip() else 'local'
+                    if isinstance(item, dict) and 'api_attempts' not in item:
+                        item['api_attempts'] = 0
+                    if isinstance(item, dict) and 'hint_source' not in item:
+                        item['hint_source'] = 'api' if str(item.get('hint','')).strip() else 'local'
+                    if isinstance(item, dict) and 'api_attempts' not in item:
+                        item['api_attempts'] = 0
                     updated_pool.append(item)
                     continue
                 w = str(item.get('word', '')).strip()

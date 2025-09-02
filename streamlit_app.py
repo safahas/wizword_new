@@ -2675,10 +2675,8 @@ def display_game():
                                                 else:
                                                     # Normalize structure; keep provided hint text if present
                                                     hint_text = str(it.get('hint','')).strip()
-                                                    if hint_text:
-                                                        new_pool.append({'word': it.get('word'), 'hint': hint_text, 'hint_source': 'api', 'api_attempts': 1})
-                                                    else:
-                                                        new_pool.append({'word': it.get('word'), 'hint': '', 'hint_source': 'local', 'api_attempts': 0})
+                                                    src = 'api' if hint_text else 'local'
+                                                    new_pool.append({'word': it.get('word'), 'hint': hint_text, 'hint_source': src, 'api_attempts': 1 if hint_text else 0})
                                                 seen.add(w)
                                                 added += 1
                                     if added == 0:

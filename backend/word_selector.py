@@ -2681,13 +2681,11 @@ class WordSelector:
                         wl = w.lower()
                         if not w or wl in avoid_set or wl in collected_set:
                             continue
-                        if allowed_terms and wl not in allowed_terms:
-                            continue
                         if not _valid_api_word(wl):
                             continue
                         if not h:
                             h = 'From your bio'
-                        collected.append({'word': w, 'hint': h})
+                        collected.append({'word': w, 'hint': h, 'hint_source': 'api', 'api_attempts': 1})
                         collected_set.add(wl)
                         added += 1
                         if added >= remaining:
