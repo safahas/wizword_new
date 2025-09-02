@@ -333,6 +333,22 @@ word_guess_contest_ai/
   - Contextual one‑liners are generated from Bio; otherwise fallback to first‑letter hints.
   - Generic “Related to your profile” hints are avoided and cleaned via a migration.
 
+### Personal Hint Generation & Persistence
+
+- First build and profile‑save behavior:
+  - When your Bio (or related profile fields) changes and you save, the app rebuilds your Personal pool up to `PERSONAL_POOL_MAX`.
+  - It requests items via API first within a short time budget; if the API returns fewer than requested, the remainder is filled offline so the pool is usable immediately.
+  - Existing API hints for matching words are reused to avoid unnecessary calls when your Bio changes.
+- Background upgrades (session‑independent):
+  - A background worker periodically reattempts API generation for Personal pool items that still use local hints, one attempt per pass, limited per user by `PERSONAL_WORKER_BATCH_PER_USER` and per word by `PERSONAL_POOL_API_ATTEMPTS`.
+  - Successful API hints overwrite local hints and are saved to `users_bio.json`.
+  - Respects API quota warnings and pauses under critical quota.
+- Data fields in `personal_pool` items:
+  - `word`: the selected word
+  - `hint`: latest hint text
+  - `hint_source`: `api` or `local`
+  - `api_attempts`: number of API tries so far (capped by `PERSONAL_POOL_API_ATTEMPTS`)
+
 ### Environment Variables (Personal Pool)
 
 Add these to `.env` as needed:
@@ -342,6 +358,8 @@ Add these to `.env` as needed:
 PERSONAL_POOL_MAX=60              # Max items per user pool
 PERSONAL_POOL_BATCH_SIZE=10       # Items requested per top‑up
 PERSONAL_POOL_API_ATTEMPTS=3      # Consecutive API retries per top‑up
+PERSONAL_POOL_REBUILD_MAX_SECS=8  # Time budget for API-assisted rebuilds
+PERSONAL_WORKER_BATCH_PER_USER=3  # Background upgrades per user per pass
 
 # Enable/disable Personal in UI and logic
 ENABLE_PERSONAL_CATEGORY=true
@@ -367,6 +385,22 @@ USERS_BIO_FILE=users_bio.json
   - Controlled independently from Personal via `FLASHCARD_POOL_MAX` (preferred) or `FLASHCARD_WORDS_COUNT`.
   - Personal continues to use `PERSONAL_POOL_MAX`.
 - Regeneration UX: On profile save with changed FlashCard text, the UI shows a progress spinner and a success message when generation completes.
+
+### FlashCard Hint Generation & Persistence
+
+- First build and profile‑save behavior:
+  - Extract candidate words from your FlashCard text (stopwords removed).
+  - Make one API attempt per word, then immediately save the pool. Any misses get a local contextual hint so the pool is usable right away.
+  - When FlashCard text changes, previously generated API hints for matching words are reused to avoid unnecessary API calls.
+- Background upgrades (session‑independent):
+  - A background worker periodically reattempts API generation for words that still have local hints, one attempt per pass, limited per user (`FLASHCARD_WORKER_BATCH_PER_USER`) and per word (`PERSONAL_POOL_API_ATTEMPTS`).
+  - Successful API hints overwrite local hints and are saved to `flash_pool`.
+  - Honors API quota warnings and pauses under critical quota.
+- Data fields in `flash_pool` items:
+  - `word`: the selected word
+  - `hint`: latest hint text
+  - `hint_source`: `api` or `local`
+  - `api_attempts`: number of API tries so far (capped by `PERSONAL_POOL_API_ATTEMPTS`)
 
 ### Environment Variables (FlashCard)
 

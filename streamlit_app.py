@@ -459,6 +459,11 @@ st.set_page_config(
 
 # st.write("🚨 [DEBUG] THIS IS THE REAL streamlit_app.py - TEST MARKER")
 from backend.game_logic import GameLogic
+try:
+    from backend.flashcard_worker import start_flashcard_worker
+    start_flashcard_worker()
+except Exception:
+    pass
 import os
 import streamlit as st
 import json
@@ -2557,29 +2562,46 @@ def display_game():
                             _new_flash_inline = st.session_state.get('profile_flash_text_inline', '')
                             set_flash_text(username_lower, _new_flash_inline)
                             if (_new_flash_inline or '').strip() != (_flash_init_inline or '').strip():
-                                # Rebuild pool with progress message
+                                # Rebuild pool with staged API attempts: one-shot pass, save, then background passes on future interactions
                                 with st.spinner('Generating FlashCard hints…'):
                                     from backend.word_selector import WordSelector
                                     ws = getattr(GameLogic, 'word_selector', None) or WordSelector()
                                     words = ws._extract_flash_words(_new_flash_inline, max_items=getattr(ws, 'flash_words_count', 10))
-                                    rebuilt = []
+                                    # Load previous pool to reuse existing API hints for same words
                                     try:
-                                        _att = int(os.getenv('PERSONAL_POOL_API_ATTEMPTS', '3'))
+                                        from backend.bio_store import get_flash_pool
+                                        _prev_pool = get_flash_pool(username_lower) or []
                                     except Exception:
-                                        _att = 3
+                                        _prev_pool = []
+                                    _prev_api_map = {}
+                                    try:
+                                        _prev_api_map = { str(it.get('word','')).strip().lower(): it for it in _prev_pool if str(it.get('hint_source','')) == 'api' and str(it.get('hint','')).strip() }
+                                    except Exception:
+                                        _prev_api_map = {}
+                                    rebuilt = []
+                                    # First pass: one attempt per word
                                     for w in words:
                                         if not w:
                                             continue
+                                        wl = str(w).strip().lower()
+                                        # Reuse existing API hint if available for this word
+                                        prev_item = _prev_api_map.get(wl)
+                                        if prev_item and str(prev_item.get('hint','')).strip():
+                                            rebuilt.append({'word': w, 'hint': str(prev_item.get('hint')), 'hint_source': 'api', 'api_attempts': int(prev_item.get('api_attempts', 1)) or 1})
+                                            continue
+                                        hint_text = None
                                         try:
-                                            api_h = ws.get_api_hints_force(w, 'flashcard', n=1, attempts=_att)
+                                            api_h = ws.get_api_hints_force(w, 'flashcard', n=1, attempts=1)
                                             hint_text = str(api_h[0]) if api_h else None
                                         except Exception:
                                             hint_text = None
                                         if not hint_text:
                                             hint_text = ws._make_flash_hint(w, _new_flash_inline)
-                                        rebuilt.append({'word': w, 'hint': hint_text or ''})
+                                            rebuilt.append({'word': w, 'hint': hint_text or '', 'hint_source': 'local', 'api_attempts': 1})
+                                        else:
+                                            rebuilt.append({'word': w, 'hint': hint_text or '', 'hint_source': 'api', 'api_attempts': 1})
                                     set_flash_pool(username_lower, rebuilt)
-                                    st.success('FlashCard hints regenerated and saved.')
+                                    st.success('FlashCard hints saved. We will keep improving missing hints in the background.')
                         except Exception:
                             pass
                         st.session_state['users'][username_lower]['birthday'] = str(birthday)
@@ -2634,14 +2656,29 @@ def display_game():
                                 attempts = 0
                                 existing_words = []
                                 while len(new_pool) < target_total and attempts < max_attempts and (_t.time() - start_ts) < api_budget_secs:
+                                    # Reuse existing API hints from old_pool for matching words when possible
+                                    try:
+                                        prev_api_map = { (it.get('word') or '').lower(): it for it in (old_pool or []) if str(it.get('hint','')) and str(it.get('hint_source','')) == 'api' }
+                                    except Exception:
+                                        prev_api_map = {}
                                     batch = ws.generate_personal_pool(username_lower, n=batch_size, avoid=existing_words)
+                                    # If generated batch lacks hint_source/api_attempts, enrich entries
                                     added = 0
                                     if batch:
                                         seen = { (it.get('word') or '').lower() for it in new_pool }
                                         for it in batch:
                                             w = (it.get('word') or '').lower()
                                             if w and w not in seen:
-                                                new_pool.append(it)
+                                                prev = prev_api_map.get(w)
+                                                if prev and str(prev.get('hint','')).strip():
+                                                    new_pool.append({'word': it.get('word'), 'hint': str(prev.get('hint')), 'hint_source': 'api', 'api_attempts': int(prev.get('api_attempts', 1)) or 1})
+                                                else:
+                                                    # Normalize structure; keep provided hint text if present
+                                                    hint_text = str(it.get('hint','')).strip()
+                                                    if hint_text:
+                                                        new_pool.append({'word': it.get('word'), 'hint': hint_text, 'hint_source': 'api', 'api_attempts': 1})
+                                                    else:
+                                                        new_pool.append({'word': it.get('word'), 'hint': '', 'hint_source': 'local', 'api_attempts': 0})
                                                 seen.add(w)
                                                 added += 1
                                     if added == 0:

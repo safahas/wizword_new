@@ -2035,27 +2035,88 @@ class WordSelector:
                 _start = _t.time()
                 words = self._extract_flash_words(text, max_items=self.flash_words_count)
                 lst = []
+                # Build map of existing API hints to reuse when text changes
+                try:
+                    prev_pool = get_flash_pool(username)
+                except Exception:
+                    prev_pool = []
+                prev_api = {}
+                try:
+                    prev_api = { str(it.get('word','')).strip().lower(): it for it in (prev_pool or []) if str(it.get('hint_source','')) == 'api' and str(it.get('hint','')).strip() }
+                except Exception:
+                    prev_api = {}
+                # First pass: one API attempt per word, then save immediately
                 try:
                     import os as _os
-                    _att = int(_os.getenv('PERSONAL_POOL_API_ATTEMPTS', '3'))
+                    _max_att = int(_os.getenv('PERSONAL_POOL_API_ATTEMPTS', '3'))
                 except Exception:
-                    _att = 3
+                    _max_att = 3
                 for w in words:
                     if not w:
                         continue
+                    wl = str(w).strip().lower()
+                    # Reuse existing API hint if we have it
+                    prev_item = prev_api.get(wl)
+                    if prev_item and str(prev_item.get('hint','')).strip():
+                        lst.append({"word": w, "hint": str(prev_item.get('hint')), 'hint_source': 'api', 'api_attempts': int(prev_item.get('api_attempts', 1)) or 1})
+                        continue
                     hint_text = None
+                    hint_source = 'local'
+                    api_attempts = 0
                     try:
-                        api_h = self.get_api_hints_force(w, 'flashcard', n=1, attempts=_att)
+                        api_h = self.get_api_hints_force(w, 'flashcard', n=1, attempts=1)
                         hint_text = str(api_h[0]) if api_h else None
+                        api_attempts = 1
                     except Exception:
                         hint_text = None
                     if not hint_text:
                         hint_text = self._make_flash_hint(w, text)
-                    lst.append({"word": w, "hint": hint_text or ''})
+                        hint_source = 'local'
+                    else:
+                        hint_source = 'api'
+                    lst.append({"word": w, "hint": hint_text or '', 'hint_source': hint_source, 'api_attempts': api_attempts})
                     if (_t.time() - _start) >= getattr(self, 'flash_rebuild_max_secs', 5.0):
                         break
                 set_flash_pool(username, lst)
                 pool = lst
+            # Maintenance pass: reattempt API hints only for words that failed previously, one-shot per call
+            try:
+                import time as _t2
+                import os as _os2
+                changed = False
+                budget = getattr(self, 'flash_rebuild_max_secs', 5.0)
+                start = _t2.time()
+                max_attempts = int(_os2.getenv('PERSONAL_POOL_API_ATTEMPTS', '3'))
+                new_pool = []
+                for it in (pool or []):
+                    if (_t2.time() - start) >= budget:
+                        new_pool.extend(pool[len(new_pool):])
+                        break
+                    w = str(it.get('word','')).strip()
+                    hint = it.get('hint', '')
+                    src = it.get('hint_source', 'local')
+                    tries = int(it.get('api_attempts', 0))
+                    if w and (src != 'api') and (tries < max_attempts):
+                        # one attempt this call
+                        got = None
+                        try:
+                            ah = self.get_api_hints_force(w, 'flashcard', n=1, attempts=1)
+                            got = str(ah[0]) if ah else None
+                        except Exception:
+                            got = None
+                        tries += 1
+                        if got:
+                            it = {"word": w, "hint": got, 'hint_source': 'api', 'api_attempts': tries}
+                            changed = True
+                        else:
+                            it = {"word": w, "hint": hint, 'hint_source': src, 'api_attempts': tries}
+                            changed = True
+                    new_pool.append(it)
+                if changed:
+                    set_flash_pool(username, new_pool)
+                    pool = new_pool
+            except Exception:
+                pass
             recent_key = f"{username}:flashcard"
             if not hasattr(self, "_recently_used_words_by_combo"):
                 self._recently_used_words_by_combo = {}
