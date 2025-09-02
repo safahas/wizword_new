@@ -2035,11 +2035,23 @@ class WordSelector:
                 _start = _t.time()
                 words = self._extract_flash_words(text, max_items=self.flash_words_count)
                 lst = []
+                try:
+                    import os as _os
+                    _att = int(_os.getenv('PERSONAL_POOL_API_ATTEMPTS', '3'))
+                except Exception:
+                    _att = 3
                 for w in words:
                     if not w:
                         continue
-                    hint = self._make_flash_hint(w, text)
-                    lst.append({"word": w, "hint": hint})
+                    hint_text = None
+                    try:
+                        api_h = self.get_api_hints_force(w, 'flashcard', n=1, attempts=_att)
+                        hint_text = str(api_h[0]) if api_h else None
+                    except Exception:
+                        hint_text = None
+                    if not hint_text:
+                        hint_text = self._make_flash_hint(w, text)
+                    lst.append({"word": w, "hint": hint_text or ''})
                     if (_t.time() - _start) >= getattr(self, 'flash_rebuild_max_secs', 5.0):
                         break
                 set_flash_pool(username, lst)
