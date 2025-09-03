@@ -48,8 +48,8 @@ class QuotaMonitor:
             
             self.quota_info["last_check"] = datetime.now(timezone.utc)
             
-            # Log quota update
-            logger.info(
+            # Log quota update (debug level)
+            logger.debug(
                 f"Quota updated - Remaining: {self.quota_info['remaining']}, "
                 f"Reset: {self.quota_info['reset_time']}"
             )

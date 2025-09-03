@@ -15,15 +15,39 @@ from pathlib import Path
 logs_dir = Path(__file__).parent.parent / 'logs'
 logs_dir.mkdir(exist_ok=True)
 
-# Configure logging
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    handlers=[
-        logging.FileHandler(logs_dir / 'game.log'),
-        logging.StreamHandler()  # Also log to console
-    ]
-)
+# Configure logging (level controlled by LOG_LEVEL env; default INFO)
+_log_level_name = os.getenv('LOG_LEVEL', 'INFO').strip().upper()
+_log_level = getattr(logging, _log_level_name, logging.INFO)
+# Force reconfigure root logger so Streamlit's defaults don't suppress DEBUG
+try:
+    logging.basicConfig(
+        level=_log_level,
+        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+        handlers=[
+            logging.FileHandler(logs_dir / 'game.log'),
+            logging.StreamHandler()
+        ],
+        force=True,
+    )
+except TypeError:
+    # For very old Python versions without force param
+    logging.getLogger().handlers.clear()  # type: ignore[attr-defined]
+    logging.basicConfig(
+        level=_log_level,
+        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+        handlers=[
+            logging.FileHandler(logs_dir / 'game.log'),
+            logging.StreamHandler()
+        ]
+    )
+
+# Also explicitly set module logger levels
+logging.getLogger().setLevel(_log_level)
+logging.getLogger('backend').setLevel(_log_level)
+logging.getLogger('backend.word_selector').setLevel(_log_level)
+logging.getLogger('backend.openrouter_monitor').setLevel(_log_level)
+logging.getLogger('backend.flashcard_worker').setLevel(_log_level)
+logging.getLogger('backend.game_logic').setLevel(_log_level)
 logger = logging.getLogger(__name__)
 
 class GameMonitor:

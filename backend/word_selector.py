@@ -2289,9 +2289,9 @@ class WordSelector:
 
         # Check for .env variable to bypass API word selection
         self.bypass_api_word_selection = os.getenv("BYPASS_API_WORD_SELECTION", "false").lower() == "true"
-        logger.info(f"BYPASS_API_WORD_SELECTION is set to: {self.bypass_api_word_selection}")
+        logger.debug(f"BYPASS_API_WORD_SELECTION is set to: {self.bypass_api_word_selection}")
         if self.bypass_api_word_selection:
-            logger.info("Bypassing API for word selection due to BYPASS_API_WORD_SELECTION setting. Using fallback/dictionary only (except 'personal' and 'flashcard').")
+            logger.debug("Bypassing API for word selection due to BYPASS_API_WORD_SELECTION setting. Using fallback/dictionary only (except 'personal' and 'flashcard').")
             self.use_fallback = True  # default to fallback
 
         self._api_hint_cache = {}
@@ -3707,14 +3707,14 @@ class WordSelector:
                 # Remove duplicates
                 filtered_hints = list(dict.fromkeys(filtered_hints))
                 if len(filtered_hints) >= min(5, n):
-                    logger.info(f"API returned {len(filtered_hints)} valid hints for '{word}': {filtered_hints}")
+                    logger.debug(f"API returned {len(filtered_hints)} valid hints for '{word}': {filtered_hints}")
                     return filtered_hints[:n]
-                logger.warning(f"API returned insufficient valid hints, retrying (attempt {attempt+1}/{max_attempts}): {filtered_hints}")
+                logger.debug(f"API returned insufficient valid hints, retrying (attempt {attempt+1}/{max_attempts}): {filtered_hints}")
                 time.sleep(1.5 * (attempt + 1))
             except Exception as e:
-                logger.error(f"Failed to get hints from API (attempt {attempt+1}): {str(e)}")
+                logger.debug(f"Failed to get hints from API (attempt {attempt+1}): {str(e)}")
                 time.sleep(1.5 * (attempt + 1))
-        logger.error(f"API failed to provide valid hints after {max_attempts} attempts for word '{word}'")
+        logger.debug(f"API failed to provide valid hints after {max_attempts} attempts for word '{word}'")
         return []
 
     def mark_word_played(self, word: str, username: str, subject: str):

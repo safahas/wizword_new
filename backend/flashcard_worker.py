@@ -97,7 +97,7 @@ def _improve_flashcard_hints_once() -> None:
             if changed:
                 try:
                     bio_store.update_user_record(username, {'flash_pool': updated_pool})
-                    logger.info(f"[FlashWorker] Upgraded flash_pool hints for user '{username}'.")
+                    logger.debug(f"[FlashWorker] Upgraded flash_pool hints for user '{username}'.")
                 except Exception:
                     pass
         except Exception:
