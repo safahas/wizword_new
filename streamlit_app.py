@@ -979,7 +979,7 @@ def validate_subject(subject: str) -> tuple[bool, str]:
     """Validate the selected subject."""
     _enable_flashcard = os.getenv('ENABLE_FLASHCARD_CATEGORY', 'true').strip().lower() in ('1','true','yes','on')
     valid_categories = ["general", "animals", "food", "places", "science", "tech", "sports",
-                       "movies", "music", "brands", "history", "random", "4th_grade", "8th_grade"]
+                       "movies", "music", "brands", "history", "law", "random", "4th_grade", "8th_grade"]
     if _enable_flashcard:
         valid_categories.append("flashcard")
     subject = subject.lower()  # Convert to lowercase for comparison
@@ -1950,7 +1950,7 @@ def display_welcome():
                 if _enable_flashcard:
                     category_options.append("flashcard")
                 if enable_personal:
-                    category_options.insert(1, "Personal")
+                    category_options.append("Personal")
                 # Normalize previously selected Personal to General before rendering the widget
                 _k = 'start_category_select'
                 _prev = st.session_state.get(_k)
@@ -2927,11 +2927,11 @@ def display_game():
     if st.session_state.get('change_category', False):
         enable_personal = os.getenv('ENABLE_PERSONAL_CATEGORY', 'true').strip().lower() in ('1', 'true', 'yes', 'on')
         enable_flashcard = os.getenv('ENABLE_FLASHCARD_CATEGORY', 'true').strip().lower() in ('1', 'true', 'yes', 'on')
-        categories = ["any", "anatomy", "animals", "aviation", "brands", "cities", "food", "general", "gre", "history", "medicines", "movies", "music", "places", "psat", "sat", "science", "sports", "tech", "4th_grade", "8th_grade"]
+        categories = ["any", "anatomy", "animals", "aviation", "brands", "cities", "food", "general", "gre", "history", "law", "medicines", "movies", "music", "places", "psat", "sat", "science", "sports", "tech", "4th_grade", "8th_grade"]
         if enable_flashcard:
             categories.append("flashcard")
         if enable_personal:
-            categories.insert(1, "Personal")
+            categories.append("Personal")
         new_category = st.selectbox("Select a new category:", categories, format_func=lambda x: ('Any' if x=='any' else ('GRE' if x=='gre' else ('SAT' if x=='sat' else ('PSAT' if x=='psat' else x.replace('_',' ').title())))), key='category_select_box')
         if st.button("Confirm Category Change", key='change_category_btn'):
             # Enforce env gate: if Personal is disabled, do not allow selection of Personal

@@ -18172,7 +18172,864 @@
         "Opposite of right.",
         "Synonym for false."
       ]
-    },
+    }, 
+    "Law": {
+      "Court": [
+        "A place where disputes are settled by officials.",
+        "Used for trials, hearings, and judgments.",
+        "Can be local, national, or international."
+      ],
+      "Judge": [
+        "A person who decides legal cases.",
+        "Often wears a robe in formal proceedings.",
+        "Has the authority to issue rulings."
+      ],
+      "Jury": [
+        "A group of citizens chosen to hear a case.",
+        "They decide guilt or innocence in some trials.",
+        "Usually consists of 6 to 12 people."
+      ],
+      "Claim": [
+        "A statement asking for a right or money.",
+        "Common in lawsuits and insurance.",
+        "Must often be supported with evidence."
+      ],
+      "Right": [
+        "A freedom or entitlement protected by rules.",
+        "Can apply to speech, property, or voting.",
+        "Sometimes described as 'civil' or 'human'."
+      ],
+      "Bill": [
+        "A written proposal for a new rule.",
+        "Must be approved before becoming binding.",
+        "Often debated in legislatures."
+      ],
+      "Code": [
+        "A collection of written rules or standards.",
+        "Used in civil, criminal, or tax systems.",
+        "Examples include Hammurabi and Napoleonic."
+      ],
+      "Fine": [
+        "Money paid as punishment for wrongdoing.",
+        "Often given for minor violations.",
+        "Collected by government authorities."
+      ],
+      "Bail": [
+        "Money or security given for temporary release.",
+        "Ensures someone returns for trial.",
+        "Set by a judge."
+      ],
+      "Case": [
+        "A legal matter brought before officials.",
+        "Can be civil or criminal.",
+        "Recorded in official documents."
+      ],
+      "Deed": [
+        "A written document proving property ownership.",
+        "Often used in real estate.",
+        "Must usually be signed and recorded."
+      ],
+      "Will": [
+        "A document describing how property is passed on.",
+        "Prepared for when someone dies.",
+        "Must be signed and witnessed."
+      ],
+      "Lawyer": [
+        "A professional trained to advise or represent clients.",
+        "Can appear in court or draft documents.",
+        "Also called attorney or counsel."
+      ],
+      "Legal": [
+        "Something permitted under official rules.",
+        "Opposite of forbidden or unlawful.",
+        "Term often paired with 'illegal.'"
+      ],
+      "Civil": [
+        "Matters involving private rights and disputes.",
+        "Differs from criminal wrongdoing.",
+        "Includes contracts, property, and family issues."
+      ],
+      "Crime": [
+        "An act that breaks public rules and is punishable.",
+        "Ranges from theft to serious offenses.",
+        "Prosecuted by the state."
+      ],
+      "Trial": [
+        "A formal process to decide guilt or liability.",
+        "Takes place in front of a judge or jury.",
+        "Often includes testimony and evidence."
+      ],
+      "Arrest": [
+        "Taking someone into custody.",
+        "Done by police officers.",
+        "Requires legal authority or a warrant."
+      ],
+      "Appeal": [
+        "A request to review and change a decision.",
+        "Filed when someone disagrees with a ruling.",
+        "Usually heard by a higher authority."
+      ],
+      "Act": [
+        "A law passed by a legislature.",
+        "Can apply nationally or locally.",
+        "Examples include the Civil Rights Act."
+      ],
+      "Bar": [
+        "The professional body for attorneys.",
+        "Also means the physical area separating officials in court.",
+        "Lawyers must pass its exam."
+      ],
+      "Oath": [
+        "A formal promise to tell the truth or fulfill duty.",
+        "Common in courts and public office.",
+        "Breaking it may be considered perjury."
+      ],
+      "Tort": [
+        "A civil wrong causing harm or loss.",
+        "Can result in monetary compensation.",
+        "Examples include negligence and defamation."
+      ],
+      "Plea": [
+        "A formal response to charges.",
+        "Can be guilty, not guilty, or no contest.",
+        "Entered in front of a judge."
+      ],
+      "Code": [
+        "A system of written rules.",
+        "Organizes civil, criminal, or other laws.",
+        "Historic examples include Hammurabi."
+      ],
+      "Habeas": [
+        "A principle requiring that detained people be brought before a court.",
+        "Protects against unlawful imprisonment.",
+        "Comes from Latin meaning 'you shall have the body.'"
+      ],
+      "Equity": [
+        "A system based on fairness and justice.",
+        "Used when strict rules don’t give fair results.",
+        "Originated in English courts."
+      ],
+      "Magna": [
+        "Refers to Magna Carta, a historic charter.",
+        "Limited the power of kings in England.",
+        "Signed in 1215."
+      ],
+      "Notary": [
+        "An official who certifies documents and signatures.",
+        "Often needed for contracts and deeds.",
+        "Provides legal authenticity."
+      ],
+      "Statute": [
+        "A written law created by a legislature.",
+        "More specific than constitutional principles.",
+        "Can be federal, state, or local."
+      ],
+      "Union": [
+        "An organized group for workers' rights.",
+        "Often signs agreements with employers.",
+        "Protected by labor laws."
+      ],
+      "Decree": [
+        "An official order with force of law.",
+        "Can be issued by a judge or ruler.",
+        "Often used in family or civil cases."
+      ],
+      "Treaty": [
+        "A formal agreement between nations.",
+        "Common in peace or trade matters.",
+        "Must usually be ratified."
+      ],
+      "Summon": [
+        "A call to appear in court.",
+        "Delivered as a written notice.",
+        "Also known as a summons."
+      ],
+      "Clerk": [
+        "An officer who maintains court records.",
+        "Assists judges and lawyers.",
+        "Prepares official documents."
+      ],
+      "Panel": [
+        "A group chosen to decide or advise.",
+        "Used for juries or legal boards.",
+        "May consist of experts or citizens."
+      ],
+      "Proof": [
+        "Evidence showing something is true.",
+        "Needed to win a case.",
+        "Can be documents, testimony, or objects."
+      ],
+      "Custody": [
+        "Control over a person or property.",
+        "Often used in family and criminal law.",
+        "Can be temporary or permanent."
+      ],
+      "Patent": [
+        "A legal right to an invention.",
+        "Protects creators for a limited time.",
+        "Encourages innovation."
+      ],
+      "Lease": [
+        "A contract for use of property for payment.",
+        "Common in housing and land.",
+        "Can be short or long term."
+      ],
+      "Grant": [
+        "Permission or funding given officially.",
+        "Used in property, education, or rights.",
+        "Can be revoked if misused."
+      ],
+      "Code": [
+        "A structured collection of rules.",
+        "Guides conduct in specific fields.",
+        "Examples include civil or criminal codes."
+      ],
+      "Edict": [
+        "An official proclamation or command.",
+        "Issued by rulers or governments.",
+        "Similar to a decree."
+      ],
+      "Civic": [
+        "Relating to duties of citizenship.",
+        "Often tied to rights and responsibilities.",
+        "Examples include voting and jury duty."
+      ],
+      "Order": [
+        "A direction given by an authority.",
+        "Common in courts and law enforcement.",
+        "Disobeying it may have consequences."
+      ],
+      "Lien": [
+        "A claim against property as security for debt.",
+        "Common in finance and real estate.",
+        "Released once payment is made."
+      ],
+      "Title": [
+        "Legal proof of property ownership.",
+        "Important in land and vehicles.",
+        "Can be transferred to others."
+      ],
+      "Vote": [
+        "A formal choice in an election.",
+        "Protects democratic participation.",
+        "Can be secret or public."
+      ],
+      "Panel": [
+        "A selected group of people for decision-making.",
+        "Used in legal trials or investigations.",
+        "Can be temporary or permanent."
+      ],
+      "Crown": [
+        "Symbol of a monarchy’s authority.",
+        "Still used as a legal term in some countries.",
+        "Refers to the government in places like the UK."
+      ],
+      "Duty": [
+        "An obligation to act in a certain way.",
+        "Common in law, ethics, and taxes.",
+        "Opposite of neglect."
+      ],
+      "Ethics": [
+        "Principles guiding right and wrong behavior.",
+        "Connected to law, medicine, and philosophy.",
+        "Related to morality."
+      ],
+      "Judge": [
+        "An official who interprets and applies law.",
+        "Presides over trials and hearings.",
+        "Appointed or elected depending on the system."
+      ],
+      "Juris": [
+        "A Latin root meaning 'law' or 'right.'",
+        "Found in words like jurisdiction and jurisprudence.",
+        "Used in many legal systems."
+      ],
+      "Limit": [
+        "A boundary or restriction set by authority.",
+        "Common in zoning, speed, or rights.",
+        "Exceeding it can lead to penalties."
+      ],
+      "Minor": [
+        "A person under legal adulthood.",
+        "Has limited rights in many countries.",
+        "Often under 18 years old."
+      ],
+      "Obey": [
+        "To follow orders or rules.",
+        "Expected in courts and contracts.",
+        "Opposite of disobey."
+      ],
+      "Penalty": [
+        "A punishment for breaking rules.",
+        "Can involve fines, jail, or restrictions.",
+        "Opposite of reward."
+      ],
+      "Reform": [
+        "The process of improving rules or systems.",
+        "Common in legal and political history.",
+        "Examples include prison or voting reforms."
+      ],
+      "Sue": [
+        "To start legal action against someone.",
+        "Common in civil disputes.",
+        "Seeks money or other remedies."
+      ],
+      "Writ": [
+        "A formal written order issued by a court.",
+        "Directs someone to do or stop something.",
+        "Examples include habeas corpus."
+      ],
+      "Accord": [
+        "An agreement between two or more parties.",
+        "Often used in international relations or disputes.",
+        "Synonym for settlement."
+      ],
+      "Affidav": [
+        "A written statement confirmed by oath.",
+        "Used as evidence in legal proceedings.",
+        "Must be signed before an official."
+      ],
+      "Appeal": [
+        "A request to review a decision by a higher authority.",
+        "Common after a trial verdict.",
+        "May result in confirmation or reversal."
+      ],
+      "Arbitr": [
+        "The process of resolving disputes outside of court.",
+        "Involves a neutral third party.",
+        "Often used in business contracts."
+      ],
+      "Assign": [
+        "To transfer rights or duties to another person.",
+        "Used in contracts and property.",
+        "Opposite of retain."
+      ],
+      "Bylaw": [
+        "A local rule made by a community or organization.",
+        "Common in cities and companies.",
+        "Usually covers daily operations."
+      ],
+      "Charter": [
+        "A formal document granting rights or powers.",
+        "Often used in government or corporations.",
+        "The Magna Carta is a famous example."
+      ],
+      "Clause": [
+        "A section of a legal document.",
+        "Defines conditions in contracts or laws.",
+        "Each part must be followed."
+      ],
+      "Consent": [
+        "Permission for something to happen.",
+        "Required in medical and legal matters.",
+        "Opposite of refusal."
+      ],
+      "Contract": [
+        "A binding agreement between two or more parties.",
+        "Can be written or verbal.",
+        "Enforceable by law."
+      ],
+      "Custom": [
+        "A traditional practice accepted as law.",
+        "Varies between cultures and societies.",
+        "Forms part of common law."
+      ],
+      "Default": [
+        "Failure to fulfill an obligation.",
+        "Common in loans or contracts.",
+        "May lead to penalties or repossession."
+      ],
+      "Divorce": [
+        "The legal end of a marriage.",
+        "Handled in family courts.",
+        "Opposite of marriage."
+      ],
+      "Estate": [
+        "All property and assets owned by a person.",
+        "Often distributed after death.",
+        "May be managed by an executor."
+      ],
+      "Fiduci": [
+        "A relationship of trust involving responsibility.",
+        "Often between trustee and beneficiary.",
+        "Breaches may lead to liability."
+      ],
+      "Guardian": [
+        "A person legally responsible for another.",
+        "Often appointed for minors.",
+        "Has duties of care and protection."
+      ],
+      "Inquest": [
+        "An official investigation into a death.",
+        "Usually led by a coroner.",
+        "Finds cause and circumstances."
+      ],
+      "Injury": [
+        "Harm or damage suffered by a person.",
+        "May result in legal claims for compensation.",
+        "Includes physical or emotional harm."
+      ],
+      "Labor": [
+        "Work or employment issues under law.",
+        "Covers wages, hours, and conditions.",
+        "Related to unions and worker rights."
+      ],
+      "Lease": [
+        "A contract allowing use of property for payment.",
+        "Common in housing and land.",
+        "Ends after a fixed time unless renewed."
+      ],
+      "Libel": [
+        "A false written statement harming reputation.",
+        "Considered a civil wrong.",
+        "Related to defamation."
+      ],
+      "Lien": [
+        "A legal claim over property for debt security.",
+        "Released once payment is made.",
+        "Common in real estate."
+      ],
+      "Minor": [
+        "A person not yet legally an adult.",
+        "Often under 18 years old.",
+        "Has limited rights and responsibilities."
+      ],
+      "Neglig": [
+        "Failure to take proper care leading to harm.",
+        "Common in civil law cases.",
+        "Example: unsafe workplaces."
+      ],
+      "Notice": [
+        "An official written announcement or warning.",
+        "Common in contracts or evictions.",
+        "Must be delivered properly to be valid."
+      ],
+      "Oblige": [
+        "A duty or responsibility enforced by law.",
+        "Often part of contracts.",
+        "Synonym for compel."
+      ],
+      "Patent": [
+        "Exclusive rights for an invention.",
+        "Grants protection for a limited period.",
+        "Encourages innovation."
+      ],
+      "Petty": [
+        "Refers to minor offenses.",
+        "Handled in lower courts.",
+        "Opposite of serious crimes."
+      ],
+      "Policy": [
+        "A guiding principle or rule.",
+        "Can be organizational or governmental.",
+        "Often written and enforceable."
+      ],
+      "Public": [
+        "Relating to people as a community.",
+        "Used in public law, public policy.",
+        "Opposite of private."
+      ],
+      "Quorum": [
+        "The minimum number needed for a meeting.",
+        "Applies in legislatures and boards.",
+        "Without it, no decisions can be made."
+      ],
+      "Revoke": [
+        "To cancel an official decision or document.",
+        "Common in licenses or contracts.",
+        "Opposite of confirm."
+      ],
+      "Rights": [
+        "Freedoms or entitlements protected by law.",
+        "Include civil, political, and human types.",
+        "Opposite of restrictions."
+      ],
+      "Sanct": [
+        "A safe or protected status.",
+        "Can apply to cities, lands, or people.",
+        "Synonym for protection."
+      ],
+      "Seize": [
+        "To take property by legal authority.",
+        "Done by police or courts.",
+        "May result from unpaid debt."
+      ],
+      "Summit": [
+        "A high-level meeting between leaders.",
+        "Can result in agreements or treaties.",
+        "Famous examples occurred during the Cold War."
+      ],
+      "Tenant": [
+        "A person who rents property.",
+        "Rights and duties are set in agreements.",
+        "Opposite of landlord."
+      ],
+      "Treaty": [
+        "A formal agreement between states.",
+        "Often used for peace or trade.",
+        "Must be ratified to take effect."
+      ],
+      "Trust": [
+        "Property managed by one person for another.",
+        "Used in inheritance and finance.",
+        "Enforced by fiduciary duty."
+      ],
+      "Usury": [
+        "Charging very high interest on loans.",
+        "Illegal in many places.",
+        "Opposite of fair lending."
+      ],
+      "Venue": [
+        "The location where a case is heard.",
+        "Chosen for fairness and convenience.",
+        "Different from jurisdiction."
+      ],
+      "Verdict": [
+        "The decision made at the end of a trial.",
+        "Announced by a judge or jury.",
+        "Can be guilty or not guilty."
+      ],
+      "Waiver": [
+        "An intentional giving up of a right.",
+        "Often signed in contracts.",
+        "Opposite of enforcement."
+      ],
+      "Witness": [
+        "A person who gives evidence in court.",
+        "Can be an expert or someone who saw events.",
+        "Takes an oath before speaking."
+      ],
+      "Writ": [
+        "A formal written order from a court.",
+        "Commands someone to act or stop an action.",
+        "Examples include habeas corpus."
+      ],
+      "Zoning": [
+        "Rules about how land may be used.",
+        "Common in city planning.",
+        "Separates areas into residential, business, and industrial."
+      ],
+      "Appeal": [
+        "A challenge to a decision made earlier.",
+        "Taken to a higher authority.",
+        "May confirm, change, or reverse the outcome."
+      ],
+      "Assign": [
+        "To designate rights or responsibilities to another.",
+        "Common in property and contracts.",
+        "Synonym for allocate."
+      ],
+      "Canon": [
+        "A rule or principle accepted as standard.",
+        "Used in law, religion, and tradition.",
+        "Synonym for regulation."
+      ],
+      "Civic": [
+        "Relating to duties of citizenship.",
+        "Linked to voting, service, and rights.",
+        "Opposite of private responsibility."
+      ],
+      "Decree": [
+        "An official command with force of law.",
+        "Issued by judges or rulers.",
+        "Similar to an edict."
+      ],
+      "Grant": [
+        "An official giving of property or rights.",
+        "Common in education and land use.",
+        "Synonym for award."
+      ],
+      "Lease": [
+        "A contract for renting property.",
+        "Sets rights of both landlord and tenant.",
+        "Usually for a fixed time."
+      ],
+      "Pardon": [
+        "An official release from punishment.",
+        "Given by leaders or executives.",
+        "Can restore rights to the individual."
+      ],
+      "Policy": [
+        "A written guideline for action.",
+        "Used in governments, schools, and workplaces.",
+        "Synonym for rule or plan."
+      ],
+      "Proxy": [
+        "The authority to act for someone else.",
+        "Often used in voting and business.",
+        "Synonym for representative."
+      ],
+      "Silent": [
+        "The right not to speak when accused.",
+        "Protects against self-incrimination.",
+        "Associated with the Fifth Amendment in the U.S."
+      ],
+      "Treaty": [
+        "A binding agreement between nations.",
+        "Covers issues like trade or peace.",
+        "Must be approved to take effect."
+      ],
+      "Union": [
+        "A group formed to protect workers’ rights.",
+        "Negotiates with employers for better conditions.",
+        "Legal in most countries."
+      ],
+      "Accuse": [
+        "To charge someone with wrongdoing.",
+        "Common in criminal and civil cases.",
+        "Must be supported with evidence."
+      ],
+      "Adjourn": [
+        "To pause or postpone a legal session.",
+        "Done by a judge or official.",
+        "Can last minutes, days, or longer."
+      ],
+      "Appeal": [
+        "A formal request to review a decision.",
+        "Heard by higher courts.",
+        "May overturn or confirm earlier rulings."
+      ],
+      "Arrest": [
+        "Taking a person into legal custody.",
+        "Requires authority and legal basis.",
+        "Often involves police action."
+      ],
+      "Breach": [
+        "A violation of duty or contract.",
+        "Can apply to agreements, trust, or law.",
+        "Often results in penalties."
+      ],
+      "Canon": [
+        "A principle or rule accepted as standard.",
+        "Used in legal, religious, or social systems.",
+        "Synonym for guideline."
+      ],
+      "Censor": [
+        "To suppress or control information.",
+        "Often linked to speech, media, or writing.",
+        "Sometimes used by governments."
+      ],
+      "Charter": [
+        "A written document granting rights or powers.",
+        "Issued by governments or rulers.",
+        "Historic example: Magna Carta."
+      ],
+      "Clause": [
+        "A section in a legal document.",
+        "Defines conditions or obligations.",
+        "Every contract contains multiple ones."
+      ],
+      "Contract": [
+        "A binding agreement between parties.",
+        "Can be written or spoken.",
+        "Legally enforceable."
+      ],
+      "Council": [
+        "A group formed to advise or govern.",
+        "Exists at local, national, or international levels.",
+        "Examples include city councils and the UN Security Council."
+      ],
+      "Custom": [
+        "A practice accepted as having legal force.",
+        "Varies by culture and history.",
+        "Forms part of common law."
+      ],
+      "Defame": [
+        "To harm someone’s reputation with false statements.",
+        "Related to libel and slander.",
+        "Often leads to lawsuits."
+      ],
+      "Decree": [
+        "An official command with legal force.",
+        "Issued by judges or rulers.",
+        "Similar to an edict."
+      ],
+      "Detain": [
+        "To keep someone in official custody.",
+        "Can be temporary or long-term.",
+        "Requires legal justification."
+      ],
+      "Dispute": [
+        "A disagreement that may go to court.",
+        "Can involve property, contracts, or family.",
+        "Often resolved by settlement or judgment."
+      ],
+      "Enact": [
+        "To officially make a law effective.",
+        "Done by legislatures or parliaments.",
+        "Opposite of repeal."
+      ],
+      "Forgery": [
+        "Making false documents or signatures.",
+        "Considered a criminal offense.",
+        "Often linked to fraud."
+      ],
+      "Guilty": [
+        "Being responsible for a crime.",
+        "Decided in court after trial.",
+        "Opposite of innocent."
+      ],
+      "Honor": [
+        "To respect agreements or commitments.",
+        "Common in contracts and treaties.",
+        "Opposite of violate."
+      ],
+      "Inmate": [
+        "A person held in a prison.",
+        "Usually serving a sentence.",
+        "Opposite of free citizen."
+      ],
+      "Inquest": [
+        "An official investigation into a death.",
+        "Led by a coroner or judge.",
+        "Finds cause and circumstances."
+      ],
+      "Justice": [
+        "The principle of fairness and law.",
+        "Sought in courts and societies.",
+        "Symbolized by scales."
+      ],
+      "Juris": [
+        "A root meaning law or rights.",
+        "Found in jurisdiction and jurisprudence.",
+        "Derived from Latin."
+      ],
+      "Liberty": [
+        "The state of being free within society.",
+        "Protected by constitutions and laws.",
+        "Often contrasted with oppression."
+      ],
+      "Mandate": [
+        "An official order or duty.",
+        "Can be given by voters or leaders.",
+        "Opposite of voluntary action."
+      ],
+      "Notary": [
+        "An official who verifies documents.",
+        "Used for contracts, deeds, and wills.",
+        "Provides legal authenticity."
+      ],
+      "Penalty": [
+        "A punishment for breaking rules.",
+        "Can involve money, jail, or restrictions.",
+        "Opposite of reward."
+      ],
+      "Pledge": [
+        "A serious promise or guarantee.",
+        "Common in legal and financial contexts.",
+        "Synonym for vow."
+      ],
+      "Policy": [
+        "A written plan or principle guiding action.",
+        "Used in law, business, and government.",
+        "Synonym for guideline."
+      ],
+      "Rebel": [
+        "A person resisting authority.",
+        "Often linked to uprisings or revolts.",
+        "Opposite of loyalist."
+      ],
+      "Reform": [
+        "The process of improving rules or systems.",
+        "Happens in law, politics, or education.",
+        "Opposite of decline."
+      ],
+      "Repeal": [
+        "To cancel a law or regulation.",
+        "Done by legislatures or courts.",
+        "Opposite of enact."
+      ],
+      "Rights": [
+        "Freedoms guaranteed by law or tradition.",
+        "Examples include speech, religion, and property.",
+        "Opposite of restrictions."
+      ],
+      "Robber": [
+        "A person who takes property unlawfully.",
+        "Often uses force or threat.",
+        "Considered a crime."
+      ],
+      "Senate": [
+        "A legislative body in many countries.",
+        "Shares power with lower chambers.",
+        "Examples exist in Rome, U.S., and France."
+      ],
+      "Silent": [
+        "The right to remain quiet during questioning.",
+        "Protects against self-incrimination.",
+        "Associated with the Fifth Amendment."
+      ],
+      "Statute": [
+        "A written law passed by a legislature.",
+        "Applies to specific matters.",
+        "Different from constitutional principles."
+      ],
+      "Suit": [
+        "A case brought before a court.",
+        "Common in civil disputes.",
+        "Short for lawsuit."
+      ],
+      "Summon": [
+        "An order to appear in court.",
+        "Served in writing to individuals.",
+        "Failure to respond may bring penalties."
+      ],
+      "Tenant": [
+        "A person renting property from another.",
+        "Rights and duties are defined in law.",
+        "Opposite of landlord."
+      ],
+      "Testify": [
+        "To give evidence under oath.",
+        "Done in court by witnesses.",
+        "Opposite of remain silent."
+      ],
+      "Treaty": [
+        "A formal agreement between states.",
+        "Often ends wars or sets trade terms.",
+        "Must be ratified."
+      ],
+      "Trial": [
+        "A formal legal process to decide disputes.",
+        "Involves evidence, witnesses, and rulings.",
+        "Can be civil or criminal."
+      ],
+      "Trust": [
+        "Property held by one for another’s benefit.",
+        "Common in estate and financial planning.",
+        "Managed by trustees."
+      ],
+      "Verdict": [
+        "The final decision in a trial.",
+        "Given by a judge or jury.",
+        "Can be guilty, not guilty, or liable."
+      ],
+      "Vote": [
+        "A choice made in an election or decision.",
+        "Part of democratic legal systems.",
+        "Opposite of abstain."
+      ],
+      "Waive": [
+        "To give up a right voluntarily.",
+        "Often signed in contracts.",
+        "Opposite of enforce."
+      ],
+      "Warden": [
+        "An official in charge of a prison.",
+        "Manages staff and inmates.",
+        "Ensures order and security."
+      ],
+      "Witness": [
+        "Someone who provides evidence in a case.",
+        "May be expert or eyewitness.",
+        "Takes an oath before speaking."
+      ],
+      "Zoning": [
+        "Rules about land use in communities.",
+        "Separates residential, commercial, and industrial areas.",
+        "Helps organize city planning."
+      ]
+    },    
     "4th_grade": {
       "bag": [
         "You can carry things in this.",
