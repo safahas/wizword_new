@@ -3341,7 +3341,18 @@ def display_game():
                                     ) else ''
                                 })
                         if rows:
-                            st.table(rows)
+                            # Sort by Last Game desc (string date), fallback by Games desc
+                            try:
+                                rows_sorted = sorted(rows, key=lambda r: (r.get('Last Game') or '', int(r.get('Games') or 0)), reverse=True)
+                            except Exception:
+                                rows_sorted = rows
+                            try:
+                                import os as _os
+                                _limit = int(_os.getenv('ADMIN_RECENT_USERS_LIMIT', '5'))
+                            except Exception:
+                                _limit = 5
+                            rows_limited = rows_sorted[: max(1, _limit)]
+                            st.table(rows_limited)
                         else:
                             st.info('No user profiles found.')
                 except Exception:
