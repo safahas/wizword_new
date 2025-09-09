@@ -4828,7 +4828,7 @@ def display_game_over(game_summary):
                     share_card_path = create_congrats_sei_card(current_user, current_category, sei_cur)
                 except Exception:
                     share_card_path = None
-                subject = f"🎉 Congratulations — Global Top SEI in {current_category.title()}!"
+                subject = f"Congratulations — WizWord Global Top SEI in {current_category.title()}!"
                 body = (
                     f"Congratulations {current_user}! You just achieved the global top SEI (Score/Time Index) in "
                     f"the {current_category.title()} category. Keep it up!"
