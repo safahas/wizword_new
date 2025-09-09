@@ -5427,7 +5427,8 @@ def send_miss_you_email(to_email: str, username: str) -> bool:
     if not (SMTP_SERVER and SMTP_USER and SMTP_PASSWORD and to_email):
         return False
     subject = "We miss you at WizWord!"
-    body = f"Hi {username},\n\nIt's been a while since your last game. Come back and beat your best SEI!\n\nPlay now: https://wizword.example\n\n— WizWord Team"
+    _site_url = os.getenv('WIZWORD_SITE') or os.getenv('APP_BASE_URL', 'https://example.com')
+    body = f"Hi {username},\n\nIt's been a while since your last game. Come back and beat your best SEI!\n\nPlay now: {_site_url}\n\n— WizWord Team"
     try:
         msg = MIMEText(body)
         msg["Subject"] = subject
