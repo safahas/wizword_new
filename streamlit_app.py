@@ -337,7 +337,7 @@ def delete_account(username: str) -> bool:
         import uuid as _uuid
         token = str(_uuid.uuid4())
         record = dict(users[uname])
-        record['deleted_at_utc'] = datetime.datetime.utcnow().isoformat()
+        record['deleted_at_utc'] = datetime.datetime.now(datetime.UTC).isoformat()
         record['reactivation_token'] = token
         deleted[uname] = record
         _save_deleted_users(deleted)
@@ -361,7 +361,7 @@ def delete_account(username: str) -> bool:
                 f"If this was a mistake, you can reactivate your account within 30 days "
                 f"using this token: {token}.\n\n"
                 f"Visit {_site_url} and open Account Options → Reactivate Account, then paste the token.\n\n"
-                f"Time: {datetime.datetime.utcnow().isoformat()}Z"
+                f"Time: {datetime.datetime.now(datetime.UTC).isoformat()}"
             )
             _send_basic_email(to_email, "WizWord Account Deletion Confirmation", body)
         return True
@@ -389,7 +389,7 @@ def reactivate_account(token: str) -> tuple[bool, str]:
             ts = rec.get('deleted_at_utc')
             if ts:
                 dt = datetime.datetime.fromisoformat(ts)
-                if (datetime.datetime.utcnow() - dt).days > int(os.getenv('REACTIVATION_WINDOW_DAYS', '30')):
+                if (datetime.datetime.now(datetime.UTC) - dt.replace(tzinfo=datetime.UTC)).days > int(os.getenv('REACTIVATION_WINDOW_DAYS', '30')):
                     return False, "Reactivation window expired"
         except Exception:
             pass
@@ -4030,6 +4030,32 @@ def display_game_over(game_summary):
         or st.session_state.get('last_mode', None)
         or game_summary.get('mode', 'Fun')
     )
+    # Force trophy animation unconditionally when DEBUG_FORCE_TROPHY is enabled
+    try:
+        if os.getenv('DEBUG_FORCE_TROPHY', '').strip().lower() in ('1', 'true', 'yes', 'on'):
+            import logging as _lg
+            _lg.getLogger('backend.game_logic').info('[DEBUG_TROPHY] Forcing trophy animation via DEBUG_FORCE_TROPHY')
+            cat_title = (game_summary.get('subject') or 'General').title()
+            st.markdown(
+                f"""
+                <style>
+                @keyframes flyTrophy {{
+                  0% {{ transform: translate(0, 0) scale(1); opacity: 0; }}
+                  10% {{ opacity: 1; }}
+                  90% {{ transform: translate(-50vw, -30vh) scale(1.2); opacity: 1; }}
+                  100% {{ transform: translate(-52vw, -32vh) scale(1.2); opacity: 0; }}
+                }}
+                .trophy-fly {{ position: fixed; right: 16px; bottom: 16px; font-size: 48px; z-index: 999999; animation: flyTrophy 2.6s ease-in-out forwards; pointer-events: none; }}
+                @keyframes riseBanner {{ 0% {{ transform: translate(-50%, 120%); opacity: 0; }} 10% {{ opacity: 1; }} 100% {{ transform: translate(-50%, -10%); opacity: 1; }} }}
+                .banner-fly {{ position: fixed; left: 50%; bottom: 10%; transform: translateX(-50%); background: linear-gradient(90deg, #22c55e 0%, #3b82f6 100%); color: #fff; padding: 10px 18px; border-radius: 10px; font-weight: 800; font-size: 20px; z-index: 999998; animation: riseBanner 1.6s ease-out forwards; box-shadow: 0 6px 24px rgba(0,0,0,0.25); pointer-events: none; }}
+                </style>
+                <div class="trophy-fly">🏆</div>
+                <div class="banner-fly">🎉 Congratulations! Global Top SEI — <b>{cat_title}</b> 🎉</div>
+                """,
+                unsafe_allow_html=True,
+            )
+    except Exception:
+        pass
     # If achieved category top SEI, fly a trophy and show congrats banner
     try:
         score_cur = game_summary.get('score', 0)
@@ -4193,8 +4219,8 @@ def display_game_over(game_summary):
         if not st.session_state.get('aggregates_updated', False):
             # Ensure timestamp exists for date bucketing
             if 'timestamp' not in game_summary or not game_summary.get('timestamp'):
-                from datetime import datetime
-                game_summary['timestamp'] = datetime.utcnow().isoformat()
+                from datetime import datetime, UTC
+                game_summary['timestamp'] = datetime.now(UTC).isoformat()
             update_aggregates_with_game(game_summary)
             st.session_state['aggregates_updated'] = True
     except Exception as e:
@@ -4757,37 +4783,46 @@ def display_game_over(game_summary):
         avg_time_cur = (time_cur / denom_cur) if time_cur else 0
         sei_cur = (avg_score_cur / avg_time_cur) if avg_time_cur > 0 else None
         if sei_cur is not None:
-            if leaderboard_category and leaderboard_category.lower() != 'all categories':
-                highest_sei_in_cat = max(user_sei.values()) if user_sei else None
-            else:
-                highest_sei_in_cat = None
-                for g in all_games:
-                    if g.get('subject', '').lower() == current_category:
-                        # Exclude current game if already saved
-                        try:
-                            _cur_ts = game_summary.get('timestamp')
-                            if _cur_ts and g.get('timestamp') == _cur_ts:
-                                continue
-                        except Exception:
-                            pass
-                        s = g.get('score', 0)
-                        t = g.get('time_taken', g.get('duration', 0))
-                        w = g.get('words_solved', 1) if g.get('mode') == 'Beat' else 1
-                        d = max(int(w or 0), 1)
-                        asw = s / d
-                        atw = (t / d) if t else 0
-                        sei_val = (asw / atw) if atw > 0 else None
-                        if sei_val is not None and (highest_sei_in_cat is None or sei_val > highest_sei_in_cat):
-                            highest_sei_in_cat = sei_val
-            # Skip sending if current SEI is exactly zero
+            # Always compute highest in category excluding the current game
+            highest_sei_in_cat = None
+            for g in all_games:
+                if g.get('subject', '').lower() != current_category:
+                    continue
+                try:
+                    _cur_ts = game_summary.get('timestamp')
+                    if _cur_ts and g.get('timestamp') == _cur_ts:
+                        continue
+                except Exception:
+                    pass
+                s = g.get('score', 0)
+                t = g.get('time_taken', g.get('duration', 0))
+                w = g.get('words_solved', 1) if g.get('mode') == 'Beat' else 1
+                d = max(int(w or 0), 1)
+                asw = s / d
+                atw = (t / d) if t else 0
+                sei_val = (asw / atw) if atw > 0 else None
+                if sei_val is not None and (highest_sei_in_cat is None or sei_val > highest_sei_in_cat):
+                    highest_sei_in_cat = sei_val
+            # Allow ties (non-zero) to count as new high
             zero_sei = isinstance(sei_cur, (int, float)) and abs(sei_cur) < 1e-12
-            is_new_high = (not zero_sei) and ((highest_sei_in_cat is None) or (sei_cur > (highest_sei_in_cat + 1e-9)))
+            is_new_high = (not zero_sei) and ((highest_sei_in_cat is None) or (sei_cur >= (highest_sei_in_cat - 1e-9)))
+            try:
+                import logging as _lgd
+                _lgd.getLogger('backend.game_logic').debug(f"[CONGRATS_EMAIL] sei_cur={sei_cur:.6f} highest_prev={highest_sei_in_cat if highest_sei_in_cat is not None else 'None'} is_new_high={is_new_high}")
+            except Exception:
+                pass
             users = st.session_state.get('users', {}) if isinstance(st.session_state.get('users'), dict) else {}
             recipient = users.get(current_user, {}).get('email')
             admin_email = os.getenv('ADMIN_EMAIL') or os.getenv('SMTP_USER')
             has_smtp = bool(os.getenv('SMTP_HOST') and os.getenv('SMTP_USER') and os.getenv('SMTP_PASS'))
+            debug_force = os.getenv('DEBUG_FORCE_TROPHY', '').strip().lower() in ('1','true','yes','on')
+            try:
+                import logging as _lgx
+                _lgx.getLogger('backend.game_logic').debug(f"[CONGRATS_EMAIL] is_new_high={is_new_high} debug_force={debug_force} recipient={recipient} has_smtp={has_smtp} admin={admin_email}")
+            except Exception:
+                pass
             
-            if is_new_high and recipient and has_smtp:
+            if (is_new_high or debug_force) and recipient and has_smtp:
                 try:
                     from backend.share_card import create_congrats_sei_card
                     share_card_path = create_congrats_sei_card(current_user, current_category, sei_cur)
@@ -4801,6 +4836,11 @@ def display_game_over(game_summary):
                 
                 try:
                     sent_ok = send_email_with_attachment([recipient], subject, body, attachment_path=share_card_path, cc_emails=[admin_email] if admin_email else None)
+                    try:
+                        import logging as _lg2
+                        _lg2.getLogger('backend.game_logic').info(f"[CONGRATS_EMAIL] sent={sent_ok} to={recipient} cc={admin_email if admin_email else ''}")
+                    except Exception:
+                        pass
                     
                     # Show celebration animation immediately on Game Over after achieving top SEI
                     cat_title = current_category.title()
@@ -5187,8 +5227,8 @@ def save_game_to_user_profile(game_summary):
     game_file = GAME_RESULTS_PATH
     # Ensure timestamp exists
     if 'timestamp' not in game_summary:
-        from datetime import datetime
-        game_summary['timestamp'] = datetime.utcnow().isoformat()
+        from datetime import datetime, UTC
+        game_summary['timestamp'] = datetime.now(UTC).isoformat()
     # Ensure nickname exists
     if 'nickname' not in game_summary or not game_summary['nickname']:
         import streamlit as st
