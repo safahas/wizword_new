@@ -254,7 +254,7 @@ def send_reset_email(to_email, reset_code):
 
     msg = MIMEText(body)
     msg["Subject"] = subject
-    msg["From"] = SMTP_USER
+    msg["From"] = (os.environ.get("ADMIN_EMAIL") or SMTP_USER or "")
     msg["To"] = to_email
 
     try:
@@ -279,7 +279,7 @@ def send_email_with_attachment(to_emails, subject, body, attachment_path=None, c
 
     try:
         msg = MIMEMultipart()
-        msg["From"] = SMTP_USER or ""
+        msg["From"] = (os.environ.get("ADMIN_EMAIL") or SMTP_USER or "")
         msg["To"] = ", ".join([e for e in to_emails if e])
         if cc_emails:
             msg["Cc"] = ", ".join([e for e in cc_emails if e])
@@ -314,7 +314,7 @@ def _send_basic_email(to_email: str, subject: str, body: str) -> bool:
     try:
         msg = MIMEText(body)
         msg["Subject"] = subject
-        msg["From"] = SMTP_USER or ""
+        msg["From"] = (os.environ.get("ADMIN_EMAIL") or SMTP_USER or "")
         msg["To"] = to_email
         with smtplib.SMTP(SMTP_SERVER, SMTP_PORT) as server:
             server.starttls()
@@ -2510,16 +2510,91 @@ def display_game():
                 _enable_flashcard_ui = os.getenv('ENABLE_FLASHCARD_CATEGORY', 'true').strip().lower() in ('1','true','yes','on')
                 if _enable_flashcard_ui:
                     try:
-                        from backend.bio_store import get_flash_text
-                        _flash_init_inline = get_flash_text(user.get('username',''))
+                        from backend.bio_store import get_flash_text, list_flash_set_names, get_active_flash_set_name, set_active_flash_set_name, upsert_flash_set
+                        _uname_lower = (user.get('username','') or '').lower()
+                        _flash_init_inline = get_flash_text(_uname_lower)
                     except Exception:
                         _flash_init_inline = ''
+                    # Named FlashCard sets selector
+                    try:
+                        _existing_sets = list_flash_set_names(_uname_lower)
+                    except Exception:
+                        _existing_sets = []
+                    try:
+                        _active_name = get_active_flash_set_name(_uname_lower) or 'default'
+                    except Exception:
+                        _active_name = 'default'
+                    # Build dropdown options including tokens
+                    try:
+                        from backend.bio_store import ensure_flash_set_token, get_flash_set_token
+                        _name_list = sorted(set((_existing_sets or []) + ([_active_name] if _active_name else [])))
+                        _label_map = {}
+                        _labels = []
+                        _active_label = None
+                        for _nm in _name_list:
+                            try:
+                                _tok = ensure_flash_set_token(_uname_lower, _nm)
+                            except Exception:
+                                _tok = get_flash_set_token(_uname_lower, _nm) or ''
+                            _lbl = f"{_nm} [{_tok}]" if _tok else _nm
+                            _labels.append(_lbl)
+                            _label_map[_lbl] = _nm
+                            if _nm == _active_name:
+                                _active_label = _lbl
+                        _default_index = 0
+                        if _active_label and _active_label in _labels:
+                            _default_index = _labels.index(_active_label)
+                    except Exception:
+                        _labels = sorted(set((_existing_sets or []) + ([_active_name] if _active_name else [])))
+                        _label_map = {s: s for s in _labels}
+                        _default_index = 0
+                    cols_fc = st.columns([2,1,1])
+                    with cols_fc[0]:
+                        _sel_label = st.selectbox('Active FlashCard Set', options=_labels, index=_default_index, key='flash_set_select_inline')
+                        _sel = _label_map.get(_sel_label, _active_name)
+                    with cols_fc[1]:
+                        _new_name = st.text_input('New Set Name', value='', key='flash_set_new_name_inline')
+                    with cols_fc[2]:
+                        if st.button('Create/Use', key='flash_set_create_use_inline'):
+                            try:
+                                _name = (_new_name or _sel or 'default').strip()
+                                if _name:
+                                    ok = upsert_flash_set(_uname_lower, _name)
+                                    if ok:
+                                        set_active_flash_set_name(_uname_lower, _name)
+                                        st.success(f"Using FlashCard set: {_name}")
+                                    else:
+                                        st.error('Reached FlashCard set limit or invalid name.')
+                            except Exception:
+                                st.error('Failed to switch/create FlashCard set.')
                     st.text_area(
                         f"FlashCard Text (up to {_flash_max_inline} characters)",
                         value=_flash_init_inline,
                         max_chars=_flash_max_inline,
                         key='profile_flash_text_inline'
                     )
+                    # Share/Join FlashCard set by token
+                    try:
+                        col_sh1, col_sh2 = st.columns([3, 1])
+                        with col_sh1:
+                            _share_token_inline = st.text_input('Join FlashCard by Token', value='', key='flash_share_token_inline')
+                        with col_sh2:
+                            if st.button('Import', key='import_flash_inline'):
+                                try:
+                                    from backend.flash_share import import_share_to_user
+                                    _tok = (_share_token_inline or '').strip()
+                                    if _tok:
+                                        ok = import_share_to_user(_tok, (user.get('username') or '').lower())
+                                        if ok:
+                                            st.success('Imported shared FlashCards into your profile.')
+                                        else:
+                                            st.error('Invalid or expired token. Please check and try again.')
+                                    else:
+                                        st.warning('Please enter a valid token to import.')
+                                except Exception:
+                                    st.error('Failed to import shared FlashCards.')
+                    except Exception:
+                        pass
                 # FlashCard info removed per request
                 min_birthday = datetime.date(1900, 1, 1)
                 raw_birthday = user.get('birthday', None)
@@ -2602,6 +2677,50 @@ def display_game():
                                             rebuilt.append({'word': w, 'hint': hint_text or '', 'hint_source': 'api', 'api_attempts': 1})
                                     set_flash_pool(username_lower, rebuilt)
                                     st.success('FlashCard hints saved. We will keep improving missing hints in the background.')
+                                    # Create a share token for this FlashCard set and notify the user
+                                    try:
+                                        from backend.flash_share import save_share
+                                        # Use active set name as title for uniqueness under user
+                                        try:
+                                            from backend.bio_store import get_active_flash_set_name, ensure_flash_set_token, get_flash_set_token
+                                            _active_title = get_active_flash_set_name(username_lower) or 'flashcard'
+                                            # Ensure token exists for this set and persist it in users.flashcards.json
+                                            _set_token = ensure_flash_set_token(username_lower, _active_title)
+                                        except Exception:
+                                            _active_title = 'flashcard'
+                                            _set_token = None
+                                        token = save_share(username_lower, title=_active_title, pool=rebuilt, token_override=_set_token)
+                                        # Display confirmation with set name and token
+                                        st.success(f"FlashCard set '{_active_title}' saved with token: {token}")
+                                        st.code(token)
+                                        # Email the token and set name to the user if SMTP configured
+                                        try:
+                                            has_smtp = bool(os.getenv('SMTP_HOST') and os.getenv('SMTP_USER') and os.getenv('SMTP_PASS'))
+                                            recipient = (st.session_state.get('users', {}).get(username_lower, {}) or {}).get('email')
+                                            if recipient and has_smtp:
+                                                subject = f"Your WizWord FlashCard set token — {_active_title}"
+                                                body = (
+                                                    f"Hello {username_lower},\n\n"
+                                                    f"Your FlashCard set has been saved.\n"
+                                                    f"Set name: {_active_title}\n"
+                                                    f"Token: {token}\n\n"
+                                                    f"Share this token with your group so they can import this set."
+                                                )
+                                                _ok = _send_basic_email(recipient, subject, body)
+                                                try:
+                                                    import logging as _lgfs
+                                                    _lgfs.getLogger('backend.game_logic').info(f"[FLASH_SHARE] set_token_emailed={_ok} to={recipient} set={_active_title}")
+                                                except Exception:
+                                                    pass
+                                        except Exception:
+                                            pass
+                                        # Duplicate email suppressed: token already emailed with set name above
+                                    except Exception:
+                                        try:
+                                            import logging as _lgs
+                                            _lgs.getLogger('backend.game_logic').warning('[FLASH_SHARE] Failed to create/display share token.')
+                                        except Exception:
+                                            pass
                         except Exception:
                             pass
                         st.session_state['users'][username_lower]['birthday'] = str(birthday)
@@ -5472,7 +5591,7 @@ def send_miss_you_email(to_email: str, username: str) -> bool:
     try:
         msg = MIMEText(body)
         msg["Subject"] = subject
-        msg["From"] = SMTP_USER
+        msg["From"] = (os.environ.get("ADMIN_EMAIL") or SMTP_USER or "")
         msg["To"] = to_email
         with smtplib.SMTP(SMTP_SERVER, SMTP_PORT) as server:
             server.starttls()

@@ -3561,7 +3561,11 @@ class WordSelector:
                 warning = get_quota_warning()
                 if warning:
                     last_warning = warning
-                    logger.warning(f"Quota warning: {warning['message']}")
+                    try:
+                        _msg = str(warning['message']).encode('ascii', 'backslashreplace').decode('ascii')
+                    except Exception:
+                        _msg = str(warning.get('message', ''))
+                    logger.warning(f"Quota warning: {_msg}")
                     if warning['level'] == 'error':
                         self.use_fallback = True
                         logger.error("Critical quota reached. Switching to fallback mode.")
@@ -3570,7 +3574,11 @@ class WordSelector:
                 return response.json()
             except Exception as e:
                 wait = min(max_delay, base_delay * (2 ** attempt)) + random.uniform(0, 1)
-                logger.warning(f"API request failed (primary, attempt {attempt+1}/{max_retries}): {e}. Retrying in {wait:.1f}s...")
+                try:
+                    _err = str(e).encode('ascii', 'backslashreplace').decode('ascii')
+                except Exception:
+                    _err = str(e)
+                logger.warning(f"API request failed (primary, attempt {attempt+1}/{max_retries}): {_err}. Retrying in {wait:.1f}s...")
                 time.sleep(wait)
         # If all primary model attempts fail, try fallback model up to max_retries times
         payload["model"] = self.fallback_model
@@ -3583,7 +3591,11 @@ class WordSelector:
                 warning = get_quota_warning()
                 if warning:
                     last_warning = warning
-                    logger.warning(f"Quota warning: {warning['message']}")
+                    try:
+                        _msg2 = str(warning['message']).encode('ascii', 'backslashreplace').decode('ascii')
+                    except Exception:
+                        _msg2 = str(warning.get('message', ''))
+                    logger.warning(f"Quota warning: {_msg2}")
                     if warning['level'] == 'error':
                         self.use_fallback = True
                         logger.error("Critical quota reached. Switching to fallback mode.")
@@ -3592,7 +3604,11 @@ class WordSelector:
                 return response.json()
             except Exception as e:
                 wait = min(max_delay, base_delay * (2 ** attempt)) + random.uniform(0, 1)
-                logger.warning(f"API request failed (fallback, attempt {attempt+1}/{max_retries}): {e}. Retrying in {wait:.1f}s...")
+                try:
+                    _err2 = str(e).encode('ascii', 'backslashreplace').decode('ascii')
+                except Exception:
+                    _err2 = str(e)
+                logger.warning(f"API request failed (fallback, attempt {attempt+1}/{max_retries}): {_err2}. Retrying in {wait:.1f}s...")
                 time.sleep(wait)
         if last_warning:
             raise RuntimeError(last_warning['message'])
@@ -3707,14 +3723,34 @@ class WordSelector:
                 # Remove duplicates
                 filtered_hints = list(dict.fromkeys(filtered_hints))
                 if len(filtered_hints) >= min(5, n):
-                    logger.debug(f"API returned {len(filtered_hints)} valid hints for '{word}': {filtered_hints}")
+                    try:
+                        _safe_hints = json.dumps(filtered_hints, ensure_ascii=True)
+                    except Exception:
+                        _safe_hints = str(filtered_hints)
+                    try:
+                        _safe_word = word.encode('ascii', 'backslashreplace').decode('ascii')
+                    except Exception:
+                        _safe_word = str(word)
+                    logger.debug(f"API returned {len(filtered_hints)} valid hints for '{_safe_word}': {_safe_hints}")
                     return filtered_hints[:n]
-                logger.debug(f"API returned insufficient valid hints, retrying (attempt {attempt+1}/{max_attempts}): {filtered_hints}")
+                try:
+                    _safe_hints2 = json.dumps(filtered_hints, ensure_ascii=True)
+                except Exception:
+                    _safe_hints2 = str(filtered_hints)
+                logger.debug(f"API returned insufficient valid hints, retrying (attempt {attempt+1}/{max_attempts}): {_safe_hints2}")
                 time.sleep(1.5 * (attempt + 1))
             except Exception as e:
-                logger.debug(f"Failed to get hints from API (attempt {attempt+1}): {str(e)}")
+                try:
+                    _safe_err = str(e).encode('ascii', 'backslashreplace').decode('ascii')
+                except Exception:
+                    _safe_err = str(e)
+                logger.debug(f"Failed to get hints from API (attempt {attempt+1}): {_safe_err}")
                 time.sleep(1.5 * (attempt + 1))
-        logger.debug(f"API failed to provide valid hints after {max_attempts} attempts for word '{word}'")
+        try:
+            _safe_word2 = word.encode('ascii', 'backslashreplace').decode('ascii')
+        except Exception:
+            _safe_word2 = str(word)
+        logger.debug(f"API failed to provide valid hints after {max_attempts} attempts for word '{_safe_word2}'")
         return []
 
     def mark_word_played(self, word: str, username: str, subject: str):
