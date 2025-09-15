@@ -3402,6 +3402,36 @@ def display_game():
                         max_chars=_flash_max_inline,
                         key='profile_flash_text_pregame'
                     )
+                    # Import shared set by token
+                    _imp_cols_pg = st.columns([2,1])
+                    with _imp_cols_pg[0]:
+                        _import_tok_pg = st.text_input('Import by Token', value='', key='flash_import_token_pregame')
+                    with _imp_cols_pg[1]:
+                        if st.button('Import', key='flash_import_btn_pregame'):
+                            try:
+                                from backend.flash_share import load_share, import_share_to_user
+                                _tok = (_import_tok_pg or '').strip()
+                                if not _tok:
+                                    st.warning('Please enter a valid token to import.')
+                                else:
+                                    _rec = load_share(_tok)
+                                    if not _rec:
+                                        st.error('Invalid or expired token.')
+                                    else:
+                                        _owner = (_rec.get('owner') or 'user')
+                                        _title = (_rec.get('title') or 'flashcard')
+                                        _set_name = f"{_owner}/{_title}"
+                                        ok = import_share_to_user(_tok, _uname_lower, set_name=_set_name)
+                                        if ok:
+                                            from backend.bio_store import set_active_flash_set_name
+                                            set_active_flash_set_name(_uname_lower, _set_name)
+                                            st.success(f"Imported '{_set_name}' from {_owner}.")
+                                            st.session_state['show_flashcard_settings'] = True
+                                            st.rerun()
+                                        else:
+                                            st.error('Failed to import: set limit reached or token invalid.')
+                            except Exception:
+                                st.error('Import failed due to an unexpected error.')
                     if st.button('Save FlashCard Text', key='save_flash_text_pregame'):
                         try:
                             from backend.bio_store import set_flash_text, set_flash_pool
@@ -4344,6 +4374,36 @@ def display_game():
                     max_chars=_flash_max_inline,
                     key='profile_flash_text_ingame'
                 )
+                # Import shared set by token (in-game)
+                _imp_cols_ig = st.columns([2,1])
+                with _imp_cols_ig[0]:
+                    _import_tok_ig = st.text_input('Import by Token', value='', key='flash_import_token_ingame')
+                with _imp_cols_ig[1]:
+                    if st.button('Import', key='flash_import_btn_ingame'):
+                        try:
+                            from backend.flash_share import load_share, import_share_to_user
+                            _tok2 = (_import_tok_ig or '').strip()
+                            if not _tok2:
+                                st.warning('Please enter a valid token to import.')
+                            else:
+                                _rec2 = load_share(_tok2)
+                                if not _rec2:
+                                    st.error('Invalid or expired token.')
+                                else:
+                                    _owner2 = (_rec2.get('owner') or 'user')
+                                    _title2 = (_rec2.get('title') or 'flashcard')
+                                    _set_name2 = f"{_owner2}/{_title2}"
+                                    ok2 = import_share_to_user(_tok2, _uname_lower, set_name=_set_name2)
+                                    if ok2:
+                                        from backend.bio_store import set_active_flash_set_name
+                                        set_active_flash_set_name(_uname_lower, _set_name2)
+                                        st.success(f"Imported '{_set_name2}' from {_owner2}.")
+                                        st.session_state['show_flashcard_settings'] = True
+                                        st.rerun()
+                                    else:
+                                        st.error('Failed to import: set limit reached or token invalid.')
+                        except Exception:
+                            st.error('Import failed due to an unexpected error.')
                 if st.button('Save FlashCard Text', key='save_flash_text_ingame'):
                     try:
                         from backend.bio_store import set_flash_text, set_flash_pool
