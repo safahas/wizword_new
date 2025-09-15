@@ -2508,7 +2508,8 @@ def display_game():
                 except Exception:
                     _flash_max_inline = 500
                 _enable_flashcard_ui = os.getenv('ENABLE_FLASHCARD_CATEGORY', 'true').strip().lower() in ('1','true','yes','on')
-                if _enable_flashcard_ui:
+                # Hide FlashCard settings from Profile; access via Beat page button instead
+                if False and _enable_flashcard_ui:
                     try:
                         from backend.bio_store import get_flash_text, list_flash_set_names, get_active_flash_set_name, set_active_flash_set_name, upsert_flash_set
                         _uname_lower = (user.get('username','') or '').lower()
@@ -4115,6 +4116,15 @@ def display_game():
             st.session_state['feedback_time'] = 0
 
 
+    # --- Fixed bottom area: include FlashCard Settings button then Restart bar ---
+    try:
+        if getattr(st.session_state.get('game'), 'mode', '') == 'Beat':
+            st.markdown("---")
+            if st.button("FlashCard Settings", key="flash_settings_entry_btn_beat_bottom"):
+                st.session_state['show_flashcard_settings'] = True
+                st.experimental_rerun()
+    except Exception:
+        pass
     # --- Timer auto-refresh for Beat mode ---
     if game.mode == 'Beat' and not st.session_state.get('game_over', False):
         import time as _time
