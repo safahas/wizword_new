@@ -3047,9 +3047,9 @@ def display_game():
     if st.session_state.get('change_category', False):
         enable_personal = os.getenv('ENABLE_PERSONAL_CATEGORY', 'true').strip().lower() in ('1', 'true', 'yes', 'on')
         enable_flashcard = os.getenv('ENABLE_FLASHCARD_CATEGORY', 'true').strip().lower() in ('1', 'true', 'yes', 'on')
-        categories = ["any", "anatomy", "animals", "aviation", "brands", "cities", "food", "general", "gre", "history", "law", "medicines", "movies", "music", "places", "psat", "sat", "science", "sports", "tech", "4th_grade", "8th_grade"]
-        if enable_flashcard:
-            categories.append("flashcard")
+        # Build categories with FlashCard first when enabled
+        base_cats = ["any", "anatomy", "animals", "aviation", "brands", "cities", "food", "general", "gre", "history", "law", "medicines", "movies", "music", "places", "psat", "sat", "science", "sports", "tech", "4th_grade", "8th_grade"]
+        categories = ["flashcard"] + base_cats if enable_flashcard else base_cats
         if enable_personal:
             categories.append("Personal")
         new_category = st.selectbox("Select a new category:", categories, format_func=lambda x: ('Any' if x=='any' else ('GRE' if x=='gre' else ('SAT' if x=='sat' else ('PSAT' if x=='psat' else x.replace('_',' ').title())))), key='category_select_box')
@@ -3227,37 +3227,60 @@ def display_game():
         if game.mode == 'Beat' and 'beat_started' not in st.session_state:
             st.session_state['beat_started'] = False
         if game.mode == 'Beat' and not st.session_state['beat_started']:
-            # Ensure pre-game page always lands at the very top (robust multi-try)
+            # Ensure pre-game page always lands at the very top (robust multi-try across containers)
             try:
                 import streamlit.components.v1 as components
                 components.html(
                     """
                     <script>
                     (function(){
-                      function toTop(){
-                        try { document.getElementById('app-top')?.scrollIntoView({behavior:'auto', block:'start'}); } catch(e){}
-                        try { window.scrollTo({top:0,left:0,behavior:'auto'}); } catch(e){}
-                        try { document.documentElement.scrollTop = 0; document.body.scrollTop = 0; } catch(e){}
+                      try { if ('scrollRestoration' in history) { history.scrollRestoration = 'manual'; } } catch(e){}
+                      try { window.onbeforeunload = function(){ window.scrollTo(0,0); }; } catch(e){}
+                      function toTopAny(doc){
+                        try { doc.getElementById('app-top')?.scrollIntoView({behavior:'auto', block:'start'}); } catch(e){}
+                        try { doc.scrollingElement && (doc.scrollingElement.scrollTop = 0); } catch(e){}
+                        try { doc.documentElement && (doc.documentElement.scrollTop = 0); } catch(e){}
+                        try { doc.body && (doc.body.scrollTop = 0); } catch(e){}
+                        try { doc.defaultView && doc.defaultView.scrollTo({top:0,left:0,behavior:'auto'}); } catch(e){}
+                        try {
+                          var c = doc.querySelector('section.main .block-container');
+                          if (c) { c.scrollTop = 0; }
+                          var vc = doc.querySelector('[data-testid="stAppViewBlockContainer"]');
+                          if (vc) { vc.scrollTop = 0; }
+                        } catch(e){}
                       }
-                      // Immediate and repeated attempts for a short period to defeat late layout shifts
-                      toTop();
-                      var tries = 0;
+                      function toTopAll(){
+                        toTopAny(document);
+                        try { if (window.parent && window.parent.document) toTopAny(window.parent.document); } catch(e){}
+                        try { if (window.top && window.top.document) toTopAny(window.top.document); } catch(e){}
+                      }
+                      // Immediate and repeated attempts to defeat layout shifts, restoration and iframe timing
+                      toTopAll();
+                      var n = 0;
                       var id = setInterval(function(){
-                        toTop();
-                        tries++;
-                        if (tries > 40) clearInterval(id); // ~2s at 50ms
+                        toTopAll();
+                        n++;
+                        if (n > 60) clearInterval(id); // ~3s at 50ms
                       }, 50);
-                      // Also on next animation frames
-                      requestAnimationFrame(toTop);
-                      setTimeout(toTop, 0);
-                      setTimeout(toTop, 100);
-                      setTimeout(toTop, 250);
-                      setTimeout(toTop, 500);
-                      setTimeout(toTop, 1000);
-                      window.addEventListener('focus', toTop, { once: true });
-                      document.addEventListener('visibilitychange', function(){ if(!document.hidden) toTop(); }, { once: true });
+                      // Also schedule a few delayed calls
+                      requestAnimationFrame(toTopAll);
+                      setTimeout(toTopAll, 0);
+                      setTimeout(toTopAll, 150);
+                      setTimeout(toTopAll, 300);
+                      setTimeout(toTopAll, 600);
+                      setTimeout(toTopAll, 1200);
+                      window.addEventListener('focus', toTopAll, { once: true });
+                      document.addEventListener('visibilitychange', function(){ if(!document.hidden) toTopAll(); }, { once: true });
                     })();
                     </script>
+                    """,
+                    height=0,
+                )
+                # Also force focus to a hidden element at the top to guarantee scroll on some browsers
+                components.html(
+                    """
+                    <div id="__top_anchor" style="position:absolute;top:0;left:0;height:1px;width:1px;"></div>
+                    <input id="__top_focus" autofocus style="position:absolute;top:0;left:0;width:1px;height:1px;opacity:0;pointer-events:none;" onfocus="try{document.getElementById('__top_anchor').scrollIntoView({behavior:'auto',block:'start'});}catch(e){}; setTimeout(function(){ try{ document.getElementById('__top_focus').blur(); }catch(e){} }, 100);" />
                     """,
                     height=0,
                 )
