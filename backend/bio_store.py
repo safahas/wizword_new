@@ -300,6 +300,29 @@ def upsert_flash_set(username: str, name: str, text: str = '', pool: List[Dict[s
     return True
 
 
+def delete_flash_set(username: str, name: str) -> bool:
+    """Delete a named flashcard set for user. Returns True on success."""
+    users = _read_flash_all()
+    key = (username or '').lower()
+    rec = users.get(key)
+    if not isinstance(rec, dict):
+        return False
+    sets = rec.get('flash_sets')
+    if not isinstance(sets, dict) or name not in sets:
+        return False
+    try:
+        del sets[name]
+    except Exception:
+        return False
+    # Adjust active set if we deleted the active one
+    if rec.get('flash_active_set') == name:
+        try:
+            rec['flash_active_set'] = next(iter(sets.keys())) if sets else ''
+        except Exception:
+            rec['flash_active_set'] = ''
+    _write_flash_all(users)
+    return True
+
 def ensure_flash_set_token(username: str, name: str) -> str:
     """Ensure the named flash set has a token; create and persist if missing. Return token."""
     users = _read_flash_all()

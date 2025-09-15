@@ -3227,15 +3227,35 @@ def display_game():
         if game.mode == 'Beat' and 'beat_started' not in st.session_state:
             st.session_state['beat_started'] = False
         if game.mode == 'Beat' and not st.session_state['beat_started']:
-            # Ensure pre-game page always lands at the very top
+            # Ensure pre-game page always lands at the very top (robust multi-try)
             try:
                 import streamlit.components.v1 as components
                 components.html(
                     """
                     <script>
                     (function(){
-                      try { document.getElementById('app-top')?.scrollIntoView({behavior:'auto', block:'start'}); } catch(e){}
-                      try { window.scrollTo(0,0); } catch(e){}
+                      function toTop(){
+                        try { document.getElementById('app-top')?.scrollIntoView({behavior:'auto', block:'start'}); } catch(e){}
+                        try { window.scrollTo({top:0,left:0,behavior:'auto'}); } catch(e){}
+                        try { document.documentElement.scrollTop = 0; document.body.scrollTop = 0; } catch(e){}
+                      }
+                      // Immediate and repeated attempts for a short period to defeat late layout shifts
+                      toTop();
+                      var tries = 0;
+                      var id = setInterval(function(){
+                        toTop();
+                        tries++;
+                        if (tries > 40) clearInterval(id); // ~2s at 50ms
+                      }, 50);
+                      // Also on next animation frames
+                      requestAnimationFrame(toTop);
+                      setTimeout(toTop, 0);
+                      setTimeout(toTop, 100);
+                      setTimeout(toTop, 250);
+                      setTimeout(toTop, 500);
+                      setTimeout(toTop, 1000);
+                      window.addEventListener('focus', toTop, { once: true });
+                      document.addEventListener('visibilitychange', function(){ if(!document.hidden) toTop(); }, { once: true });
                     })();
                     </script>
                     """,
@@ -3381,6 +3401,20 @@ def display_game():
                     with cols_fc[0]:
                         _sel_label = st.selectbox('Active FlashCard Set', options=_labels, index=_default_index, key='flash_set_select_pregame')
                         _sel = _label_map.get(_sel_label, _active_name)
+                        # Delete current set
+                        if st.button('Delete Set', key='flash_delete_set_pregame'):
+                            try:
+                                from backend.bio_store import delete_flash_set
+                                if _sel:
+                                    ok = delete_flash_set(_uname_lower, _sel)
+                                    if ok:
+                                        st.success(f"Deleted set: {_sel}")
+                                        st.session_state['show_flashcard_settings'] = True
+                                        st.rerun()
+                                    else:
+                                        st.error('Failed to delete set.')
+                            except Exception:
+                                st.error('Error deleting set.')
                     with cols_fc[1]:
                         _new_name = st.text_input('New Set Name', value='', key='flash_set_new_name_pregame')
                     with cols_fc[2]:
@@ -4353,6 +4387,19 @@ def display_game():
                 with cols_fc[0]:
                     _sel_label = st.selectbox('Active FlashCard Set', options=_labels, index=_default_index, key='flash_set_select_ingame')
                     _sel = _label_map.get(_sel_label, _active_name)
+                    if st.button('Delete Set', key='flash_delete_set_ingame'):
+                        try:
+                            from backend.bio_store import delete_flash_set
+                            if _sel:
+                                ok = delete_flash_set(_uname_lower, _sel)
+                                if ok:
+                                    st.success(f"Deleted set: {_sel}")
+                                    st.session_state['show_flashcard_settings'] = True
+                                    st.rerun()
+                                else:
+                                    st.error('Failed to delete set.')
+                        except Exception:
+                            st.error('Error deleting set.')
                 with cols_fc[1]:
                     _new_name = st.text_input('New Set Name', value='', key='flash_set_new_name_ingame')
                 with cols_fc[2]:
