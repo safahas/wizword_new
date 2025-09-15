@@ -2133,34 +2133,44 @@ class WordSelector:
             return None
 
     def _extract_flash_words(self, text: str, max_items: int = 10) -> list:
-        """Extract distinct candidate words from text; simple noun-like heuristic."""
+        """Extract words from FlashCard text using Personal-style allow/deny and scoring."""
         try:
-            import re as _re
-            toks = _re.findall(r"[A-Za-z]{3,}", text or "")
-            seen = set()
-            out = []
-            # Stopwords/generic tokens to exclude (mirror Personal rules)
-            stop = {
-                'the','a','an','and','or','but','if','then','else','for','with','without','about','into','onto','from','by','for','as','at','to','in','of','on','this','that','these','those',
-                'have','has','had','be','been','being','am','is','are','was','were','do','does','did','can','could','should','would','may','might','must',
-                'i','you','your','my','our','their','his','her','it','they','we','me','him','them','us',
-            }
+            import re
+            toks = re.findall(r"[A-Za-z0-9]+", text or "")
+            stop = {"and","the","with","for","you","your","at","to","in","of","on","a","an","is","are","was","were","be","been","am","from","by","or","as"}
+            number_words = {"zero","one","two","three","four","five","six","seven","eight","nine","ten","eleven","twelve","thirteen","fourteen","fifteen","sixteen","seventeen","eighteen","nineteen","twenty"}
+            deny = {"people","person","thing","things","stuff","place","time","year","years","work","works","worked","working","live","lived","living","like","likes","liked","watch","watched","watching","join","joined","joining","use","used","using","since","have","been","most","many","life","day","days","good","bad","nice","great","hello","thanks","team"} | number_words
+            def valid_word(w: str) -> bool:
+                if not w or len(w) < 3 or len(w) > 15:
+                    return False
+                wl = w.lower()
+                if wl in stop or wl in deny:
+                    return False
+                if wl.isdigit():
+                    return False
+                letters = ''.join([c for c in wl if c.isalpha()])
+                if len(letters) < 2 or not any(c in 'aeiou' for c in letters):
+                    return False
+                return True
+            scores = {}
             for t in toks:
                 tl = t.lower()
-                if tl in stop:
+                if not valid_word(tl):
                     continue
-                if tl in seen:
-                    continue
-                seen.add(tl)
-                out.append(tl)
-                if len(out) >= max_items:
-                    break
-            return out
+                rel = 1.0
+                L = len(tl)
+                if 5 <= L <= 9:
+                    rel += 0.5
+                if t[:1].isupper():
+                    rel += 0.5
+                scores[tl] = max(scores.get(tl, 0.0), rel)
+            ranked = sorted(scores.items(), key=lambda x: x[1], reverse=True)
+            return [w for w,_ in ranked[:max_items]]
         except Exception:
             return []
 
     def _make_flash_hint(self, word: str, text: str) -> str:
-        """Create a related hint from the flash text context or fallback to first-letter."""
+        """Create a context-aware hint similar to Personal hints (keywords + first letter)."""
         try:
             w = (word or '').strip()
             src = (text or '')
@@ -2168,11 +2178,7 @@ class WordSelector:
             # Helper: choose up to 2 meaningful keywords near the word
             def _keywords(window: str, target: str) -> list:
                 import re as _re
-                stop = {
-                    'the','a','an','and','or','but','if','then','else','for','with','without','about','into','onto','from','by','for','as','at','to','in','of','on','this','that','these','those',
-                    'have','has','had','be','been','being','am','is','are','was','were','do','does','did','can','could','should','would','may','might','must',
-                    'i','you','your','my','our','their','his','her','it','they','we','me','him','them','us',
-                }
+                stop = {"and","the","with","for","you","your","at","to","in","of","on","a","an","is","are","was","were","be","been","am","from","by","or","as"}
                 toks = _re.findall(r"[A-Za-z]{3,}", window)
                 scores = []
                 for t in toks:
