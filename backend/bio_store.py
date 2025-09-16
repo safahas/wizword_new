@@ -193,7 +193,18 @@ def get_flash_pool(username: str) -> List[Dict[str, Any]]:
     sets = rec.get('flash_sets') or {}
     active = rec.get('flash_active_set')
     if isinstance(sets, dict) and active and active in sets:
-        pool = (sets.get(active) or {}).get('pool')
+        item = (sets.get(active) or {})
+        ref_tok = item.get('ref_token')
+        if isinstance(ref_tok, str) and ref_tok:
+            try:
+                from backend.flash_share import load_share
+                shared = load_share(ref_tok)
+                if isinstance(shared, dict):
+                    pool = shared.get('pool')
+                    return pool if isinstance(pool, list) else []
+            except Exception:
+                return []
+        pool = item.get('pool')
         return pool if isinstance(pool, list) else []
     return []
 
@@ -209,6 +220,14 @@ def set_flash_pool(username: str, pool: List[Dict[str, Any]]) -> None:
     if not rec.get('flash_active_set'):
         rec['flash_active_set'] = 'default'
     active = rec['flash_active_set']
+    # Do not overwrite a referenced set's pool
+    try:
+        cur = rec['flash_sets'].get(active) or {}
+        if isinstance(cur.get('ref_token'), str) and cur.get('ref_token'):
+            _write_flash_all(users)
+            return
+    except Exception:
+        pass
     if active not in rec['flash_sets'] and len(rec['flash_sets']) >= FLASHCARD_MAX_SETS:
         # Cannot create new set due to limit; ignore write
         pass
@@ -363,7 +382,27 @@ def get_flash_set_token(username: str, name: str) -> Optional[str]:
     rec = _get_flash_user_record(username)
     sets = rec.get('flash_sets') or {}
     item = (sets.get(name) or {}) if isinstance(sets, dict) else {}
-    tok = item.get('token')
+    tok = item.get('token') or item.get('ref_token')
     return str(tok) if tok else None
+
+
+def add_flash_set_ref(username: str, name: str, token: str, owner: str = '', title: str = '') -> bool:
+    """Create/update a named set that references a shared FlashCard by token (no copy)."""
+    users = _read_flash_all()
+    key = (username or '').lower()
+    if key not in users or not isinstance(users[key], dict):
+        users[key] = {}
+    rec = users[key]
+    if 'flash_sets' not in rec or not isinstance(rec['flash_sets'], dict):
+        rec['flash_sets'] = {}
+    rec['flash_sets'][name] = {
+        'ref_token': str(token or ''),
+        'ref_owner': str(owner or ''),
+        'ref_title': str(title or ''),
+    }
+    if not rec.get('flash_active_set'):
+        rec['flash_active_set'] = name
+    _write_flash_all(users)
+    return True
 
 

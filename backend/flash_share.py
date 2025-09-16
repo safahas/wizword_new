@@ -110,21 +110,15 @@ def list_shares_by_owner(owner: str) -> List[Dict[str, Any]]:
 
 
 def import_share_to_user(token: str, username: str, set_name: Optional[str] = None) -> bool:
-	"""Copy shared pool into user's named flashcard set (or active set).
-
-	If set_name is provided and doesn't exist, will create if under the per-user limit.
-	"""
-	from backend.bio_store import set_flash_pool, upsert_flash_set, set_active_flash_set_name
+	"""Reference a shared pool by token in user's named flashcard set (no copying)."""
+	from backend.bio_store import add_flash_set_ref, upsert_flash_set, set_active_flash_set_name
 	rec = load_share(token)
 	if not rec:
 		return False
-	pool = rec.get('pool') or []
 	uname = (username or '').lower()
-	if set_name:
-		ok = upsert_flash_set(uname, set_name, pool=pool)
-		if not ok:
-			return False
-		set_active_flash_set_name(uname, set_name)
-	else:
-		set_flash_pool(uname, pool)
+	name = set_name or (rec.get('title') or 'flashcard')
+	# Ensure set exists minimally, then attach reference token/metadata
+	_ = upsert_flash_set(uname, name)
+	add_flash_set_ref(uname, name, token=str(token or ''), owner=str(rec.get('owner') or ''), title=str(rec.get('title') or ''))
+	set_active_flash_set_name(uname, name)
 	return True
