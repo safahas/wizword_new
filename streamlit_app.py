@@ -3575,9 +3575,19 @@ def display_game():
             try:
                 # Use the running category shown in the banner
                 chosen_cat = (game.subject or 'any').lower()
-                # Pull Top 3 from aggregates with simple per-category cache to avoid recomputation
+                # Determine active FlashCard token (if applicable) for cache scoping
+                active_token = None
+                if chosen_cat == 'flashcard':
+                    try:
+                        from backend.bio_store import get_active_flash_set_name, get_flash_set_token
+                        _uname_cf = (st.session_state.get('user', {}) or {}).get('username') or ''
+                        active_token = get_flash_set_token(_uname_cf, get_active_flash_set_name(_uname_cf) or 'flashcard')
+                    except Exception:
+                        active_token = None
+                cache_key = f"{chosen_cat}:{active_token or ''}" if chosen_cat == 'flashcard' else chosen_cat
+                # Pull Top 3 from cache (scoped by category+token) to avoid recomputation
                 _cache = st.session_state.get('_top3_start_cache', {})
-                if _cache.get('cat') == chosen_cat and 'rows' in _cache:
+                if _cache.get('key') == cache_key and 'rows' in _cache:
                     top3_rows = _cache.get('rows', [])
                 else:
                     # Restrict FlashCard Top 3 to same shared token
@@ -3637,6 +3647,8 @@ def display_game():
                         top3_rows = get_top10_from_aggregates(chosen_cat)[:3]
                 if (not top3_rows) and chosen_cat != 'any':
                     top3_rows = get_top10_from_aggregates('any')[:3]
+                # Update cache with scoped key
+                st.session_state['_top3_start_cache'] = {'key': cache_key, 'rows': top3_rows}
                 if not top3_rows:
                     try:
                         _agg = _load_aggregates()
@@ -5363,9 +5375,41 @@ def display_game_over(game_summary):
     except Exception:
         pass
     # Global Leaderboard header without the inline Your SEI
+    # If FlashCard, restrict to same token as active set of current user
+    token_label = ''
+    allowed_users = None
+    if (leaderboard_category or '').lower() == 'flashcard':
+        try:
+            from backend.bio_store import get_active_flash_set_name, get_flash_set_token
+            uname = (st.session_state.get('user') or {}).get('username') or (game_summary.get('nickname') or '')
+            uname = (uname or '').lower()
+            token_gc = get_flash_set_token(uname, get_active_flash_set_name(uname) or 'flashcard')
+            if token_gc:
+                token_label = f" — Token: {token_gc}"
+                # Build allowed users by active set matching token (ref or owner)
+                import os as _os, json as _json
+                flash_path = _os.getenv('USERS_FLASH_FILE', 'users.flashcards.json')
+                users_flash = {}
+                if _os.path.exists(flash_path):
+                    with open(flash_path, 'r', encoding='utf-8') as f:
+                        users_flash = _json.load(f)
+                allowed_users = set()
+                for un, rec in (users_flash or {}).items():
+                    try:
+                        sets = rec.get('flash_sets') or {}
+                        active = rec.get('flash_active_set')
+                        if isinstance(sets, dict) and active and active in sets:
+                            item = sets.get(active) or {}
+                            if str(item.get('ref_token') or '') == str(token_gc) or str(item.get('token') or '') == str(token_gc):
+                                allowed_users.add((un or '').lower())
+                    except Exception:
+                        continue
+        except Exception:
+            token_label = ''
+            allowed_users = None
     st.markdown(f"""
     <div style='font-size:1.1em; font-weight:700; color:#fff; margin-bottom:0.5em;'>
-        🏆 Global Leaderboard (Top 3 by SEI) - {leaderboard_category.title() if leaderboard_category != 'All Categories' else 'All Categories'}
+        🏆 Global Leaderboard (Top 3 by SEI) - {(leaderboard_category.title() if leaderboard_category != 'All Categories' else 'All Categories')}{token_label}
     </div>
     """, unsafe_allow_html=True)
     user_sei = {}
@@ -5373,6 +5417,8 @@ def display_game_over(game_summary):
         user = g.get('nickname', '').lower()
         game_category = g.get('subject', '').lower()
         if leaderboard_category and leaderboard_category.lower() != 'all categories' and game_category != leaderboard_category.lower():
+            continue
+        if allowed_users is not None and user not in allowed_users:
             continue
 
         score = g.get('score', 0)
@@ -5528,6 +5574,8 @@ def display_game_over(game_summary):
         dates = []
         for gg in all_games:
             if leaderboard_category and leaderboard_category.lower() != 'all categories' and (gg.get('subject','') or '').lower() != leaderboard_category.lower():
+                continue
+            if allowed_users is not None and (gg.get('nickname','') or '').lower() not in allowed_users:
                 continue
             if (gg.get('nickname','') or '').lower() != u:
                 continue
