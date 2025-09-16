@@ -3580,7 +3580,61 @@ def display_game():
                 if _cache.get('cat') == chosen_cat and 'rows' in _cache:
                     top3_rows = _cache.get('rows', [])
                 else:
-                    top3_rows = get_top10_from_aggregates(chosen_cat)[:3]
+                    # Restrict FlashCard Top 3 to same shared token
+                    if chosen_cat == 'flashcard':
+                        try:
+                            from backend.bio_store import get_active_flash_set_name, get_flash_set_token
+                            uname = (st.session_state.get('user', {}) or {}).get('username') or ''
+                            token = get_flash_set_token(uname, get_active_flash_set_name(uname) or 'flashcard')
+                        except Exception:
+                            token = None
+                        if token:
+                            # Compute Top 3 among users with same token
+                            try:
+                                import os as _os, json as _json
+                                flash_path = _os.getenv('USERS_FLASH_FILE', 'users.flashcards.json')
+                                users_flash = {}
+                                if _os.path.exists(flash_path):
+                                    with open(flash_path, 'r', encoding='utf-8') as f:
+                                        users_flash = _json.load(f)
+                                allowed = set()
+                                for un, rec in (users_flash or {}).items():
+                                    try:
+                                        sets = rec.get('flash_sets') or {}
+                                        active = rec.get('flash_active_set')
+                                        if isinstance(sets, dict) and active and active in sets:
+                                            item = sets.get(active) or {}
+                                            if str(item.get('ref_token') or '') == str(token) or str(item.get('token') or '') == str(token):
+                                                allowed.add(un)
+                                    except Exception:
+                                        continue
+                                games = get_all_game_results()
+                                games = [g for g in games if (g.get('subject','').lower() == 'flashcard') and (g.get('nickname','').lower() in allowed)]
+                                user_highest = {}
+                                user_date = {}
+                                for g in games:
+                                    score = g.get('score', 0)
+                                    time_taken = g.get('time_taken', g.get('duration', 0))
+                                    words = g.get('words_solved', 1) if g.get('mode') == 'Beat' else 1
+                                    denom = max(int(words or 0), 1)
+                                    avg_score = score / denom
+                                    avg_time = (time_taken / denom) if time_taken else 0
+                                    sei = (avg_score / avg_time) if avg_time > 0 else None
+                                    if sei is None:
+                                        continue
+                                    u = (g.get('nickname','') or '').lower()
+                                    ts = g.get('timestamp','')
+                                    if (u not in user_highest) or (sei > user_highest[u]):
+                                        user_highest[u] = sei
+                                        user_date[u] = ts.split('T')[0] if isinstance(ts, str) and 'T' in ts else ts
+                                sorted_rows = sorted(user_highest.items(), key=lambda x: x[1], reverse=True)[:3]
+                                top3_rows = [{ 'User': u, 'Highest SEI': round(sei, 4), 'Date': user_date.get(u,'') } for u, sei in sorted_rows]
+                            except Exception:
+                                top3_rows = []
+                        else:
+                            top3_rows = []
+                    else:
+                        top3_rows = get_top10_from_aggregates(chosen_cat)[:3]
                 if (not top3_rows) and chosen_cat != 'any':
                     top3_rows = get_top10_from_aggregates('any')[:3]
                 if not top3_rows:
@@ -3618,9 +3672,19 @@ def display_game():
                         st.caption(f"DEBUG TOP3 START: First row sample: {top3_rows[0]}")
                     st.session_state['top3_start_debug_done'] = True
                 nice_cat = chosen_cat.replace('_',' ').title()
+                token_label = ''
+                if chosen_cat == 'flashcard':
+                    try:
+                        from backend.bio_store import get_active_flash_set_name, get_flash_set_token
+                        uname = (st.session_state.get('user') or {}).get('username') or ''
+                        token = get_flash_set_token(uname, get_active_flash_set_name(uname) or 'flashcard')
+                        if token:
+                            token_label = f" — Token: {token}"
+                    except Exception:
+                        token_label = ''
                 st.markdown(f"""
                 <div style='font-size:1.0em; font-weight:700; color:#fff; margin:1em 0 0.25em 0;'>
-                    🏆 Global Leaderboard (Top 3 by SEI) - {nice_cat}
+                    🏆 Global Leaderboard (Top 3 by SEI) - {nice_cat}{token_label}
                 </div>
                 """, unsafe_allow_html=True)
                 if top3_rows:
@@ -5866,12 +5930,36 @@ def get_all_game_results():
             results.append(game)
     return results
 
-def get_global_leaderboard(top_n=10, mode=None, category=None):
+def get_global_leaderboard(top_n=10, mode=None, category=None, flash_ref_token: str | None = None):
     games = get_all_game_results()
     if mode and mode != "All":
         games = [g for g in games if g.get("mode") == mode]
     if category and category != "All":
         games = [g for g in games if g.get("subject") == category]
+    # If filtering FlashCard by shared token, include only games from users whose active set references that token
+    if category == 'flashcard' and flash_ref_token:
+        try:
+            import json as _json, os as _os
+            flash_path = _os.getenv('USERS_FLASH_FILE', 'users.flashcards.json')
+            users_flash = {}
+            if _os.path.exists(flash_path):
+                with open(flash_path, 'r', encoding='utf-8') as f:
+                    users_flash = _json.load(f)
+            allowed_users = set()
+            for uname, rec in (users_flash or {}).items():
+                try:
+                    sets = rec.get('flash_sets') or {}
+                    active = rec.get('flash_active_set')
+                    if isinstance(sets, dict) and active and active in sets:
+                        item = sets.get(active) or {}
+                        if str(item.get('ref_token') or '') == str(flash_ref_token):
+                            allowed_users.add(uname)
+                except Exception:
+                    continue
+            if allowed_users:
+                games = [g for g in games if (g.get('nickname','').lower() in allowed_users)]
+        except Exception:
+            pass
     games.sort(key=lambda g: g.get("score", 0), reverse=True)
     return games[:top_n]
 def get_user_stats(username):
