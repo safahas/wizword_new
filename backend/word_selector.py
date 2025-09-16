@@ -2389,10 +2389,16 @@ class WordSelector:
             return ''
 
     def _make_profile_hint(self, word: str, rec: dict) -> str:
-        """Create a clearer one-line hint based on profile context rather than a generic label."""
+        """Create a clearer one-line hint based on profile context rather than a generic label.
+
+        Enhanced: if the bio contains the exact word, extract a local context window and
+        surface up to two meaningful neighboring keywords, mirroring FlashCard behavior.
+        Falls back to role/location/occupation heuristics and finally first-letter.
+        """
         try:
             wl = (word or '').strip().lower()
             bio_text = str(rec.get('bio') or '')
+            # Inline helper for first letter
             def _first_letter_hint(w: str) -> str:
                 try:
                     for c in (w or ''):
@@ -2401,6 +2407,41 @@ class WordSelector:
                     return "Starts with a letter"
                 except Exception:
                     return "Starts with a letter"
+            # If the bio contains the exact word, build a context-based hint
+            try:
+                idx = bio_text.lower().find(wl)
+                if idx != -1:
+                    start = max(0, idx - 80)
+                    end = min(len(bio_text), idx + 80)
+                    window = bio_text[start:end]
+                    import re as _re
+                    stop = {"and","the","with","for","you","your","at","to","in","of","on","a","an","is","are","was","were","be","been","am","from","by","or","as"}
+                    toks = _re.findall(r"[A-Za-z]{3,}", window)
+                    scores = []
+                    for t in toks:
+                        tl = t.lower()
+                        if tl == wl or tl in stop:
+                            continue
+                        score = 1
+                        if tl.endswith(('tion','sion','ment','ness','ity','ism','ing','ed','ship','ance','ence')):
+                            score += 1
+                        if t[:1].isupper():
+                            score += 1
+                        scores.append((t, score))
+                    scores.sort(key=lambda x: x[1], reverse=True)
+                    neigh = []
+                    for t,_ in scores:
+                        if t.lower() not in {o.lower() for o in neigh}:
+                            neigh.append(t)
+                        if len(neigh) >= 2:
+                            break
+                    first = next((ch for ch in (word or '') if ch.isalpha()), None)
+                    if neigh and first:
+                        if len(neigh) == 1:
+                            return f"Starts with '{first.upper()}'. Related to {neigh[0]}"
+                        return f"Starts with '{first.upper()}'. Related to {neigh[0]} and {neigh[1]}"
+            except Exception:
+                pass
             # Early guard for generic tokens
             generic = {
                 'have','since','and','the','this','that','these','those','with','without','about','into','onto',
