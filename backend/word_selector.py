@@ -2137,7 +2137,12 @@ class WordSelector:
         try:
             import re
             toks = re.findall(r"[A-Za-z0-9]+", text or "")
-            stop = {"and","the","with","for","you","your","at","to","in","of","on","a","an","is","are","was","were","be","been","am","from","by","or","as"}
+            # Expanded stopwords to avoid function words in FlashCard extraction
+            stop = {
+                "and","the","with","for","you","your","at","to","in","of","on","a","an","is","are","was","were","be","been","am","from","by","or","as",
+                "while","every","then","etc","also","because","however","therefore","thus","very","really","quite","maybe","often","sometimes","usually","always","never","again","still",
+                "than","into","onto","until","within","without","across","through","during","before","after","between","against","among","about","like","just","even","both","either","neither","each","per","via"
+            }
             number_words = {"zero","one","two","three","four","five","six","seven","eight","nine","ten","eleven","twelve","thirteen","fourteen","fifteen","sixteen","seventeen","eighteen","nineteen","twenty"}
             deny = {"people","person","thing","things","stuff","place","time","year","years","work","works","worked","working","live","lived","living","like","likes","liked","watch","watched","watching","join","joined","joining","use","used","using","since","have","been","most","many","life","day","days","good","bad","nice","great","hello","thanks","team"} | number_words
             def valid_word(w: str) -> bool:
@@ -2178,7 +2183,12 @@ class WordSelector:
             # Helper: choose up to 2 meaningful keywords near the word
             def _keywords(window: str, target: str) -> list:
                 import re as _re
-                stop = {"and","the","with","for","you","your","at","to","in","of","on","a","an","is","are","was","were","be","been","am","from","by","or","as"}
+                # Match extraction stopwords for keyword selection too
+                stop = {
+                    "and","the","with","for","you","your","at","to","in","of","on","a","an","is","are","was","were","be","been","am","from","by","or","as",
+                    "while","every","then","etc","also","because","however","therefore","thus","very","really","quite","maybe","often","sometimes","usually","always","never","again","still",
+                    "than","into","onto","until","within","without","across","through","during","before","after","between","against","among","about","like","just","even","both","either","neither","each","per","via"
+                }
                 toks = _re.findall(r"[A-Za-z]{3,}", window)
                 scores = []
                 for t in toks:

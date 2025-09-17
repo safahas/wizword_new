@@ -108,7 +108,8 @@ def _maybe_migrate_flash_from_bio(username: str) -> None:
         migrated['flash_sets'] = {
             'default': {
                 'text': str(legacy_text or ''),
-                'pool': legacy_pool if isinstance(legacy_pool, list) else []
+                'pool': legacy_pool if isinstance(legacy_pool, list) else [],
+                'token': uuid.uuid4().hex[:8]
             }
         }
         migrated['flash_active_set'] = 'default'
@@ -205,7 +206,7 @@ def get_flash_pool(username: str) -> List[Dict[str, Any]]:
             except Exception:
                 return []
         pool = item.get('pool')
-        return pool if isinstance(pool, list) else []
+    return pool if isinstance(pool, list) else []
     return []
 
 
@@ -312,6 +313,9 @@ def upsert_flash_set(username: str, name: str, text: str = '', pool: List[Dict[s
             rec['flash_sets'][name]['text'] = str(text or '')
         if pool is not None:
             rec['flash_sets'][name]['pool'] = list(pool)
+        # If set exists but has no token and is not a reference, ensure token
+        if not rec['flash_sets'][name].get('ref_token') and not rec['flash_sets'][name].get('token'):
+            rec['flash_sets'][name]['token'] = uuid.uuid4().hex[:8]
     # Ensure active set points to this name if not set
     if not rec.get('flash_active_set'):
         rec['flash_active_set'] = name
@@ -379,11 +383,16 @@ def ensure_flash_set_token(username: str, name: str) -> str:
 
 
 def get_flash_set_token(username: str, name: str) -> Optional[str]:
-    rec = _get_flash_user_record(username)
-    sets = rec.get('flash_sets') or {}
-    item = (sets.get(name) or {}) if isinstance(sets, dict) else {}
-    tok = item.get('token') or item.get('ref_token')
-    return str(tok) if tok else None
+    # Ensure a token exists if this is a local (owned) set; return ref_token for references
+    try:
+        tok = ensure_flash_set_token(username, name)
+        return str(tok) if tok else None
+    except Exception:
+        rec = _get_flash_user_record(username)
+        sets = rec.get('flash_sets') or {}
+        item = (sets.get(name) or {}) if isinstance(sets, dict) else {}
+        tok2 = item.get('token') or item.get('ref_token')
+        return str(tok2) if tok2 else None
 
 
 def add_flash_set_ref(username: str, name: str, token: str, owner: str = '', title: str = '') -> bool:
