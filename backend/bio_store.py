@@ -355,6 +355,11 @@ def ensure_flash_set_token(username: str, name: str) -> str:
     rec = users[key]
     if 'flash_sets' not in rec or not isinstance(rec['flash_sets'], dict):
         rec['flash_sets'] = {}
+    # If this is a reference set, prefer ref_token and do not create an owner token
+    if name in rec['flash_sets'] and isinstance(rec['flash_sets'][name], dict):
+        ref_tok = rec['flash_sets'][name].get('ref_token')
+        if isinstance(ref_tok, str) and ref_tok:
+            return ref_tok
     if name not in rec['flash_sets']:
         # Create minimal set with token when missing (respecting limit)
         if len(rec['flash_sets']) >= FLASHCARD_MAX_SETS:
@@ -383,16 +388,21 @@ def ensure_flash_set_token(username: str, name: str) -> str:
 
 
 def get_flash_set_token(username: str, name: str) -> Optional[str]:
-    # Ensure a token exists if this is a local (owned) set; return ref_token for references
+    # Return ref_token if present (for imported/reference sets); otherwise ensure/return owner token
+    rec = _get_flash_user_record(username)
+    sets = rec.get('flash_sets') or {}
+    item = (sets.get(name) or {}) if isinstance(sets, dict) else {}
+    ref_tok = item.get('ref_token')
+    if isinstance(ref_tok, str) and ref_tok:
+        return ref_tok
+    # Owned set: ensure a token exists
     try:
-        tok = ensure_flash_set_token(username, name)
+        tok = item.get('token')
+        if not tok:
+            tok = ensure_flash_set_token(username, name)
         return str(tok) if tok else None
     except Exception:
-        rec = _get_flash_user_record(username)
-        sets = rec.get('flash_sets') or {}
-        item = (sets.get(name) or {}) if isinstance(sets, dict) else {}
-        tok2 = item.get('token') or item.get('ref_token')
-        return str(tok2) if tok2 else None
+        return None
 
 
 def add_flash_set_ref(username: str, name: str, token: str, owner: str = '', title: str = '') -> bool:
