@@ -2030,7 +2030,25 @@ class WordSelector:
         try:
             text = (get_flash_text(username) or '')[: self.flash_text_max]
             pool = get_flash_pool(username)
+            # If pool exceeds current target size (env lowered), trim and persist
+            try:
+                if pool and len(pool) > self.flash_words_count:
+                    trimmed = list(pool)[: self.flash_words_count]
+                    set_flash_pool(username, trimmed)
+                    try:
+                        logger.info(f"[FLASH_BUILD] trimmed pool from {len(pool)} to {len(trimmed)} user={username}")
+                        print(f"[FLASH_BUILD][trim] {len(pool)}=>{len(trimmed)} user={username}")
+                    except Exception:
+                        pass
+                    pool = trimmed
+            except Exception:
+                pass
             if not pool or len(pool) < self.flash_words_count:
+                try:
+                    logger.info(f"[FLASH_BUILD] start user={username} pool_curr={len(pool) if pool else 0} target={self.flash_words_count} text_bytes={len((text or '').encode('utf-8','ignore'))}")
+                    print(f"[FLASH_BUILD][start] user={username} curr={len(pool) if pool else 0} target={self.flash_words_count}")
+                except Exception:
+                    pass
                 import time as _t
                 _start = _t.time()
                 # API-first pool builder from source text for nouns + contextual hints (env-gated)
@@ -2038,7 +2056,18 @@ class WordSelector:
                 use_api_flash = os.getenv('FLASHCARD_API_FIRST', 'false').strip().lower() in ('1','true','yes','on')
                 api_items = self._generate_flash_pool_api(text, max_items=self.flash_words_count) if use_api_flash else []
                 if api_items:
-                    lst = api_items
+                    # Deduplicate and limit to flash_words_count
+                    seenw = set()
+                    dedup = []
+                    for it in api_items:
+                        wl = str(it.get('word','')).strip().lower()
+                        if not wl or wl in seenw:
+                            continue
+                        seenw.add(wl)
+                        dedup.append(it)
+                        if len(dedup) >= self.flash_words_count:
+                            break
+                    lst = dedup
                 else:
                     words = self._extract_flash_words(text, max_items=self.flash_words_count)
                 # Build map of existing API hints to reuse when text changes
@@ -2057,7 +2086,8 @@ class WordSelector:
                     _max_att = int(_os.getenv('PERSONAL_POOL_API_ATTEMPTS', '3'))
                 except Exception:
                     _max_att = 3
-                for w in ([it.get('word') for it in lst] if lst and isinstance(lst[0], dict) and 'word' in lst[0] else words):
+                built_words = [it.get('word') for it in lst] if lst and isinstance(lst[0], dict) and 'word' in lst[0] else words
+                for w in built_words:
                     if not w:
                         continue
                     wl = str(w).strip().lower()
@@ -2092,10 +2122,33 @@ class WordSelector:
                     if not hint_text:
                         hint_text = self._make_flash_hint(w, text) or self._first_letter_hint(w)
                         hint_source = 'local'
-                    lst.append({"word": w, "hint": hint_text or '', 'hint_source': hint_source, 'api_attempts': api_attempts})
-                    if (_t.time() - _start) >= getattr(self, 'flash_rebuild_max_secs', 5.0):
+                    # Append if not already present
+                    if str(w).strip().lower() not in {it.get('word','').lower() for it in lst}:
+                        lst.append({"word": w, "hint": hint_text or '', 'hint_source': hint_source, 'api_attempts': api_attempts})
+                    # Respect time budget but try to reach target size; break if both time exceeded and we have enough
+                    if (_t.time() - _start) >= getattr(self, 'flash_rebuild_max_secs', 5.0) and len(lst) >= self.flash_words_count:
                         break
+                # If still short, top up with offline extraction beyond initial words to reach target size
+                if len(lst) < self.flash_words_count:
+                    try:
+                        more = self._extract_flash_words(text, max_items=self.flash_words_count * 2)
+                        existing = {it.get('word','').lower() for it in lst}
+                        for w in more:
+                            if len(lst) >= self.flash_words_count:
+                                break
+                            if not w or w.lower() in existing:
+                                continue
+                            hint_text = self._make_flash_hint(w, text) or self._first_letter_hint(w)
+                            lst.append({"word": w, "hint": hint_text, 'hint_source': 'local', 'api_attempts': 0})
+                            existing.add(w.lower())
+                    except Exception:
+                        pass
                 set_flash_pool(username, lst)
+                try:
+                    logger.info(f"[FLASH_BUILD] saved items={len(lst)} user={username}")
+                    print(f"[FLASH_BUILD][saved] items={len(lst)} user={username}")
+                except Exception:
+                    pass
                 pool = lst
             # Maintenance pass: reattempt API hints only for words that failed previously, one-shot per call
             try:
@@ -2132,6 +2185,11 @@ class WordSelector:
                     new_pool.append(it)
                 if changed:
                     set_flash_pool(username, new_pool)
+                    try:
+                        logger.info(f"[FLASH_BUILD] maintenance_updated items={len(new_pool)} user={username}")
+                        print(f"[FLASH_BUILD][maint] items={len(new_pool)} user={username}")
+                    except Exception:
+                        pass
                     pool = new_pool
             except Exception:
                 pass
@@ -2484,8 +2542,8 @@ class WordSelector:
         except Exception:
             self.flash_text_max = 500
         try:
-            # Independent FlashCard pool size
-            self.flash_words_count = int(os.getenv("FLASHCARD_POOL_MAX", os.getenv("FLASHCARD_WORDS_COUNT", "10")))
+            # Single source of truth: FLASHCARD_POOL_MAX (fallback default 10)
+            self.flash_words_count = int(os.getenv("FLASHCARD_POOL_MAX", "10"))
         except Exception:
             self.flash_words_count = 10
         try:
