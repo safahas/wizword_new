@@ -3689,9 +3689,7 @@ def display_game():
                             pass
             except Exception:
                 pass
-            if not st.session_state.get('show_flashcard_settings', False):
-                if st.button("FlashCard Settings", key="flash_settings_entry_btn_beat_pregame"):
-                    st.session_state['show_flashcard_settings'] = True
+            # Moved FlashCard Settings button below the Change Category button
             # Show a fixed banner if a deferred FlashCard build is in progress (pre-game)
             try:
                 if st.session_state.get('_flash_build_run') and st.session_state.get('_flash_build_context') == 'pregame':
@@ -3710,7 +3708,7 @@ def display_game():
             except Exception:
                 pass
             # Render FlashCard Settings panel here when requested
-            if st.session_state.get('show_flashcard_settings', False):
+            if st.session_state.get('show_flashcard_settings', False) and not st.session_state.get('_render_flash_below', False):
                 st.markdown("---")
                 st.markdown("### FlashCard Settings")
                 user = st.session_state.get('user', {}) or {}
@@ -4172,6 +4170,185 @@ def display_game():
                     st.session_state.pop('_top3_start_cache', None)
                     st.rerun()
                 st.markdown("</div>", unsafe_allow_html=True)
+                # FlashCard Settings button placed directly below Change Category
+                if st.button("FlashCard Settings", key="flash_settings_entry_btn_beat_pregame"):
+                    st.session_state['show_flashcard_settings'] = True
+                    st.session_state['_render_flash_below'] = True
+                    st.rerun()
+                # Render FlashCard Settings panel here when requested (below Change Category)
+                if st.session_state.get('show_flashcard_settings', False) and st.session_state.get('_render_flash_below', False):
+                    st.markdown("---")
+                    st.markdown("### FlashCard Settings")
+                    user = st.session_state.get('user', {}) or {}
+                    _enable_flashcard_ui = os.getenv('ENABLE_FLASHCARD_CATEGORY', 'true').strip().lower() in ('1','true','yes','on')
+                    if _enable_flashcard_ui:
+                        try:
+                            _flash_max_inline = int(os.getenv('FLASHCARD_TEXT_MAX', '500'))
+                        except Exception:
+                            _flash_max_inline = 500
+                        try:
+                            from backend.bio_store import get_flash_text, list_flash_set_names, get_active_flash_set_name, set_active_flash_set_name, upsert_flash_set, ensure_flash_set_token, get_flash_set_token
+                            _uname_lower = (user.get('username','') or '').lower()
+                            _flash_init_inline = get_flash_text(_uname_lower)
+                        except Exception:
+                            _flash_init_inline = ''
+                            _uname_lower = ''
+                        try:
+                            _existing_sets = list_flash_set_names(_uname_lower)
+                        except Exception:
+                            _existing_sets = []
+                        try:
+                            _active_name = get_active_flash_set_name(_uname_lower) or 'default'
+                        except Exception:
+                            _active_name = 'default'
+                        try:
+                            _name_list = sorted(set((_existing_sets or []) + ([_active_name] if _active_name else [])))
+                            _label_map = {}
+                            _labels = []
+                            _active_label = None
+                            for _nm in _name_list:
+                                try:
+                                    _tok = ensure_flash_set_token(_uname_lower, _nm)
+                                except Exception:
+                                    _tok = get_flash_set_token(_uname_lower, _nm) or ''
+                                _lbl = f"{_nm} [{_tok}]" if _tok else _nm
+                                _labels.append(_lbl)
+                                _label_map[_lbl] = _nm
+                                if _nm == _active_name:
+                                    _active_label = _lbl
+                            _default_index = 0
+                            if _active_label and _active_label in _labels:
+                                _default_index = _labels.index(_active_label)
+                        except Exception:
+                            _labels = sorted(set((_existing_sets or []) + ([_active_name] if _active_name else [])))
+                            _label_map = {s: s for s in _labels}
+                            _default_index = 0
+                        cols_fc = st.columns([2,1,1])
+                        with cols_fc[0]:
+                            _sel_label = st.selectbox('Active FlashCard Set', options=_labels, index=_default_index, key='flash_set_select_pregame_below')
+                            _sel = _label_map.get(_sel_label, _active_name)
+                            if st.button('Delete Set', key='flash_delete_set_pregame_below'):
+                                try:
+                                    from backend.bio_store import delete_flash_set
+                                    if _sel:
+                                        ok = delete_flash_set(_uname_lower, _sel)
+                                        if ok:
+                                            st.success(f"Deleted set: {_sel}")
+                                            st.session_state['show_flashcard_settings'] = True
+                                            st.session_state['_render_flash_below'] = True
+                                            st.rerun()
+                                        else:
+                                            st.error('Failed to delete set.')
+                                except Exception:
+                                    st.error('Error deleting set.')
+                        with cols_fc[1]:
+                            _new_name = st.text_input('New Set Name', value='', key='flash_set_new_name_pregame_below')
+                        with cols_fc[2]:
+                            if st.button('Create/Use', key='flash_set_create_use_pregame_below'):
+                                try:
+                                    _name = (_new_name or _sel or 'default').strip()
+                                    if _name:
+                                        ok = upsert_flash_set(_uname_lower, _name)
+                                        if ok:
+                                            set_active_flash_set_name(_uname_lower, _name)
+                                            st.success(f"Using FlashCard set: {_name}")
+                                        else:
+                                            st.error('Reached FlashCard set limit or invalid name.')
+                                except Exception:
+                                    st.error('Failed to switch/create FlashCard set.')
+                        st.text_area(
+                            f"FlashCard Text (up to {_flash_max_inline} characters)",
+                            value=_flash_init_inline,
+                            max_chars=_flash_max_inline,
+                            key='profile_flash_text_pregame_below'
+                        )
+                        # Build From Document
+                        st.markdown("#### Build From Document")
+                        _doc_file_pg2 = st.file_uploader('Upload PDF, DOCX, or TXT', type=['pdf','docx','txt'], key='flash_doc_upload_pregame_below')
+                        if st.button('Generate from Document', key='flash_doc_generate_pregame_below'):
+                            if not _doc_file_pg2:
+                                st.warning('Please upload a file first.')
+                            else:
+                                import io, time as _t
+                                with st.spinner('Calling backend to generate words and hints...'):
+                                    try:
+                                        import os as _os, requests as _req
+                                        backend_url = _os.getenv('BACKEND_HINTS_URL', 'http://localhost:8000/generate-hints')
+                                        files = { 'file': (_doc_file_pg2.name, _doc_file_pg2.getvalue(), _doc_file_pg2.type or 'application/octet-stream') }
+                                        resp = _req.post(backend_url, files=files, timeout=90)
+                                        resp.raise_for_status()
+                                        data = resp.json()
+                                        hints_map = data.get('hints') or {}
+                                        if not isinstance(hints_map, dict) or not hints_map:
+                                            st.error('Backend returned empty hints.')
+                                        else:
+                                            new_pool = []
+                                            for w, hints in hints_map.items():
+                                                try:
+                                                    h = (hints or [None])[0]
+                                                    if w and h:
+                                                        new_pool.append({'word': str(w).strip(), 'hint': str(h).strip(), 'hint_source': 'doc', 'api_attempts': 0})
+                                                except Exception:
+                                                    continue
+                                            if new_pool:
+                                                from backend.bio_store import set_flash_pool, set_flash_text, get_active_flash_set_name, set_active_flash_set_name, ensure_flash_set_token
+                                                set_flash_pool(_uname_lower, new_pool)
+                                                active_title = get_active_flash_set_name(_uname_lower) or 'flashcard'
+                                                try:
+                                                    set_active_flash_set_name(_uname_lower, active_title)
+                                                except Exception:
+                                                    pass
+                                                try:
+                                                    _src_label = f"[Uploaded file: {_doc_file_pg2.name}]"
+                                                    set_flash_text(_uname_lower, _src_label)
+                                                except Exception:
+                                                    pass
+                                                tok = ensure_flash_set_token(_uname_lower, active_title)
+                                                st.success(f"FlashCard pool updated from document. Items: {len(new_pool)}. Token: {tok}")
+                                                try:
+                                                    st.session_state['show_flashcard_settings'] = True
+                                                    st.session_state['_render_flash_below'] = True
+                                                    st.session_state.pop('_top3_start_cache', None)
+                                                    st.session_state['original_category_choice'] = 'flashcard'
+                                                except Exception:
+                                                    pass
+                                                st.rerun()
+                                            else:
+                                                st.error('No usable items produced from document.')
+                                    except Exception as e:
+                                        st.error(f'Backend error: {e}')
+                        # Import by Token
+                        st.markdown("#### Import by Token")
+                        _imp_cols_pg2 = st.columns([2,1])
+                        with _imp_cols_pg2[0]:
+                            _import_tok_pg2 = st.text_input('Import by Token', value='', key='flash_import_token_pregame_below')
+                        with _imp_cols_pg2[1]:
+                            if st.button('Import', key='flash_import_btn_pregame_below'):
+                                try:
+                                    from backend.flash_share import load_share, import_share_to_user
+                                    _tokb = (_import_tok_pg2 or '').strip()
+                                    if not _tokb:
+                                        st.warning('Please enter a valid token to import.')
+                                    else:
+                                        _recb = load_share(_tokb)
+                                        if not _recb:
+                                            st.error('Invalid or expired token.')
+                                        else:
+                                            _ownerb = (_recb.get('owner') or 'user')
+                                            _titleb = (_recb.get('title') or 'flashcard')
+                                            _set_nameb = f"{_ownerb}/{_titleb}"
+                                            okb = import_share_to_user(_tokb, _uname_lower, set_name=_set_nameb)
+                                            if okb:
+                                                from backend.bio_store import set_active_flash_set_name
+                                                set_active_flash_set_name(_uname_lower, _set_nameb)
+                                                st.success(f"Imported '{_set_nameb}' from {_ownerb}.")
+                                                st.session_state['show_flashcard_settings'] = True
+                                                st.session_state['_render_flash_below'] = True
+                                                st.rerun()
+                                            else:
+                                                st.error('Failed to import: set limit reached or token invalid.')
+                                except Exception:
+                                    st.error('Import failed due to an unexpected error.')
                 # Admin-only: render all user profiles when toggled in the sidebar
                 try:
                     if st.session_state.get('show_all_users_profiles'):
