@@ -1,0 +1,67 @@
+import os
+from fastapi import FastAPI, UploadFile, File, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
+from dotenv import load_dotenv
+
+from .doc_utils import get_limits, sanitize_text, sanitize_hints_map
+from .doc_schema import HintsResponse
+from .doc_llm import generate_hints_from_text
+
+load_dotenv()
+
+app = FastAPI(title="WizWord Doc Hint API")
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"], allow_credentials=True,
+    allow_methods=["*"], allow_headers=["*"],
+)
+
+
+def _read_upload_bytes(file: UploadFile, max_bytes: int) -> bytes:
+    data = file.file.read(max_bytes + 1)
+    if not data:
+        raise HTTPException(status_code=400, detail="Empty file.")
+    if len(data) > max_bytes:
+        raise HTTPException(status_code=400, detail=f"File exceeds limit of {max_bytes} bytes.")
+    return data
+
+
+@app.post("/generate-hints", response_model=HintsResponse)
+async def generate_hints(file: UploadFile = File(...)):
+    max_bytes, flash_max = get_limits()
+    raw = _read_upload_bytes(file, max_bytes)
+    name = (file.filename or "").lower()
+    ext = name.split(".")[-1]
+    # Simple text extraction (PDF/DOCX/TXT minimal viable)
+    text = ""
+    try:
+        if ext == "pdf":
+            from io import BytesIO
+            from pypdf import PdfReader
+            reader = PdfReader(BytesIO(raw))
+            text = "\n".join([(p.extract_text() or "") for p in reader.pages])
+        elif ext == "docx":
+            from io import BytesIO
+            from docx import Document
+            doc = Document(BytesIO(raw))
+            text = "\n".join([p.text for p in doc.paragraphs])
+        elif ext == "txt":
+            text = raw.decode("utf-8", errors="ignore")
+        else:
+            raise HTTPException(status_code=400, detail="Unsupported file type. Use PDF, DOCX, or TXT.")
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Failed to read file: {e}")
+
+    text = sanitize_text(text, max_chars=6000)
+    try:
+        raw_hints = await generate_hints_from_text(text, count=flash_max)
+        cleaned = sanitize_hints_map(raw_hints, desired_count=flash_max, doc_text=text)
+        resp = HintsResponse(hints=cleaned)
+        return resp
+    except Exception as e:
+        raise HTTPException(status_code=502, detail=f"LLM error: {e}")
+
+

@@ -3625,6 +3625,12 @@ def display_game():
                             print(f"[FLASH_BUILD][precheck] pool={len(_pool_fc)} target={_target_fc} user={_uname_fc} set={_active_fc}")
                         except Exception:
                             pass
+                    else:
+                        # Clear any lingering precheck banner if pool is now ready
+                        try:
+                            st.empty()
+                        except Exception:
+                            pass
             except Exception:
                 pass
             if not st.session_state.get('show_flashcard_settings', False):
@@ -3848,6 +3854,66 @@ def display_game():
                                             st.error('Failed to import: set limit reached or token invalid.')
                             except Exception:
                                 st.error('Import failed due to an unexpected error.')
+                    # Build from uploaded document via backend hint API
+                    st.markdown("<div style='height:6px'></div>", unsafe_allow_html=True)
+                    st.markdown("#### Build From Document")
+                    _doc_file_pg = st.file_uploader('Upload PDF, DOCX, or TXT', type=['pdf','docx','txt'], key='flash_doc_upload_pregame')
+                    if st.button('Generate from Document', key='flash_doc_generate_pregame'):
+                        if not _doc_file_pg:
+                            st.warning('Please upload a file first.')
+                        else:
+                            import io, time as _t
+                            with st.spinner('Calling backend to generate words and hints...'):
+                                try:
+                                    import os as _os, requests as _req
+                                    backend_url = _os.getenv('BACKEND_HINTS_URL', 'http://localhost:8000/generate-hints')
+                                    files = { 'file': (_doc_file_pg.name, _doc_file_pg.getvalue(), _doc_file_pg.type or 'application/octet-stream') }
+                                    resp = _req.post(backend_url, files=files, timeout=90)
+                                    resp.raise_for_status()
+                                    data = resp.json()
+                                    hints_map = data.get('hints') or {}
+                                    if not isinstance(hints_map, dict) or not hints_map:
+                                        st.error('Backend returned empty hints.')
+                                    else:
+                                        # Convert to pool (use first hint)
+                                        new_pool = []
+                                        for w, hints in hints_map.items():
+                                            try:
+                                                h = (hints or [None])[0]
+                                                if w and h:
+                                                    new_pool.append({'word': str(w).strip(), 'hint': str(h).strip(), 'hint_source': 'doc', 'api_attempts': 0})
+                                            except Exception:
+                                                continue
+                                        if new_pool:
+                                            from backend.bio_store import set_flash_pool, set_flash_text, get_active_flash_set_name, set_active_flash_set_name, ensure_flash_set_token
+                                            set_flash_pool(_uname_lower, new_pool)
+                                            active_title = get_active_flash_set_name(_uname_lower) or 'flashcard'
+                                            # Ensure the active set is explicitly selected and has a token
+                                            try:
+                                                set_active_flash_set_name(_uname_lower, active_title)
+                                            except Exception:
+                                                pass
+                                            # Record the source file name in the FlashCard text field for visibility
+                                            try:
+                                                _src_label = f"[Uploaded file: {_doc_file_pg.name}]"
+                                                set_flash_text(_uname_lower, _src_label)
+                                            except Exception:
+                                                pass
+                                            tok = ensure_flash_set_token(_uname_lower, active_title)
+                                            st.success(f"FlashCard pool updated from document. Items: {len(new_pool)}. Token: {tok}")
+                                            # Close panel and rerun so game uses the updated active set immediately
+                                            try:
+                                                st.session_state['show_flashcard_settings'] = False
+                                                st.session_state.pop('_top3_start_cache', None)
+                                                # Prefer FlashCard category on next run if not already selected
+                                                st.session_state['original_category_choice'] = 'flashcard'
+                                            except Exception:
+                                                pass
+                                            st.rerun()
+                                        else:
+                                            st.error('No usable items produced from document.')
+                                except Exception as e:
+                                    st.error(f'Backend error: {e}')
                     if st.button('Save FlashCard Text', key='save_flash_text_pregame'):
                         try:
                             from backend.bio_store import set_flash_text, set_flash_pool

@@ -2043,7 +2043,8 @@ class WordSelector:
                     pool = trimmed
             except Exception:
                 pass
-            if not pool or len(pool) < self.flash_words_count:
+            # Do not rebuild if a pool exists, even if smaller than target (e.g., document-generated pools)
+            if not pool:
                 try:
                     logger.info(f"[FLASH_BUILD] start user={username} pool_curr={len(pool) if pool else 0} target={self.flash_words_count} text_bytes={len((text or '').encode('utf-8','ignore'))}")
                     print(f"[FLASH_BUILD][start] user={username} curr={len(pool) if pool else 0} target={self.flash_words_count}")
