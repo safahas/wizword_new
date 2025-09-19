@@ -3109,11 +3109,13 @@ def display_game():
     if st.session_state.get('change_category', False):
         enable_personal = os.getenv('ENABLE_PERSONAL_CATEGORY', 'true').strip().lower() in ('1', 'true', 'yes', 'on')
         enable_flashcard = os.getenv('ENABLE_FLASHCARD_CATEGORY', 'true').strip().lower() in ('1', 'true', 'yes', 'on')
-        # Build categories with FlashCard first when enabled
+        # Build categories with FlashCard moved to the end of the list
         base_cats = ["any", "anatomy", "animals", "aviation", "brands", "cities", "food", "general", "gre", "history", "law", "medicines", "movies", "music", "places", "psat", "sat", "science", "sports", "tech", "4th_grade", "8th_grade"]
-        categories = ["flashcard"] + base_cats if enable_flashcard else base_cats
+        categories = list(base_cats)
         if enable_personal:
             categories.append("Personal")
+        if enable_flashcard:
+            categories.append("flashcard")
         new_category = st.selectbox("Select a new category:", categories, format_func=lambda x: ('Any' if x=='any' else ('GRE' if x=='gre' else ('SAT' if x=='sat' else ('PSAT' if x=='psat' else x.replace('_',' ').title())))), key='category_select_box')
         if st.button("Confirm Category Change", key='change_category_btn'):
             # Enforce env gate: if Personal is disabled, do not allow selection of Personal
@@ -3180,6 +3182,13 @@ def display_game():
                 nickname=st.session_state.user['username'],
                 difficulty=game.difficulty
             )
+            # Defensive: ensure FlashCard sticks and never resolves to another category
+            try:
+                if str(new_category).lower() == 'flashcard':
+                    st.session_state.game.subject = 'flashcard'
+                    st.session_state.game.original_subject = 'flashcard'
+            except Exception:
+                pass
             # --- Update user profile default_category ---
             if 'user' in st.session_state and st.session_state['user']:
                 st.session_state['user']['default_category'] = new_category
