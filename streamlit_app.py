@@ -2047,13 +2047,15 @@ def display_welcome():
 
         # --- Global Top 3 by SEI for chosen category (outside form for visibility) ---
         try:
-            # Use the active/running category if available; otherwise user's default; fallback to 'any'
-            if 'game' in st.session_state and st.session_state.game and getattr(st.session_state.game, 'subject', None):
+            # Use pinned display category if set, else active/running, else default, else 'any'
+            if st.session_state.get('_active_display_category'):
+                chosen_cat = str(st.session_state['_active_display_category']).lower()
+            elif 'game' in st.session_state and st.session_state.game and getattr(st.session_state.game, 'subject', None):
                 chosen_cat = str(getattr(st.session_state.game, 'subject')).lower()
             else:
                 user_profile = st.session_state.get('user', {})
                 chosen_cat = (user_profile.get('default_category') or 'any').lower()
-            top3_rows = []
+                top3_rows = []
             # If FlashCard, restrict to same token as active set
             if chosen_cat == 'flashcard':
                 try:
@@ -3187,6 +3189,11 @@ def display_game():
                 if str(new_category).lower() == 'flashcard':
                     st.session_state.game.subject = 'flashcard'
                     st.session_state.game.original_subject = 'flashcard'
+            except Exception:
+                pass
+            # Pin the display category so UI headers don't drift on reruns
+            try:
+                st.session_state['_active_display_category'] = str(new_category).lower()
             except Exception:
                 pass
             # --- Update user profile default_category ---
