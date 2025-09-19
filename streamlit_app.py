@@ -3518,7 +3518,63 @@ def display_game():
                         max_chars=_flash_max_inline,
                         key='profile_flash_text_pregame'
                     )
-                    # Import shared set by token
+                    # Build from document (moved above import)
+                    st.markdown("<div style='height:6px'></div>", unsafe_allow_html=True)
+                    st.markdown("#### Build From Document")
+                    _doc_file_pg = st.file_uploader('Upload PDF, DOCX, or TXT', type=['pdf','docx','txt'], key='flash_doc_upload_pregame')
+                    if st.button('Generate from Document', key='flash_doc_generate_pregame'):
+                        if not _doc_file_pg:
+                            st.warning('Please upload a file first.')
+                        else:
+                            import io, time as _t
+                            with st.spinner('Calling backend to generate words and hints...'):
+                                try:
+                                    import os as _os, requests as _req
+                                    backend_url = _os.getenv('BACKEND_HINTS_URL', 'http://localhost:8000/generate-hints')
+                                    files = { 'file': (_doc_file_pg.name, _doc_file_pg.getvalue(), _doc_file_pg.type or 'application/octet-stream') }
+                                    resp = _req.post(backend_url, files=files, timeout=90)
+                                    resp.raise_for_status()
+                                    data = resp.json()
+                                    hints_map = data.get('hints') or {}
+                                    if not isinstance(hints_map, dict) or not hints_map:
+                                        st.error('Backend returned empty hints.')
+                                    else:
+                                        new_pool = []
+                                        for w, hints in hints_map.items():
+                                            try:
+                                                h = (hints or [None])[0]
+                                                if w and h:
+                                                    new_pool.append({'word': str(w).strip(), 'hint': str(h).strip(), 'hint_source': 'doc', 'api_attempts': 0})
+                                            except Exception:
+                                                continue
+                                        if new_pool:
+                                            from backend.bio_store import set_flash_pool, set_flash_text, get_active_flash_set_name, set_active_flash_set_name, ensure_flash_set_token
+                                            set_flash_pool(_uname_lower, new_pool)
+                                            active_title = get_active_flash_set_name(_uname_lower) or 'flashcard'
+                                            try:
+                                                set_active_flash_set_name(_uname_lower, active_title)
+                                            except Exception:
+                                                pass
+                                            try:
+                                                _src_label = f"[Uploaded file: {_doc_file_pg.name}]"
+                                                set_flash_text(_uname_lower, _src_label)
+                                            except Exception:
+                                                pass
+                                            tok = ensure_flash_set_token(_uname_lower, active_title)
+                                            st.success(f"FlashCard pool updated from document. Items: {len(new_pool)}. Token: {tok}")
+                                            try:
+                                                st.session_state['show_flashcard_settings'] = False
+                                                st.session_state.pop('_top3_start_cache', None)
+                                                st.session_state['original_category_choice'] = 'flashcard'
+                                            except Exception:
+                                                pass
+                                            st.rerun()
+                                        else:
+                                            st.error('No usable items produced from document.')
+                                except Exception as e:
+                                    st.error(f'Backend error: {e}')
+                    # Import shared set by token (moved below)
+                    st.markdown("#### Import by Token")
                     _imp_cols_pg = st.columns([2,1])
                     with _imp_cols_pg[0]:
                         _import_tok_pg = st.text_input('Import by Token', value='', key='flash_import_token_pregame')
@@ -3824,37 +3880,7 @@ def display_game():
                         max_chars=_flash_max_inline,
                         key='profile_flash_text_pregame'
                     )
-                    # Import shared set by token
-                    _imp_cols_pg = st.columns([2,1])
-                    with _imp_cols_pg[0]:
-                        _import_tok_pg = st.text_input('Import by Token', value='', key='flash_import_token_pregame')
-                    with _imp_cols_pg[1]:
-                        if st.button('Import', key='flash_import_btn_pregame'):
-                            try:
-                                from backend.flash_share import load_share, import_share_to_user
-                                _tok = (_import_tok_pg or '').strip()
-                                if not _tok:
-                                    st.warning('Please enter a valid token to import.')
-                                else:
-                                    _rec = load_share(_tok)
-                                    if not _rec:
-                                        st.error('Invalid or expired token.')
-                                    else:
-                                        _owner = _rec.get('owner','')
-                                        _title = _rec.get('title','') or 'shared'
-                                        _set_name = f"{_owner}/{_title}"
-                                        ok = import_share_to_user(_tok, _uname_lower, set_name=_set_name)
-                                        if ok:
-                                            from backend.bio_store import set_active_flash_set_name
-                                            set_active_flash_set_name(_uname_lower, _set_name)
-                                            st.success(f"Imported '{_set_name}' from {_owner}.")
-                                            st.session_state['show_flashcard_settings'] = True
-                                            st.rerun()
-                                        else:
-                                            st.error('Failed to import: set limit reached or token invalid.')
-                            except Exception:
-                                st.error('Import failed due to an unexpected error.')
-                    # Build from uploaded document via backend hint API
+                    # Build from uploaded document via backend hint API (moved above import)
                     st.markdown("<div style='height:6px'></div>", unsafe_allow_html=True)
                     st.markdown("#### Build From Document")
                     _doc_file_pg = st.file_uploader('Upload PDF, DOCX, or TXT', type=['pdf','docx','txt'], key='flash_doc_upload_pregame')
@@ -3914,6 +3940,37 @@ def display_game():
                                             st.error('No usable items produced from document.')
                                 except Exception as e:
                                     st.error(f'Backend error: {e}')
+                    # Import shared set by token (now below Build From Document)
+                    st.markdown("#### Import by Token")
+                    _imp_cols_pg = st.columns([2,1])
+                    with _imp_cols_pg[0]:
+                        _import_tok_pg = st.text_input('Import by Token', value='', key='flash_import_token_pregame')
+                    with _imp_cols_pg[1]:
+                        if st.button('Import', key='flash_import_btn_pregame'):
+                            try:
+                                from backend.flash_share import load_share, import_share_to_user
+                                _tok = (_import_tok_pg or '').strip()
+                                if not _tok:
+                                    st.warning('Please enter a valid token to import.')
+                                else:
+                                    _rec = load_share(_tok)
+                                    if not _rec:
+                                        st.error('Invalid or expired token.')
+                                    else:
+                                        _owner = _rec.get('owner','')
+                                        _title = _rec.get('title','') or 'shared'
+                                        _set_name = f"{_owner}/{_title}"
+                                        ok = import_share_to_user(_tok, _uname_lower, set_name=_set_name)
+                                        if ok:
+                                            from backend.bio_store import set_active_flash_set_name
+                                            set_active_flash_set_name(_uname_lower, _set_name)
+                                            st.success(f"Imported '{_set_name}' from {_owner}.")
+                                            st.session_state['show_flashcard_settings'] = True
+                                            st.rerun()
+                                        else:
+                                            st.error('Failed to import: set limit reached or token invalid.')
+                            except Exception:
+                                st.error('Import failed due to an unexpected error.')
                     if st.button('Save FlashCard Text', key='save_flash_text_pregame'):
                         try:
                             from backend.bio_store import set_flash_text, set_flash_pool
