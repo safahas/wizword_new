@@ -1,13 +1,29 @@
 import os
+import logging
+from pathlib import Path
 from fastapi import FastAPI, UploadFile, File, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from dotenv import load_dotenv
+from dotenv import load_dotenv, find_dotenv
 
 from .doc_utils import get_limits, sanitize_text, sanitize_hints_map
 from .doc_schema import HintsResponse
 from .doc_llm import generate_hints_from_text
 
-load_dotenv()
+# Load environment from a shared .env (prefer project root), without overriding existing env
+_ENV_PATH = find_dotenv(usecwd=True)
+if not _ENV_PATH:
+    try:
+        _ENV_PATH = str((Path(__file__).resolve().parent.parent / ".env"))
+    except Exception:
+        _ENV_PATH = ""
+if _ENV_PATH and os.path.exists(_ENV_PATH):
+    load_dotenv(_ENV_PATH, override=False)
+
+logger = logging.getLogger(__name__)
+try:
+    logger.info(f"[DocAPI] Loaded .env from: {_ENV_PATH or '[none]'}; FLASHCARD_POOL_MAX={os.getenv('FLASHCARD_POOL_MAX','10')}; UPLOAD_MAX_BYTES={os.getenv('UPLOAD_MAX_BYTES','10240')}")
+except Exception:
+    pass
 
 app = FastAPI(title="WizWord Doc Hint API")
 
@@ -56,6 +72,10 @@ async def generate_hints(file: UploadFile = File(...)):
         raise HTTPException(status_code=400, detail=f"Failed to read file: {e}")
 
     text = sanitize_text(text, max_chars=6000)
+    # Ensure API key is available (from .env or environment)
+    if not os.getenv("OPENROUTER_API_KEY"):
+        logger.error("[DocAPI] OPENROUTER_API_KEY not set; .env path=%s", _ENV_PATH or "[none]")
+        raise HTTPException(status_code=500, detail="OPENROUTER_API_KEY not set (backend .env not loaded or variable missing)")
     try:
         raw_hints = await generate_hints_from_text(text, count=flash_max)
         cleaned = sanitize_hints_map(raw_hints, desired_count=flash_max, doc_text=text)

@@ -1,12 +1,20 @@
 import os
 import json
 import httpx
-from dotenv import load_dotenv
+import logging
+from dotenv import load_dotenv, find_dotenv
 
-load_dotenv()
+# Load shared .env (prefer project root) without overriding existing env
+_ENV_PATH = find_dotenv(usecwd=True)
+if _ENV_PATH:
+    load_dotenv(_ENV_PATH, override=False)
+try:
+    logging.getLogger(__name__).info(f"[DocLLM] Loaded .env from: {_ENV_PATH or '[none]'}; MODEL={os.getenv('OPENROUTER_MODEL','')}")
+except Exception:
+    pass
 
 OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions"
-MODEL = os.getenv("OPENROUTER_MODEL", "google/gemini-2.0-flash-thinking-exp:free")
+MODEL = os.getenv("OPENROUTER_MODEL", "gpt-4o")
 
 
 def _build_prompt(doc_text: str, count: int) -> dict:
@@ -51,8 +59,11 @@ OUTPUT FORMAT EXAMPLE (structure only; not actual content):
 
 
 async def generate_hints_from_text(doc_text: str, count: int) -> dict:
+    api_key = os.getenv("OPENROUTER_API_KEY")
+    if not api_key:
+        raise RuntimeError("OPENROUTER_API_KEY not set (backend .env not loaded or variable missing)")
     headers = {
-        "Authorization": f"Bearer {os.environ['OPENROUTER_API_KEY']}",
+        "Authorization": f"Bearer {api_key}",
         "HTTP-Referer": os.environ.get("OPENROUTER_REFERER", "https://example.com"),
         "X-Title": os.environ.get("OPENROUTER_TITLE", "WizWord Hint Generator"),
         "Content-Type": "application/json",

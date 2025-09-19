@@ -2270,10 +2270,12 @@ class WordSelector:
             "You are extracting vocabulary for flashcards. Read the source text. "
             "Return only nouns or proper nouns that actually appear in the text (no verbs or function words). "
             "Favor meaningful entities and concepts over generic words. "
-            "For each word, write one short, question-style hint that tests comprehension of the passage. "
-            "The hint should reference ideas from the text without revealing the answer; avoid quoting the word or near-synonyms. "
-            "Prefer cloze-like phrasing (e.g., 'In the passage, which term is associated with X and Y?'). "
-            "Respond ONLY with compact JSON: {\"items\": [{\"word\":\"\", \"pos\":\"noun\", \"hint\":\"\"}...]}. "
+            "For each selected word, produce EXACTLY three short hints that test comprehension, ALL grounded in THIS text, and NEVER include the word itself (no substrings, case-insensitive): "
+            "Hint A: plain-meaning or role in context. "
+            "Hint B: where/why it matters in THIS text (policy, actor, action, section, outcome, etc.). "
+            "Hint C: a concise related idea (synonym, consequence, example) that still fits THIS text. "
+            "Keep hints simple and clear. Avoid generic filler. Do NOT leak the answer word in any hint. "
+            "Respond ONLY with compact JSON object of the form: {\"items\": [{\"word\":\"\", \"pos\":\"noun\", \"hints\":[\"A\",\"B\",\"C\"]}, ...]} "
             f"Limit to {max_items} unique items."
         )
         return {
@@ -2341,7 +2343,8 @@ class WordSelector:
                 for it in data['items']:
                     try:
                         w = str((it.get('word') or '')).strip()
-                        h = str((it.get('hint') or '')).strip()
+                        hints_arr = it.get('hints')
+                        h = str((it.get('hint') or '')).strip() if hints_arr is None else ''
                         if not w:
                             continue
                         wl = w.lower()
@@ -2355,23 +2358,52 @@ class WordSelector:
                         if wl in seen:
                             continue
                         seen.add(wl)
-                        # Sanitize hint: avoid leaking the answer and ensure groundedness
-                        leak = (w.lower() in (h or '').lower())
-                        grounded = False
-                        try:
-                            hint_tokens = set(t.lower() for t in _re.findall(r"[A-Za-z]{3,}", h or ""))
-                            grounded = len(hint_tokens & content_words) > 0
-                        except Exception:
-                            grounded = False
-                        if leak or not grounded:
-                            hint_text = self._make_flash_hint(w, text)
+                        # Build candidate hints list (prefer 3 from LLM if provided)
+                        cand_hints = []
+                        if isinstance(hints_arr, list):
+                            for hh in hints_arr:
+                                if isinstance(hh, str) and hh.strip():
+                                    cand_hints.append(hh.strip())
+                        elif h:
+                            cand_hints.append(h)
+
+                        # Sanitize candidates: remove answer leakage (substring, case-insensitive) and ensure groundedness
+                        sanitized = []
+                        for hh in cand_hints:
+                            try:
+                                leak_pat = _re.compile(_re.escape(wl), _re.IGNORECASE)
+                                if leak_pat.search(hh):
+                                    continue
+                                hint_tokens = set(t.lower() for t in _re.findall(r"[A-Za-z]{3,}", hh))
+                                grounded = len(hint_tokens & content_words) > 0
+                                if not grounded:
+                                    continue
+                                sanitized.append(hh)
+                            except Exception:
+                                continue
+
+                        # Ensure exactly 3 for optional storage; choose one primary for pool
+                        while len(sanitized) < 3:
+                            sanitized.append(f"Related to {wl}")
+
+                        if sanitized:
+                            hint_text = sanitized[0]
+                            extra_hints = sanitized[:3]
                         else:
-                            hint_text = h
+                            hint_text = None
+                            extra_hints = []
+
+                        if not hint_text:
+                            hint_text = self._make_flash_hint(w, text)
+                            extra_hints = [hint_text]
                         if not hint_text:
                             hint_text = self._first_letter_hint(w)
+                            extra_hints = [hint_text]
+
                         items.append({
                             'word': w,
                             'hint': hint_text,
+                            'hints': extra_hints,
                             'hint_source': 'api',
                             'api_attempts': 1,
                         })
