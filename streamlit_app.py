@@ -2166,6 +2166,19 @@ def display_welcome():
                     pass
                 # Clear the flag after first display
                 st.session_state['_flash_pending_msg'] = False
+            # Long-lived email notice (defaults to 45s; configurable via EMAIL_NOTICE_TTL_SECONDS)
+            try:
+                if st.session_state.get('_email_token_msg'):
+                    import time as _t
+                    ttl = int(os.getenv('EMAIL_NOTICE_TTL_SECONDS', '45'))
+                    ts = float(st.session_state.get('_email_token_msg_ts', 0))
+                    if (_t.time() - ts) < ttl:
+                        st.success(st.session_state['_email_token_msg'])
+                    else:
+                        st.session_state.pop('_email_token_msg', None)
+                        st.session_state.pop('_email_token_msg_ts', None)
+            except Exception:
+                pass
             st.markdown(f"""
             <div style='font-size:1.0em; font-weight:700; color:#fff; margin:0.5em 0 0.25em 0;'>
                 🏆 Global Leaderboard (Top 3 by SEI) - {nice_cat}{token_label}
@@ -3604,6 +3617,13 @@ def display_game():
                                                         f"Share this token with your group so they can import this set."
                                                     )
                                                     _send_basic_email(recipient, subject, body)
+                                                    try:
+                                                        st.caption(f"Token emailed to {recipient}")
+                                                        st.session_state['_email_token_msg'] = f"Token emailed to {recipient}"
+                                                        import time as _t
+                                                        st.session_state['_email_token_msg_ts'] = _t.time()
+                                                    except Exception:
+                                                        pass
                                             except Exception:
                                                 pass
                                             try:
@@ -4311,6 +4331,13 @@ def display_game():
                                                 f"Share this token with your group so they can import this set."
                                             )
                                             _send_basic_email(recipient, subject, body)
+                                            try:
+                                                st.caption(f"Token emailed to {recipient}")
+                                                st.session_state['_email_token_msg'] = f"Token emailed to {recipient}"
+                                                import time as _t
+                                                st.session_state['_email_token_msg_ts'] = _t.time()
+                                            except Exception:
+                                                pass
                                     except Exception:
                                         pass
                             finally:
