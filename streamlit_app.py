@@ -3588,6 +3588,24 @@ def display_game():
                                                 pass
                                             tok = ensure_flash_set_token(_uname_lower, active_title)
                                             st.success(f"FlashCard pool updated from document. Items: {len(new_pool)}. Token: {tok}")
+                                            # Email token to user (consistent with text save)
+                                            try:
+                                                has_smtp = bool(os.getenv('SMTP_HOST') and os.getenv('SMTP_USER') and os.getenv('SMTP_PASS'))
+                                                recipient = (st.session_state.get('users', {}).get(_uname_lower, {}) or {}).get('email')
+                                                if recipient and has_smtp:
+                                                    from backend.flash_share import save_share
+                                                    share_token = save_share(_uname_lower, title=active_title, pool=new_pool, token_override=tok)
+                                                    subject = f"Your WizWord FlashCard set token — {active_title}"
+                                                    body = (
+                                                        f"Hello {_uname_lower},\n\n"
+                                                        f"Your FlashCard set has been saved from document.\n"
+                                                        f"Set name: {active_title}\n"
+                                                        f"Token: {share_token}\n\n"
+                                                        f"Share this token with your group so they can import this set."
+                                                    )
+                                                    _send_basic_email(recipient, subject, body)
+                                            except Exception:
+                                                pass
                                             try:
                                                 st.session_state['show_flashcard_settings'] = False
                                                 st.session_state.pop('_top3_start_cache', None)
@@ -4443,6 +4461,25 @@ def display_game():
                                                     pass
                                                 tok = ensure_flash_set_token(_uname_lower, active_title)
                                                 st.success(f"FlashCard pool updated from document. Items: {len(new_pool)}. Token: {tok}")
+                                                # Email token (below-panel path)
+                                                try:
+                                                    has_smtp = bool(os.getenv('SMTP_HOST') and os.getenv('SMTP_USER') and os.getenv('SMTP_PASS'))
+                                                    recipient = (st.session_state.get('users', {}).get(_uname_lower, {}) or {}).get('email')
+                                                    if recipient and has_smtp:
+                                                        from backend.flash_share import save_share
+                                                        share_token = save_share(_uname_lower, title=active_title, pool=new_pool, token_override=tok)
+                                                        subject = f"Your WizWord FlashCard set token — {active_title}"
+                                                        body = (
+                                                            f"Hello {_uname_lower},\n\n"
+                                                            f"Your FlashCard set has been saved from document.\n"
+                                                            f"Set name: {active_title}\n"
+                                                            f"Token: {share_token}\n\n"
+                                                            f"Share this token with your group so they can import this set."
+                                                        )
+                                                        _send_basic_email(recipient, subject, body)
+                                                except Exception as e:
+                                                    import logging as _elog
+                                                    _elog.getLogger('frontend.flashcard').warning(f"[FLASH_BUILD] email (doc below) failed: {e}")
                                                 try:
                                                     st.session_state['show_flashcard_settings'] = True
                                                     st.session_state['_render_flash_below'] = True
