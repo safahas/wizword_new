@@ -63,6 +63,23 @@ ENABLE_PERSONAL_CATEGORY=true  # set false to hide Personal and force General in
 streamlit run streamlit_app.py
 ```
 
+### Optional: run the document‑hint backend (for FlashCard uploads)
+The FastAPI service parses PDF/DOCX/TXT and asks the LLM for grounded hints.
+
+```bash
+# New terminal, from project root
+export PYTHONPATH="$PWD"            # PowerShell: $env:PYTHONPATH="$PWD"
+python -m uvicorn wizword.backend.doc_api:app --host 127.0.0.1 --port 8000
+```
+The UI calls the backend at `BACKEND_HINTS_URL` (default `http://localhost:8000/generate-hints`).
+
+Backend .env precedence and debugging:
+- The backend loads `.env` from the project root and `.env` values OVERRIDE any pre-set environment variables for deterministic config.
+- Verify effective config via the debug endpoint:
+  - PowerShell: `curl http://127.0.0.1:8000/env-debug`
+  - Returns: `env_path`, selected env values, and computed limits (e.g., `flashcard_pool_max`).
+  - If values are unexpected, check for duplicate lines in `.env` or persistent User/Machine env vars and clear them.
+
 ## How to Play
 
 - Choose a mode:
@@ -386,6 +403,11 @@ USERS_BIO_FILE=users_bio.json
   - Personal continues to use `PERSONAL_POOL_MAX`.
 - Regeneration UX: On profile save with changed FlashCard text, the UI shows a progress spinner and a success message when generation completes.
 
+#### FlashCard document uploads
+- Upload PDF/DOCX/TXT in FlashCard Settings to build the pool from the file’s text.
+- The backend enforces size via `UPLOAD_MAX_BYTES` (default 10240 = 10KB). Increase if your files are larger.
+- On success, the UI shows item count and the FlashCard token. If SMTP is configured, the token is emailed to you.
+
 ### FlashCard Hint Generation & Persistence
 
 - First build and profile‑save behavior:
@@ -420,7 +442,28 @@ PERSONAL_POOL_REBUILD_MAX_SECS=8   # Time budget for rebuilding pools
 
 # API behavior
 BYPASS_API_WORD_SELECTION=true     # FlashCard/Personal may still use API; others bypass
+
+# API‑first extraction for FlashCard (noun‑focused); falls back if API fails
+FLASHCARD_API_FIRST=false
+
+# Document upload size (backend); default 10240 bytes (10KB)
+UPLOAD_MAX_BYTES=10240
+
+# Backend endpoint for uploads → hints
+BACKEND_HINTS_URL=http://localhost:8000/generate-hints
+
+# Email token notice lifetime (seconds) on pre‑game screen
+EMAIL_NOTICE_TTL_SECONDS=45
+
+# Background worker cadence for FlashCard maintenance (top‑ups, API retries)
+FLASHCARD_WORKER_INTERVAL_SECS=180
 ```
+
+Notes on UI vs Backend environment:
+- The Streamlit UI and the FastAPI backend run as separate processes and each reads its own environment.
+- The pre‑game progress banner text “Preparing FlashCard words and hints… (N/T)” uses the UI’s `FLASHCARD_POOL_MAX` to compute T.
+- If the banner shows an unexpected T, restart Streamlit with the desired value in that shell:
+  - PowerShell: `$env:FLASHCARD_POOL_MAX="20"; ./venv/Scripts/streamlit run streamlit_app.py`
 
 ## Data Files
 
@@ -460,5 +503,28 @@ This project is licensed under the MIT License - see the LICENSE file for detail
   - Controls whether the in-game WizWord banner (score/timer strip) stays fixed at the top or scrolls with the page.
 
 ## Admin Dashboard Counters
+
+## Beat pre‑game timers and refresh behavior
+
+- TIME_OVER panel timer: after `TIME_OVER_PANEL_SECONDS` (default = `BEAT_MODE_TIME`), a “Time Over” panel can appear. This does NOT log you out.
+- Inactivity logout timer: after `INACTIVITY_LOGOUT_SECONDS`, session state is cleared (auto‑logout). Set to 0 to disable.
+- Periodic refresh while idle: `INACTIVITY_REFRESH_MS` controls silent reruns during pre‑game.
+
+Reset on user actions (pre‑game): Clicking any of the following resets the TIME_OVER timer to keep you active while FlashCard pools build.
+- Change Category
+- FlashCard Settings
+- Save FlashCard Text (both pre‑game panels)
+- Generate from Document (both pre‑game panels)
+
+Recommended .env during long builds:
+```env
+INACTIVITY_LOGOUT_SECONDS=0
+TIME_OVER_PANEL_SECONDS=300
+INACTIVITY_REFRESH_MS=5000
+```
+
+Notes:
+- The pre‑game FlashCard header is pinned to the selected category to prevent visual fallback while the background worker tops up the pool.
+- The UI shows “Preparing FlashCard words and hints… (N/Target)” during top‑ups and auto‑hides the banner if it lingers.
 
 - `game_data/global_counters.json` tracks users count, total game time, and total sessions. 

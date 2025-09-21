@@ -7,7 +7,8 @@ from dotenv import load_dotenv, find_dotenv
 # Load shared .env (prefer project root) without overriding existing env
 _ENV_PATH = find_dotenv(usecwd=True)
 if _ENV_PATH:
-    load_dotenv(_ENV_PATH, override=False)
+    # Prefer .env values over pre-set env for consistent behavior
+    load_dotenv(_ENV_PATH, override=True)
 try:
     logging.getLogger(__name__).info(f"[DocLLM] Loaded .env from: {_ENV_PATH or '[none]'}; MODEL={os.getenv('OPENROUTER_MODEL','')}")
 except Exception:

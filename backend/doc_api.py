@@ -17,7 +17,8 @@ if not _ENV_PATH:
     except Exception:
         _ENV_PATH = ""
 if _ENV_PATH and os.path.exists(_ENV_PATH):
-    load_dotenv(_ENV_PATH, override=False)
+    # .env should override any pre-set env vars for deterministic config
+    load_dotenv(_ENV_PATH, override=True)
 
 logger = logging.getLogger(__name__)
 try:
@@ -32,6 +33,24 @@ app.add_middleware(
     allow_origins=["*"], allow_credentials=True,
     allow_methods=["*"], allow_headers=["*"],
 )
+
+@app.get("/env-debug")
+def env_debug():
+    """Return key environment values and computed limits for quick verification."""
+    max_bytes, flash_max = get_limits()
+    return {
+        "env_path": _ENV_PATH or "",
+        "env": {
+            "FLASHCARD_POOL_MAX": os.getenv("FLASHCARD_POOL_MAX", "unset"),
+            "UPLOAD_MAX_BYTES": os.getenv("UPLOAD_MAX_BYTES", "unset"),
+            "OPENROUTER_MODEL": os.getenv("OPENROUTER_MODEL", "unset"),
+            "BACKEND_HINTS_URL": os.getenv("BACKEND_HINTS_URL", "unset"),
+        },
+        "limits": {
+            "max_file_bytes": max_bytes,
+            "flashcard_pool_max": flash_max,
+        },
+    }
 
 
 def _read_upload_bytes(file: UploadFile, max_bytes: int) -> bytes:

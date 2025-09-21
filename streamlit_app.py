@@ -3243,6 +3243,20 @@ def display_game():
         st.error("No active game found. Please start a new game.")
         return
     game = st.session_state.game
+    # Global long-lived email token notice (shows across reruns)
+    try:
+        _msg = st.session_state.get('_email_token_msg')
+        if _msg:
+            import time as _t
+            _ttl = int(os.getenv('EMAIL_NOTICE_TTL_SECONDS', '45'))
+            _ts = float(st.session_state.get('_email_token_msg_ts', 0))
+            if (_t.time() - _ts) < _ttl:
+                st.success(_msg)
+            else:
+                st.session_state.pop('_email_token_msg', None)
+                st.session_state.pop('_email_token_msg_ts', None)
+    except Exception:
+        pass
     user_name = st.session_state.user['username'] if st.session_state.get('user') else ''
     max_hints = game.current_settings["max_hints"]
     # --- Banner and stats ---
@@ -3562,6 +3576,12 @@ def display_game():
                     st.markdown("#### Build From Document")
                     _doc_file_pg = st.file_uploader('Upload PDF, DOCX, or TXT', type=['pdf','docx','txt'], key='flash_doc_upload_pregame')
                     if st.button('Generate from Document', key='flash_doc_generate_pregame'):
+                        # Refresh TIME_OVER panel timer on user action
+                        try:
+                            import time as _time
+                            st.session_state['start_idle_at'] = _time.time()
+                        except Exception:
+                            pass
                         if not _doc_file_pg:
                             st.warning('Please upload a file first.')
                         else:
@@ -3671,6 +3691,12 @@ def display_game():
                     # Pre-render a placeholder for live status before the button to ensure visibility
                     _flash_status_pre = st.empty()
                     if st.button('Save FlashCard Text', key='save_flash_text_pregame'):
+                        # Refresh TIME_OVER panel timer on user action
+                        try:
+                            import time as _time
+                            st.session_state['start_idle_at'] = _time.time()
+                        except Exception:
+                            pass
                         try:
                             from backend.bio_store import set_flash_text, set_flash_pool
                             _new_text_pg = st.session_state.get('profile_flash_text_pregame','')
@@ -4245,12 +4271,23 @@ def display_game():
                 st.markdown("<div class='beat-change-cat' style='display:inline-block;margin-top:8px;'>", unsafe_allow_html=True)
                 if st.button('Change Category', key='change_category_btn_beat_start'):
                     st.session_state['change_category'] = True
+                    # Refresh TIME_OVER panel timer on user action
+                    try:
+                        import time as _time
+                        st.session_state['start_idle_at'] = _time.time()
+                    except Exception:
+                        pass
                     # Clear the cached Top 3 so it refreshes for the new category
                     st.session_state.pop('_top3_start_cache', None)
                     st.rerun()
                 st.markdown("</div>", unsafe_allow_html=True)
                 # FlashCard Settings button placed directly below Change Category
                 if st.button("FlashCard Settings", key="flash_settings_entry_btn_beat_pregame"):
+                    try:
+                        import time as _time
+                        st.session_state['start_idle_at'] = _time.time()
+                    except Exception:
+                        pass
                     st.session_state['show_flashcard_settings'] = True
                     st.session_state['_render_flash_below'] = True
                     st.rerun()
@@ -4430,6 +4467,11 @@ def display_game():
                         # Save button for inline FlashCard text
                         if st.button('Save FlashCard Text', key='save_flash_text_pregame_below'):
                             try:
+                                import time as _time
+                                st.session_state['start_idle_at'] = _time.time()
+                            except Exception:
+                                pass
+                            try:
                                 from backend.bio_store import set_flash_text, set_flash_pool, get_active_flash_set_name, ensure_flash_set_token
                                 _new_text_pg2 = st.session_state.get('profile_flash_text_pregame_below','')
                                 set_flash_text(_uname_lower, _new_text_pg2)
@@ -4449,6 +4491,11 @@ def display_game():
                         st.markdown("#### Build From Document")
                         _doc_file_pg2 = st.file_uploader('Upload PDF, DOCX, or TXT', type=['pdf','docx','txt'], key='flash_doc_upload_pregame_below')
                         if st.button('Generate from Document', key='flash_doc_generate_pregame_below'):
+                            try:
+                                import time as _time
+                                st.session_state['start_idle_at'] = _time.time()
+                            except Exception:
+                                pass
                             if not _doc_file_pg2:
                                 st.warning('Please upload a file first.')
                             else:
