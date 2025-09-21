@@ -3133,10 +3133,9 @@ def display_game():
         enable_personal = os.getenv('ENABLE_PERSONAL_CATEGORY', 'true').strip().lower() in ('1', 'true', 'yes', 'on')
         enable_flashcard = os.getenv('ENABLE_FLASHCARD_CATEGORY', 'true').strip().lower() in ('1', 'true', 'yes', 'on')
         # Build categories with FlashCard moved to the end of the list
+        # Personal is intentionally hidden from the change-category dropdown
         base_cats = ["any", "anatomy", "animals", "aviation", "brands", "cities", "food", "general", "gre", "history", "law", "medicines", "movies", "music", "places", "psat", "sat", "science", "sports", "tech", "4th_grade", "8th_grade"]
         categories = list(base_cats)
-        if enable_personal:
-            categories.append("Personal")
         if enable_flashcard:
             categories.append("flashcard")
         new_category = st.selectbox("Select a new category:", categories, format_func=lambda x: ('Any' if x=='any' else ('GRE' if x=='gre' else ('SAT' if x=='sat' else ('PSAT' if x=='psat' else x.replace('_',' ').title())))), key='category_select_box')
