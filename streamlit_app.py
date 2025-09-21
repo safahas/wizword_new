@@ -4284,14 +4284,16 @@ def display_game():
                     st.rerun()
                 st.markdown("</div>", unsafe_allow_html=True)
                 # FlashCard Settings button placed directly below Change Category
+                # Toggleable FlashCard Settings button (expand/collapse)
                 if st.button("FlashCard Settings", key="flash_settings_entry_btn_beat_pregame"):
                     try:
                         import time as _time
                         st.session_state['start_idle_at'] = _time.time()
                     except Exception:
                         pass
-                    st.session_state['show_flashcard_settings'] = True
-                    st.session_state['_render_flash_below'] = True
+                    cur = bool(st.session_state.get('show_flashcard_settings')) and bool(st.session_state.get('_render_flash_below'))
+                    st.session_state['show_flashcard_settings'] = not cur
+                    st.session_state['_render_flash_below'] = not cur
                     st.rerun()
                 # Render FlashCard Settings panel here when requested (below Change Category)
                 if st.session_state.get('show_flashcard_settings', False) and st.session_state.get('_render_flash_below', False):
