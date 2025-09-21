@@ -3564,12 +3564,14 @@ def display_game():
                                         st.error('Reached FlashCard set limit or invalid name.')
                             except Exception:
                                 st.error('Failed to switch/create FlashCard set.')
-                    st.text_area(
-                        f"FlashCard Text (up to {_flash_max_inline} characters)",
-                        value=_flash_init_inline,
-                        max_chars=_flash_max_inline,
-                        key='profile_flash_text_pregame'
-                    )
+                        _enable_fc_text = os.getenv('ENABLE_FLASHCARD_TEXT', 'false').strip().lower() in ('1','true','yes','on')
+                        if _enable_fc_text:
+                            st.text_area(
+                                f"FlashCard Text (up to {_flash_max_inline} characters)",
+                                value=_flash_init_inline,
+                                max_chars=_flash_max_inline,
+                                key='profile_flash_text_pregame'
+                            )
                     # Build from document (moved above import)
                     st.markdown("<div style='height:6px'></div>", unsafe_allow_html=True)
                     st.markdown("#### Build From Document")
@@ -3689,7 +3691,8 @@ def display_game():
                                 st.error('Import failed due to an unexpected error.')
                     # Pre-render a placeholder for live status before the button to ensure visibility
                     _flash_status_pre = st.empty()
-                    if st.button('Save FlashCard Text', key='save_flash_text_pregame'):
+                    _enable_fc_text_btn = os.getenv('ENABLE_FLASHCARD_TEXT', 'false').strip().lower() in ('1','true','yes','on')
+                    if _enable_fc_text_btn and st.button('Save FlashCard Text', key='save_flash_text_pregame'):
                         # Refresh TIME_OVER panel timer on user action
                         try:
                             import time as _time
@@ -4457,14 +4460,17 @@ def display_game():
                                             st.error('Reached FlashCard set limit or invalid name.')
                                 except Exception:
                                     st.error('Failed to switch/create FlashCard set.')
-                        st.text_area(
-                            f"FlashCard Text (up to {_flash_max_inline} characters)",
-                            value=_flash_init_inline,
-                            max_chars=_flash_max_inline,
-                            key='profile_flash_text_pregame_below'
-                        )
+                        _enable_fc_text2 = os.getenv('ENABLE_FLASHCARD_TEXT', 'false').strip().lower() in ('1','true','yes','on')
+                        if _enable_fc_text2:
+                            st.text_area(
+                                f"FlashCard Text (up to {_flash_max_inline} characters)",
+                                value=_flash_init_inline,
+                                max_chars=_flash_max_inline,
+                                key='profile_flash_text_pregame_below'
+                            )
                         # Save button for inline FlashCard text
-                        if st.button('Save FlashCard Text', key='save_flash_text_pregame_below'):
+                        _enable_fc_text_btn2 = os.getenv('ENABLE_FLASHCARD_TEXT', 'false').strip().lower() in ('1','true','yes','on')
+                        if _enable_fc_text_btn2 and st.button('Save FlashCard Text', key='save_flash_text_pregame_below'):
                             try:
                                 import time as _time
                                 st.session_state['start_idle_at'] = _time.time()
