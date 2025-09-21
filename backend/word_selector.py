@@ -2030,11 +2030,47 @@ class WordSelector:
         try:
             text = (get_flash_text(username) or '')[: self.flash_text_max]
             pool = get_flash_pool(username)
-            if not pool or len(pool) < self.flash_words_count:
+            # If pool exceeds current target size (env lowered), trim and persist
+            try:
+                if pool and len(pool) > self.flash_words_count:
+                    trimmed = list(pool)[: self.flash_words_count]
+                    set_flash_pool(username, trimmed)
+                    try:
+                        logger.info(f"[FLASH_BUILD] trimmed pool from {len(pool)} to {len(trimmed)} user={username}")
+                        print(f"[FLASH_BUILD][trim] {len(pool)}=>{len(trimmed)} user={username}")
+                    except Exception:
+                        pass
+                    pool = trimmed
+            except Exception:
+                pass
+            # Do not rebuild if a pool exists, even if smaller than target (e.g., document-generated pools)
+            if not pool:
+                try:
+                    logger.info(f"[FLASH_BUILD] start user={username} pool_curr={len(pool) if pool else 0} target={self.flash_words_count} text_bytes={len((text or '').encode('utf-8','ignore'))}")
+                    print(f"[FLASH_BUILD][start] user={username} curr={len(pool) if pool else 0} target={self.flash_words_count}")
+                except Exception:
+                    pass
                 import time as _t
                 _start = _t.time()
-                words = self._extract_flash_words(text, max_items=self.flash_words_count)
+                # API-first pool builder from source text for nouns + contextual hints (env-gated)
                 lst = []
+                use_api_flash = os.getenv('FLASHCARD_API_FIRST', 'false').strip().lower() in ('1','true','yes','on')
+                api_items = self._generate_flash_pool_api(text, max_items=self.flash_words_count) if use_api_flash else []
+                if api_items:
+                    # Deduplicate and limit to flash_words_count
+                    seenw = set()
+                    dedup = []
+                    for it in api_items:
+                        wl = str(it.get('word','')).strip().lower()
+                        if not wl or wl in seenw:
+                            continue
+                        seenw.add(wl)
+                        dedup.append(it)
+                        if len(dedup) >= self.flash_words_count:
+                            break
+                    lst = dedup
+                else:
+                    words = self._extract_flash_words(text, max_items=self.flash_words_count)
                 # Build map of existing API hints to reuse when text changes
                 try:
                     prev_pool = get_flash_pool(username)
@@ -2051,7 +2087,8 @@ class WordSelector:
                     _max_att = int(_os.getenv('PERSONAL_POOL_API_ATTEMPTS', '3'))
                 except Exception:
                     _max_att = 3
-                for w in words:
+                built_words = [it.get('word') for it in lst] if lst and isinstance(lst[0], dict) and 'word' in lst[0] else words
+                for w in built_words:
                     if not w:
                         continue
                     wl = str(w).strip().lower()
@@ -2063,21 +2100,56 @@ class WordSelector:
                     hint_text = None
                     hint_source = 'local'
                     api_attempts = 0
+                    # If API pool already provided hint for this word
                     try:
-                        api_h = self.get_api_hints_force(w, 'flashcard', n=1, attempts=1)
-                        hint_text = str(api_h[0]) if api_h else None
-                        api_attempts = 1
+                        if isinstance(api_items, list):
+                            for it in api_items:
+                                if str(it.get('word','')).strip().lower() == wl and str(it.get('hint','')).strip():
+                                    hint_text = str(it.get('hint')).strip()
+                                    api_attempts = int(it.get('api_attempts', 1)) or 1
+                                    hint_source = 'api'
+                                    break
                     except Exception:
-                        hint_text = None
+                        pass
+                    # Otherwise attempt single API hint call
                     if not hint_text:
-                        hint_text = self._make_flash_hint(w, text)
+                        try:
+                            api_h = self.get_api_hints_force(w, 'flashcard', n=1, attempts=1)
+                            hint_text = str(api_h[0]) if api_h else None
+                            api_attempts = 1
+                            hint_source = 'api' if hint_text else 'local'
+                        except Exception:
+                            hint_text = None
+                    if not hint_text:
+                        hint_text = self._make_flash_hint(w, text) or self._first_letter_hint(w)
                         hint_source = 'local'
-                    else:
-                        hint_source = 'api'
-                    lst.append({"word": w, "hint": hint_text or '', 'hint_source': hint_source, 'api_attempts': api_attempts})
-                    if (_t.time() - _start) >= getattr(self, 'flash_rebuild_max_secs', 5.0):
+                    # Append if not already present
+                    if str(w).strip().lower() not in {it.get('word','').lower() for it in lst}:
+                        lst.append({"word": w, "hint": hint_text or '', 'hint_source': hint_source, 'api_attempts': api_attempts})
+                    # Respect time budget but try to reach target size; break if both time exceeded and we have enough
+                    if (_t.time() - _start) >= getattr(self, 'flash_rebuild_max_secs', 5.0) and len(lst) >= self.flash_words_count:
                         break
+                # If still short, top up with offline extraction beyond initial words to reach target size
+                if len(lst) < self.flash_words_count:
+                    try:
+                        more = self._extract_flash_words(text, max_items=self.flash_words_count * 2)
+                        existing = {it.get('word','').lower() for it in lst}
+                        for w in more:
+                            if len(lst) >= self.flash_words_count:
+                                break
+                            if not w or w.lower() in existing:
+                                continue
+                            hint_text = self._make_flash_hint(w, text) or self._first_letter_hint(w)
+                            lst.append({"word": w, "hint": hint_text, 'hint_source': 'local', 'api_attempts': 0})
+                            existing.add(w.lower())
+                    except Exception:
+                        pass
                 set_flash_pool(username, lst)
+                try:
+                    logger.info(f"[FLASH_BUILD] saved items={len(lst)} user={username}")
+                    print(f"[FLASH_BUILD][saved] items={len(lst)} user={username}")
+                except Exception:
+                    pass
                 pool = lst
             # Maintenance pass: reattempt API hints only for words that failed previously, one-shot per call
             try:
@@ -2114,6 +2186,11 @@ class WordSelector:
                     new_pool.append(it)
                 if changed:
                     set_flash_pool(username, new_pool)
+                    try:
+                        logger.info(f"[FLASH_BUILD] maintenance_updated items={len(new_pool)} user={username}")
+                        print(f"[FLASH_BUILD][maint] items={len(new_pool)} user={username}")
+                    except Exception:
+                        pass
                     pool = new_pool
             except Exception:
                 pass
@@ -2133,34 +2210,225 @@ class WordSelector:
             return None
 
     def _extract_flash_words(self, text: str, max_items: int = 10) -> list:
-        """Extract distinct candidate words from text; simple noun-like heuristic."""
+        """Extract words from FlashCard text using Personal-style allow/deny and scoring."""
         try:
-            import re as _re
-            toks = _re.findall(r"[A-Za-z]{3,}", text or "")
-            seen = set()
-            out = []
-            # Stopwords/generic tokens to exclude (mirror Personal rules)
+            import re
+            toks = re.findall(r"[A-Za-z0-9]+", text or "")
+            # Expanded stopwords to avoid function words in FlashCard extraction
             stop = {
-                'the','a','an','and','or','but','if','then','else','for','with','without','about','into','onto','from','by','for','as','at','to','in','of','on','this','that','these','those',
-                'have','has','had','be','been','being','am','is','are','was','were','do','does','did','can','could','should','would','may','might','must',
-                'i','you','your','my','our','their','his','her','it','they','we','me','him','them','us',
+                "and","the","with","for","you","your","at","to","in","of","on","a","an","is","are","was","were","be","been","am","from","by","or","as",
+                "while","every","then","etc","also","because","however","therefore","thus","very","really","quite","maybe","often","sometimes","usually","always","never","again","still",
+                "than","into","onto","until","within","without","across","through","during","before","after","between","against","among","about","like","just","even","both","either","neither","each","per","via",
+                # Common verb forms to exclude
+                "called","call","calls","calling","has","have","had","can","could","make","makes","made","show","shows","showed","showing","talk","talks","talking"
             }
+            number_words = {"zero","one","two","three","four","five","six","seven","eight","nine","ten","eleven","twelve","thirteen","fourteen","fifteen","sixteen","seventeen","eighteen","nineteen","twenty"}
+            deny = {"people","person","thing","things","stuff","place","time","year","years","work","works","worked","working","live","lived","living","like","likes","liked","watch","watched","watching","join","joined","joining","use","used","using","since","have","been","most","many","life","day","days","good","bad","nice","great","hello","thanks","team"} | number_words
+            def valid_word(w: str) -> bool:
+                if not w or len(w) < 3 or len(w) > 15:
+                    return False
+                wl = w.lower()
+                if wl in stop or wl in deny:
+                    return False
+                if wl.isdigit():
+                    return False
+                letters = ''.join([c for c in wl if c.isalpha()])
+                if len(letters) < 2 or not any(c in 'aeiou' for c in letters):
+                    return False
+                return True
+            scores = {}
             for t in toks:
                 tl = t.lower()
-                if tl in stop:
+                if not valid_word(tl):
                     continue
-                if tl in seen:
-                    continue
-                seen.add(tl)
-                out.append(tl)
-                if len(out) >= max_items:
-                    break
-            return out
+                rel = 1.0
+                L = len(tl)
+                if 5 <= L <= 9:
+                    rel += 0.5
+                if t[:1].isupper():
+                    rel += 0.5
+                scores[tl] = max(scores.get(tl, 0.0), rel)
+            ranked = sorted(scores.items(), key=lambda x: x[1], reverse=True)
+            return [w for w,_ in ranked[:max_items]]
+        except Exception:
+            return []
+
+    def _first_letter_hint(self, word: str) -> str:
+        try:
+            c = next((ch for ch in (word or '') if ch.isalpha()), None)
+            return f"Starts with '{c.upper()}'" if c else "Starts with a letter"
+        except Exception:
+            return "Starts with a letter"
+
+    def _build_flash_pool_prompt(self, text: str, max_items: int) -> dict:
+        """Build an API prompt to extract nouns/proper nouns from text and a comprehension-style hint per word.
+
+        The model must return strict JSON with shape:
+        {"items": [{"word": "...", "pos": "noun", "hint": "..."}, ...]}
+        """
+        instr = (
+            "You are extracting vocabulary for flashcards. Read the source text. "
+            "Return only nouns or proper nouns that actually appear in the text (no verbs or function words). "
+            "Favor meaningful entities and concepts over generic words. "
+            "For each selected word, produce EXACTLY three short hints that test comprehension, ALL grounded in THIS text, and NEVER include the word itself (no substrings, case-insensitive): "
+            "Hint A: plain-meaning or role in context. "
+            "Hint B: where/why it matters in THIS text (policy, actor, action, section, outcome, etc.). "
+            "Hint C: a concise related idea (synonym, consequence, example) that still fits THIS text. "
+            "Keep hints simple and clear. Avoid generic filler. Do NOT leak the answer word in any hint. "
+            "Respond ONLY with compact JSON object of the form: {\"items\": [{\"word\":\"\", \"pos\":\"noun\", \"hints\":[\"A\",\"B\",\"C\"]}, ...]} "
+            f"Limit to {max_items} unique items."
+        )
+        return {
+            "model": os.getenv("OPENROUTER_MODEL", "gpt-4o"),
+            "messages": [
+                {"role": "system", "content": instr},
+                {"role": "user", "content": f"Source text:\n{text or ''}"},
+            ]
+        }
+
+    def _generate_flash_pool_api(self, text: str, max_items: int = 10) -> list:
+        """Call the API to extract noun words and contextual hints from the given text.
+
+        Returns list of {word, hint, hint_source, api_attempts}.
+        """
+        try:
+            if not text or not getattr(self, 'api_key_valid', False) or not getattr(self, 'api_key', None):
+                return []
+            messages = self._build_flash_pool_prompt(text, max_items)
+            response = self._make_api_request_with_retry(messages)
+            content = response["choices"][0]["message"]["content"].strip()
+            # Strip code fences if any
+            if content.startswith('```'):
+                content = content.lstrip('`').strip()
+                if content.startswith('json'):
+                    content = content[4:].strip()
+            import re as _re, json as _json
+            data = None
+            # Try JSON object directly
+            try:
+                data = _json.loads(content)
+            except Exception:
+                # Try to extract first JSON object
+                m = _re.search(r'\{[^{}]*(?:\{[^{}]*\}[^{}]*)*\}', content, _re.DOTALL)
+                if m:
+                    try:
+                        data = _json.loads(m.group(0))
+                    except Exception:
+                        data = None
+            # Build stop/deny sets to reject function words like 'called'
+            stop = {
+                "and","the","with","for","you","your","at","to","in","of","on","a","an","is","are","was","were","be","been","am","from","by","or","as",
+                "while","every","then","etc","also","because","however","therefore","thus","very","really","quite","maybe","often","sometimes","usually","always","never","again","still",
+                "than","into","onto","until","within","without","across","through","during","before","after","between","against","among","about","like","just","even","both","either","neither","each","per","via",
+                # common verbs/auxiliaries/participles to exclude
+                "called","call","calls","calling","has","have","had","can","could","make","makes","made","show","shows","showed","showing","talk","talks","talking"
+            }
+            deny = {"people","person","thing","things","stuff","place","time","year","years","work","works","worked","working","live","lived","living","like","likes","liked","use","used","using","since","most","many","life","day","days","good","bad","nice","great","hello","thanks","team"}
+            import re as _re
+            def _in_text_word(w: str) -> bool:
+                try:
+                    pattern = r"(?i)(?<![A-Za-z])" + _re.escape(w) + r"(?![A-Za-z])"
+                    return _re.search(pattern, text or "") is not None
+                except Exception:
+                    return (w or '').lower() in (text or '').lower()
+
+            # Prepare a set of content words from the text for grounding check
+            content_words = set([t.lower() for t in _re.findall(r"[A-Za-z]{3,}", text or "")]) - stop - deny
+            # Never allow certain verbs even if present
+            hard_exclude = {"called","call","calls","calling"}
+
+            items = []
+            if isinstance(data, dict) and isinstance(data.get('items'), list):
+                seen = set()
+                for it in data['items']:
+                    try:
+                        w = str((it.get('word') or '')).strip()
+                        hints_arr = it.get('hints')
+                        h = str((it.get('hint') or '')).strip() if hints_arr is None else ''
+                        if not w:
+                            continue
+                        wl = w.lower()
+                        # Reuse FlashCard validity rules
+                        letters = ''.join([c for c in wl if c.isalpha()])
+                        if not (2 <= len(letters) <= 15) or not any(c in 'aeiou' for c in letters):
+                            continue
+                        # Exclude stop/deny/hard_exclude and ensure appears in text
+                        if wl in stop or wl in deny or wl in hard_exclude or not _in_text_word(wl):
+                            continue
+                        if wl in seen:
+                            continue
+                        seen.add(wl)
+                        # Build candidate hints list (prefer 3 from LLM if provided)
+                        cand_hints = []
+                        if isinstance(hints_arr, list):
+                            for hh in hints_arr:
+                                if isinstance(hh, str) and hh.strip():
+                                    cand_hints.append(hh.strip())
+                        elif h:
+                            cand_hints.append(h)
+
+                        # Sanitize candidates: remove answer leakage (substring, case-insensitive) and ensure groundedness
+                        sanitized = []
+                        for hh in cand_hints:
+                            try:
+                                leak_pat = _re.compile(_re.escape(wl), _re.IGNORECASE)
+                                if leak_pat.search(hh):
+                                    continue
+                                hint_tokens = set(t.lower() for t in _re.findall(r"[A-Za-z]{3,}", hh))
+                                grounded = len(hint_tokens & content_words) > 0
+                                if not grounded:
+                                    continue
+                                sanitized.append(hh)
+                            except Exception:
+                                continue
+
+                        # Ensure exactly 3 for optional storage; choose one primary for pool
+                        while len(sanitized) < 3:
+                            sanitized.append(f"Related to {wl}")
+
+                        if sanitized:
+                            hint_text = sanitized[0]
+                            extra_hints = sanitized[:3]
+                        else:
+                            hint_text = None
+                            extra_hints = []
+
+                        if not hint_text:
+                            hint_text = self._make_flash_hint(w, text)
+                            extra_hints = [hint_text]
+                        if not hint_text:
+                            hint_text = self._first_letter_hint(w)
+                            extra_hints = [hint_text]
+
+                        items.append({
+                            'word': w,
+                            'hint': hint_text,
+                            'hints': extra_hints,
+                            'hint_source': 'api',
+                            'api_attempts': 1,
+                        })
+                        if len(items) >= max_items:
+                            break
+                    except Exception:
+                        continue
+            # If API returned too few, fill with offline extractor to reach target
+            if len(items) < max_items:
+                try:
+                    fillers = self._extract_flash_words(text, max_items=max_items)
+                    fillers = [w for w in fillers if w and w.lower() not in {it['word'].lower() for it in items}]
+                    for w in fillers:
+                        if len(items) >= max_items:
+                            break
+                        hint_text = self._make_flash_hint(w, text) or self._first_letter_hint(w)
+                        items.append({'word': w, 'hint': hint_text, 'hint_source': 'local', 'api_attempts': 0})
+                except Exception:
+                    pass
+            return items
         except Exception:
             return []
 
     def _make_flash_hint(self, word: str, text: str) -> str:
-        """Create a related hint from the flash text context or fallback to first-letter."""
+        """Create a comprehension-style hint from nearby context; fallback to first letter."""
         try:
             w = (word or '').strip()
             src = (text or '')
@@ -2168,10 +2436,12 @@ class WordSelector:
             # Helper: choose up to 2 meaningful keywords near the word
             def _keywords(window: str, target: str) -> list:
                 import re as _re
+                # Match extraction stopwords for keyword selection too
                 stop = {
-                    'the','a','an','and','or','but','if','then','else','for','with','without','about','into','onto','from','by','for','as','at','to','in','of','on','this','that','these','those',
-                    'have','has','had','be','been','being','am','is','are','was','were','do','does','did','can','could','should','would','may','might','must',
-                    'i','you','your','my','our','their','his','her','it','they','we','me','him','them','us',
+                    "and","the","with","for","you","your","at","to","in","of","on","a","an","is","are","was","were","be","been","am","from","by","or","as",
+                    "while","every","then","etc","also","because","however","therefore","thus","very","really","quite","maybe","often","sometimes","usually","always","never","again","still",
+                    "than","into","onto","until","within","without","across","through","during","before","after","between","against","among","about","like","just","even","both","either","neither","each","per","via",
+                    "called","call","calls","calling"
                 }
                 toks = _re.findall(r"[A-Za-z]{3,}", window)
                 scores = []
@@ -2200,17 +2470,15 @@ class WordSelector:
                 ctx = src[start:end]
                 kws = _keywords(ctx, w)
                 first = next((ch for ch in w if ch.isalpha()), None)
-                if kws and first:
+                # Try to phrase as a question that checks understanding
+                if kws:
                     if len(kws) == 1:
-                        return f"Starts with '{first.upper()}'. Related to {kws[0]}"
-                    return f"Starts with '{first.upper()}'. Related to {kws[0]} and {kws[1]}"
-                if first:
-                    return f"Starts with '{first.upper()}'"
-            # Fallback first letter
-            c = next((ch for ch in w if ch.isalpha()), None)
-            return f"Starts with '{c.upper()}'" if c else "Starts with a letter"
+                        return f"In the passage, which term is closely tied to {kws[0]}?"
+                    return f"Which concept in the text connects {kws[0]} and {kws[1]}?"
+            # Fallback: first letter prompt
+            return self._first_letter_hint(w)
         except Exception:
-            return "Related to your flash text"
+            return self._first_letter_hint(word)
 
     def __init__(self):
         """Initialize the word selector."""
@@ -2307,8 +2575,8 @@ class WordSelector:
         except Exception:
             self.flash_text_max = 500
         try:
-            # Independent FlashCard pool size
-            self.flash_words_count = int(os.getenv("FLASHCARD_POOL_MAX", os.getenv("FLASHCARD_WORDS_COUNT", "10")))
+            # Single source of truth: FLASHCARD_POOL_MAX (fallback default 10)
+            self.flash_words_count = int(os.getenv("FLASHCARD_POOL_MAX", "10"))
         except Exception:
             self.flash_words_count = 10
         try:
@@ -2383,10 +2651,16 @@ class WordSelector:
             return ''
 
     def _make_profile_hint(self, word: str, rec: dict) -> str:
-        """Create a clearer one-line hint based on profile context rather than a generic label."""
+        """Create a clearer one-line hint based on profile context rather than a generic label.
+
+        Enhanced: if the bio contains the exact word, extract a local context window and
+        surface up to two meaningful neighboring keywords, mirroring FlashCard behavior.
+        Falls back to role/location/occupation heuristics and finally first-letter.
+        """
         try:
             wl = (word or '').strip().lower()
             bio_text = str(rec.get('bio') or '')
+            # Inline helper for first letter
             def _first_letter_hint(w: str) -> str:
                 try:
                     for c in (w or ''):
@@ -2395,6 +2669,41 @@ class WordSelector:
                     return "Starts with a letter"
                 except Exception:
                     return "Starts with a letter"
+            # If the bio contains the exact word, build a context-based hint
+            try:
+                idx = bio_text.lower().find(wl)
+                if idx != -1:
+                    start = max(0, idx - 80)
+                    end = min(len(bio_text), idx + 80)
+                    window = bio_text[start:end]
+                    import re as _re
+                    stop = {"and","the","with","for","you","your","at","to","in","of","on","a","an","is","are","was","were","be","been","am","from","by","or","as"}
+                    toks = _re.findall(r"[A-Za-z]{3,}", window)
+                    scores = []
+                    for t in toks:
+                        tl = t.lower()
+                        if tl == wl or tl in stop:
+                            continue
+                        score = 1
+                        if tl.endswith(('tion','sion','ment','ness','ity','ism','ing','ed','ship','ance','ence')):
+                            score += 1
+                        if t[:1].isupper():
+                            score += 1
+                        scores.append((t, score))
+                    scores.sort(key=lambda x: x[1], reverse=True)
+                    neigh = []
+                    for t,_ in scores:
+                        if t.lower() not in {o.lower() for o in neigh}:
+                            neigh.append(t)
+                        if len(neigh) >= 2:
+                            break
+                    first = next((ch for ch in (word or '') if ch.isalpha()), None)
+                    if neigh and first:
+                        if len(neigh) == 1:
+                            return f"Starts with '{first.upper()}'. Related to {neigh[0]}"
+                        return f"Starts with '{first.upper()}'. Related to {neigh[0]} and {neigh[1]}"
+            except Exception:
+                pass
             # Early guard for generic tokens
             generic = {
                 'have','since','and','the','this','that','these','those','with','without','about','into','onto',
@@ -3561,7 +3870,11 @@ class WordSelector:
                 warning = get_quota_warning()
                 if warning:
                     last_warning = warning
-                    logger.warning(f"Quota warning: {warning['message']}")
+                    try:
+                        _msg = str(warning['message']).encode('ascii', 'backslashreplace').decode('ascii')
+                    except Exception:
+                        _msg = str(warning.get('message', ''))
+                    logger.warning(f"Quota warning: {_msg}")
                     if warning['level'] == 'error':
                         self.use_fallback = True
                         logger.error("Critical quota reached. Switching to fallback mode.")
@@ -3570,7 +3883,11 @@ class WordSelector:
                 return response.json()
             except Exception as e:
                 wait = min(max_delay, base_delay * (2 ** attempt)) + random.uniform(0, 1)
-                logger.warning(f"API request failed (primary, attempt {attempt+1}/{max_retries}): {e}. Retrying in {wait:.1f}s...")
+                try:
+                    _err = str(e).encode('ascii', 'backslashreplace').decode('ascii')
+                except Exception:
+                    _err = str(e)
+                logger.warning(f"API request failed (primary, attempt {attempt+1}/{max_retries}): {_err}. Retrying in {wait:.1f}s...")
                 time.sleep(wait)
         # If all primary model attempts fail, try fallback model up to max_retries times
         payload["model"] = self.fallback_model
@@ -3583,7 +3900,11 @@ class WordSelector:
                 warning = get_quota_warning()
                 if warning:
                     last_warning = warning
-                    logger.warning(f"Quota warning: {warning['message']}")
+                    try:
+                        _msg2 = str(warning['message']).encode('ascii', 'backslashreplace').decode('ascii')
+                    except Exception:
+                        _msg2 = str(warning.get('message', ''))
+                    logger.warning(f"Quota warning: {_msg2}")
                     if warning['level'] == 'error':
                         self.use_fallback = True
                         logger.error("Critical quota reached. Switching to fallback mode.")
@@ -3592,7 +3913,11 @@ class WordSelector:
                 return response.json()
             except Exception as e:
                 wait = min(max_delay, base_delay * (2 ** attempt)) + random.uniform(0, 1)
-                logger.warning(f"API request failed (fallback, attempt {attempt+1}/{max_retries}): {e}. Retrying in {wait:.1f}s...")
+                try:
+                    _err2 = str(e).encode('ascii', 'backslashreplace').decode('ascii')
+                except Exception:
+                    _err2 = str(e)
+                logger.warning(f"API request failed (fallback, attempt {attempt+1}/{max_retries}): {_err2}. Retrying in {wait:.1f}s...")
                 time.sleep(wait)
         if last_warning:
             raise RuntimeError(last_warning['message'])
@@ -3707,14 +4032,34 @@ class WordSelector:
                 # Remove duplicates
                 filtered_hints = list(dict.fromkeys(filtered_hints))
                 if len(filtered_hints) >= min(5, n):
-                    logger.debug(f"API returned {len(filtered_hints)} valid hints for '{word}': {filtered_hints}")
+                    try:
+                        _safe_hints = json.dumps(filtered_hints, ensure_ascii=True)
+                    except Exception:
+                        _safe_hints = str(filtered_hints)
+                    try:
+                        _safe_word = word.encode('ascii', 'backslashreplace').decode('ascii')
+                    except Exception:
+                        _safe_word = str(word)
+                    logger.debug(f"API returned {len(filtered_hints)} valid hints for '{_safe_word}': {_safe_hints}")
                     return filtered_hints[:n]
-                logger.debug(f"API returned insufficient valid hints, retrying (attempt {attempt+1}/{max_attempts}): {filtered_hints}")
+                try:
+                    _safe_hints2 = json.dumps(filtered_hints, ensure_ascii=True)
+                except Exception:
+                    _safe_hints2 = str(filtered_hints)
+                logger.debug(f"API returned insufficient valid hints, retrying (attempt {attempt+1}/{max_attempts}): {_safe_hints2}")
                 time.sleep(1.5 * (attempt + 1))
             except Exception as e:
-                logger.debug(f"Failed to get hints from API (attempt {attempt+1}): {str(e)}")
+                try:
+                    _safe_err = str(e).encode('ascii', 'backslashreplace').decode('ascii')
+                except Exception:
+                    _safe_err = str(e)
+                logger.debug(f"Failed to get hints from API (attempt {attempt+1}): {_safe_err}")
                 time.sleep(1.5 * (attempt + 1))
-        logger.debug(f"API failed to provide valid hints after {max_attempts} attempts for word '{word}'")
+        try:
+            _safe_word2 = word.encode('ascii', 'backslashreplace').decode('ascii')
+        except Exception:
+            _safe_word2 = str(word)
+        logger.debug(f"API failed to provide valid hints after {max_attempts} attempts for word '{_safe_word2}'")
         return []
 
     def mark_word_played(self, word: str, username: str, subject: str):

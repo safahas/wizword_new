@@ -1,0 +1,10 @@
+FROM python:3.11-slim
+WORKDIR /app
+RUN apt-get update && apt-get install -y --no-install-recommends supervisor && rm -rf /var/lib/apt/lists/*
+COPY . /app
+RUN python -m venv /app/venv && /app/venv/bin/pip install -U pip && \
+    /app/venv/bin/pip install -r requirements.txt
+COPY supervisord.conf /etc/supervisor/conf.d/wizword.conf
+ENV PYTHONPATH=/app
+EXPOSE 8000 8501
+CMD ["/usr/bin/supervisord","-n","-c","/etc/supervisor/conf.d/wizword.conf"]
