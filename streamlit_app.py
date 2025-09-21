@@ -5935,10 +5935,8 @@ def display_game_over(game_summary):
             from datetime import datetime, timedelta
             plt.style.use('seaborn-v0_8')
             sns.set_palette("husl")
-            # --- Running Average Score/Word & Time/Word vs. Game Date ---
-            # Prepare data
-            avg_scores = []
-            avg_times = []
+            # --- SEI per Game vs. Date (average score graph removed) ---
+            # Prepare data for SEI only
             sei_values = []
             game_dates = []
             total_score = 0
@@ -5957,60 +5955,32 @@ def display_game_over(game_summary):
                     avg_score = total_score / denom
                     avg_time = total_time / denom
                     sei = avg_score / avg_time if avg_time > 0 else 0
-                    avg_scores.append(avg_score)
-                    avg_times.append(avg_time)
                     sei_values.append(sei)
-                    # Use only the date part for x-axis
                     if isinstance(date, str):
                         date = date.split('T')[0]
                     game_dates.append(date)
-            if avg_scores and avg_times and sei_values and game_dates:
-                # Append current game's SEI point to the graph if in Beat mode
+            if sei_values and game_dates:
                 try:
                     if game_summary.get('mode') == 'Beat':
                         cur_date = (game_summary.get('timestamp') or '')[:10]
                         if cur_date:
                             game_dates.append(cur_date)
-                            # Use current avg values computed above for consistency
                             _words = game_summary.get('words_solved', 1)
                             _time = game_summary.get('duration') or game_summary.get('time_taken', 0)
                             _den = max(int(_words or 0), 1)
-                            avg_scores.append((score / _den) if (score := game_summary.get('score', 0)) or True else 0)
-                            avg_times.append((_time / _den) if _time else 0)
-                            _sei_val = (avg_scores[-1] / avg_times[-1]) if avg_times[-1] > 0 else 0
+                            _avg_score = (game_summary.get('score', 0) / _den)
+                            _avg_time = (_time / _den) if _time else 0
+                            _sei_val = (_avg_score / _avg_time) if _avg_time > 0 else 0
                             sei_values.append(_sei_val)
                 except Exception:
                     pass
-                fig, ax = plt.subplots(figsize=(6, 3))
-                color1 = 'tab:blue'
-                color2 = 'tab:orange'
-                color3 = 'tab:green'
-                ax.plot(game_dates, avg_scores, marker='o', linewidth=2, markersize=6, color=color1, label='Running Avg Score/Word')
-                ax.set_xlabel('Game Date')
-                ax.set_ylabel('Running Avg Score/Word', color=color1)
-                ax.tick_params(axis='y', labelcolor=color1)
-                ax.set_xticks(game_dates)
-                ax.set_xticklabels(game_dates, rotation=45, ha='right', fontsize=8)
-                ax2 = ax.twinx()
-                ax2.plot(game_dates, avg_times, marker='s', linewidth=2, markersize=6, color=color2, label='Running Avg Time/Word (s)')
-                ax2.set_ylabel('Running Avg Time per Word (sec)', color=color2)
-                ax2.set_ylim(0, 300)
-                ax2.tick_params(axis='y', labelcolor=color2)
-                lines, labels = ax.get_legend_handles_labels()
-                lines2, labels2 = ax2.get_legend_handles_labels()
-                ax2.legend(lines + lines2, labels + labels2, loc='upper left')
-                category_label = (game_summary.get('subject') or getattr(st.session_state.game, 'subject', None) or 'All Categories')
-                ax.set_title(f"{category_label.title()} — Running Avg Score/Word & Time/Word vs. Game Date")
-                fig.tight_layout()
-                st.pyplot(fig)
-                # Add a separate SEI line graph
                 fig_sei, ax_sei = plt.subplots(figsize=(6, 3))
+                color3 = 'tab:green'
                 ax_sei.plot(game_dates, sei_values, marker='^', linewidth=2, markersize=6, color=color3, label='SEI (Score/Time Index)')
                 ax_sei.set_xlabel('Game Date')
                 ax_sei.set_ylabel('SEI (Score/Time Index)', color=color3)
                 category_label = (game_summary.get('subject') or getattr(st.session_state.game, 'subject', None) or 'All Categories')
                 ax_sei.set_title(f"{category_label.title()} — Score Efficiency Index (SEI) per Game")
-                # Match x-axis label styling to the main stats graph
                 ax_sei.set_xticks(game_dates)
                 ax_sei.set_xticklabels(game_dates, rotation=45, ha='right', fontsize=8)
                 ax_sei.legend(loc='upper left')
