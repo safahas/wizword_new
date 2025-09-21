@@ -1,0 +1,310 @@
+{
+  "safaa": {
+    "password": "safa",
+    "email": "safahas@gmail.com",
+    "default_category": "Personal",
+    "education": "Master's Degree",
+    "address": "6859 Almaden rd, San Jose, CA 95120",
+    "birthday": "1953-03-01",
+    "occupation": "Engineer",
+    "games_count": 42,
+    "bio": "i am a retired software engineer. I worked with high tech company Juniper networks. i live at Almaden Valley neighborhood  in San Jose, California  since 2000. I have one daughter, Zina (1984) , a science teacher. I have three sons, Ali (1991) pharmacist, Sadok (1994) digital marketing  and Adam (2008) student. I have been married to my wife Alyaa since 1984. I like to watch  soccer and basketball league games. I  am working on developing AI powered applications such as wizword .I used to join weekly male only  friends gathering for thursday dinner. ",
+    "last_game_time": "2025-08-28T00:51:34.193187",
+    "personal_pool": [
+      {
+        "word": "Engineer",
+        "hint": "A professional who designs and builds software."
+      },
+      {
+        "word": "Juniper",
+        "hint": "A tech company where the person worked."
+      },
+      {
+        "word": "Almaden",
+        "hint": "The valley where the person lives."
+      },
+      {
+        "word": "Ali",
+        "hint": "The eldest son who is a pharmacist."
+      },
+      {
+        "word": "Sadok",
+        "hint": "The second son working in digital marketing."
+      },
+      {
+        "word": "Adam",
+        "hint": "The youngest son who is a student"
+      },
+      {
+        "word": "Alyaa",
+        "hint": "The name of the person's wife."
+      },
+      {
+        "word": "Basketball",
+        "hint": "A sport the person enjoys watching."
+      },
+      {
+        "word": "Gathering",
+        "hint": "Its thuysday"
+      },
+      {
+        "word": "retired",
+        "hint": "No longer working"
+      },
+      {
+        "word": "software",
+        "hint": "Type of computer programs"
+      },
+      {
+        "word": "neighborhood",
+        "hint": "Area where people live"
+      },
+      {
+        "word": "daughter",
+        "hint": "Female child"
+      },
+      {
+        "word": "science",
+        "hint": "Study of natural world"
+      },
+      {
+        "word": "pharmacist",
+        "hint": "Person who prepares medicines"
+      },
+      {
+        "word": "marketing",
+        "hint": "Promotion of products or services"
+      },
+      {
+        "word": "student",
+        "hint": "Person studying at school or university"
+      },
+      {
+        "word": "tech",
+        "hint": "Retired engineer who designs operas."
+      },
+      {
+        "word": "applications",
+        "hint": "Software programs designed for specific tasks."
+      },
+      {
+        "word": "soccer",
+        "hint": "A popular sport played with a ball and feet."
+      },
+      {
+        "word": "games",
+        "hint": "Competitive activities with rules and winners."
+      },
+      {
+        "word": "valley",
+        "hint": "A low area of land between hills or mountains."
+      },
+      {
+        "word": "networks",
+        "hint": "Systems of interconnected computers or people."
+      },
+      {
+        "word": "friends",
+        "hint": "People who share a bond and enjoy each other's company."
+      },
+      {
+        "word": "weekly",
+        "hint": "Occurring once a week."
+      },
+      {
+        "word": "san",
+        "hint": "A common initialism for city names"
+      },
+      {
+        "word": "company",
+        "hint": "Where I spent much of my career."
+      },
+      {
+        "word": "teacher",
+        "hint": "A family occupation"
+      },
+      {
+        "word": "Wizword",
+        "hint": "A project I am working on."
+      },
+      {
+        "word": "Male",
+        "hint": "The gender of the gathering members."
+      },
+      {
+        "word": "Dinner",
+        "hint": "Evening meal."
+      },
+      {
+        "word": "Married",
+        "hint": "My relationship status with Alyaa."
+      },
+      {
+        "word": "Zina",
+        "hint": "Name of one of my children."
+      },
+      {
+        "word": "Thursday",
+        "hint": "Day of the dinner meetup."
+      },
+      {
+        "word": "Digital",
+        "hint": "Type of Ali's profession."
+      },
+      {
+        "word": "California",
+        "hint": "State where I live"
+      },
+      {
+        "word": "league",
+        "hint": "competitive organization of sports brings teams together."
+      },
+      {
+        "word": "powered",
+        "hint": "Related to your profile"
+      },
+      {
+        "word": "high",
+        "hint": "Related to your profile"
+      },
+      {
+        "word": "jose",
+        "hint": "Name of your daughter"
+      },
+      {
+        "word": "sons",
+        "hint": "A family relationship"
+      },
+      {
+        "word": "wife",
+        "hint": "A family relationship"
+      },
+      {
+        "word": "developing",
+        "hint": "Related to your profile"
+      }
+    ]
+  },
+  "safahot": {
+    "password": "safa",
+    "email": "safahas@hotmail.com",
+    "default_category": "4th_grade",
+    "games_count": 9
+  },
+  "alyaa": {
+    "password": "alyaa1967",
+    "email": "alyaamtoma@gmail.com",
+    "default_category": "4th_grade",
+    "games_count": 1
+  },
+  "admin": {
+    "password": "admin",
+    "email": "admin@baghdade.com",
+    "birthday": "2000-01-01",
+    "education": "Student",
+    "bio": "i am a retired software engineer. I worked with high tech company\nJuniper networks. i live at Almaden Valley neighborhood  in San Jose,\nCalifornia  since 2000. I have one daughter, Zina (1984) , a science\nteacher. I have three sons, Ali (1991) pharmacist, Sadok (1994)\ndigital marketing  and Adam (2008) student. I have been married to my\nwife Alyaa since 1984. I like to watch  soccer and basketball league\ngames. I  am working on developing AI powered applications such as\nwizword .I used to join weekly male only  friends gathering for\nthursday dinner.\n",
+    "games_count": 9,
+    "last_game_time": "2025-08-28T00:23:05.612824",
+    "default_category": "Personal",
+    "address": "",
+    "occupation": "",
+    "personal_pool": [
+      {
+        "word": "engineer",
+        "hint": "Profession related to building structures."
+      },
+      {
+        "word": "Juniper",
+        "hint": "High tech company"
+      },
+      {
+        "word": "Almaden",
+        "hint": "Valley neighborhood"
+      },
+      {
+        "word": "Zina",
+        "hint": "One of the children"
+      },
+      {
+        "word": "Ali",
+        "hint": "One of the sons"
+      },
+      {
+        "word": "Pharmacist",
+        "hint": "Someone who prepares and dispenses medicine"
+      },
+      {
+        "word": "Alyaa",
+        "hint": "The wife name"
+      },
+      {
+        "word": "basketball",
+        "hint": "Name of your wife"
+      },
+      {
+        "word": "AI",
+        "hint": "Artificial Intelligence"
+      },
+      {
+        "word": "Adam",
+        "hint": "name of youngest son"
+      },
+      {
+        "word": "sons",
+        "hint": "Male children."
+      },
+      {
+        "word": "daughter",
+        "hint": "Female offspring."
+      },
+      {
+        "word": "software",
+        "hint": "Field of work for the user."
+      },
+      {
+        "word": "Married",
+        "hint": "union status of the user."
+      },
+      {
+        "word": "Soccer",
+        "hint": "Favorite game."
+      },
+      {
+        "word": "San",
+        "hint": "Area of residence."
+      },
+      {
+        "word": "Wife",
+        "hint": "Life partner."
+      },
+      {
+        "word": "student",
+        "hint": "Tied to your education"
+      },
+      {
+        "word": "retired",
+        "hint": "No longer working after an extended career."
+      },
+      {
+        "word": "tech",
+        "hint": "Abbreviation for technology."
+      },
+      {
+        "word": "networks",
+        "hint": "Systems of interconnected computers."
+      },
+      {
+        "word": "Valley",
+        "hint": "Lowland area between hills or mountains."
+      },
+      {
+        "word": "neighborhood",
+        "hint": "A community or district of a town."
+      },
+      {
+        "word": "Science",
+        "hint": "Systemic study of nature and natural phenomena."
+      }
+    ]
+  }
+}

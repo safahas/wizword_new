@@ -1,0 +1,290 @@
+{
+  "safaa": {
+    "flash_sets": {
+      "terms": {
+        "text": "[Uploaded file: 4th_grade_science_ants.pdf]",
+        "pool": [
+          {
+            "word": "Ants",
+            "hint": "They are often found in colonies.",
+            "hint_source": "api",
+            "api_attempts": 1
+          },
+          {
+            "word": "Colonies",
+            "hint": "They are often ruled by a distant power.",
+            "hint_source": "api",
+            "api_attempts": 2
+          },
+          {
+            "word": "Queen",
+            "hint": "Mother of group",
+            "hint_source": "doc",
+            "api_attempts": 1
+          },
+          {
+            "word": "Worker",
+            "hint": "Gathers food",
+            "hint_source": "doc",
+            "api_attempts": 0
+          },
+          {
+            "word": "Soldier",
+            "hint": "Guards colony",
+            "hint_source": "doc",
+            "api_attempts": 0
+          },
+          {
+            "word": "Nests",
+            "hint": "Homes of insects",
+            "hint_source": "doc",
+            "api_attempts": 0
+          },
+          {
+            "word": "Pheromones",
+            "hint": "Chemical signals",
+            "hint_source": "doc",
+            "api_attempts": 0
+          },
+          {
+            "word": "Antennae",
+            "hint": "Sensory organs",
+            "hint_source": "doc",
+            "api_attempts": 0
+          },
+          {
+            "word": "Teamwork",
+            "hint": "Cooperation",
+            "hint_source": "doc",
+            "api_attempts": 0
+          },
+          {
+            "word": "Strength",
+            "hint": "Ability to carry",
+            "hint_source": "doc",
+            "api_attempts": 0
+          },
+          {
+            "word": "Nutrients",
+            "hint": "Essential for growth",
+            "hint_source": "doc",
+            "api_attempts": 0
+          },
+          {
+            "word": "Seeds",
+            "hint": "Plant beginnings",
+            "hint_source": "doc",
+            "api_attempts": 0
+          },
+          {
+            "word": "Ecosystems",
+            "hint": "Communities of life",
+            "hint_source": "doc",
+            "api_attempts": 0
+          },
+          {
+            "word": "Adapt",
+            "hint": "Change to survive",
+            "hint_source": "doc",
+            "api_attempts": 0
+          },
+          {
+            "word": "Survive",
+            "hint": "Continue living",
+            "hint_source": "doc",
+            "api_attempts": 0
+          },
+          {
+            "word": "Forests",
+            "hint": "Wooded areas",
+            "hint_source": "doc",
+            "api_attempts": 0
+          },
+          {
+            "word": "Fungus",
+            "hint": "Grown by leafcutters",
+            "hint_source": "doc",
+            "api_attempts": 0
+          }
+        ],
+        "token": "0eacb12c"
+      },
+      "ants2": {
+        "text": "[Uploaded file: 4th_grade_science_ants.pdf]",
+        "pool": [
+          {
+            "word": "Ants",
+            "hint": "Tiny insects",
+            "hint_source": "doc",
+            "api_attempts": 0
+          },
+          {
+            "word": "Colonies",
+            "hint": "Large groups",
+            "hint_source": "doc",
+            "api_attempts": 0
+          },
+          {
+            "word": "Queen",
+            "hint": "Mother of colony",
+            "hint_source": "doc",
+            "api_attempts": 0
+          },
+          {
+            "word": "Worker",
+            "hint": "Cares for eggs",
+            "hint_source": "doc",
+            "api_attempts": 0
+          },
+          {
+            "word": "Soldier",
+            "hint": "Guards colony",
+            "hint_source": "doc",
+            "api_attempts": 0
+          },
+          {
+            "word": "Nests",
+            "hint": "Ant homes",
+            "hint_source": "doc",
+            "api_attempts": 0
+          },
+          {
+            "word": "Pheromones",
+            "hint": "Chemical signals",
+            "hint_source": "doc",
+            "api_attempts": 0
+          },
+          {
+            "word": "Antennae",
+            "hint": "Used to touch",
+            "hint_source": "doc",
+            "api_attempts": 0
+          },
+          {
+            "word": "Teamwork",
+            "hint": "Cooperation",
+            "hint_source": "doc",
+            "api_attempts": 0
+          },
+          {
+            "word": "Strength",
+            "hint": "Carry heavy objects",
+            "hint_source": "doc",
+            "api_attempts": 0
+          },
+          {
+            "word": "Ecosystems",
+            "hint": "Communities of life",
+            "hint_source": "doc",
+            "api_attempts": 0
+          },
+          {
+            "word": "Seeds",
+            "hint": "Spread by ants",
+            "hint_source": "doc",
+            "api_attempts": 0
+          },
+          {
+            "word": "Fungus",
+            "hint": "Grown by leafcutters",
+            "hint_source": "doc",
+            "api_attempts": 0
+          },
+          {
+            "word": "Forests",
+            "hint": "Ant habitats",
+            "hint_source": "doc",
+            "api_attempts": 0
+          },
+          {
+            "word": "Deserts",
+            "hint": "Dry habitats",
+            "hint_source": "doc",
+            "api_attempts": 0
+          },
+          {
+            "word": "Cities",
+            "hint": "Urban areas",
+            "hint_source": "doc",
+            "api_attempts": 0
+          },
+          {
+            "word": "Bridges",
+            "hint": "Made by army ants",
+            "hint_source": "doc",
+            "api_attempts": 0
+          },
+          {
+            "word": "Adventure",
+            "hint": "Exciting journey",
+            "hint_source": "doc",
+            "api_attempts": 0
+          }
+        ],
+        "token": "96249b4f"
+      }
+    },
+    "flash_active_set": "ants2"
+  },
+  "alyaa": {
+    "flash_sets": {
+      "flashcard": {
+        "text": "",
+        "pool": [
+          {
+            "word": "study",
+            "hint": "A place where students often gather to learn."
+          }
+        ],
+        "token": "0672cef2"
+      }
+    },
+    "flash_active_set": "flashcard"
+  },
+  "safahot": {
+    "flash_sets": {
+      "default": {
+        "text": "",
+        "pool": [],
+        "token": "4305f6e8"
+      },
+      "ants12": {
+        "text": "Ants are tiny insects that live  is big families called colonies.  Each colony can have thousands of ants! Every ant has a special job:\nThe queen ant lays eggs.too \n\n\n\n\n\n\n\n\n\n\nThe worker ants gather food, take care of the young, and build the nest.\n\nThe soldier ants guard the colony.\n\nAnts are tiny insects that live in big families called colonies. Each colony can have thousands of ants! Every ant has a special job:\nThe queen ant lays eggs.\n\nThe worker ants gather food, take care of the young, and build the nest.\n\nThe soldier ants guard the colony.\n\nAnts are super strong for their size—they can carry things up to 50 times heavier than themselves! They “talk” to each other by leaving a special smell trail called pheromones. This helps them find food and stay safe.\n\nAnts are also very helpful to nature. They clean up dead insects, spread seeds, and make the soil better for plants. Even though they are small, ants show us how teamwork makes a big difference.\n\n\n\n\n\n\n\n\n",
+        "pool": [
+          {
+            "word": "ants",
+            "hint": "These creatures are known for their strength relative to their size.",
+            "hint_source": "api",
+            "api_attempts": 1
+          },
+          {
+            "word": "insects",
+            "hint": "They often have six legs.",
+            "hint_source": "api",
+            "api_attempts": 1
+          },
+          {
+            "word": "families",
+            "hint": "They often gather around a table for meals.",
+            "hint_source": "api",
+            "api_attempts": 1
+          },
+          {
+            "word": "colonies",
+            "hint": "They are often found on the moon.",
+            "hint_source": "api",
+            "api_attempts": 1
+          },
+          {
+            "word": "colony",
+            "hint": "A group of people who have settled in a new place.",
+            "hint_source": "api",
+            "api_attempts": 1
+          }
+        ],
+        "token": "9dc6c4d2"
+      }
+    },
+    "flash_active_set": "ants12"
+  }
+}

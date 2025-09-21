@@ -1,0 +1,1953 @@
+{
+  "guest": {
+    "personal_pool": [
+      {
+        "word": "apple",
+        "hint": "A fruit that grows on trees."
+      },
+      {
+        "word": "car",
+        "hint": "A vehicle used for transportation."
+      },
+      {
+        "word": "book",
+        "hint": "A set of written or printed sheets of paper."
+      },
+      {
+        "word": "table",
+        "hint": "A piece of furniture with a flat top and legs."
+      },
+      {
+        "word": "dog",
+        "hint": "A domesticated animal often kept as a pet."
+      },
+      {
+        "word": "Kite",
+        "hint": "What kites reach for."
+      },
+      {
+        "word": "Cloud",
+        "hint": "Cloud, thunder, and lightning."
+      },
+      {
+        "word": "Tablet",
+        "hint": "A modern tech device."
+      },
+      {
+        "word": "hat",
+        "hint": "Something you wear on your head."
+      },
+      {
+        "word": "bike",
+        "hint": "A vehicle with two wheels."
+      },
+      {
+        "word": "chair",
+        "hint": "Something you sit on."
+      },
+      {
+        "word": "bear",
+        "hint": "A large powerful mammal."
+      },
+      {
+        "word": "piano",
+        "hint": "An instrument used in bands and for solo."
+      },
+      {
+        "word": "tree",
+        "hint": "A tall plant with a wooden trunk"
+      },
+      {
+        "word": "river",
+        "hint": "A large natural stream of water."
+      },
+      {
+        "word": "moon",
+        "hint": "Satellite that orbits Earth."
+      },
+      {
+        "word": "mouse",
+        "hint": "Small rodent, often mistaken for a large rat."
+      },
+      {
+        "word": "Star",
+        "hint": "Luminous celestial body."
+      },
+      {
+        "word": "boxes",
+        "hint": "Items of storage."
+      },
+      {
+        "word": "blanket",
+        "hint": "A cloth for warmth."
+      }
+    ]
+  },
+  "admin": {
+    "bio": "cybersecurity, networking, and cloud systems at Juniper Networks and a local startup incubator. I mentor students at a robotics club and volunteer at the public library. I enjoy hiking in Almaden Quicksilver, trail running at Los Gatos Creek, and cycling to Santa Cruz. On weekends I practice photography, astronomy with a backyard telescope, and cooking Mediterranean dishes; I also roast coffee and garden tomatoes, basil, and citrus. I follow soccer and basketball and support the Earthquakes and Warriors. I travel to Seattle, Portland, Denver, Austin, and New York for conferences. My family—partner Lina and kids Maya and Omar—join me for camping in Yosemite and Big Sur. I contribute to open‑source, write tech blogs, and present at meetups on APIs, data science, LLMs, and prompt engineering.",
+    "personal_pool": [
+      {
+        "word": "robotics",
+        "hint": "Club where I mentor students."
+      },
+      {
+        "word": "hiking",
+        "hint": "Activity in Almaden Quicksilver."
+      },
+      {
+        "word": "photography",
+        "hint": "Weekend hobby captured with a camera."
+      },
+      {
+        "word": "telescope",
+        "hint": "Astronomy tool in my backyard."
+      },
+      {
+        "word": "cycling",
+        "hint": "Activity with Santa Cruz as the destination."
+      },
+      {
+        "word": "earthquakes",
+        "hint": "Soccer team supported by me."
+      },
+      {
+        "word": "cloud",
+        "hint": "Systems managed by me at Juniper Networks."
+      },
+      {
+        "word": "Juniper",
+        "hint": "The name of the main employer"
+      },
+      {
+        "word": "coffee",
+        "hint": "A beverage often brewed early morning"
+      },
+      {
+        "word": "camping",
+        "hint": "Family outdoor activity in Yosemite and Big Sur."
+      },
+      {
+        "word": "Basketball",
+        "hint": "Favorite team is the Warriors"
+      },
+      {
+        "word": "mediterranean",
+        "hint": "It's how he'd describe dinner"
+      },
+      {
+        "word": "networking",
+        "hint": "Connecting with professionals in cyber systems."
+      },
+      {
+        "word": "tomatoes",
+        "hint": "a fruit not a vegetable!"
+      },
+      {
+        "word": "Running",
+        "hint": "A speedy outdoor activity."
+      },
+      {
+        "word": "Astronomy",
+        "hint": "Exploring stars and planets."
+      },
+      {
+        "word": "Garden",
+        "hint": "Plant Basil and Tomatoes"
+      },
+      {
+        "word": "family",
+        "hint": "From a general theme"
+      },
+      {
+        "word": "project",
+        "hint": "From a general theme"
+      },
+      {
+        "word": "health",
+        "hint": "From a general theme"
+      }
+    ],
+    "flash_text": "cybersecurity,  networking,    and  cloud  systems    at Juniper Networks and a local startup incubator. I mentor students at a robotics club and   volunteer at the public library. I enjoy hiking in Almaden Quicksilver, trail running at Los Gatos Creek, and cycling to Santa Cruz. On weekends I practice photography, astronomy with a backyard telescope, and cooking Mediterranean dishes; I also roast coffee and garden tomatoes, basil, and citrus. I follow soccer and basketball and support the Earthquakes and Warriors. I travel to Seattle, Portland, Denver, Austin, and New York for conferences. My family—partner Lina and kids Maya and Omar—join me for camping in Yosemite and Big Sur. I contribute to open‑source, write tech blogs, and present at meetups on APIs, data science, LLMs, and prompt engineering.",
+    "flash_pool": [
+      {
+        "word": "cybersecurity",
+        "hint": "It protects data from digital threats.",
+        "hint_source": "api",
+        "api_attempts": 1
+      },
+      {
+        "word": "networking",
+        "hint": "Starts with 'N'. Related to cybersecurity and Juniper",
+        "hint_source": "local",
+        "api_attempts": 5
+      }
+    ]
+  },
+  "test1": {
+    "bio": "’m a senior software engineer and AI researcher in San Jose, California. I build Python, Django, FastAPI, and React applications, focusing on cybersecurity, networking, and cloud systems at Juniper Networks and a local startup incubator. I mentor students at a robotics club and volunteer at the public library. I enjoy hiking in Almaden Quicksilver, trail running at Los Gatos Creek, and cycling to Santa Cruz. On weekends I practice photography, astronomy with a backyard telescope, and cooking Mediterranean dishes; I also roast coffee and garden tomatoes, basil, and citrus. I follow soccer and basketball and support the Earthquakes and Warriors. I travel to Seattle, Portland, Denver, Austin, and New York for conferences. My family—partner Lina and kids Maya and Omar—join me",
+    "personal_pool": [
+      {
+        "word": "Hiking",
+        "hint": "A preferred weekend activity"
+      },
+      {
+        "word": "Networking",
+        "hint": "A core focus area in cybersecurity at work"
+      },
+      {
+        "word": "Robotics",
+        "hint": "Club where I do volunteer work"
+      },
+      {
+        "word": "Photography",
+        "hint": "What hobbies I love to practice"
+      },
+      {
+        "word": "Astronomy",
+        "hint": "Another hobby of mine. I use a backyard telescope"
+      },
+      {
+        "word": "Travel",
+        "hint": "Wanting to swim in the pond again."
+      },
+      {
+        "word": "Warriors",
+        "hint": "Favorite San Francisco-based team."
+      },
+      {
+        "word": "Coffee",
+        "hint": "Enjoys the process of roasting."
+      },
+      {
+        "word": "Mentor",
+        "hint": "Guides students at a robotics club."
+      },
+      {
+        "word": "telescope",
+        "hint": "Nightly hobby for astronomy enthusiast."
+      },
+      {
+        "word": "Almaden",
+        "hint": "Nearby open space park to explore."
+      },
+      {
+        "word": "basketball",
+        "hint": "Favourite sports league outside San Jose."
+      },
+      {
+        "word": "basil",
+        "hint": "One of the herbs grown in the garden."
+      },
+      {
+        "word": "California",
+        "hint": "The state where the profile owner works."
+      },
+      {
+        "word": "cloud",
+        "hint": "The type of systems the profile owner focuses on."
+      },
+      {
+        "word": "cybersecurity",
+        "hint": "Security aspect developed in their applications."
+      },
+      {
+        "word": "DJango",
+        "hint": "The web framework built with Python."
+      },
+      {
+        "word": "Denver",
+        "hint": "South-Central  city visited for conferences."
+      },
+      {
+        "word": "mediterranean",
+        "hint": "Type of food the profile owner enjoys cooking."
+      },
+      {
+        "word": "backyard",
+        "hint": "Outdoor space near your home"
+      }
+    ],
+    "flash_text": "m a senior software engineer and AI researcher in San Jose, California. I build Python, Django, FastAPI, and React applications, focusing on cybersecurity, networking, and cloud systems at Juniper Networks and a local startup incubator. I mentor students at a robotics club and volunteer at the public library. I enjoy hiking in Almaden Quicksilver, trail running at Los Gatos Creek, and cycling to Santa Cruz. On weekends I practice photography, astronomy with a backyard telescope, and cooking Mediterranean dishes; I also roast coffee and garden tomatoes, basil, and citrus. I follow soccer and basketball and support the Earthquakes and Warriors. I travel to Seattle, Portland, Denver, Austin, and New York for conferences. My family—partner Lina and kids Maya and Omar—join me",
+    "flash_pool": [
+      {
+        "word": "senior",
+        "hint": "Adults who have achieved greater experience and authority in ten years as compared to juniors.",
+        "hint_source": "api",
+        "api_attempts": 1
+      },
+      {
+        "word": "software",
+        "hint": "Programmers create it.",
+        "hint_source": "api",
+        "api_attempts": 3
+      },
+      {
+        "word": "engineer",
+        "hint": "Designs blueprints.",
+        "hint_source": "api",
+        "api_attempts": 4
+      },
+      {
+        "word": "researcher",
+        "hint": "They spend time digging up facts and information.",
+        "hint_source": "api",
+        "api_attempts": 1
+      },
+      {
+        "word": "san",
+        "hint": "A soft sound that a human might make to soothe a child.",
+        "hint_source": "api",
+        "api_attempts": 1
+      },
+      {
+        "word": "jose",
+        "hint": "A popular choice for mounts.",
+        "hint_source": "api",
+        "api_attempts": 1
+      },
+      {
+        "word": "california",
+        "hint": "A well-known Governor attempted to manage the infamous  state .",
+        "hint_source": "api",
+        "api_attempts": 1
+      },
+      {
+        "word": "build",
+        "hint": "Imagine a robot doing this process.",
+        "hint_source": "api",
+        "api_attempts": 1
+      },
+      {
+        "word": "python",
+        "hint": "Recommended reading for novices and experts alike.",
+        "hint_source": "api",
+        "api_attempts": 2
+      },
+      {
+        "word": "django",
+        "hint": "It's a web framework.",
+        "hint_source": "api",
+        "api_attempts": 1
+      },
+      {
+        "word": "fastapi",
+        "hint": "It's often used to build interactive web services.",
+        "hint_source": "api",
+        "api_attempts": 4
+      },
+      {
+        "word": "react",
+        "hint": "Mickey was surprised when it started to come to him that he was now on the front page.",
+        "hint_source": "api",
+        "api_attempts": 1
+      },
+      {
+        "word": "applications",
+        "hint": "They are submitted when you apply for a new job.",
+        "hint_source": "api",
+        "api_attempts": 2
+      },
+      {
+        "word": "focusing",
+        "hint": "It is the introduction to realizing a goal.",
+        "hint_source": "api",
+        "api_attempts": 2
+      },
+      {
+        "word": "cybersecurity",
+        "hint": "It stops hackers from helping themselves to your data.",
+        "hint_source": "api",
+        "api_attempts": 4
+      },
+      {
+        "word": "networking",
+        "hint": "Meaningful bonds are achieved through interactions between people.",
+        "hint_source": "api",
+        "api_attempts": 1
+      },
+      {
+        "word": "cloud",
+        "hint": "It's where rain comes from.",
+        "hint_source": "api",
+        "api_attempts": 3
+      },
+      {
+        "word": "systems",
+        "hint": "It is often used to describe the organization of software to make an application works well.",
+        "hint_source": "api",
+        "api_attempts": 1
+      },
+      {
+        "word": "juniper",
+        "hint": "A thumb-sized evergreen used in the making of Gin.",
+        "hint_source": "api",
+        "api_attempts": 4
+      },
+      {
+        "word": "networks",
+        "hint": "Connection points often have hubs.",
+        "hint_source": "api",
+        "api_attempts": 4
+      },
+      {
+        "word": "local",
+        "hint": "Place where you live sounds are easily heard.",
+        "hint_source": "api",
+        "api_attempts": 2
+      },
+      {
+        "word": "startup",
+        "hint": "Move from idea to market.",
+        "hint_source": "api",
+        "api_attempts": 1
+      },
+      {
+        "word": "incubator",
+        "hint": "He used over the decades this to pass knowledge to students who came to learn what they love.",
+        "hint_source": "api",
+        "api_attempts": 5
+      },
+      {
+        "word": "mentor",
+        "hint": "Eacht person deserves a great teaching guide.",
+        "hint_source": "api",
+        "api_attempts": 1
+      },
+      {
+        "word": "students",
+        "hint": "They often carry heavy backpacks.",
+        "hint_source": "api",
+        "api_attempts": 1
+      },
+      {
+        "word": "robotics",
+        "hint": "It's a field that combines engineering and computers.",
+        "hint_source": "api",
+        "api_attempts": 4
+      },
+      {
+        "word": "club",
+        "hint": "A place where people can gather to listen to music.",
+        "hint_source": "api",
+        "api_attempts": 3
+      },
+      {
+        "word": "volunteer",
+        "hint": "The person making the commitment is gladly offering.",
+        "hint_source": "api",
+        "api_attempts": 3
+      },
+      {
+        "word": "public",
+        "hint": "A place where everyone can go.",
+        "hint_source": "api",
+        "api_attempts": 1
+      },
+      {
+        "word": "library",
+        "hint": "Knowledge is stored here.",
+        "hint_source": "api",
+        "api_attempts": 2
+      }
+    ]
+  },
+  "test3": {
+    "bio": "I’m a senior software engineer and AI researcher in San Jose, California. I build Python3, Django, FastAPI, and React applications, focusing on cybersecurity, networking, and cloud systems at Juniper Networks and a local startup incubator. I mentor students at a robotics club and volunteer at the public library. I enjoy hiking in Almaden Quicksilver, trail running at Los Gatos Creek, and cycling to Santa Cruz. On weekends I practice photography, astronomy with a backyard telescope, and cooking Mediterranean dishes; I also roast coffee and garden tomatoes, basil, and citrus. I follow soccer and basketball and support the Earthquakes and Warriors. I travel to Seattle, Portland, Denver, Austin, and New York for conferences. My family—partner Lina and kids Maya and Omar—join me for camping in Yosemite and Big Sur. I contribute to open‑source, write tech blogs, and present at meetups on APIs, data science, LLMs, and prompt engineering.",
+    "personal_pool": [
+      {
+        "word": "cybersecurity",
+        "hint": "Protecting digital data and systems from threats."
+      },
+      {
+        "word": "photography",
+        "hint": "The art of capturing images, often practiced on weekends."
+      },
+      {
+        "word": "hiking",
+        "hint": "An outdoor activity enjoyed at Almaden Quicksilver."
+      },
+      {
+        "word": "React",
+        "hint": "A popular JavaScript library for building user interfaces."
+      },
+      {
+        "word": "robotics",
+        "hint": "An area in which the individual mentors students at a club."
+      },
+      {
+        "word": "Juniper",
+        "hint": "Networking company based in California, a part of career."
+      },
+      {
+        "word": "Astronomy",
+        "hint": "Hobby involving a telescope for stargazing."
+      },
+      {
+        "word": "Mentor",
+        "hint": "Activity involving guiding students at a club."
+      },
+      {
+        "word": "Mediterranean",
+        "hint": "Type of dishes cooked on weekends."
+      },
+      {
+        "word": "networking",
+        "hint": "Connecting systems and people, vital for communications."
+      },
+      {
+        "word": "family",
+        "hint": "From a general theme"
+      },
+      {
+        "word": "project",
+        "hint": "From a general theme"
+      },
+      {
+        "word": "health",
+        "hint": "From a general theme"
+      },
+      {
+        "word": "finance",
+        "hint": "From a general theme"
+      },
+      {
+        "word": "music",
+        "hint": "From a general theme"
+      },
+      {
+        "word": "teacher",
+        "hint": "From a general theme"
+      },
+      {
+        "word": "Coffee",
+        "hint": "Loves coffee."
+      },
+      {
+        "word": "Engineer",
+        "hint": "Primary profession related to software"
+      },
+      {
+        "word": "Earthquakes",
+        "hint": "Sporting team based in San Jose"
+      },
+      {
+        "word": "Lina",
+        "hint": "The name of your partner"
+      }
+    ]
+  },
+  "test2": {
+    "bio": "I’m a senior software engineer and AI researcher in San Jose, California. I build Python, Django, FastAPI, and React applications, focusing on cybersecurity, networking, and cloud systems at Juniper Networks and a local startup incubator. I mentor students at a robotics club and volunteer at the public library. I enjoy hiking in Almaden Quicksilver, trail running at Los Gatos Creek, and cycling to Santa Cruz. On weekends I practice photography, astronomy with a backyard telescope, and cooking Mediterranean dishes; I also roast coffee and garden tomatoes, basil, and citrus. I follow soccer and basketball and support the Earthquakes and Warriors. I travel to Seattle, Portland, Denver, Austin, and New York for conferences. My family—partner Lina and kids Maya and Omar—join me for camping in Yosemite and Big Sur. I contribute to open‑source, write tech blogs, and present at meetups on APIs, data science, LLMs, and prompt engineering.",
+    "personal_pool": [
+      {
+        "word": "Python",
+        "hint": "Programming language used for development"
+      },
+      {
+        "word": "Django",
+        "hint": "Web framework for Python"
+      },
+      {
+        "word": "FastAPI",
+        "hint": "Modern web framework for building APIs"
+      },
+      {
+        "word": "Juniper",
+        "hint": "Network company where I work on cybersecurity"
+      },
+      {
+        "word": "Mentor",
+        "hint": "Guide robotics club students"
+      },
+      {
+        "word": "hiking",
+        "hint": "Activities in Almaden Quicksilver"
+      },
+      {
+        "word": "cooking",
+        "hint": "Mediterranean dishes enjoyed"
+      },
+      {
+        "word": "cloud",
+        "hint": "Systems, cybersecurity, and networking"
+      },
+      {
+        "word": "Engineer",
+        "hint": "Profession which he practices."
+      },
+      {
+        "word": "family",
+        "hint": "From a general theme"
+      },
+      {
+        "word": "astronomy",
+        "hint": "Study of celestial objects"
+      },
+      {
+        "word": "basketball",
+        "hint": "Sport played with a round ball"
+      },
+      {
+        "word": "basil",
+        "hint": "Herbal plant used in Mediterranean cuisine"
+      },
+      {
+        "word": "conferences",
+        "hint": "Gatherings of professionals in a field"
+      },
+      {
+        "word": "library",
+        "hint": "Public place to borrow books"
+      },
+      {
+        "word": "photography",
+        "hint": "Art of capturing light with a camera"
+      },
+      {
+        "word": "robotics",
+        "hint": "Electronic devices that can perform tasks"
+      },
+      {
+        "word": "soccer",
+        "hint": "Football game played worldwide"
+      },
+      {
+        "word": "tomatoes",
+        "hint": "Red fruits commonly used in salads"
+      },
+      {
+        "word": "Yosemite",
+        "hint": "National park in California"
+      }
+    ],
+    "flash_text": "I’m a senior software engineer   and AI   researcher in San Jose, California. I build Python, Django, FastAPI, and React applications, focusing on cybersecurity, networking, and cloud systems at Juniper Networks and a local startup incubator. I mentor students at a robotics club and volunteer at the public library. I enjoy hiking in Almaden Quicksilver, trail running at Los Gatos Creek, and cycling to Santa Cruz. On weekends I practice photography, astronomy with a backyard telescope, and cooking Mediterranean dishes; I also roast coffee and garden tomatoes, basil, and citrus. I follow soccer and basketball and support the Earthquakes and Warriors. I travel to Seattle, Portland, Denver, Austin, and New York for conferences. My family—partner Lina and kids Maya and Omar—join me for camping in Yosemite and Big Sur. I contribute to open‑source, write tech blogs, and present at meetups on APIs, data science, LLMs, and prompt engineering.",
+    "flash_pool": [
+      {
+        "word": "senior",
+        "hint": "This is an academic ranking.",
+        "hint_source": "api",
+        "api_attempts": 3
+      },
+      {
+        "word": "software",
+        "hint": "Made not by hand.",
+        "hint_source": "api",
+        "api_attempts": 2
+      },
+      {
+        "word": "engineer",
+        "hint": "It comes in handy when very quickly building a house out of playing cards. ",
+        "hint_source": "api",
+        "api_attempts": 3
+      },
+      {
+        "word": "researcher",
+        "hint": "Knowledge hunters . ",
+        "hint_source": "api",
+        "api_attempts": 1
+      },
+      {
+        "word": "san",
+        "hint": "A map can assist with navigation.",
+        "hint_source": "api",
+        "api_attempts": 3
+      },
+      {
+        "word": "jose",
+        "hint": "You can find them on the sport card designs.",
+        "hint_source": "api",
+        "api_attempts": 4
+      },
+      {
+        "word": "california",
+        "hint": "A state famous for its music scene since the 1940s.",
+        "hint_source": "api",
+        "api_attempts": 2
+      },
+      {
+        "word": "build",
+        "hint": "It's what you might do with a home after a basic workshop.",
+        "hint_source": "api",
+        "api_attempts": 3
+      },
+      {
+        "word": "python",
+        "hint": "It's something necessary in a zoo.",
+        "hint_source": "api",
+        "api_attempts": 2
+      },
+      {
+        "word": "django",
+        "hint": "It's open-source.",
+        "hint_source": "api",
+        "api_attempts": 1
+      },
+      {
+        "word": "fastapi",
+        "hint": "It enables developers to create web applications with minimal effort.",
+        "hint_source": "api",
+        "api_attempts": 1
+      },
+      {
+        "word": "react",
+        "hint": "It can be a response.",
+        "hint_source": "api",
+        "api_attempts": 2
+      },
+      {
+        "word": "applications",
+        "hint": "They're reviewed for admission.",
+        "hint_source": "api",
+        "api_attempts": 2
+      },
+      {
+        "word": "focusing",
+        "hint": "Practicing a concentration skill.",
+        "hint_source": "api",
+        "api_attempts": 5
+      },
+      {
+        "word": "cybersecurity",
+        "hint": "Protects against digital intruders.",
+        "hint_source": "api",
+        "api_attempts": 2
+      },
+      {
+        "word": "networking",
+        "hint": "The secret input is what allows different computers with internet connections to communicate.",
+        "hint_source": "api",
+        "api_attempts": 3
+      },
+      {
+        "word": "cloud",
+        "hint": "It can be created from a collection of points.",
+        "hint_source": "api",
+        "api_attempts": 1
+      },
+      {
+        "word": "systems",
+        "hint": "Interconnected components.",
+        "hint_source": "api",
+        "api_attempts": 1
+      },
+      {
+        "word": "juniper",
+        "hint": "It smells like gin.",
+        "hint_source": "api",
+        "api_attempts": 1
+      },
+      {
+        "word": "networks",
+        "hint": "Connected devices.",
+        "hint_source": "api",
+        "api_attempts": 1
+      },
+      {
+        "word": "local",
+        "hint": "It can be as opposed to foreign.",
+        "hint_source": "api",
+        "api_attempts": 4
+      },
+      {
+        "word": "startup",
+        "hint": "New ventures typically begin here.",
+        "hint_source": "api",
+        "api_attempts": 2
+      },
+      {
+        "word": "incubator",
+        "hint": "A place where something young develops.",
+        "hint_source": "api",
+        "api_attempts": 4
+      },
+      {
+        "word": "mentor",
+        "hint": "It can be a guide.",
+        "hint_source": "api",
+        "api_attempts": 1
+      },
+      {
+        "word": "students",
+        "hint": "In this group,  knowledge is shared.",
+        "hint_source": "api",
+        "api_attempts": 2
+      },
+      {
+        "word": "robotics",
+        "hint": "Consider the study of artificial beings.",
+        "hint_source": "api",
+        "api_attempts": 2
+      },
+      {
+        "word": "club",
+        "hint": "Gather eye protection, a baseball bat and a ball.",
+        "hint_source": "api",
+        "api_attempts": 2
+      },
+      {
+        "word": "volunteer",
+        "hint": "This person helps out of their own free will.",
+        "hint_source": "api",
+        "api_attempts": 1
+      },
+      {
+        "word": "public",
+        "hint": "People can access it.",
+        "hint_source": "api",
+        "api_attempts": 1
+      },
+      {
+        "word": "library",
+        "hint": "It is a place where silence is appreciated.",
+        "hint_source": "api",
+        "api_attempts": 1
+      }
+    ]
+  },
+  "safaa": {
+    "bio": "I'm a senior  software engineer and AI researcher in San Jose,  California. I build Python, Django, FastAPI, and React  applications, focusing on cybersecurity, networking, and cloud systems at Juniper Networks and a local startup incubator. I mentor students at a robotics club and volunteer at the public library. I enjoy hiking in Almaden Quicksilver, trail running at Los Gatos Creek, and cycling to Santa Cruz. On weekends I practice photography, astronomy with a backyard telescope, and cooking Mediterranean dishes; I also roast coffee and garden tomatoes, basil, and citrus. I follow soccer and basketball and support the Earthquakes and Warriors. I travel to Seattle, Portland, Denver, Austin, and New York for conferences. My family—partner Lina and kids Maya and Omar—join me for camping in Yosemite and Big Sur. I contribute to open‑source, write tech blogs, and present at meetups on APIs, data science, LLMs, and prompt engineering.",
+    "flash_text": "m a senior software engineer and AI researcher in San Jose, California. I build Python, Django, FastAPI, and React applications, focusing on cybersecurity, networking, and cloud systems at Juniper Networks and a local startup incubator. I mentor students at a robotics club and volunteer at the public library. I enjoy hiking in Almaden Quicksilver, trail running at Los Gatos Creek, and cycling to Santa Cruz. On weekends I practice photography, astronomy with a backyard telescope, and cooking Mediterranean dishes; I also roast coffee and garden tomatoes, basil, and citrus. I follow soccer and basketball and support the Earthquakes and Warriors. I travel to Seattle, Portland, Denver, Austin, and New York for conferences. My family—partner Lina and kids Maya and Omar—join me for camping in Yosemite and Big Sur. I contribute to open‑source, write tech blogs, and present at meetups on APIs, data science, LLMs, and prompt engineering.",
+    "flash_pool": [
+      {
+        "word": "senior",
+        "hint": "One might be pushed on a merry-go-round.",
+        "hint_source": "api",
+        "api_attempts": 1
+      },
+      {
+        "word": "software",
+        "hint": "Easily upgraded, this can run on many types of devices and can be switches at any time.",
+        "hint_source": "api",
+        "api_attempts": 1
+      },
+      {
+        "word": "engineer",
+        "hint": "Looks at many diagrams.",
+        "hint_source": "api",
+        "api_attempts": 2
+      },
+      {
+        "word": "researcher",
+        "hint": "They dedicate their time to uncover facts.",
+        "hint_source": "api",
+        "api_attempts": 3
+      },
+      {
+        "word": "san",
+        "hint": "You might use this on a hot summer day.",
+        "hint_source": "api",
+        "api_attempts": 2
+      },
+      {
+        "word": "jose",
+        "hint": "This term can mean a traditional Andalusian short coat or a surname common in Spanish and Brazilian cultures.",
+        "hint_source": "api",
+        "api_attempts": 1
+      },
+      {
+        "word": "california",
+        "hint": "It is a place where Hollywood is located.",
+        "hint_source": "api",
+        "api_attempts": 2
+      },
+      {
+        "word": "build",
+        "hint": "It involves creating a house.",
+        "hint_source": "api",
+        "api_attempts": 1
+      },
+      {
+        "word": "python",
+        "hint": "These animals slither and are commonly featured on a flashcard for learning about reptiles.",
+        "hint_source": "api",
+        "api_attempts": 1
+      },
+      {
+        "word": "django",
+        "hint": "This category is the title of a popular web application development framework.",
+        "hint_source": "api",
+        "api_attempts": 1
+      },
+      {
+        "word": "fastapi",
+        "hint": "It's used to develop APIs with Python.",
+        "hint_source": "api",
+        "api_attempts": 1
+      },
+      {
+        "word": "react",
+        "hint": "Something people do when they hear 'fire'.",
+        "hint_source": "api",
+        "api_attempts": 1
+      },
+      {
+        "word": "applications",
+        "hint": "IT heard about your job search and forwarded their latest opportunities over.",
+        "hint_source": "api",
+        "api_attempts": 1
+      },
+      {
+        "word": "focusing",
+        "hint": "Morning exercise for eyes.",
+        "hint_source": "api",
+        "api_attempts": 2
+      },
+      {
+        "word": "cybersecurity",
+        "hint": "Starts with 'C'. Related to Python and Django",
+        "hint_source": "local",
+        "api_attempts": 5
+      },
+      {
+        "word": "networking",
+        "hint": "It involves connecting with others.",
+        "hint_source": "api",
+        "api_attempts": 3
+      },
+      {
+        "word": "cloud",
+        "hint": "Happy science was based on observations made from a good altitude.",
+        "hint_source": "api",
+        "api_attempts": 2
+      },
+      {
+        "word": "systems",
+        "hint": "The concept is also a system.",
+        "hint_source": "api",
+        "api_attempts": 1
+      },
+      {
+        "word": "juniper",
+        "hint": "It can have berries that are used for flavoring in most conventional alcoholic beverage.",
+        "hint_source": "api",
+        "api_attempts": 2
+      },
+      {
+        "word": "networks",
+        "hint": "Connects multiple devices.",
+        "hint_source": "api",
+        "api_attempts": 3
+      },
+      {
+        "word": "local",
+        "hint": "Requires very little travel.",
+        "hint_source": "api",
+        "api_attempts": 1
+      },
+      {
+        "word": "startup",
+        "hint": "It can indicate the beginning of a company's life.",
+        "hint_source": "api",
+        "api_attempts": 4
+      },
+      {
+        "word": "incubator",
+        "hint": "Helps things grow.",
+        "hint_source": "api",
+        "api_attempts": 1
+      },
+      {
+        "word": "mentor",
+        "hint": "Eunice persuadees by her advices and teachings.",
+        "hint_source": "api",
+        "api_attempts": 2
+      },
+      {
+        "word": "students",
+        "hint": "Use it to indicate someone in a learning institution.",
+        "hint_source": "api",
+        "api_attempts": 2
+      },
+      {
+        "word": "robotics",
+        "hint": "It combines science and mechanics to engineer intelligent machines.",
+        "hint_source": "api",
+        "api_attempts": 2
+      },
+      {
+        "word": "club",
+        "hint": "Frequently has a nightlife schedule.",
+        "hint_source": "api",
+        "api_attempts": 2
+      },
+      {
+        "word": "volunteer",
+        "hint": "Sincerity can go a long way.",
+        "hint_source": "api",
+        "api_attempts": 1
+      },
+      {
+        "word": "public",
+        "hint": "A crowd is often found.",
+        "hint_source": "api",
+        "api_attempts": 4
+      },
+      {
+        "word": "library",
+        "hint": "The place where knowledge is stored.",
+        "hint_source": "api",
+        "api_attempts": 1
+      }
+    ],
+    "personal_pool": [
+      {
+        "word": "Python",
+        "hint": "Programming language."
+      },
+      {
+        "word": "Django",
+        "hint": "A web framework for web development."
+      },
+      {
+        "word": "FastAPI",
+        "hint": "A modern, fast API framework."
+      },
+      {
+        "word": "React",
+        "hint": "A JavaScript library for building user interfaces."
+      },
+      {
+        "word": "Cybersecurity",
+        "hint": "The practice of defending digital information."
+      },
+      {
+        "word": "Mentor",
+        "hint": "A guide or teacher, especially for students."
+      },
+      {
+        "word": "Hiking",
+        "hint": "Outdoor activity walking in nature."
+      },
+      {
+        "word": "Photography",
+        "hint": "The art of taking and processing photos."
+      },
+      {
+        "word": "Astronomy",
+        "hint": "The study of celestial objects and phenomena."
+      },
+      {
+        "word": "Engineer",
+        "hint": "A person who designs or builds things."
+      },
+      {
+        "word": "family",
+        "hint": "From a general theme"
+      },
+      {
+        "word": "project",
+        "hint": "From a general theme"
+      },
+      {
+        "word": "health",
+        "hint": "From a general theme"
+      },
+      {
+        "word": "finance",
+        "hint": "From a general theme"
+      },
+      {
+        "word": "music",
+        "hint": "From a general theme"
+      },
+      {
+        "word": "teacher",
+        "hint": "From a general theme"
+      }
+    ]
+  },
+  "test4": {
+    "bio": "m a senior software engineer and AI researcher in San Jose, California. I build Python, Django, FastAPI, and React applications \n, focusing on cybersecurity, networking, and cloud systems at Juniper Networks and a local startup incubator. I mentor students at a robotics club and volunteer at the public library. I enjoy hiking in Almaden Quicksilver, trail running at Los Gatos Creek, and cycling to Santa Cruz. On weekends I practice photography, astronomy with a backyard telescope, and cooking Mediterranean dishes; I also roast coffee and garden tomatoes, basil, and citrus. I follow soccer and basketball and support the Earthquakes and Warriors. I travel to Seattle, Portland, Denver, Austin, and New York for conferences. My family—partner Lina and kids Maya and Omar—join me for camping in Yosemite and Big Sur. I contribute to open‑source, write tech blogs, and present at meetups on APIs, data science, LLMs, and prompt engineering.",
+    "flash_text": "",
+    "personal_pool": [
+      {
+        "word": "Engineer",
+        "hint": "A builder of software applications.",
+        "hint_source": "api",
+        "api_attempts": 1
+      },
+      {
+        "word": "Cybersecurity",
+        "hint": "A area of expertise in the profile.",
+        "hint_source": "api",
+        "api_attempts": 1
+      },
+      {
+        "word": "Telescope",
+        "hint": "A tool for observing stars.",
+        "hint_source": "api",
+        "api_attempts": 1
+      },
+      {
+        "word": "Mediterranean",
+        "hint": "A type of cuisine from the Mediterranean region.",
+        "hint_source": "api",
+        "api_attempts": 1
+      },
+      {
+        "word": "Hiking",
+        "hint": "Foot path trail to view sunrise in nature",
+        "hint_source": "api",
+        "api_attempts": 1
+      },
+      {
+        "word": "Django",
+        "hint": "A high-level Python web framework.",
+        "hint_source": "api",
+        "api_attempts": 1
+      },
+      {
+        "word": "Astronomy",
+        "hint": "stargazing hobby with lenses at home",
+        "hint_source": "api",
+        "api_attempts": 1
+      },
+      {
+        "word": "Mentor",
+        "hint": "Guiding students in a robotics club.",
+        "hint_source": "api",
+        "api_attempts": 1
+      },
+      {
+        "word": "Earthquakes",
+        "hint": "A professional soccer team based in San Jose.",
+        "hint_source": "api",
+        "api_attempts": 1
+      },
+      {
+        "word": "Cycling",
+        "hint": "Riding a bicycle for recreation.",
+        "hint_source": "api",
+        "api_attempts": 1
+      }
+    ]
+  },
+  "test5": {
+    "bio": "m a senior software engineer and AI researcher in San Jose, California. I build Python, Django, FastAPI, and React applications, focusing on cybersecurity, networking, and cloud systems at Juniper Networks and a local startup incubator. I mentor students at a robotics club and volunteer at the public library. I enjoy hiking in Almaden Quicksilver, trail running at Los Gatos Creek, and cycling to Santa Cruz. On weekends I practice photography, astronomy with a backyard telescope, and cooking Mediterranean dishes; I also roast coffee and garden tomatoes, basil, and citrus. I follow soccer and basketball and support the Earthquakes and Warriors. I travel to Seattle, Portland, Denver, Austin, and New York for conferences. My family—partner Lina and kids Maya and Omar—join me for camping in Yosemite and Big Sur. I contribute to open‑source, write tech blogs, and present at meetups on APIs, data science, LLMs, and prompt engineering.",
+    "flash_text": "",
+    "personal_pool": [
+      {
+        "word": "Python",
+        "hint": "Programming language used in applications.",
+        "hint_source": "api",
+        "api_attempts": 1
+      },
+      {
+        "word": "Django",
+        "hint": "Python framework for web development.",
+        "hint_source": "api",
+        "api_attempts": 1
+      },
+      {
+        "word": "React",
+        "hint": "Library used for web UI.",
+        "hint_source": "api",
+        "api_attempts": 1
+      },
+      {
+        "word": "Juniper",
+        "hint": "Networking and cybersecurity company.",
+        "hint_source": "api",
+        "api_attempts": 1
+      },
+      {
+        "word": "Cycling",
+        "hint": "Weekend bicycle ride destination.",
+        "hint_source": "api",
+        "api_attempts": 1
+      },
+      {
+        "word": "Earthquakes",
+        "hint": "Supported soccer team in San Jose.",
+        "hint_source": "api",
+        "api_attempts": 1
+      },
+      {
+        "word": "Warriors",
+        "hint": "Supported basketball team.",
+        "hint_source": "api",
+        "api_attempts": 1
+      },
+      {
+        "word": "Yosemite",
+        "hint": "National park often visited for camping.",
+        "hint_source": "api",
+        "api_attempts": 1
+      },
+      {
+        "word": "astro",
+        "hint": "Enthusiast activity outdoors with a backyard telescope.",
+        "hint_source": "api",
+        "api_attempts": 1
+      },
+      {
+        "word": "hiking",
+        "hint": "Outdoor activity mentioned in the profile.",
+        "hint_source": "api",
+        "api_attempts": 1
+      }
+    ]
+  },
+  "test6": {
+    "bio": "'m a senior software engineer and AI researcher in San Jose, California. I build Python, Django, FastAPI, and React applications, focusing on cybersecurity, networking, and cloud systems at Juniper Networks and a local startup incubator. I mentor students at a robotics club and volunteer at the public library. I enjoy hiking in Almaden Quicksilver, trail running at Los Gatos Creek, and cycling to Santa Cruz. On weekends I practice photography, astronomy with a backyard telescope, and cooking Mediterranean dishes; I also roast coffee and garden tomatoes, basil, and citrus. I follow soccer and basketball and support the Earthquakes and Warriors. I travel to Seattle, Portland, Denver, Austin, and New York for conferences. My family—partner Lina and kids Maya and Omar—join me for camping in Yosemite and Big Sur. I contribute to open‑source, write tech blogs, and present at meetups on APIs, data science, LLMs, and prompt engineering.",
+    "flash_text": "",
+    "personal_pool": [
+      {
+        "word": "Almaden",
+        "hint": "Hiking spot",
+        "hint_source": "api",
+        "api_attempts": 1
+      },
+      {
+        "word": "Django",
+        "hint": "Python framework",
+        "hint_source": "api",
+        "api_attempts": 1
+      },
+      {
+        "word": "Juniper",
+        "hint": "Employer",
+        "hint_source": "api",
+        "api_attempts": 1
+      },
+      {
+        "word": "OpenSource",
+        "hint": "Contribution type",
+        "hint_source": "api",
+        "api_attempts": 1
+      },
+      {
+        "word": "Cycling",
+        "hint": "Weekday activity",
+        "hint_source": "api",
+        "api_attempts": 1
+      },
+      {
+        "word": "Mentor",
+        "hint": "Role at robotics club",
+        "hint_source": "api",
+        "api_attempts": 1
+      },
+      {
+        "word": "Philadelphia",
+        "hint": "Favorite sports team",
+        "hint_source": "api",
+        "api_attempts": 1
+      },
+      {
+        "word": "Conferences",
+        "hint": "Travel destination",
+        "hint_source": "api",
+        "api_attempts": 1
+      },
+      {
+        "word": "Software",
+        "hint": "Engineering field",
+        "hint_source": "api",
+        "api_attempts": 1
+      },
+      {
+        "word": "Coffee",
+        "hint": "Beverage",
+        "hint_source": "api",
+        "api_attempts": 1
+      }
+    ]
+  },
+  "test7": {
+    "bio": "",
+    "flash_text": "I'm a senior software engineer and AI researcher in San Jose, California. I build Python, Django, FastAPI, and React applications, focusing on cybersecurity, networking, and cloud systems at Juniper Networks and a local startup incubator. I mentor students at a robotics club and volunteer at the public library. I enjoy hiking in Almaden Quicksilver, trail running at Los Gatos Creek, and cycling to Santa Cruz. On weekends I practice photography, astronomy with a backyard telescope, and cooking Mediterranean dishes; I also roast coffee and garden tomatoes, basil, and citrus. I follow soccer and basketball and support the Earthquakes and Warriors. I travel to Seattle, Portland, Denver, Austin, and New York for conferences. My family—partner Lina and kids Maya and Omar—join me for camping in Yosemite and Big Sur. I contribute to open‑source, write tech blogs, and present at meetups on APIs, data science, LLMs, and prompt engineering.",
+    "flash_pool": [
+      {
+        "word": "senior",
+        "hint": "Many have roles and positions of this nature after extensive learning.",
+        "hint_source": "api",
+        "api_attempts": 5
+      },
+      {
+        "word": "software",
+        "hint": "Found in modern offices.",
+        "hint_source": "api",
+        "api_attempts": 3
+      },
+      {
+        "word": "engineer",
+        "hint": "Tools are designed and created by them.",
+        "hint_source": "api",
+        "api_attempts": 2
+      },
+      {
+        "word": "researcher",
+        "hint": "Data analyzis is a common task among them.",
+        "hint_source": "api",
+        "api_attempts": 4
+      },
+      {
+        "word": "san",
+        "hint": "Used to treat wounds.",
+        "hint_source": "api",
+        "api_attempts": 3
+      },
+      {
+        "word": "jose",
+        "hint": "He is an internationally recognized soccer star.",
+        "hint_source": "api",
+        "api_attempts": 1
+      },
+      {
+        "word": "california",
+        "hint": "It’s a western US state where Hollywood movies are mostly made.",
+        "hint_source": "api",
+        "api_attempts": 1
+      },
+      {
+        "word": "build",
+        "hint": "It results in a physical structure and can be created using nearly hundreds of digital tools.",
+        "hint_source": "api",
+        "api_attempts": 3
+      },
+      {
+        "word": "python",
+        "hint": "Often used to teach coding to beginners.",
+        "hint_source": "api",
+        "api_attempts": 2
+      },
+      {
+        "word": "django",
+        "hint": "It is well known for its ability to reduce the burden of developing Web systems.",
+        "hint_source": "api",
+        "api_attempts": 2
+      },
+      {
+        "word": "fastapi",
+        "hint": "It's a framework used by software developers.",
+        "hint_source": "api",
+        "api_attempts": 1
+      },
+      {
+        "word": "react",
+        "hint": "A teacher might wish students to do this to new material presented in class.",
+        "hint_source": "api",
+        "api_attempts": 3
+      },
+      {
+        "word": "applications",
+        "hint": "Can be submitted for position consideration.",
+        "hint_source": "api",
+        "api_attempts": 2
+      },
+      {
+        "word": "focusing",
+        "hint": "It's something that a lens does.",
+        "hint_source": "api",
+        "api_attempts": 1
+      },
+      {
+        "word": "cybersecurity",
+        "hint": "It protects digital information.",
+        "hint_source": "api",
+        "api_attempts": 1
+      },
+      {
+        "word": "networking",
+        "hint": "Starts with 'N'. Related to Python and Django",
+        "hint_source": "local",
+        "api_attempts": 5
+      },
+      {
+        "word": "cloud",
+        "hint": "You find them in the sky, not the ground.",
+        "hint_source": "api",
+        "api_attempts": 2
+      },
+      {
+        "word": "systems",
+        "hint": "It would look like a flowchart with various steps of a process.",
+        "hint_source": "api",
+        "api_attempts": 3
+      },
+      {
+        "word": "juniper",
+        "hint": "Confusion's consolation when it's too hot.",
+        "hint_source": "api",
+        "api_attempts": 1
+      },
+      {
+        "word": "networks",
+        "hint": "Starts with 'N'. Related to focusing and cybersecurity",
+        "hint_source": "local",
+        "api_attempts": 5
+      },
+      {
+        "word": "local",
+        "hint": "This is where you vote.",
+        "hint_source": "api",
+        "api_attempts": 1
+      },
+      {
+        "word": "startup",
+        "hint": "It's often the first step of a new venture.",
+        "hint_source": "api",
+        "api_attempts": 1
+      },
+      {
+        "word": "incubator",
+        "hint": "Starts with 'I'. Related to security and networking",
+        "hint_source": "local",
+        "api_attempts": 5
+      },
+      {
+        "word": "mentor",
+        "hint": "Provides guidance to a learner.",
+        "hint_source": "api",
+        "api_attempts": 5
+      },
+      {
+        "word": "students",
+        "hint": "Plural individuals who actively learn.",
+        "hint_source": "api",
+        "api_attempts": 1
+      },
+      {
+        "word": "robotics",
+        "hint": "It involves programmable mechanical devices.",
+        "hint_source": "api",
+        "api_attempts": 2
+      },
+      {
+        "word": "club",
+        "hint": "A place where people go to dance and hang out.",
+        "hint_source": "api",
+        "api_attempts": 2
+      },
+      {
+        "word": "volunteer",
+        "hint": "It is often associated with selfless help.",
+        "hint_source": "api",
+        "api_attempts": 1
+      },
+      {
+        "word": "public",
+        "hint": "Where people gather.",
+        "hint_source": "api",
+        "api_attempts": 1
+      },
+      {
+        "word": "library",
+        "hint": "A place to quietly find information.",
+        "hint_source": "api",
+        "api_attempts": 3
+      }
+    ]
+  },
+  "safahot": {
+    "bio": "'m a senior software engineer and AI researcher in San Jose, California. I build Python, Django, FastAPI, and React applications, focusing on cybersecurity, networking, and cloud systems at Juniper Networks and a local startup incubator. I mentor students at a robotics club and volunteer at the public library. I enjoy hiking in Almaden Quicksilver, trail running at Los Gatos Creek, and cycling to Santa Cruz. On weekends I practice photography, astronomy with a backyard telescope, and cooking Mediterranean dishes; I also roast coffee and garden tomatoes, basil, and citrus. I follow soccer and basketball and support the Earthquakes and Warriors. I travel to Seattle, Portland, Denver, Austin, and New York for conferences. My family—partner Lina and kids Maya and Omar—join me for camping in Yosemite and Big Sur. I contribute to open‑source, write tech blogs, and present at meetups on APIs, data science, LLMs, and prompt engineering.",
+    "flash_text": "I'm a senior software engineer and AI researcher in San Jose, California. I build Python, Django, FastAPI, and React applications, focusing on cybersecurity, networking, and cloud systems at Juniper Networks and a local startup incubator. I mentor students at a robotics club and volunteer at the public library. I enjoy hiking in Almaden Quicksilver, trail running at Los Gatos Creek, and cycling to Santa Cruz. On weekends I practice photography, astronomy with a backyard telescope, and cooking Mediterranean dishes; I also roast coffee and garden tomatoes, basil, and citrus. I follow soccer and basketball and support the Earthquakes and Warriors. I travel to Seattle, Portland, Denver, Austin, and New York for conferences. My family—partner Lina and kids Maya and Omar—join me for camping in Yosemite and Big Sur. I contribute to open‑source, write tech blogs, and present at meetups on APIs, data science, LLMs, and prompt engineering.",
+    "flash_pool": [
+      {
+        "word": "senior",
+        "hint": "One might be pushed on a merry-go-round.",
+        "hint_source": "api",
+        "api_attempts": 1
+      },
+      {
+        "word": "software",
+        "hint": "Easily upgraded, this can run on many types of devices and can be switches at any time.",
+        "hint_source": "api",
+        "api_attempts": 1
+      },
+      {
+        "word": "engineer",
+        "hint": "Design and plan is a common responsibility.",
+        "hint_source": "api",
+        "api_attempts": 2
+      },
+      {
+        "word": "researcher",
+        "hint": "They study to discover new things.",
+        "hint_source": "api",
+        "api_attempts": 2
+      },
+      {
+        "word": "san",
+        "hint": "It marks a difference between right and wrong.",
+        "hint_source": "api",
+        "api_attempts": 4
+      },
+      {
+        "word": "jose",
+        "hint": "This term can mean a traditional Andalusian short coat or a surname common in Spanish and Brazilian cultures.",
+        "hint_source": "api",
+        "api_attempts": 1
+      },
+      {
+        "word": "california",
+        "hint": "Known for its beaches and Hollywood.",
+        "hint_source": "api",
+        "api_attempts": 2
+      },
+      {
+        "word": "build",
+        "hint": "It involves creating a house.",
+        "hint_source": "api",
+        "api_attempts": 1
+      },
+      {
+        "word": "python",
+        "hint": "These animals slither and are commonly featured on a flashcard for learning about reptiles.",
+        "hint_source": "api",
+        "api_attempts": 1
+      },
+      {
+        "word": "django",
+        "hint": "This category is the title of a popular web application development framework.",
+        "hint_source": "api",
+        "api_attempts": 1
+      },
+      {
+        "word": "fastapi",
+        "hint": "It's used to develop APIs with Python.",
+        "hint_source": "api",
+        "api_attempts": 1
+      },
+      {
+        "word": "react",
+        "hint": "Something people do when they hear 'fire'.",
+        "hint_source": "api",
+        "api_attempts": 1
+      },
+      {
+        "word": "applications",
+        "hint": "IT heard about your job search and forwarded their latest opportunities over.",
+        "hint_source": "api",
+        "api_attempts": 1
+      },
+      {
+        "word": "focusing",
+        "hint": "Comes from concentrating power or energy before deploying.",
+        "hint_source": "api",
+        "api_attempts": 3
+      },
+      {
+        "word": "cybersecurity",
+        "hint": "It's a realm that thwarts digital marauders.",
+        "hint_source": "api",
+        "api_attempts": 3
+      },
+      {
+        "word": "networking",
+        "hint": "A group of connected items.",
+        "hint_source": "api",
+        "api_attempts": 2
+      },
+      {
+        "word": "cloud",
+        "hint": "Starts with 'C'. Related to FastAPI and React",
+        "hint_source": "local",
+        "api_attempts": 5
+      },
+      {
+        "word": "systems",
+        "hint": "The concept is also a system.",
+        "hint_source": "api",
+        "api_attempts": 1
+      },
+      {
+        "word": "juniper",
+        "hint": "Common arid-region tree that provides a shade of blue.",
+        "hint_source": "api",
+        "api_attempts": 2
+      },
+      {
+        "word": "networks",
+        "hint": "It is  a group of interconnected data systems.",
+        "hint_source": "api",
+        "api_attempts": 3
+      },
+      {
+        "word": "local",
+        "hint": "Requires very little travel.",
+        "hint_source": "api",
+        "api_attempts": 1
+      },
+      {
+        "word": "startup",
+        "hint": "You might find these on a founder's desk during a conference.",
+        "hint_source": "api",
+        "api_attempts": 2
+      },
+      {
+        "word": "incubator",
+        "hint": "Helps things grow.",
+        "hint_source": "api",
+        "api_attempts": 1
+      },
+      {
+        "word": "mentor",
+        "hint": "A wise gray wolf is an accomplished teacher guiding its packs in survival.",
+        "hint_source": "api",
+        "api_attempts": 2
+      },
+      {
+        "word": "students",
+        "hint": "They often sit in rows.",
+        "hint_source": "api",
+        "api_attempts": 4
+      },
+      {
+        "word": "robotics",
+        "hint": "So keeps on improving intelligent machines.",
+        "hint_source": "api",
+        "api_attempts": 3
+      },
+      {
+        "word": "club",
+        "hint": "Experience a variety of hobbies and activities.",
+        "hint_source": "api",
+        "api_attempts": 2
+      },
+      {
+        "word": "volunteer",
+        "hint": "Sincerity can go a long way.",
+        "hint_source": "api",
+        "api_attempts": 1
+      },
+      {
+        "word": "public",
+        "hint": "Place where people gather.",
+        "hint_source": "api",
+        "api_attempts": 2
+      },
+      {
+        "word": "library",
+        "hint": "The place where knowledge is stored.",
+        "hint_source": "api",
+        "api_attempts": 1
+      }
+    ],
+    "flash_sets": {
+      "software": {
+        "text": "",
+        "pool": [
+          {
+            "word": "spaced",
+            "hint": "Make sure the writing has consistent intervals."
+          }
+        ]
+      },
+      "amazon": {
+        "text": "Writing a post about life at Amazon requires a nuanced approach, as the experience can vary dramatically depending on the role, team, and location. For example, a software engineer's daily life differs greatly from a warehouse associate's. The post can explore Amazon's high-performance, fast-paced environment while also acknowledging the diverse perspectives of its employees.\nA day in the life at Amazon: The dynamic and demanding reality\nLife at Amazon is a tale of two distinct worlds: the high-stakes, innovation-driven environment of its corporate offices and the fast-paced, physically demanding world of its fulfillment centers. While employees in both spheres are driven by Amazon's famous \"Day 1\" mentality, their daily realities offer vastly different perspectives on what it means to be an \"Amazonian\".\nLife at the corporate office",
+        "pool": [
+          {
+            "word": "writing",
+            "hint": "Starts with 'W'. Related to Amazon and nuanced",
+            "hint_source": "local",
+            "api_attempts": 1
+          },
+          {
+            "word": "post",
+            "hint": "Starts with 'P'. Related to Writing and Amazon",
+            "hint_source": "local",
+            "api_attempts": 1
+          },
+          {
+            "word": "life",
+            "hint": "It encompasses all stages from start to finish.",
+            "hint_source": "api",
+            "api_attempts": 1
+          },
+          {
+            "word": "amazon",
+            "hint": "Massive river started in the Andes.",
+            "hint_source": "api",
+            "api_attempts": 1
+          },
+          {
+            "word": "requires",
+            "hint": "Usually starts a math problem.",
+            "hint_source": "api",
+            "api_attempts": 1
+          },
+          {
+            "word": "nuanced",
+            "hint": "Starts with 'N'. Related to Writing and Amazon",
+            "hint_source": "local",
+            "api_attempts": 1
+          },
+          {
+            "word": "approach",
+            "hint": "Starts with 'A'. Related to Writing and Amazon",
+            "hint_source": "local",
+            "api_attempts": 1
+          },
+          {
+            "word": "experience",
+            "hint": "Starts with 'E'. Related to Writing and Amazon",
+            "hint_source": "local",
+            "api_attempts": 1
+          },
+          {
+            "word": "vary",
+            "hint": "Starts with 'V'. Related to Amazon and nuanced",
+            "hint_source": "local",
+            "api_attempts": 1
+          },
+          {
+            "word": "dramatically",
+            "hint": "Starts with 'D'. Related to Amazon and nuanced",
+            "hint_source": "local",
+            "api_attempts": 1
+          },
+          {
+            "word": "depending",
+            "hint": "It describes varying outcomes.",
+            "hint_source": "api",
+            "api_attempts": 1
+          },
+          {
+            "word": "role",
+            "hint": "Starts with 'R'. Related to nuanced and experience",
+            "hint_source": "local",
+            "api_attempts": 1
+          },
+          {
+            "word": "team",
+            "hint": "Starts with 'T'. Related to uanced and experience",
+            "hint_source": "local",
+            "api_attempts": 1
+          },
+          {
+            "word": "location",
+            "hint": "It's where something can be found.",
+            "hint_source": "api",
+            "api_attempts": 1
+          },
+          {
+            "word": "example",
+            "hint": "Education and learning accompany your daily 'study habit'.",
+            "hint_source": "api",
+            "api_attempts": 1
+          },
+          {
+            "word": "software",
+            "hint": "Starts with 'S'. Related to depending and location",
+            "hint_source": "local",
+            "api_attempts": 1
+          },
+          {
+            "word": "engineer",
+            "hint": "Mastery of mathematics can be key to success.",
+            "hint_source": "api",
+            "api_attempts": 1
+          },
+          {
+            "word": "daily",
+            "hint": "It marks the closing session of every week's first five days.",
+            "hint_source": "api",
+            "api_attempts": 1
+          },
+          {
+            "word": "differs",
+            "hint": "It can give two alternatives.",
+            "hint_source": "api",
+            "api_attempts": 1
+          },
+          {
+            "word": "greatly",
+            "hint": "It describes something done with a large extent.",
+            "hint_source": "api",
+            "api_attempts": 1
+          },
+          {
+            "word": "warehouse",
+            "hint": "Starts with 'W'. Related to location and Amazon",
+            "hint_source": "local",
+            "api_attempts": 1
+          },
+          {
+            "word": "associate",
+            "hint": "Starts with 'A'. Related to Amazon and performance",
+            "hint_source": "local",
+            "api_attempts": 1
+          },
+          {
+            "word": "explore",
+            "hint": "Starts with 'E'. Related to Amazon and performance",
+            "hint_source": "local",
+            "api_attempts": 1
+          },
+          {
+            "word": "high",
+            "hint": "Reveals what's above the clouds.",
+            "hint_source": "api",
+            "api_attempts": 1
+          },
+          {
+            "word": "performance",
+            "hint": "It can be evaluated.",
+            "hint_source": "api",
+            "api_attempts": 1
+          },
+          {
+            "word": "fast",
+            "hint": "Starts with 'F'. Related to Amazon and performance",
+            "hint_source": "local",
+            "api_attempts": 1
+          },
+          {
+            "word": "paced",
+            "hint": "Think about steps.",
+            "hint_source": "api",
+            "api_attempts": 1
+          },
+          {
+            "word": "environment",
+            "hint": "Starts with 'E'. Related to Amazon and performance",
+            "hint_source": "local",
+            "api_attempts": 1
+          },
+          {
+            "word": "while",
+            "hint": "It might capture what the teacher does throughout the semester.",
+            "hint_source": "api",
+            "api_attempts": 1
+          },
+          {
+            "word": "also",
+            "hint": "Starts with 'A'. Related to Amazon and performance",
+            "hint_source": "local",
+            "api_attempts": 1
+          }
+        ]
+      }
+    },
+    "flash_active_set": "amazon",
+    "personal_pool": [
+      {
+        "word": "Python",
+        "hint": "Programming language used in work",
+        "hint_source": "api",
+        "api_attempts": 1
+      },
+      {
+        "word": "Django",
+        "hint": "Web framework for Python projects",
+        "hint_source": "api",
+        "api_attempts": 1
+      },
+      {
+        "word": "React",
+        "hint": "JavaScript library used in applications",
+        "hint_source": "api",
+        "api_attempts": 1
+      },
+      {
+        "word": "Cybersecurity",
+        "hint": "Field of expertise in work a large concern.",
+        "hint_source": "api",
+        "api_attempts": 1
+      },
+      {
+        "word": "Hiking",
+        "hint": "Outdoor activity on trails a favorite",
+        "hint_source": "api",
+        "api_attempts": 1
+      },
+      {
+        "word": "Astronomy",
+        "hint": "The hobby pursued by night",
+        "hint_source": "api",
+        "api_attempts": 1
+      },
+      {
+        "word": "Photography",
+        "hint": "Keep an project - record memories",
+        "hint_source": "api",
+        "api_attempts": 1
+      },
+      {
+        "word": "Camping",
+        "hint": "Family activity in nature----Public Frequented camping ground",
+        "hint_source": "api",
+        "api_attempts": 1
+      },
+      {
+        "word": "Basketball",
+        "hint": "Sport team supported by Engineer",
+        "hint_source": "api",
+        "api_attempts": 1
+      },
+      {
+        "word": "OpenSource",
+        "hint": "Type of projects contributed to",
+        "hint_source": "api",
+        "api_attempts": 1
+      }
+    ]
+  },
+  "alyaa": {
+    "bio": "m a senior software engineer and AI researcher in San Jose, California. I build Python, Django, FastAPI, and React applications, focusing on cybersecurity, networking, and cloud systems at Juniper Networks and a local startup incubator. I mentor students at a robotics club and volunteer at the public library. I enjoy hiking in Almaden Quicksilver, trail running at Los Gatos Creek, and cycling to Santa Cruz. On weekends I practice photography, astronomy with a backyard telescope, and cooking Mediterranean dishes; I also roast coffee and garden tomatoes, basil, and citrus. I follow soccer and basketball and support the Earthquakes and Warriors. I travel to Seattle, Portland, Denver, Austin, and New York for conferences. My family—partner Lina and kids Maya and Omar—join me for camping in Yosemite and Big Sur. I contribute to open‑source, write tech blogs, and present at meetups on APIs, data science, LLMs, and prompt engineering.",
+    "personal_pool": [
+      {
+        "word": "Python",
+        "hint": "Programming language used for software development",
+        "hint_source": "api",
+        "api_attempts": 1
+      },
+      {
+        "word": "SanJose",
+        "hint": "City in California",
+        "hint_source": "api",
+        "api_attempts": 1
+      },
+      {
+        "word": "Django",
+        "hint": "Python web framework",
+        "hint_source": "api",
+        "api_attempts": 1
+      },
+      {
+        "word": "cloud",
+        "hint": "Remote data storage and computing resources",
+        "hint_source": "api",
+        "api_attempts": 1
+      },
+      {
+        "word": "hiking",
+        "hint": "Outdoor activity in nature trails",
+        "hint_source": "api",
+        "api_attempts": 1
+      },
+      {
+        "word": "photography",
+        "hint": "Art of capturing images with a camera",
+        "hint_source": "api",
+        "api_attempts": 1
+      },
+      {
+        "word": "astronomy",
+        "hint": "Study of celestial objects and phenomena",
+        "hint_source": "api",
+        "api_attempts": 1
+      },
+      {
+        "word": "cooking",
+        "hint": "Preparing meals using various ingredients and techniques",
+        "hint_source": "api",
+        "api_attempts": 1
+      },
+      {
+        "word": "soccer",
+        "hint": "Sport with a ball kicked around a stadium",
+        "hint_source": "api",
+        "api_attempts": 1
+      },
+      {
+        "word": "family",
+        "hint": "From a general theme",
+        "hint_source": "api",
+        "api_attempts": 1
+      }
+    ]
+  }
+}

@@ -2,19 +2,23 @@
   "safaa": {
     "password": "safa1953",
     "email": "safahas@gmail.com",
-    "default_category": "4th_grade",
+    "default_category": "animals",
     "education": "Master's Degree",
     "address": "6859 Almaden rd, San Jose, CA 95120",
     "birthday": "1953-03-01",
-    "occupation": "Engineer"
+    "occupation": "Engineer",
+    "games_count": 28,
+    "last_game_time": "2025-09-21T00:36:44.715985+00:00"
   },
   "safahot": {
     "password": "safa1953",
-    "email": "safahas@hotmail.com"
+    "email": "safahas@hotmail.com",
+    "games_count": 9
   },
   "alyaa": {
     "password": "alyaa1967",
     "email": "alyaamtoma@gmail.com",
-    "default_category": "4th_grade"
+    "default_category": "4th_grade",
+    "games_count": 1
   }
 }

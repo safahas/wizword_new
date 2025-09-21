@@ -1,0 +1,240 @@
+{
+  "safaa": {
+    "password": "safa",
+    "email": "safahas@gmail.com",
+    "default_category": "Personal",
+    "education": "Master's Degree",
+    "address": "6859 Almaden rd, San Jose, CA 95120",
+    "birthday": "1953-03-01",
+    "occupation": "Engineer",
+    "games_count": 41,
+    "bio": "i am a retired software engineer. I worked with high tech company Juniper networks. i live at Almaden Valley neighborhood\u00a0 in San Jose, California\u00a0 since 2000. I have one daughter, Zina (1984) , a science\u00a0teacher. I have three sons, Ali (1991) pharmacist, Sadok (1994) digital marketing\u00a0 and Adam (2008) student. I have been married to my wife Alyaa since 1984. I like to watch\u00a0 soccer and basketball league\u00a0games. I \u00a0am working on developing AI powered applications such as wizword .I used to join weekly\u00a0male only\u00a0\u00a0friends gathering for thursday dinner.\u00a0",
+    "last_game_time": "2025-08-27T17:43:34.912920"
+  },
+  "safahot": {
+    "password": "safa",
+    "email": "safahas@hotmail.com",
+    "default_category": "4th_grade",
+    "games_count": 9
+  },
+  "alyaa": {
+    "password": "alyaa1967",
+    "email": "alyaamtoma@gmail.com",
+    "default_category": "4th_grade",
+    "games_count": 1
+  },
+  "admin": {
+    "password": "admin",
+    "email": "admin@baghdade.com",
+    "birthday": "2000-01-01",
+    "education": "Student",
+    "bio": "i am a retired software engineer. I worked with high tech company\nJuniper networks. i live at Almaden Valley neighborhood  in San Jose,\nCalifornia  since 2000. I have one daughter, Zina (1984) , a science\nteacher. I have three sons, Ali (1991) pharmacist, Sadok (1994)\ndigital marketing  and Adam (2008) student. I have been married to my\nwife Alyaa since 1984. I like to watch  soccer and basketball league\ngames. I  am working on developing AI powered applications such as\nwizword .I used to join weekly male only  friends gathering for\nthursday dinner.\n",
+    "games_count": 9,
+    "last_game_time": "2025-08-28T00:23:05.612824",
+    "default_category": "Personal",
+    "address": "",
+    "occupation": "",
+    "personal_pool": [
+      {
+        "word": "engineer",
+        "hint": "Profession related to building structures."
+      },
+      {
+        "word": "Juniper",
+        "hint": "High tech company"
+      },
+      {
+        "word": "Almaden",
+        "hint": "Valley neighborhood"
+      },
+      {
+        "word": "Zina",
+        "hint": "One of the children"
+      },
+      {
+        "word": "Ali",
+        "hint": "One of the sons"
+      },
+      {
+        "word": "Pharmacist",
+        "hint": "Someone who prepares and dispenses medicine"
+      },
+      {
+        "word": "Alyaa",
+        "hint": "The wife name"
+      },
+      {
+        "word": "basketball",
+        "hint": ""
+      },
+      {
+        "word": "AI",
+        "hint": "Artificial Intelligence"
+      },
+      {
+        "word": "Adam",
+        "hint": "name of youngest son"
+      },
+      {
+        "word": "sons",
+        "hint": "Male children."
+      },
+      {
+        "word": "daughter",
+        "hint": "Female offspring."
+      },
+      {
+        "word": "software",
+        "hint": "Field of work for the user."
+      },
+      {
+        "word": "Married",
+        "hint": "union status of the user."
+      },
+      {
+        "word": "Soccer",
+        "hint": "Favorite game."
+      },
+      {
+        "word": "San",
+        "hint": "Area of residence."
+      },
+      {
+        "word": "Wife",
+        "hint": "Life partner."
+      },
+      {
+        "word": "have",
+        "hint": "From your bio"
+      },
+      {
+        "word": "student",
+        "hint": "Tied to your education"
+      },
+      {
+        "word": "since",
+        "hint": "From your bio"
+      },
+      {
+        "word": "retired",
+        "hint": "No longer working after an extended career."
+      },
+      {
+        "word": "tech",
+        "hint": "Abbreviation for technology."
+      },
+      {
+        "word": "networks",
+        "hint": "Systems of interconnected computers."
+      },
+      {
+        "word": "Valley",
+        "hint": "Lowland area between hills or mountains."
+      },
+      {
+        "word": "neighborhood",
+        "hint": "A community or district of a town."
+      },
+      {
+        "word": "Science",
+        "hint": "Systemic study of nature and natural phenomena."
+      },
+      {
+        "word": "digital",
+        "hint": "Related to computer technology."
+      },
+      {
+        "word": "marketing",
+        "hint": "The promotion, distribution, and sale of products."
+      },
+      {
+        "word": "applications",
+        "hint": "Softwares: (developing AI powered)"
+      },
+      {
+        "word": "California",
+        "hint": "State in USA"
+      },
+      {
+        "word": "friends",
+        "hint": "Enjoys dinner with guests weekly."
+      },
+      {
+        "word": "Thursday",
+        "hint": "Day of their friends' bi-weekly dinner."
+      },
+      {
+        "word": "Games",
+        "hint": "Arguably sporting versions that started at ease."
+      },
+      {
+        "word": "Dinner",
+        "hint": "Early gatherings for more afternoon fun."
+      },
+      {
+        "word": "League",
+        "hint": "Collection of teams playing together."
+      },
+      {
+        "word": "Gathering",
+        "hint": "Weekly event I'm accustomed to"
+      },
+      {
+        "word": "company",
+        "hint": "From your bio"
+      },
+      {
+        "word": "teacher",
+        "hint": "From your bio"
+      },
+      {
+        "word": "three",
+        "hint": "From your bio"
+      },
+      {
+        "word": "sadok",
+        "hint": "From your bio"
+      },
+      {
+        "word": "watch",
+        "hint": "From your bio"
+      },
+      {
+        "word": "powered",
+        "hint": "From your bio"
+      },
+      {
+        "word": "wizword",
+        "hint": "From your bio"
+      },
+      {
+        "word": "weekly",
+        "hint": "From your bio"
+      },
+      {
+        "word": "high",
+        "hint": "From your bio"
+      },
+      {
+        "word": "live",
+        "hint": "From your bio"
+      },
+      {
+        "word": "jose",
+        "hint": "From your bio"
+      },
+      {
+        "word": "one",
+        "hint": "From your bio"
+      },
+      {
+        "word": "like",
+        "hint": "From your bio"
+      },
+      {
+        "word": "developing",
+        "hint": "From your bio"
+      }
+    ]
+  }
+}
