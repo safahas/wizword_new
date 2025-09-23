@@ -2367,20 +2367,24 @@ class WordSelector:
                         elif h:
                             cand_hints.append(h)
 
-                        # Sanitize candidates: remove answer leakage (substring, case-insensitive) and ensure groundedness
-                        sanitized = []
+                        # Sanitize candidates: remove answer leakage (substring, case-insensitive) and score groundedness
+                        sanitized_scored = []
                         for hh in cand_hints:
                             try:
                                 leak_pat = _re.compile(_re.escape(wl), _re.IGNORECASE)
                                 if leak_pat.search(hh):
                                     continue
                                 hint_tokens = set(t.lower() for t in _re.findall(r"[A-Za-z]{3,}", hh))
-                                grounded = len(hint_tokens & content_words) > 0
-                                if not grounded:
+                                ground_score = len(hint_tokens & content_words)
+                                if ground_score <= 0:
                                     continue
-                                sanitized.append(hh)
+                                sanitized_scored.append((hh, ground_score))
                             except Exception:
                                 continue
+
+                        # Sort by groundedness (desc) so the first is most document-grounded
+                        sanitized_scored.sort(key=lambda x: x[1], reverse=True)
+                        sanitized = [hh for hh,_s in sanitized_scored]
 
                         # Ensure exactly 3 for optional storage; choose one primary for pool
                         while len(sanitized) < 3:
