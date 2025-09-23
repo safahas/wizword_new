@@ -4284,8 +4284,10 @@ def display_game():
                     st.rerun()
                 st.markdown("</div>", unsafe_allow_html=True)
                 # FlashCard Settings button placed directly below Change Category
-                # Toggleable FlashCard Settings button (expand/collapse)
-                if st.button("FlashCard Settings", key="flash_settings_entry_btn_beat_pregame"):
+                # Toggleable FlashCard Settings button (expand/collapse), blocked for 'guest'
+                _uname_cur = ((st.session_state.get('user') or {}).get('username') or '').strip().lower()
+                _disabled_guest = (_uname_cur == 'guest')
+                if st.button("FlashCard Settings", key="flash_settings_entry_btn_beat_pregame", disabled=_disabled_guest):
                     try:
                         import time as _time
                         st.session_state['start_idle_at'] = _time.time()
@@ -4295,6 +4297,8 @@ def display_game():
                     st.session_state['show_flashcard_settings'] = not cur
                     st.session_state['_render_flash_below'] = not cur
                     st.rerun()
+                if _disabled_guest:
+                    st.caption("FlashCard Settings are unavailable for guest users.")
                 # Render FlashCard Settings panel here when requested (below Change Category)
                 if st.session_state.get('show_flashcard_settings', False) and st.session_state.get('_render_flash_below', False):
                     st.markdown("---")
