@@ -43,7 +43,16 @@ def sanitize_hints_map(hints: dict, desired_count: int, doc_text: str | None = N
         doc_tokens = {t.lower() for t in re.findall(r"[A-Za-z]{3,10}", doc_text)}
     # Broad English stopwords and function words; plus generic/unhelpful terms
     STOPWORDS = {
-        "and","the","with","which","that","this","these","those","from","then","than","into","onto","until","within","without","across","through","during","before","after","between","against","among","about","like","just","even","both","either","neither","each","per","via","over","under","very","really","quite","maybe","often","sometimes","usually","always","never","again","still","because","however","therefore","thus","also","into","onto","here","there","where","when","while","every","some","many","most","few","more","less","such","only","own","same","other","another","much","any","all","none","one","two","three","four","five","six","seven","eight","nine","ten","first","second","third","part","central","general","common","live",
+        # Articles / determiners / quantifiers
+        "a","an","the","this","that","these","those","some","many","most","few","more","less","such","only","own","same","other","another","any","all","none","one","two","three","four","five","six","seven","eight","nine","ten","first","second","third",
+        # Pronouns
+        "i","me","my","mine","myself","we","us","our","ours","ourselves","you","your","yours","yourself","yourselves","he","him","his","himself","she","her","hers","herself","it","its","itself","they","them","their","theirs","themselves","who","whom","whose","someone","something","everyone","everything","anyone","anything","noone","nothing",
+        # Conjunctions / prepositions / adverbs
+        "and","or","but","because","however","therefore","thus","also","with","without","within","from","to","into","onto","over","under","across","through","during","before","after","between","against","among","about","like","via","per","here","there","where","when","while","then","than",
+        # Frequency / modality / fillers
+        "very","really","quite","maybe","often","sometimes","usually","always","never","again","still",
+        # Generic/unhelpful
+        "which","that","part","central","general","common","live",
     }
     def _clean_hint(word: str, hint: str) -> str:
         # Remove ANY occurrence (substring) of the word, case-insensitive

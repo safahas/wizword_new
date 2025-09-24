@@ -40,7 +40,15 @@ TASK:
 1) Choose exactly {count} important words that best test comprehension of the above text.
 2) Constraints for words:
    - 3–13 letters, A–Z only (no spaces, digits, apostrophes, or hyphens)
-   - Avoid overly obscure terms; prefer high-signal content words
+   - Must appear in the document
+   - Prefer nouns or proper nouns central to the passage; high‑signal content words
+   - Do NOT select function words (pronouns, determiners, conjunctions, prepositions, fillers) such as:
+     her, she, he, they, it, you, we, I, this, that, these, those, who, whom, whose,
+     a, an, the, some, many, most, few, more, less, any, all, none, one, two,
+     and, or, but, because, however, therefore, thus, with, without, from, to, into, onto,
+     over, under, across, through, during, before, after, between, against, among, about,
+     like, via, per, here, there, where, when, while, then, than, very, really, quite, maybe,
+     often, sometimes, usually, always, never, again, still
 3) For each selected word, produce EXACTLY {hints_per_word} short, simple hints:
    - Do NOT include the word itself in any hint
    - Hints must be diverse and grounded in the document context
