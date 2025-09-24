@@ -4440,9 +4440,20 @@ def display_game():
                             if st.button('Delete Set', key='flash_delete_set_pregame_below'):
                                 try:
                                     from backend.bio_store import delete_flash_set
+                                    from backend.flash_share import delete_share
                                     if _sel:
                                         ok = delete_flash_set(_uname_lower, _sel)
                                         if ok:
+                                            # Also delete owned share, if any
+                                            try:
+                                                # Extract token from label "name [token]"
+                                                _toklbl = (_sel_label or '')
+                                                import re as _re
+                                                m = _re.search(r"\[(?P<t>[0-9a-fA-F]{6,})\]", _toklbl)
+                                                if m:
+                                                    delete_share(_uname_lower, m.group('t'))
+                                            except Exception:
+                                                pass
                                             st.success(f"Deleted set: {_sel}")
                                             st.session_state['show_flashcard_settings'] = True
                                             st.session_state['_render_flash_below'] = True

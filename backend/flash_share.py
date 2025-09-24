@@ -109,6 +109,24 @@ def list_shares_by_owner(owner: str) -> List[Dict[str, Any]]:
 	return out
 
 
+def delete_share(owner: str, token: str) -> bool:
+    """Delete a shared flashcard set by token if owned by 'owner'.
+
+    Returns True if a record was deleted, False otherwise.
+    """
+    if not token:
+        return False
+    data = _read_all()
+    rec = data.get(str(token))
+    if isinstance(rec, dict) and (rec.get('owner') or '').lower() == (owner or '').lower():
+        try:
+            del data[str(token)]
+            _write_all(data)
+            return True
+        except Exception:
+            return False
+    return False
+
 def import_share_to_user(token: str, username: str, set_name: Optional[str] = None) -> bool:
 	"""Reference a shared pool by token in user's named flashcard set (no copying)."""
 	from backend.bio_store import add_flash_set_ref, upsert_flash_set, set_active_flash_set_name
