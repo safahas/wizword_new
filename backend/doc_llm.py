@@ -23,6 +23,12 @@ def _build_prompt(doc_text: str, count: int) -> dict:
         "You are a helpful assistant that extracts key vocabulary from a document and "
         "returns EXACT JSON—no code fences, no commentary."
     )
+    # How many hints per word to request (default 3)
+    try:
+        hints_per_word = int(os.getenv("FLASHCARD_HINTS_PER_WORD", "3"))
+    except Exception:
+        hints_per_word = 3
+
     user = f"""You are powering a word/hint generator for a vocabulary game.
 
 INPUT DOCUMENT (sanitized, truncated):
@@ -33,18 +39,18 @@ INPUT DOCUMENT (sanitized, truncated):
 TASK:
 1) Choose exactly {count} important words that best test comprehension of the above text.
 2) Constraints for words:
-   - 3–10 letters, A–Z only (no spaces, digits, apostrophes, or hyphens)
+   - 3–13 letters, A–Z only (no spaces, digits, apostrophes, or hyphens)
    - Avoid overly obscure terms; prefer high-signal content words
-3) For each selected word, produce EXACTLY three short, simple hints:
+3) For each selected word, produce EXACTLY {hints_per_word} short, simple hints:
    - Do NOT include the word itself in any hint
    - Hints must be diverse and grounded in the document context
    - Keep them age-appropriate and clear
-4) Output STRICT JSON as an object mapping words to arrays of three strings.
+4) Output STRICT JSON as an object mapping words to arrays of {hints_per_word} strings.
 
 OUTPUT FORMAT EXAMPLE (structure only; not actual content):
 {{
-  "WordOne": ["hint1", "hint2", "hint3"],
-  "WordTwo": ["hint1", "hint2", "hint3"]
+  "WordOne": ["hint1", "hint2", "hint{hints_per_word}"],
+  "WordTwo": ["hint1", "hint2", "hint{hints_per_word}"]
 }}
 """
     body = {

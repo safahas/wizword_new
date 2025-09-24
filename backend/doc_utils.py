@@ -28,7 +28,7 @@ def get_limits() -> tuple[int, int]:
 def sanitize_hints_map(hints: dict, desired_count: int, doc_text: str | None = None) -> dict:
     """Post-process LLM output to satisfy schema:
     - keep only 3–10 letter keys (A–Z)
-    - ensure exactly 3 hints per word
+    - ensure exactly N hints per word (N = FLASHCARD_HINTS_PER_WORD, default 3)
     - remove the word (case-insensitive, word boundaries) from its hints
     - trim/pad to desired_count entries
     """
@@ -36,7 +36,7 @@ def sanitize_hints_map(hints: dict, desired_count: int, doc_text: str | None = N
     if not isinstance(hints, dict):
         return {}
     out: dict[str, list[str]] = {}
-    key_pat = re.compile(r"^[A-Za-z]{3,10}$")
+    key_pat = re.compile(r"^[A-Za-z]{3,13}$")
     # Build doc token set for grounding check
     doc_tokens: set[str] = set()
     if isinstance(doc_text, str) and doc_text:
@@ -57,6 +57,11 @@ def sanitize_hints_map(hints: dict, desired_count: int, doc_text: str | None = N
         "Key idea tied to the document.",
         "Relates to the main topic discussed.",
     ]
+    # Number of hints per word to enforce
+    try:
+        target_hints = int(os.getenv("FLASHCARD_HINTS_PER_WORD", "3"))
+    except Exception:
+        target_hints = 3
     for k, arr in hints.items():
         if not isinstance(k, str) or not key_pat.match(k.strip()):
             continue
@@ -69,9 +74,9 @@ def sanitize_hints_map(hints: dict, desired_count: int, doc_text: str | None = N
             for h in arr:
                 if isinstance(h, str) and h.strip():
                     items.append(_clean_hint(word, h))
-        # ensure exactly 3
-        items = items[:3]
-        while len(items) < 3:
+        # ensure exactly target_hints
+        items = items[:target_hints]
+        while len(items) < target_hints:
             items.append(_clean_hint(word, safe_fillers[len(items) % len(safe_fillers)]))
         out[word] = items
         if len(out) >= desired_count:

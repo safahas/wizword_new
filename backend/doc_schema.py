@@ -4,18 +4,26 @@ import re
 
 
 class HintsResponse(BaseModel):
-    """word -> [hint1, hint2, hint3] mapping returned by the LLM pipeline."""
+    """word -> [hints...] mapping returned by the LLM pipeline.
 
-    hints: Dict[str, List[str]] = Field(..., description="word -> [hint1, hint2, hint3]")
+    Count is validated against FLASHCARD_HINTS_PER_WORD (default 3).
+    """
+
+    hints: Dict[str, List[str]] = Field(..., description="word -> [hint1, hint2, ...]")
 
     @validator("hints")
     def validate_hints(cls, v):
-        pat = re.compile(r"^[A-Za-z]{3,10}$")
+        import os
+        pat = re.compile(r"^[A-Za-z]{3,13}$")
+        try:
+            target = int(os.getenv("FLASHCARD_HINTS_PER_WORD", "3"))
+        except Exception:
+            target = 3
         for k, arr in v.items():
             if not pat.match(k or ""):
                 raise ValueError(f"Invalid word key: {k}")
-            if not isinstance(arr, list) or len(arr) != 3:
-                raise ValueError(f"Each word must have exactly 3 hints: {k}")
+            if not isinstance(arr, list) or len(arr) != int(target):
+                raise ValueError(f"Each word must have exactly {target} hints: {k}")
             for h in arr:
                 if not isinstance(h, str) or not h.strip():
                     raise ValueError(f"Empty hint for word: {k}")
