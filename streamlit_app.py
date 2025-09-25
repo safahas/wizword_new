@@ -5570,7 +5570,7 @@ def display_game():
 
     # --- Fixed bottom area: include FlashCard Settings button then Restart bar ---
     try:
-        if getattr(st.session_state.get('game'), 'mode', '') == 'Beat':
+        if getattr(st.session_state.get('game'), 'mode', '') == 'Beat' and not st.session_state.get('beat_started', False):
             st.markdown("---")
             if st.button("FlashCard Settings", key="flash_settings_entry_btn_beat_bottom"):
                 st.session_state['show_flashcard_settings'] = True
