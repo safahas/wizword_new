@@ -333,6 +333,11 @@ def delete_flash_set(username: str, name: str) -> bool:
     sets = rec.get('flash_sets')
     if not isinstance(sets, dict) or name not in sets:
         return False
+    # Capture token for cascading removal of imported references
+    try:
+        removed_token = (sets.get(name) or {}).get('token')
+    except Exception:
+        removed_token = None
     try:
         del sets[name]
     except Exception:
@@ -343,6 +348,43 @@ def delete_flash_set(username: str, name: str) -> bool:
             rec['flash_active_set'] = next(iter(sets.keys())) if sets else ''
         except Exception:
             rec['flash_active_set'] = ''
+    # Cascade: remove any imported/reference sets in other users that point to this token
+    try:
+        if removed_token:
+            for u_key, u_rec in list(users.items()):
+                if not isinstance(u_rec, dict):
+                    continue
+                u_sets = u_rec.get('flash_sets') or {}
+                if not isinstance(u_sets, dict):
+                    continue
+                for s_name in list(u_sets.keys()):
+                    item = u_sets.get(s_name) or {}
+                    ref_tok = item.get('ref_token')
+                    ref_owner = item.get('ref_owner')
+                    ref_title = item.get('ref_title')
+                    if (isinstance(ref_tok, str) and ref_tok == removed_token) or \
+                       ((ref_owner or '').lower() == key and (ref_title or '') == name):
+                        try:
+                            del u_sets[s_name]
+                        except Exception:
+                            continue
+                        # Fix up active set for that user if needed
+                        if u_rec.get('flash_active_set') == s_name:
+                            try:
+                                u_rec['flash_active_set'] = next(iter(u_sets.keys())) if u_sets else ''
+                            except Exception:
+                                u_rec['flash_active_set'] = ''
+            # Also remove from flash_shares store if present
+            try:
+                from backend.flash_share import delete_share
+                try:
+                    delete_share(removed_token)
+                except Exception:
+                    pass
+            except Exception:
+                pass
+    except Exception:
+        pass
     _write_flash_all(users)
     return True
 
