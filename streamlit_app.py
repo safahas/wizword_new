@@ -2059,9 +2059,13 @@ def display_welcome():
             # If FlashCard, restrict to same token as active set
             if chosen_cat == 'flashcard':
                 try:
-                    from backend.bio_store import get_active_flash_set_name, get_flash_set_token
+                    from backend.bio_store import get_active_flash_set_name, get_flash_set_token, ensure_flash_set_token
                     uname = (st.session_state.get('user', {}) or {}).get('username') or ''
-                    token = get_flash_set_token(uname, get_active_flash_set_name(uname) or 'flashcard')
+                    active_set_name = get_active_flash_set_name(uname) or 'flashcard'
+                    token = get_flash_set_token(uname, active_set_name)
+                    if not token:
+                        # Ensure admin (or any user) always has a token for the active set
+                        token = ensure_flash_set_token(uname, active_set_name)
                 except Exception:
                     token = None
                 if token:
@@ -2080,6 +2084,9 @@ def display_welcome():
                                 item = sets.get(active) or {}
                                 if str(item.get('ref_token') or '') == str(token) or str(item.get('token') or '') == str(token):
                                     allowed.add((un or '').lower())
+                        # Always include the current user so their own FlashCard results appear
+                        if uname:
+                            allowed.add((uname or '').lower())
                         games = get_all_game_results()
                         games = [g for g in games if (g.get('subject','').lower() == 'flashcard') and ((g.get('nickname','') or '').lower() in allowed)]
                         user_highest = {}
@@ -2105,7 +2112,8 @@ def display_welcome():
                         top3_rows = []
             else:
                 top3_rows = get_top10_from_aggregates(chosen_cat)[:3]
-            if (not top3_rows) and chosen_cat != 'any':
+            # Do not fall back to 'any' when FlashCard is selected; enforce token scoping
+            if (not top3_rows) and chosen_cat not in ('any', 'flashcard'):
                 top3_rows = get_top10_from_aggregates('any')[:3]
             if (not top3_rows) and 'game' in st.session_state and st.session_state.game:
                 top3_rows = get_top10_from_aggregates(getattr(st.session_state.game, 'subject', 'any')).copy()[:3]
