@@ -2648,6 +2648,8 @@ def display_game():
                                     ok = upsert_flash_set(_uname_lower, _name)
                                     if ok:
                                         set_active_flash_set_name(_uname_lower, _name)
+                                        st.session_state.pop('_top3_start_cache', None)
+                                        st.session_state['top3_rev'] = st.session_state.get('top3_rev', 0) + 1
                                         st.success(f"Using FlashCard set: {_name}")
                                     else:
                                         st.error('Reached FlashCard set limit or invalid name.')
@@ -3613,6 +3615,8 @@ def display_game():
                                             active_title = get_active_flash_set_name(_uname_lower) or 'flashcard'
                                             try:
                                                 set_active_flash_set_name(_uname_lower, active_title)
+                                                st.session_state.pop('_top3_start_cache', None)
+                                                st.session_state['top3_rev'] = st.session_state.get('top3_rev', 0) + 1
                                             except Exception:
                                                 pass
                                             try:
@@ -3682,6 +3686,8 @@ def display_game():
                                         if ok:
                                             from backend.bio_store import set_active_flash_set_name
                                             set_active_flash_set_name(_uname_lower, _set_name)
+                                            st.session_state.pop('_top3_start_cache', None)
+                                            st.session_state['top3_rev'] = st.session_state.get('top3_rev', 0) + 1
                                             st.success(f"Imported '{_set_name}' from {_owner}.")
                                             st.session_state['show_flashcard_settings'] = True
                                             st.rerun()
@@ -4138,8 +4144,8 @@ def display_game():
 
             # Bottom-of-start-page Global Leaderboard (Top 10 by SEI) for user's default category
             try:
-                # Use the running category shown in the banner
-                chosen_cat = (game.subject or 'any').lower()
+                # Use pinned display category if set, else the running category shown in the banner
+                chosen_cat = str(st.session_state.get('_active_display_category') or (game.subject or 'any')).lower()
                 # Determine active FlashCard token (if applicable) for cache scoping
                 active_token = None
                 if chosen_cat == 'flashcard':
@@ -4149,7 +4155,8 @@ def display_game():
                         active_token = get_flash_set_token(_uname_cf, get_active_flash_set_name(_uname_cf) or 'flashcard')
                     except Exception:
                         active_token = None
-                cache_key = f"{chosen_cat}:{active_token or ''}" if chosen_cat == 'flashcard' else chosen_cat
+                rev = st.session_state.get('top3_rev', 0)
+                cache_key = (f"{chosen_cat}:{active_token or ''}:{rev}" if chosen_cat == 'flashcard' else f"{chosen_cat}:{rev}")
                 # Pull Top 3 from cache (scoped by category+token) to avoid recomputation
                 _cache = st.session_state.get('_top3_start_cache', {})
                 if _cache.get('key') == cache_key and 'rows' in _cache:
@@ -4281,6 +4288,7 @@ def display_game():
                         pass
                     # Clear the cached Top 3 so it refreshes for the new category
                     st.session_state.pop('_top3_start_cache', None)
+                    st.session_state['top3_rev'] = st.session_state.get('top3_rev', 0) + 1
                     st.rerun()
                 st.markdown("</div>", unsafe_allow_html=True)
                 # FlashCard Settings button placed directly below Change Category
