@@ -5,6 +5,7 @@ import time
 from typing import Dict, Any, Optional, List
 
 FLASH_SHARE_FILE = os.getenv('FLASH_SHARE_FILE', 'game_data/flash_shares.json')
+USERS_FLASH_FILE = os.getenv('USERS_FLASH_FILE', 'users.flashcards.json')
 
 
 def _ensure_store() -> None:
@@ -128,15 +129,42 @@ def delete_share(owner: str, token: str) -> bool:
     return False
 
 def import_share_to_user(token: str, username: str, set_name: Optional[str] = None) -> bool:
-	"""Reference a shared pool by token in user's named flashcard set (no copying)."""
-	from backend.bio_store import add_flash_set_ref, upsert_flash_set, set_active_flash_set_name
-	rec = load_share(token)
-	if not rec:
-		return False
-	uname = (username or '').lower()
-	name = set_name or (rec.get('title') or 'flashcard')
-	# Ensure set exists minimally, then attach reference token/metadata
-	_ = upsert_flash_set(uname, name)
-	add_flash_set_ref(uname, name, token=str(token or ''), owner=str(rec.get('owner') or ''), title=str(rec.get('title') or ''))
-	set_active_flash_set_name(uname, name)
-	return True
+    """Reference a shared pool by token in user's named flashcard set (no copying)."""
+    from backend.bio_store import add_flash_set_ref, upsert_flash_set, set_active_flash_set_name
+    rec = load_share(token)
+    # Fallback: if token isn't in flash_shares.json, try to locate an owner's set by scanning USERS_FLASH_FILE
+    if not rec:
+        try:
+            if os.path.exists(USERS_FLASH_FILE):
+                with open(USERS_FLASH_FILE, 'r', encoding='utf-8') as f:
+                    users_flash = json.load(f) or {}
+                token_l = str(token or '').strip()
+                owner_found = None
+                title_found = None
+                pool_found = None
+                for owner, urec in users_flash.items():
+                    sets = (urec or {}).get('flash_sets') or {}
+                    for name, item in sets.items():
+                        itok = str((item or {}).get('token') or '')
+                        if itok and itok == token_l:
+                            owner_found = str(owner or '').lower()
+                            title_found = str(name or 'flashcard')
+                            pool_found = (item or {}).get('pool') or []
+                            break
+                    if owner_found:
+                        break
+                if owner_found and isinstance(pool_found, list):
+                    # Materialize a share so downstream lookups will work
+                    save_share(owner_found, title_found, pool_found, token_override=token_l)
+                    rec = load_share(token_l)
+        except Exception:
+            rec = None
+    if not rec:
+        return False
+    uname = (username or '').lower()
+    name = set_name or (rec.get('title') or 'flashcard')
+    # Ensure set exists minimally, then attach reference token/metadata
+    _ = upsert_flash_set(uname, name)
+    add_flash_set_ref(uname, name, token=str(token or ''), owner=str(rec.get('owner') or ''), title=str(rec.get('title') or ''))
+    set_active_flash_set_name(uname, name)
+    return True

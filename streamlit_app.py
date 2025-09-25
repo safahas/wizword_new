@@ -3687,8 +3687,8 @@ def display_game():
                                             st.rerun()
                                         else:
                                             st.error('Failed to import: set limit reached or token invalid.')
-                            except Exception:
-                                st.error('Import failed due to an unexpected error.')
+                            except Exception as e:
+                               st.error(f'Import failed: {e}')
                     # Pre-render a placeholder for live status before the button to ensure visibility
                     _flash_status_pre = st.empty()
                     _enable_fc_text_btn = os.getenv('ENABLE_FLASHCARD_TEXT', 'false').strip().lower() in ('1','true','yes','on')
@@ -4074,8 +4074,8 @@ def display_game():
                                             st.rerun()
                                         else:
                                             st.error('Failed to import: set limit reached or token invalid.')
-                            except Exception:
-                                st.error('Import failed due to an unexpected error.')
+                            except Exception as e:
+                               st.error(f'Import failed: {e}')
                     if st.button('Save FlashCard Text', key='save_flash_text_pregame'):
                         try:
                             from backend.bio_store import set_flash_text, set_flash_pool
@@ -4618,8 +4618,8 @@ def display_game():
                                                 st.rerun()
                                             else:
                                                 st.error('Failed to import: set limit reached or token invalid.')
-                                except Exception:
-                                    st.error('Import failed due to an unexpected error.')
+                                except Exception as e:
+                                    st.error(f'Import failed: {e}')
                 # Admin-only: render all user profiles when toggled in the sidebar
                 try:
                     if st.session_state.get('show_all_users_profiles'):
@@ -5457,8 +5457,8 @@ def display_game():
                                         st.rerun()
                                     else:
                                         st.error('Failed to import: set limit reached or token invalid.')
-                        except Exception:
-                            st.error('Import failed due to an unexpected error.')
+                        except Exception as e:
+                            st.error(f'Import failed: {e}')
                 if st.button('Save FlashCard Text', key='save_flash_text_ingame'):
                     try:
                         from backend.bio_store import set_flash_text, set_flash_pool
