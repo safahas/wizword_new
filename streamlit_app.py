@@ -2159,13 +2159,19 @@ def display_welcome():
                 except Exception:
                     token_label = ''
             # Optional pinned waiting message if FlashCard pool may be building
-            if st.session_state.get('_flash_pending_msg') and chosen_cat == 'flashcard':
+            if chosen_cat == 'flashcard':
+                if st.session_state.get('_flash_pending_msg'):
+                    try:
+                        st.info("Preparing FlashCard words and hints. This may take a moment…")
+                    except Exception:
+                        pass
+                # Also show if API-first is enabled or worker is active, to cover retry loops/quota waits
                 try:
-                    st.info("Preparing FlashCard words and hints. This may take a moment…")
+                    _api_first = os.getenv('FLASHCARD_API_FIRST', 'false').strip().lower() in ('1','true','yes','on')
                 except Exception:
-                    pass
-                # Clear the flag after first display
-                st.session_state['_flash_pending_msg'] = False
+                    _api_first = False
+                if _api_first:
+                    st.caption("FlashCard is preparing hints (API-first). Falling back automatically if quota is low…")
             # Long-lived email notice (defaults to 45s; configurable via EMAIL_NOTICE_TTL_SECONDS)
             try:
                 if st.session_state.get('_email_token_msg'):
@@ -3199,13 +3205,23 @@ def display_game():
             # Reset time-over flags when changing category starts a new game
             st.session_state.pop('time_over', None)
             st.session_state.pop('time_over_at', None)
-            st.session_state.game = create_game_with_env_guard(
-                word_length=5,
-                subject=new_category,
-                mode=game.mode,
-                nickname=st.session_state.user['username'],
-                difficulty=game.difficulty
-            )
+            if str(new_category).lower() == 'flashcard':
+                with st.spinner('Switching to FlashCard… preparing words and hints (may take a moment)...'):
+                    st.session_state.game = create_game_with_env_guard(
+                        word_length=5,
+                        subject=new_category,
+                        mode=game.mode,
+                        nickname=st.session_state.user['username'],
+                        difficulty=game.difficulty
+                    )
+            else:
+                st.session_state.game = create_game_with_env_guard(
+                    word_length=5,
+                    subject=new_category,
+                    mode=game.mode,
+                    nickname=st.session_state.user['username'],
+                    difficulty=game.difficulty
+                )
             # Defensive: ensure FlashCard sticks and never resolves to another category
             try:
                 if str(new_category).lower() == 'flashcard':
@@ -4289,6 +4305,13 @@ def display_game():
                     # Clear the cached Top 3 so it refreshes for the new category
                     st.session_state.pop('_top3_start_cache', None)
                     st.session_state['top3_rev'] = st.session_state.get('top3_rev', 0) + 1
+                    # If switching to FlashCard, show a waiting notice on next render
+                    try:
+                        sel = st.session_state.get('_active_display_category') or (getattr(st.session_state.get('game'), 'subject', '') or '').lower()
+                        if str(sel).lower() == 'flashcard':
+                            st.session_state['_flash_pending_msg'] = True
+                    except Exception:
+                        pass
                     st.rerun()
                 st.markdown("</div>", unsafe_allow_html=True)
                 # FlashCard Settings button placed directly below Change Category
