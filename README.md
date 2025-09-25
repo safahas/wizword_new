@@ -424,6 +424,13 @@ USERS_BIO_FILE=users_bio.json
   - `hint_source`: `api` or `local`
   - `api_attempts`: number of API tries so far (capped by `PERSONAL_POOL_API_ATTEMPTS`)
 
+#### Sharing, Importing, and Deletion (Tokens)
+
+- Each FlashCard set has a short token that can be shared with others. Imports reference the owner’s set by token (no copying), so everyone stays in sync.
+- Email: After saving a set or generating from a document, the token is shown in‑app and can be emailed to the set owner (if SMTP is configured). The From/CC behavior uses `SMTP_USER`/`ADMIN_EMAIL` as documented above.
+- Leaderboard scoping: The FlashCard Top 3 on pre‑game and game‑over screens is filtered by the active set’s token so you only see your token group.
+- Cascading deletion (new): When an owner deletes a FlashCard set, all imported references to that set (by token) are automatically removed from other users in `users.flashcards.json`. The share entry is also removed from `game_data/flash_shares.json` when present. If a user’s active set was that import, their `flash_active_set` is reset to another available set (or empty).
+
 ### Environment Variables (FlashCard)
 
 ```env
