@@ -3595,6 +3595,12 @@ def display_game():
                             except Exception:
                                 st.error('Error deleting set.')
                     with cols_fc[1]:
+                        # Clear New Set Name before widget creation if flagged
+                        try:
+                            if st.session_state.pop('_clear_newset_name_pregame', False):
+                                st.session_state['flash_set_new_name_pregame'] = ''
+                        except Exception:
+                            pass
                         _new_name = st.text_input('New Set Name', value='', key='flash_set_new_name_pregame')
                     with cols_fc[2]:
                         if st.button('Create/Use', key='flash_set_create_use_pregame'):
@@ -3605,6 +3611,10 @@ def display_game():
                                     if ok:
                                         set_active_flash_set_name(_uname_lower, _name)
                                         st.success(f"Using FlashCard set: {_name}")
+                                        # Request clearing on next render to avoid post-instantiation mutation
+                                        st.session_state['_clear_newset_name_pregame'] = True
+                                        st.session_state['show_flashcard_settings'] = True
+                                        st.rerun()
                                     else:
                                         st.error('Reached FlashCard set limit or invalid name.')
                             except Exception:
@@ -3891,6 +3901,12 @@ def display_game():
                 try:
                     user = st.session_state.get('user', {}) or {}
                     _uname_lower = (user.get('username','') or '').lower()
+                    # Clear import box if requested (must happen before widget is created)
+                    try:
+                        if st.session_state.pop('_clear_import_token_pregame', False):
+                            st.session_state['flash_import_token_pregame'] = ''
+                    except Exception:
+                        pass
                     st.markdown("#### Import by Token")
                     _imp_cols_pg_top = st.columns([2,1])
                     with _imp_cols_pg_top[0]:
@@ -3915,6 +3931,8 @@ def display_game():
                                             from backend.bio_store import set_active_flash_set_name
                                             set_active_flash_set_name(_uname_lower, _set_name)
                                             st.success(f"Imported '{_set_name}' from {_owner}.")
+                                            # Request clearing the import field on next render
+                                            st.session_state['_clear_import_token_pregame'] = True
                                             st.session_state['show_flashcard_settings'] = True
                                             st.rerun()
                                         else:
@@ -4386,6 +4404,12 @@ def display_game():
                     # Import by Token — render at the very top of the panel (below header)
                     try:
                         _uname_lower = ((st.session_state.get('user') or {}).get('username') or '').lower()
+                        # Clear import box for below-header panel prior to widget creation
+                        try:
+                            if st.session_state.pop('_clear_import_token_below_header', False):
+                                st.session_state['flash_import_token_below_header'] = ''
+                        except Exception:
+                            pass
                         st.markdown("#### Import by Token")
                         _imp_cols_top_below = st.columns([2,1])
                         with _imp_cols_top_below[0]:
@@ -4410,6 +4434,7 @@ def display_game():
                                                 from backend.bio_store import set_active_flash_set_name
                                                 set_active_flash_set_name(_uname_lower, _set_name_hdr)
                                                 st.success(f"Imported '{_set_name_hdr}' from {_owner_hdr}.")
+                                                st.session_state['_clear_import_token_below_header'] = True
                                                 st.session_state['show_flashcard_settings'] = True
                                                 st.session_state['_render_flash_below'] = True
                                                 st.rerun()
@@ -4579,6 +4604,12 @@ def display_game():
                                 except Exception:
                                     st.error('Error deleting set.')
                         with cols_fc[1]:
+                            # Clear New Set Name (below panel) before widget creation if flagged
+                            try:
+                                if st.session_state.pop('_clear_newset_name_below', False):
+                                    st.session_state['flash_set_new_name_pregame_below'] = ''
+                            except Exception:
+                                pass
                             _new_name = st.text_input('New Set Name', value='', key='flash_set_new_name_pregame_below')
                         with cols_fc[2]:
                             if st.button('Create/Use', key='flash_set_create_use_pregame_below'):
@@ -4589,6 +4620,10 @@ def display_game():
                                         if ok:
                                             set_active_flash_set_name(_uname_lower, _name)
                                             st.success(f"Using FlashCard set: {_name}")
+                                            st.session_state['_clear_newset_name_below'] = True
+                                            st.session_state['show_flashcard_settings'] = True
+                                            st.session_state['_render_flash_below'] = True
+                                            st.rerun()
                                         else:
                                             st.error('Reached FlashCard set limit or invalid name.')
                                 except Exception:
