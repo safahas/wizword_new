@@ -288,13 +288,32 @@ def send_email_with_attachment(to_emails, subject, body, attachment_path=None, c
         msg.attach(MIMEText(body, "plain"))
 
         if attachment_path and os.path.exists(attachment_path):
-            with open(attachment_path, "rb") as f:
-                part = MIMEBase('application', 'octet-stream')
-                part.set_payload(f.read())
-            encoders.encode_base64(part)
-            filename = os.path.basename(attachment_path)
-            part.add_header('Content-Disposition', f'attachment; filename="{filename}"')
-            msg.attach(part)
+            try:
+                import mimetypes
+                filename = os.path.basename(attachment_path)
+                ctype, encoding = mimetypes.guess_type(filename)
+                if ctype is None:
+                    ctype = 'application/octet-stream'
+                maintype, subtype = ctype.split('/', 1)
+                with open(attachment_path, 'rb') as f:
+                    file_bytes = f.read()
+                if maintype == 'text':
+                    try:
+                        # Try to decode as UTF-8; fallback to octet-stream if it fails
+                        text_content = file_bytes.decode('utf-8', errors='ignore')
+                        part = MIMEText(text_content, _subtype=subtype)
+                    except Exception:
+                        part = MIMEBase('application', 'octet-stream')
+                        part.set_payload(file_bytes)
+                        encoders.encode_base64(part)
+                else:
+                    part = MIMEBase(maintype, subtype)
+                    part.set_payload(file_bytes)
+                    encoders.encode_base64(part)
+                part.add_header('Content-Disposition', f'attachment; filename="{filename}"')
+                msg.attach(part)
+            except Exception as attach_err:
+                print(f"Attachment processing failed, sending without attachment: {attach_err}")
 
         with smtplib.SMTP(SMTP_SERVER, SMTP_PORT) as server:
             server.starttls()
@@ -3650,6 +3669,59 @@ def display_game():
                                                 pass
                                             tok = ensure_flash_set_token(_uname_lower, active_title)
                                             st.success(f"FlashCard pool updated from document. Items: {len(new_pool)}. Token: {tok}")
+                                            # Email token with the uploaded document attached (top-panel path)
+                                            try:
+                                                has_smtp = bool(_os.getenv('SMTP_HOST') and _os.getenv('SMTP_USER') and _os.getenv('SMTP_PASS'))
+                                                # Resolve recipient email from session or users.json
+                                                recipient = (st.session_state.get('users', {}).get(_uname_lower, {}) or {}).get('email')
+                                                if not recipient:
+                                                    try:
+                                                        import json as __json
+                                                        with open(_os.getenv('USERS_FILE', 'users.json'), 'r', encoding='utf-8') as __f:
+                                                            __users = __json.load(__f)
+                                                        recipient = ( (__users.get(_uname_lower) or {}).get('email') )
+                                                    except Exception:
+                                                        recipient = None
+                                                if recipient and has_smtp:
+                                                    from backend.flash_share import save_share
+                                                    share_token = save_share(_uname_lower, title=active_title, pool=new_pool, token_override=tok)
+                                                    subject = f"Your WizWord FlashCard set token — {active_title}"
+                                                    body = (
+                                                        f"Hello {_uname_lower},\n\n"
+                                                        f"Your FlashCard set has been saved from document.\n"
+                                                        f"Set name: {active_title}\n"
+                                                        f"Token: {share_token}\n\n"
+                                                        f"Source file: {safe_name}\n\n"
+                                                        f"Share this token with your group so they can import this set.\n"
+                                                    )
+                                                    # Write uploaded file to a temp path for attachment
+                                                    import time as __t, os as __os
+                                                    tmp_dir = __os.getenv('UPLOAD_EMAIL_TMP_DIR', 'game_data/uploads')
+                                                    try:
+                                                        __os.makedirs(tmp_dir, exist_ok=True)
+                                                    except Exception:
+                                                        pass
+                                                    safe_name = __os.path.basename(_doc_file_pg.name)
+                                                    tmp_path = __os.path.join(tmp_dir, f"{_uname_lower}_{int(__t.time())}_{safe_name}")
+                                                    try:
+                                                        with open(tmp_path, 'wb') as wf:
+                                                            wf.write(_doc_file_pg.getvalue())
+                                                    except Exception:
+                                                        tmp_path = None
+                                                    try:
+                                                        if tmp_path:
+                                                            send_email_with_attachment([recipient], subject, body, attachment_path=tmp_path, cc_emails=[_os.getenv('ADMIN_EMAIL')])
+                                                        else:
+                                                            _send_basic_email(recipient, subject, body)
+                                                    finally:
+                                                        try:
+                                                            if tmp_path and __os.path.exists(tmp_path):
+                                                                __os.remove(tmp_path)
+                                                        except Exception:
+                                                            pass
+                                            except Exception as __e_mail:
+                                                import logging as __elog
+                                                __elog.getLogger('frontend.flashcard').warning(f"[FLASH_BUILD] email (doc top) failed: {__e_mail}")
                                             # Email token to user (consistent with text save)
                                             try:
                                                 has_smtp = bool(os.getenv('SMTP_HOST') and os.getenv('SMTP_USER') and os.getenv('SMTP_PASS'))
@@ -4599,19 +4671,53 @@ def display_game():
                                                 # Email token (below-panel path)
                                                 try:
                                                     has_smtp = bool(os.getenv('SMTP_HOST') and os.getenv('SMTP_USER') and os.getenv('SMTP_PASS'))
+                                                    # Resolve recipient email from session or users.json
                                                     recipient = (st.session_state.get('users', {}).get(_uname_lower, {}) or {}).get('email')
+                                                    if not recipient:
+                                                        try:
+                                                            import json as __json2
+                                                            with open(os.getenv('USERS_FILE', 'users.json'), 'r', encoding='utf-8') as __f2:
+                                                                __users2 = __json2.load(__f2)
+                                                            recipient = ( (__users2.get(_uname_lower) or {}).get('email') )
+                                                        except Exception:
+                                                            recipient = None
                                                     if recipient and has_smtp:
                                                         from backend.flash_share import save_share
                                                         share_token = save_share(_uname_lower, title=active_title, pool=new_pool, token_override=tok)
                                                         subject = f"Your WizWord FlashCard set token — {active_title}"
+                                                        # Persist uploaded file to a temp path for attachment and capture filename first
+                                                        import time as __t2, os as __os2
+                                                        tmp_dir2 = __os2.getenv('UPLOAD_EMAIL_TMP_DIR', 'game_data/uploads')
+                                                        try:
+                                                            __os2.makedirs(tmp_dir2, exist_ok=True)
+                                                        except Exception:
+                                                            pass
+                                                        safe_name2 = __os2.path.basename(_doc_file_pg2.name)
+                                                        tmp_path2 = __os2.path.join(tmp_dir2, f"{_uname_lower}_{int(__t2.time())}_{safe_name2}")
+                                                        try:
+                                                            with open(tmp_path2, 'wb') as wf2:
+                                                                wf2.write(_doc_file_pg2.getvalue())
+                                                        except Exception:
+                                                            tmp_path2 = None
                                                         body = (
                                                             f"Hello {_uname_lower},\n\n"
                                                             f"Your FlashCard set has been saved from document.\n"
                                                             f"Set name: {active_title}\n"
                                                             f"Token: {share_token}\n\n"
-                                                            f"Share this token with your group so they can import this set."
+                                                            f"Source file: {safe_name2}\n\n"
+                                                            f"Share this token with your group so they can import this set.\n"
                                                         )
-                                                        _send_basic_email(recipient, subject, body)
+                                                        try:
+                                                            if tmp_path2:
+                                                                send_email_with_attachment([recipient], subject, body, attachment_path=tmp_path2, cc_emails=[os.getenv('ADMIN_EMAIL')])
+                                                            else:
+                                                                _send_basic_email(recipient, subject, body)
+                                                        finally:
+                                                            try:
+                                                                if tmp_path2 and __os2.path.exists(tmp_path2):
+                                                                    __os2.remove(tmp_path2)
+                                                            except Exception:
+                                                                pass
                                                 except Exception as e:
                                                     import logging as _elog
                                                     _elog.getLogger('frontend.flashcard').warning(f"[FLASH_BUILD] email (doc below) failed: {e}")
