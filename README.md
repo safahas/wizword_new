@@ -406,7 +406,7 @@ USERS_BIO_FILE=users_bio.json
 #### FlashCard document uploads
 - Upload PDF/DOCX/TXT in FlashCard Settings to build the pool from the file’s text.
 - The backend enforces size via `UPLOAD_MAX_BYTES` (default 10240 = 10KB). Increase if your files are larger.
-- On success, the UI shows item count and the FlashCard token. If SMTP is configured, the token is emailed to you.
+- On success, the UI shows item count and the FlashCard token. If SMTP is configured, the token is emailed to you with the uploaded file attached. The email subject includes the set name, and the body lists the source file name.
 
 ### FlashCard Hint Generation & Persistence
 
@@ -428,6 +428,7 @@ USERS_BIO_FILE=users_bio.json
 
 - Each FlashCard set has a short token that can be shared with others. Imports reference the owner’s set by token (no copying), so everyone stays in sync.
 - Email: After saving a set or generating from a document, the token is shown in‑app and can be emailed to the set owner (if SMTP is configured). The From/CC behavior uses `SMTP_USER`/`ADMIN_EMAIL` as documented above.
+- Email details: Subject is “Your WizWord FlashCard set token — <Set Name>”. When generated from a document, the uploaded file is attached and the body includes the source file name.
 - Leaderboard scoping: The FlashCard Top 3 on pre‑game and game‑over screens is filtered by the active set’s token so you only see your token group.
 - Cascading deletion (new): When an owner deletes a FlashCard set, all imported references to that set (by token) are automatically removed from other users in `users.flashcards.json`. The share entry is also removed from `game_data/flash_shares.json` when present. If a user’s active set was that import, their `flash_active_set` is reset to another available set (or empty).
 
