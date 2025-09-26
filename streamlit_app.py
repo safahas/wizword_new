@@ -4738,38 +4738,7 @@ def display_game():
                                                 st.error('No usable items produced from document.')
                                     except Exception as e:
                                         st.error(f'Backend error: {e}')
-                        # Import by Token
-                        st.markdown("#### Import by Token")
-                        _imp_cols_pg2 = st.columns([2,1])
-                        with _imp_cols_pg2[0]:
-                            _import_tok_pg2 = st.text_input('Import by Token', value='', key='flash_import_token_pregame_below')
-                        with _imp_cols_pg2[1]:
-                            if st.button('Import', key='flash_import_btn_pregame_below'):
-                                try:
-                                    from backend.flash_share import load_share, import_share_to_user
-                                    _tokb = (_import_tok_pg2 or '').strip()
-                                    if not _tokb:
-                                        st.warning('Please enter a valid token to import.')
-                                    else:
-                                        _recb = load_share(_tokb)
-                                        if not _recb:
-                                            st.error('Invalid or expired token.')
-                                        else:
-                                            _ownerb = (_recb.get('owner') or 'user')
-                                            _titleb = (_recb.get('title') or 'flashcard')
-                                            _set_nameb = f"{_ownerb}/{_titleb}"
-                                            okb = import_share_to_user(_tokb, _uname_lower, set_name=_set_nameb)
-                                            if okb:
-                                                from backend.bio_store import set_active_flash_set_name
-                                                set_active_flash_set_name(_uname_lower, _set_nameb)
-                                                st.success(f"Imported '{_set_nameb}' from {_ownerb}.")
-                                                st.session_state['show_flashcard_settings'] = True
-                                                st.session_state['_render_flash_below'] = True
-                                                st.rerun()
-                                            else:
-                                                st.error('Failed to import: set limit reached or token invalid.')
-                                except Exception as e:
-                                    st.error(f'Import failed: {e}')
+                        # (Duplicate Import by Token removed; import is shown at panel top)
                 # Admin-only: render all user profiles when toggled in the sidebar
                 try:
                     if st.session_state.get('show_all_users_profiles'):
