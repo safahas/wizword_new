@@ -3594,31 +3594,7 @@ def display_game():
                                         st.error('Failed to delete set.')
                             except Exception:
                                 st.error('Error deleting set.')
-                    with cols_fc[1]:
-                        # Clear New Set Name before widget creation if flagged
-                        try:
-                            if st.session_state.pop('_clear_newset_name_pregame', False):
-                                st.session_state['flash_set_new_name_pregame'] = ''
-                        except Exception:
-                            pass
-                        _new_name = st.text_input('New Set Name', value='', key='flash_set_new_name_pregame')
-                    with cols_fc[2]:
-                        if st.button('Create/Use', key='flash_set_create_use_pregame'):
-                            try:
-                                _name = (_new_name or _sel or 'default').strip()
-                                if _name:
-                                    ok = upsert_flash_set(_uname_lower, _name)
-                                    if ok:
-                                        set_active_flash_set_name(_uname_lower, _name)
-                                        st.success(f"Using FlashCard set: {_name}")
-                                        # Request clearing on next render to avoid post-instantiation mutation
-                                        st.session_state['_clear_newset_name_pregame'] = True
-                                        st.session_state['show_flashcard_settings'] = True
-                                        st.rerun()
-                                    else:
-                                        st.error('Reached FlashCard set limit or invalid name.')
-                            except Exception:
-                                st.error('Failed to switch/create FlashCard set.')
+                    # New Set Name moved into the Build From Document block below
                         _enable_fc_text = os.getenv('ENABLE_FLASHCARD_TEXT', 'false').strip().lower() in ('1','true','yes','on')
                         if _enable_fc_text:
                             st.text_area(
@@ -3630,6 +3606,32 @@ def display_game():
                     # Build from document (moved above import)
                     st.markdown("<div style='height:6px'></div>", unsafe_allow_html=True)
                     st.markdown("#### Build From Document")
+                    # New Set Name controls (moved inside Build From Document)
+                    try:
+                        if st.session_state.pop('_clear_newset_name_pregame', False):
+                            st.session_state['flash_set_new_name_pregame'] = ''
+                    except Exception:
+                        pass
+                    _ns_cols = st.columns([2,1])
+                    with _ns_cols[0]:
+                        _new_name = st.text_input('New Set Name', value='', key='flash_set_new_name_pregame')
+                    with _ns_cols[1]:
+                        if st.button('Create/Use', key='flash_set_create_use_pregame'):
+                            try:
+                                from backend.bio_store import upsert_flash_set, set_active_flash_set_name
+                                _name = (_new_name or _sel or 'default').strip()
+                                if _name:
+                                    ok = upsert_flash_set(_uname_lower, _name)
+                                    if ok:
+                                        set_active_flash_set_name(_uname_lower, _name)
+                                        st.success(f"Using FlashCard set: {_name}")
+                                        st.session_state['_clear_newset_name_pregame'] = True
+                                        st.session_state['show_flashcard_settings'] = True
+                                        st.rerun()
+                                    else:
+                                        st.error('Reached FlashCard set limit or invalid name.')
+                            except Exception:
+                                st.error('Failed to switch/create FlashCard set.')
                     _doc_file_pg = st.file_uploader('Upload PDF, DOCX, or TXT', type=['pdf','docx','txt'], key='flash_doc_upload_pregame')
                     if st.button('Generate from Document', key='flash_doc_generate_pregame'):
                         # Refresh TIME_OVER panel timer on user action
@@ -4603,31 +4605,7 @@ def display_game():
                                             st.error('Failed to delete set.')
                                 except Exception:
                                     st.error('Error deleting set.')
-                        with cols_fc[1]:
-                            # Clear New Set Name (below panel) before widget creation if flagged
-                            try:
-                                if st.session_state.pop('_clear_newset_name_below', False):
-                                    st.session_state['flash_set_new_name_pregame_below'] = ''
-                            except Exception:
-                                pass
-                            _new_name = st.text_input('New Set Name', value='', key='flash_set_new_name_pregame_below')
-                        with cols_fc[2]:
-                            if st.button('Create/Use', key='flash_set_create_use_pregame_below'):
-                                try:
-                                    _name = (_new_name or _sel or 'default').strip()
-                                    if _name:
-                                        ok = upsert_flash_set(_uname_lower, _name)
-                                        if ok:
-                                            set_active_flash_set_name(_uname_lower, _name)
-                                            st.success(f"Using FlashCard set: {_name}")
-                                            st.session_state['_clear_newset_name_below'] = True
-                                            st.session_state['show_flashcard_settings'] = True
-                                            st.session_state['_render_flash_below'] = True
-                                            st.rerun()
-                                        else:
-                                            st.error('Reached FlashCard set limit or invalid name.')
-                                except Exception:
-                                    st.error('Failed to switch/create FlashCard set.')
+                        # (New Set Name moved into Build From Document block below)
                         _enable_fc_text2 = os.getenv('ENABLE_FLASHCARD_TEXT', 'false').strip().lower() in ('1','true','yes','on')
                         if _enable_fc_text2:
                             st.text_area(
@@ -4660,8 +4638,34 @@ def display_game():
                                 st.rerun()
                             except Exception:
                                 st.error('Failed to save FlashCard text.')
-                        # Build From Document (now below Import by Token)
+                        # Build From Document (now hosts New Set Name as well)
                         st.markdown("#### Build From Document")
+                        # New Set Name controls (below panel)
+                        try:
+                            if st.session_state.pop('_clear_newset_name_below', False):
+                                st.session_state['flash_set_new_name_pregame_below'] = ''
+                        except Exception:
+                            pass
+                        _ns_cols_b = st.columns([2,1])
+                        with _ns_cols_b[0]:
+                            _new_name = st.text_input('New Set Name', value='', key='flash_set_new_name_pregame_below')
+                        with _ns_cols_b[1]:
+                            if st.button('Create/Use', key='flash_set_create_use_pregame_below'):
+                                try:
+                                    _name = (_new_name or _sel or 'default').strip()
+                                    if _name:
+                                        ok = upsert_flash_set(_uname_lower, _name)
+                                        if ok:
+                                            set_active_flash_set_name(_uname_lower, _name)
+                                            st.success(f"Using FlashCard set: {_name}")
+                                            st.session_state['_clear_newset_name_below'] = True
+                                            st.session_state['show_flashcard_settings'] = True
+                                            st.session_state['_render_flash_below'] = True
+                                            st.rerun()
+                                        else:
+                                            st.error('Reached FlashCard set limit or invalid name.')
+                                except Exception:
+                                    st.error('Failed to switch/create FlashCard set.')
                         _doc_file_pg2 = st.file_uploader('Upload PDF, DOCX, or TXT', type=['pdf','docx','txt'], key='flash_doc_upload_pregame_below')
                         if st.button('Generate from Document', key='flash_doc_generate_pregame_below'):
                             try:
