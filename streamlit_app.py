@@ -3580,20 +3580,33 @@ def display_game():
                     with cols_fc[0]:
                         _sel_label = st.selectbox('Active FlashCard Set', options=_labels, index=_default_index, key='flash_set_select_pregame')
                         _sel = _label_map.get(_sel_label, _active_name)
-                        # Delete current set
-                        if st.button('Delete Set', key='flash_delete_set_pregame'):
-                            try:
-                                from backend.bio_store import delete_flash_set
-                                if _sel:
-                                    ok = delete_flash_set(_uname_lower, _sel)
-                                    if ok:
-                                        st.success(f"Deleted set: {_sel}")
+                        # Row of actions: Delete | Use
+                        _btn_cols = st.columns([1,1])
+                        with _btn_cols[0]:
+                            if st.button('Delete Set', key='flash_delete_set_pregame'):
+                                try:
+                                    from backend.bio_store import delete_flash_set
+                                    if _sel:
+                                        ok = delete_flash_set(_uname_lower, _sel)
+                                        if ok:
+                                            st.success(f"Deleted set: {_sel}")
+                                            st.session_state['show_flashcard_settings'] = True
+                                            st.rerun()
+                                        else:
+                                            st.error('Failed to delete set.')
+                                except Exception:
+                                    st.error('Error deleting set.')
+                        with _btn_cols[1]:
+                            if st.button('Use Set', key='flash_use_set_pregame'):
+                                try:
+                                    from backend.bio_store import set_active_flash_set_name
+                                    if _sel:
+                                        set_active_flash_set_name(_uname_lower, _sel)
+                                        st.success(f"Using FlashCard set: {_sel}")
                                         st.session_state['show_flashcard_settings'] = True
                                         st.rerun()
-                                    else:
-                                        st.error('Failed to delete set.')
-                            except Exception:
-                                st.error('Error deleting set.')
+                                except Exception:
+                                    st.error('Failed to switch to selected set.')
                     # New Set Name moved into the Build From Document block below
                         _enable_fc_text = os.getenv('ENABLE_FLASHCARD_TEXT', 'false').strip().lower() in ('1','true','yes','on')
                         if _enable_fc_text:
@@ -4580,31 +4593,45 @@ def display_game():
                         with cols_fc[0]:
                             _sel_label = st.selectbox('Active FlashCard Set', options=_labels, index=_default_index, key='flash_set_select_pregame_below')
                             _sel = _label_map.get(_sel_label, _active_name)
-                            if st.button('Delete Set', key='flash_delete_set_pregame_below'):
-                                try:
-                                    from backend.bio_store import delete_flash_set
-                                    from backend.flash_share import delete_share
-                                    if _sel:
-                                        ok = delete_flash_set(_uname_lower, _sel)
-                                        if ok:
-                                            # Also delete owned share, if any
-                                            try:
-                                                # Extract token from label "name [token]"
-                                                _toklbl = (_sel_label or '')
-                                                import re as _re
-                                                m = _re.search(r"\[(?P<t>[0-9a-fA-F]{6,})\]", _toklbl)
-                                                if m:
-                                                    delete_share(_uname_lower, m.group('t'))
-                                            except Exception:
-                                                pass
-                                            st.success(f"Deleted set: {_sel}")
+                            _btn_cols_b = st.columns([1,1])
+                            with _btn_cols_b[0]:
+                                if st.button('Delete Set', key='flash_delete_set_pregame_below'):
+                                    try:
+                                        from backend.bio_store import delete_flash_set
+                                        from backend.flash_share import delete_share
+                                        if _sel:
+                                            ok = delete_flash_set(_uname_lower, _sel)
+                                            if ok:
+                                                # Also delete owned share, if any
+                                                try:
+                                                    # Extract token from label "name [token]"
+                                                    _toklbl = (_sel_label or '')
+                                                    import re as _re
+                                                    m = _re.search(r"\[(?P<t>[0-9a-fA-F]{6,})\]", _toklbl)
+                                                    if m:
+                                                        delete_share(_uname_lower, m.group('t'))
+                                                except Exception:
+                                                    pass
+                                                st.success(f"Deleted set: {_sel}")
+                                                st.session_state['show_flashcard_settings'] = True
+                                                st.session_state['_render_flash_below'] = True
+                                                st.rerun()
+                                            else:
+                                                st.error('Failed to delete set.')
+                                    except Exception:
+                                        st.error('Error deleting set.')
+                            with _btn_cols_b[1]:
+                                if st.button('Use Set', key='flash_use_set_pregame_below'):
+                                    try:
+                                        from backend.bio_store import set_active_flash_set_name
+                                        if _sel:
+                                            set_active_flash_set_name(_uname_lower, _sel)
+                                            st.success(f"Using FlashCard set: {_sel}")
                                             st.session_state['show_flashcard_settings'] = True
                                             st.session_state['_render_flash_below'] = True
                                             st.rerun()
-                                        else:
-                                            st.error('Failed to delete set.')
-                                except Exception:
-                                    st.error('Error deleting set.')
+                                    except Exception:
+                                        st.error('Failed to switch to selected set.')
                         # (New Set Name moved into Build From Document block below)
                         _enable_fc_text2 = os.getenv('ENABLE_FLASHCARD_TEXT', 'false').strip().lower() in ('1','true','yes','on')
                         if _enable_fc_text2:
