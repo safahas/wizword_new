@@ -3758,39 +3758,7 @@ def display_game():
                                             st.error('No usable items produced from document.')
                                 except Exception as e:
                                     st.error(f'Backend error: {e}')
-                    # Import shared set by token (moved below)
-                    st.markdown("#### Import by Token")
-                    _imp_cols_pg = st.columns([2,1])
-                    with _imp_cols_pg[0]:
-                        _import_tok_pg = st.text_input('Import by Token', value='', key='flash_import_token_pregame')
-                    with _imp_cols_pg[1]:
-                        if st.button('Import', key='flash_import_btn_pregame'):
-                            try:
-                                from backend.flash_share import load_share, import_share_to_user
-                                _tok = (_import_tok_pg or '').strip()
-                                if not _tok:
-                                    st.warning('Please enter a valid token to import.')
-                                else:
-                                    _rec = load_share(_tok)
-                                    if not _rec:
-                                        st.error('Invalid or expired token.')
-                                    else:
-                                        _owner = (_rec.get('owner') or 'user')
-                                        _title = (_rec.get('title') or 'flashcard')
-                                        _set_name = f"{_owner}/{_title}"
-                                        ok = import_share_to_user(_tok, _uname_lower, set_name=_set_name)
-                                        if ok:
-                                            from backend.bio_store import set_active_flash_set_name
-                                            set_active_flash_set_name(_uname_lower, _set_name)
-                                            st.session_state.pop('_top3_start_cache', None)
-                                            st.session_state['top3_rev'] = st.session_state.get('top3_rev', 0) + 1
-                                            st.success(f"Imported '{_set_name}' from {_owner}.")
-                                            st.session_state['show_flashcard_settings'] = True
-                                            st.rerun()
-                                        else:
-                                            st.error('Failed to import: set limit reached or token invalid.')
-                            except Exception as e:
-                               st.error(f'Import failed: {e}')
+                    # (lower duplicate Import by Token removed; handled at top of panel)
                     # Pre-render a placeholder for live status before the button to ensure visibility
                     _flash_status_pre = st.empty()
                     _enable_fc_text_btn = os.getenv('ENABLE_FLASHCARD_TEXT', 'false').strip().lower() in ('1','true','yes','on')
@@ -3919,6 +3887,42 @@ def display_game():
             # Render FlashCard Settings panel here when requested
             if st.session_state.get('show_flashcard_settings', False) and not st.session_state.get('_render_flash_below', False):
                 st.markdown("---")
+                # Import by Token placed BEFORE the FlashCard Settings header
+                try:
+                    user = st.session_state.get('user', {}) or {}
+                    _uname_lower = (user.get('username','') or '').lower()
+                    st.markdown("#### Import by Token")
+                    _imp_cols_pg_top = st.columns([2,1])
+                    with _imp_cols_pg_top[0]:
+                        _import_tok_pg_top = st.text_input('Import by Token', value='', key='flash_import_token_pregame')
+                    with _imp_cols_pg_top[1]:
+                        if st.button('Import', key='flash_import_btn_pregame'):
+                            try:
+                                from backend.flash_share import load_share, import_share_to_user
+                                _tok = (_import_tok_pg_top or '').strip()
+                                if not _tok:
+                                    st.warning('Please enter a valid token to import.')
+                                else:
+                                    _rec = load_share(_tok)
+                                    if not _rec:
+                                        st.error('Invalid or expired token.')
+                                    else:
+                                        _owner = _rec.get('owner','')
+                                        _title = _rec.get('title','') or 'shared'
+                                        _set_name = f"{_owner}/{_title}"
+                                        ok = import_share_to_user(_tok, _uname_lower, set_name=_set_name)
+                                        if ok:
+                                            from backend.bio_store import set_active_flash_set_name
+                                            set_active_flash_set_name(_uname_lower, _set_name)
+                                            st.success(f"Imported '{_set_name}' from {_owner}.")
+                                            st.session_state['show_flashcard_settings'] = True
+                                            st.rerun()
+                                        else:
+                                            st.error('Failed to import: set limit reached or token invalid.')
+                            except Exception as e:
+                               st.error(f'Import failed: {e}')
+                except Exception:
+                    pass
                 st.markdown("### FlashCard Settings")
                 user = st.session_state.get('user', {}) or {}
                 _enable_flashcard_ui = os.getenv('ENABLE_FLASHCARD_CATEGORY', 'true').strip().lower() in ('1','true','yes','on')
@@ -4147,37 +4151,7 @@ def display_game():
                                             st.error('No usable items produced from document.')
                                 except Exception as e:
                                     st.error(f'Backend error: {e}')
-                    # Import shared set by token (now below Build From Document)
-                    st.markdown("#### Import by Token")
-                    _imp_cols_pg = st.columns([2,1])
-                    with _imp_cols_pg[0]:
-                        _import_tok_pg = st.text_input('Import by Token', value='', key='flash_import_token_pregame')
-                    with _imp_cols_pg[1]:
-                        if st.button('Import', key='flash_import_btn_pregame'):
-                            try:
-                                from backend.flash_share import load_share, import_share_to_user
-                                _tok = (_import_tok_pg or '').strip()
-                                if not _tok:
-                                    st.warning('Please enter a valid token to import.')
-                                else:
-                                    _rec = load_share(_tok)
-                                    if not _rec:
-                                        st.error('Invalid or expired token.')
-                                    else:
-                                        _owner = _rec.get('owner','')
-                                        _title = _rec.get('title','') or 'shared'
-                                        _set_name = f"{_owner}/{_title}"
-                                        ok = import_share_to_user(_tok, _uname_lower, set_name=_set_name)
-                                        if ok:
-                                            from backend.bio_store import set_active_flash_set_name
-                                            set_active_flash_set_name(_uname_lower, _set_name)
-                                            st.success(f"Imported '{_set_name}' from {_owner}.")
-                                            st.session_state['show_flashcard_settings'] = True
-                                            st.rerun()
-                                        else:
-                                            st.error('Failed to import: set limit reached or token invalid.')
-                            except Exception as e:
-                               st.error(f'Import failed: {e}')
+                    # (Import by Token moved to top)
                     if st.button('Save FlashCard Text', key='save_flash_text_pregame'):
                         try:
                             from backend.bio_store import set_flash_text, set_flash_pool
@@ -4260,6 +4234,7 @@ def display_game():
                 else:
                     # Restrict FlashCard Top 3 to same shared token
                     if chosen_cat == 'flashcard':
+                        top3_rows = []
                         try:
                             from backend.bio_store import get_active_flash_set_name, get_flash_set_token
                             uname = (st.session_state.get('user', {}) or {}).get('username') or ''
@@ -4267,7 +4242,6 @@ def display_game():
                         except Exception:
                             token = None
                         if token:
-                            # Compute Top 3 among users with same token
                             try:
                                 import os as _os, json as _json
                                 flash_path = _os.getenv('USERS_FLASH_FILE', 'users.flashcards.json')
@@ -4277,17 +4251,14 @@ def display_game():
                                         users_flash = _json.load(f)
                                 allowed = set()
                                 for un, rec in (users_flash or {}).items():
-                                    try:
-                                        sets = rec.get('flash_sets') or {}
-                                        active = rec.get('flash_active_set')
-                                        if isinstance(sets, dict) and active and active in sets:
-                                            item = sets.get(active) or {}
-                                            if str(item.get('ref_token') or '') == str(token) or str(item.get('token') or '') == str(token):
-                                                allowed.add(un)
-                                    except Exception:
-                                        continue
+                                    sets = (rec or {}).get('flash_sets') or {}
+                                    active = (rec or {}).get('flash_active_set')
+                                    if isinstance(sets, dict) and active and active in sets:
+                                        item = sets.get(active) or {}
+                                        if str(item.get('ref_token') or '') == str(token) or str(item.get('token') or '') == str(token):
+                                            allowed.add((un or '').lower())
                                 games = get_all_game_results()
-                                games = [g for g in games if (g.get('subject','').lower() == 'flashcard') and (g.get('nickname','').lower() in allowed)]
+                                games = [g for g in games if (g.get('subject','').lower() == 'flashcard') and ((g.get('nickname','') or '').lower() in allowed)]
                                 user_highest = {}
                                 user_date = {}
                                 for g in games:
@@ -4309,8 +4280,6 @@ def display_game():
                                 top3_rows = [{ 'User': u, 'Highest SEI': round(sei, 4), 'Date': user_date.get(u,'') } for u, sei in sorted_rows]
                             except Exception:
                                 top3_rows = []
-                        else:
-                            top3_rows = []
                     else:
                         top3_rows = get_top10_from_aggregates(chosen_cat)[:3]
                 # Do not fall back to 'any' when FlashCard is selected; enforce token scoping
@@ -4414,6 +4383,42 @@ def display_game():
                 if st.session_state.get('show_flashcard_settings', False) and st.session_state.get('_render_flash_below', False):
                     st.markdown("---")
                     st.markdown("### FlashCard Settings")
+                    # Import by Token — render at the very top of the panel (below header)
+                    try:
+                        _uname_lower = ((st.session_state.get('user') or {}).get('username') or '').lower()
+                        st.markdown("#### Import by Token")
+                        _imp_cols_top_below = st.columns([2,1])
+                        with _imp_cols_top_below[0]:
+                            _import_tok_top_below = st.text_input('Import by Token', value='', key='flash_import_token_below_header')
+                        with _imp_cols_top_below[1]:
+                            if st.button('Import', key='flash_import_btn_below_header'):
+                                try:
+                                    from backend.flash_share import load_share, import_share_to_user
+                                    _tok_hdr = (_import_tok_top_below or '').strip()
+                                    if not _tok_hdr:
+                                        st.warning('Please enter a valid token to import.')
+                                    else:
+                                        _rec_hdr = load_share(_tok_hdr)
+                                        if not _rec_hdr:
+                                            st.error('Invalid or expired token.')
+                                        else:
+                                            _owner_hdr = (_rec_hdr.get('owner') or 'user')
+                                            _title_hdr = (_rec_hdr.get('title') or 'flashcard')
+                                            _set_name_hdr = f"{_owner_hdr}/{_title_hdr}"
+                                            ok_hdr = import_share_to_user(_tok_hdr, _uname_lower, set_name=_set_name_hdr)
+                                            if ok_hdr:
+                                                from backend.bio_store import set_active_flash_set_name
+                                                set_active_flash_set_name(_uname_lower, _set_name_hdr)
+                                                st.success(f"Imported '{_set_name_hdr}' from {_owner_hdr}.")
+                                                st.session_state['show_flashcard_settings'] = True
+                                                st.session_state['_render_flash_below'] = True
+                                                st.rerun()
+                                            else:
+                                                st.error('Failed to import: set limit reached or token invalid.')
+                                except Exception as e:
+                                    st.error(f'Import failed: {e}')
+                    except Exception:
+                        pass
                     user = st.session_state.get('user', {}) or {}
                     _enable_flashcard_ui = os.getenv('ENABLE_FLASHCARD_CATEGORY', 'true').strip().lower() in ('1','true','yes','on')
                     if _enable_flashcard_ui:
@@ -4620,7 +4625,7 @@ def display_game():
                                 st.rerun()
                             except Exception:
                                 st.error('Failed to save FlashCard text.')
-                        # Build From Document
+                        # Build From Document (now below Import by Token)
                         st.markdown("#### Build From Document")
                         _doc_file_pg2 = st.file_uploader('Upload PDF, DOCX, or TXT', type=['pdf','docx','txt'], key='flash_doc_upload_pregame_below')
                         if st.button('Generate from Document', key='flash_doc_generate_pregame_below'):
