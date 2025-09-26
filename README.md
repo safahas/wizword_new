@@ -88,6 +88,11 @@ Backend .env precedence and debugging:
   - Beat: Timed sprint — default {int(os.getenv('BEAT_MODE_TIME', 300)) if False else 300}s
 - Pick a category or any for random
 - Interact during play:
+- FlashCard Settings quick guide:
+  - Import by Token at the top; then select sets from the drop‑down.
+  - Use Set next to Delete Set switches instantly to the selected set.
+  - To create a new set, scroll to Build From Document, enter New Set Name, and click Create/Use. Then you can upload a file and Generate from Document.
+  - Your group’s FlashCard leaderboards are filtered by the active token; the token is shown in the header.
   - Ask yes/no questions (−1)
   - Request up to 3 hints (−10 each)
   - Guess any time (wrong −10, correct +20 × word length)
@@ -407,6 +412,16 @@ USERS_BIO_FILE=users_bio.json
 - Upload PDF/DOCX/TXT in FlashCard Settings to build the pool from the file’s text.
 - The backend enforces size via `UPLOAD_MAX_BYTES` (default 10240 = 10KB). Increase if your files are larger.
 - On success, the UI shows item count and the FlashCard token. If SMTP is configured, the token is emailed to you with the uploaded file attached. The email subject includes the set name, and the body lists the source file name.
+
+#### Managing FlashCard sets (Create, Use, Delete)
+
+- Import by Token (top of panel): paste a token shared by someone and click Import. The input clears automatically after a successful import.
+- Active FlashCard Set drop‑down: pick any of your sets.
+  - Delete Set: removes the selected set. If it’s an owned set, any imported references in other users are removed automatically (cascading deletion). If it’s an import, only the reference is removed.
+  - Use Set: switches to the selected set without altering its content.
+- Build From Document block:
+  - New Set Name + Create/Use: creates a new set with that name and makes it active. The name field clears after creation.
+  - Upload a file (PDF/DOCX/TXT) and click Generate from Document to populate the pool for the active set. The token is ensured and, if SMTP is set, a token email is sent with the document attached.
 
 ### FlashCard Hint Generation & Persistence
 

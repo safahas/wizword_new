@@ -2304,6 +2304,15 @@ def display_welcome():
 
             {_personal_section}{_flashcard_section}
 
+            #### FlashCard Settings — Step by Step
+            1. Open FlashCard Settings on the pre‑game screen.
+            2. Import by Token (top): paste a token and click Import. The field clears after success.
+            3. Choose a set from "Active FlashCard Set".
+               - Click **Use Set** to switch; click **Delete Set** to remove it.
+            4. To create a new set: in "Build From Document" enter **New Set Name**, click **Create/Use**.
+            5. Optional: upload a PDF/DOCX/TXT and click **Generate from Document** to fill the pool.
+            6. Your FlashCard leaderboards are filtered by the active token (shown in the header).
+
             #### Tips
             - Start with vowels/common letters.
             - Use questions to narrow the space before spending hints.
