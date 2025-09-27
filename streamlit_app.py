@@ -1114,7 +1114,7 @@ def display_login():
     }
     .wizword-animated-text {
         font-family: 'Baloo 2', 'Poppins', 'Arial Black', Arial, sans-serif !important;
-        font-size: 1.4em;                       /* 30% smaller */
+        font-size: 1.4em;                       /* keep size; improve contrast below */
         font-weight: 900;
         letter-spacing: 0.10em;
         background: linear-gradient(90deg, #FFD93D 0%, #FF6B6B 40%, #4ECDC4 80%, #FFD93D 100%);
@@ -1123,9 +1123,11 @@ def display_login():
         -webkit-background-clip: text;
         color: transparent;
         -webkit-text-fill-color: transparent;
-        -webkit-text-stroke: 1px rgba(255,255,255,0.65); /* readable outline when gradient is faint */
-        filter: drop-shadow(0 0 10px #FFD93D99) drop-shadow(0 0 8px #4ECDC499);
-        text-shadow: 0 0 14px #FFD93D99, 0 0 18px #FF6B6B99, 0 0 10px #4ECDC488, 1px 1px 6px rgba(0,0,0,0.18);
+        /* Stronger dark outline for better readability */
+        -webkit-text-stroke: 2px rgba(0,0,0,0.65);
+        /* Reduce bright glow and add darker shadow for contrast */
+        filter: drop-shadow(0 0 6px rgba(0,0,0,0.35)) drop-shadow(0 0 10px rgba(255,217,61,0.35));
+        text-shadow: 0 2px 8px rgba(0,0,0,0.35), 0 0 10px rgba(255,217,61,0.45), 0 0 8px rgba(78,205,196,0.35);
         animation: gradient-move 4s linear infinite, pop 2.5s cubic-bezier(.36,1.56,.64,1) infinite, glow-pulse 2.2s ease-in-out infinite;
         text-align: center;
         margin: 0 auto;
@@ -1269,9 +1271,10 @@ def display_login():
             )
         _enable_flashcard_htp = os.getenv('ENABLE_FLASHCARD_CATEGORY', 'true').strip().lower() in ('1','true','yes','on')
         flashcard_section = (
-            "#### FlashCard Category (Your Text)\n"
-            "- Paste your own text in Profile → FlashCard Text. The game extracts meaningful words (excludes stopwords) and generates one concise hint per word.\n"
-            "- API‑first for hints, with fallback to local; saves generated hints into your flash pool. Auto‑regenerates when you change and save the text.\n\n"
+            "#### FlashCard Category (Upload or Import)\n"
+            "- Build From Document: upload a PDF/DOCX/TXT to generate a pool for your active set. A token is ensured and, if email is configured, the token is emailed to you (with the uploaded file attached).\n"
+            "- Import by Token (top of FlashCard Settings): paste a token and click Import to use a shared set. Imports reference the owner’s set, and the field clears after success.\n"
+            "- Manage sets: pick from ‘Active FlashCard Set’, use **Use Set** to switch instantly, or **Delete Set** to remove. Leaderboards are filtered by the active token.\n\n"
         ) if _enable_flashcard_htp else ""
         st.markdown(f"""
         ### How to Play
