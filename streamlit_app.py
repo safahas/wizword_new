@@ -1186,7 +1186,7 @@ def display_login():
     if 'login_show_howto' not in st.session_state:
         st.session_state['login_show_howto'] = False
     with st.expander("☰ Menu", expanded=False):
-        c1, c2 = st.columns(2)
+        c1, c2, c3 = st.columns(3)
         with c1:
             if st.button("Welcome to WizWord!", key="login_menu_welcome"):
                 st.session_state['login_show_welcome'] = not st.session_state['login_show_welcome']
@@ -1194,6 +1194,10 @@ def display_login():
         with c2:
             if st.button("How to Play", key="login_menu_howto"):
                 st.session_state['login_show_howto'] = not st.session_state['login_show_howto']
+                st.rerun()
+        with c3:
+            if st.button("Why try WizWord?", key="login_menu_why"):
+                st.session_state['login_show_why'] = not st.session_state.get('login_show_why', False)
                 st.rerun()
 
     # --- Introductory Section (conditional) ---
@@ -1234,6 +1238,21 @@ def display_login():
         
         Ready to boost your brainpower — one word at a time?
         Let the game begin! ✨
+            </p>
+        </div>
+        """, unsafe_allow_html=True)
+
+    # --- Why try WizWord? (conditional) ---
+    if st.session_state.get('login_show_why'):
+        st.markdown("""
+        <div style='max-width: 760px; margin: 0 auto 1.5em auto; background: rgba(255,255,255,0.45); border-radius: 1.2em; padding: 1.25em 1.6em; box-shadow: 0 1px 8px rgba(0,0,0,0.08);'>
+            <h2 style="text-align:center; color:#222; margin-bottom:0.4em; font-size:1.8em;">Why try WizWord?</h2>
+            <p style="font-size:1.1em; color:#111; line-height:1.55em;">
+            WizWord is an AI-powered experience that learns how you think, nudges your memory, and adjusts the challenge as you play.<br/>
+            Our goal isn’t clicks or gimmicks—it’s real cognitive value.<br/>
+            Students, parents, educators, professionals… anyone who likes to stretch their brain a bit will feel at home here.<br/>
+            If Wordle met GPT, with dynamic hints, adaptive logic, and pattern recognition—that’s WizWord. Think Duolingo for critical thinking.<br/>
+            If you’re curious, give it two minutes. If it doesn’t spark anything, tell us why and we’ll make it better.
             </p>
         </div>
         """, unsafe_allow_html=True)
