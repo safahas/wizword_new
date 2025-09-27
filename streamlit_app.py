@@ -902,20 +902,21 @@ st.markdown(
             justify-content: center !important;
         }
         .wizword-banner-subtitle {
-            font-size: 1em; /* Reduced from 1.45em */
-            color: #fff;
-            opacity: 0.98;
-            letter-spacing: 0.07em;
+            font-size: 1.35em; /* Larger and clearer */
+            color: #000; /* Black text */
+            opacity: 1;
+            letter-spacing: 0.08em;
             margin-top: 3px;
-            padding: 0.15em 0.7em;
+            padding: 0.18em 0.9em;
             border-radius: 0.7em;
-            background: rgba(255,255,255,0.13);
-            box-shadow: 0 1px 4px rgba(255,255,255,0.06);
-            text-shadow: 0 1px 4px #FFD93D88, 0 1px 2px rgba(0,0,0,0.07);
+            background: rgba(255,255,255,0.22);
+            box-shadow: 0 1px 6px rgba(255,255,255,0.10);
+            text-shadow: 0 1px 0 rgba(255,255,255,0.85);
             text-align: center;
             display: flex;
             justify-content: center;
             align-items: center;
+            font-weight: 800;
         }
     }
     </style>
@@ -1131,20 +1132,21 @@ def display_login():
         padding: 0 0.05em;
     }
     .wizword-banner-subtitle {
-        font-size: 0.7em; /* 30% smaller */
-        color: #fff;
-        opacity: 0.98;
-        letter-spacing: 0.07em;
-        margin-top: 3px;
-        padding: 0.15em 0.7em;
+        font-size: 1.5em; /* Larger */
+        color: #000; /* Black for clarity */
+        opacity: 1;
+        letter-spacing: 0.08em;
+        margin-top: 4px;
+        padding: 0.2em 0.9em;
         border-radius: 0.7em;
-        background: rgba(255,255,255,0.13);
-        box-shadow: 0 1px 4px rgba(255,255,255,0.06);
-        text-shadow: 0 1px 4px #FFD93D88, 0 1px 2px rgba(0,0,0,0.07);
+        background: rgba(255,255,255,0.22);
+        box-shadow: 0 1px 6px rgba(255,255,255,0.10);
+        text-shadow: 0 1px 0 rgba(255,255,255,0.85);
         text-align: center;
         display: flex;
         justify-content: center;
         align-items: center;
+        font-weight: 800;
     }
     </style>
     """, unsafe_allow_html=True)
