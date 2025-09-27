@@ -2214,7 +2214,7 @@ def display_welcome():
                 pass
             st.markdown(f"""
             <div style='font-size:1.0em; font-weight:700; color:#fff; margin:0.5em 0 0.25em 0;'>
-                🏆 Global Leaderboard (Top 3 by SEI) - {nice_cat}{token_label}
+                🏆 Global Leaderboard (Top 3 by SEI) - <span style='color:#000; font-size:1.25em; text-shadow:0 1px 0 rgba(255,255,255,.6);'>{nice_cat}</span>{token_label}
             </div>
             """, unsafe_allow_html=True)
             if top3_rows:
@@ -4376,7 +4376,7 @@ def display_game():
                         token_label = ''
                 st.markdown(f"""
                 <div style='font-size:1.0em; font-weight:700; color:#fff; margin:1em 0 0.25em 0;'>
-                    🏆 Global Leaderboard (Top 3 by SEI) - {nice_cat}{token_label}
+                    🏆 Global Leaderboard (Top 3 by SEI) - <span style='color:#000; font-size:1.25em; text-shadow:0 1px 0 rgba(255,255,255,.6);'>{nice_cat}</span>{token_label}
                 </div>
                 """, unsafe_allow_html=True)
                 if top3_rows:
@@ -6489,7 +6489,7 @@ def display_game_over(game_summary):
             allowed_users = None
     st.markdown(f"""
     <div style='font-size:1.1em; font-weight:700; color:#fff; margin-bottom:0.5em;'>
-        🏆 Global Leaderboard (Top 3 by SEI) - {(leaderboard_category.title() if leaderboard_category != 'All Categories' else 'All Categories')}{token_label}
+        🏆 Global Leaderboard (Top 3 by SEI) - <span style='color:#000000; font-size:1.35em; text-shadow:0 1px 0 rgba(255,255,255,.7);'>{(leaderboard_category.title() if leaderboard_category != 'All Categories' else 'All Categories')}</span>{token_label}
     </div>
     """, unsafe_allow_html=True)
     user_sei = {}
