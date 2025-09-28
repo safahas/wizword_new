@@ -1323,7 +1323,7 @@ def display_login():
                     st.session_state['user'] = {
                         'username': 'guest',
                         'email': '',
-                        'default_category': 'general'
+                        'default_category': '4th_grade'
                     }
                     st.session_state['logged_in'] = True
                     st.session_state['auth_mode'] = 'login'
@@ -4409,7 +4409,8 @@ def display_game():
                     st.info("No games available yet for this category.")
                 # Change Category under Top 10
                 st.markdown("<div class='beat-change-cat' style='display:inline-block;margin-top:8px;'>", unsafe_allow_html=True)
-                if st.button('Change Category', key='change_category_btn_beat_start'):
+                _is_guest = (((st.session_state.get('user') or {}).get('username') or '').strip().lower() == 'guest')
+                if st.button('Change Category', key='change_category_btn_beat_start', disabled=_is_guest):
                     st.session_state['change_category'] = True
                     # Refresh TIME_OVER panel timer on user action
                     try:
@@ -4429,6 +4430,8 @@ def display_game():
                         pass
                     st.rerun()
                 st.markdown("</div>", unsafe_allow_html=True)
+                if _is_guest:
+                    st.caption("Category changes are disabled in guest mode. Please sign in to change category.")
                 # FlashCard Settings button placed directly below Change Category
                 # Toggleable FlashCard Settings button (expand/collapse), blocked for 'guest'
                 _uname_cur = ((st.session_state.get('user') or {}).get('username') or '').strip().lower()
