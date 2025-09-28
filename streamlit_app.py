@@ -6162,7 +6162,27 @@ def display_game_over(game_summary):
             running_category = game_summary.get('subject', None)
         if running_category:
             user_games = [g for g in user_games if g.get('subject', '').lower() == running_category.lower()]
-        if user_games:
+        # If guest user, always show a demo SEI graph even without history
+        _is_guest_user = ((st.session_state.get('user') or {}).get('username', '').strip().lower() == 'guest') or st.session_state.get('guest_mode', False)
+        if _is_guest_user:
+            import matplotlib.pyplot as plt
+            from datetime import datetime, timedelta
+            # Demo: generate 7 days of SEI with a gentle upward trend
+            dates = [(datetime.now() - timedelta(days=(6 - i))).strftime('%Y-%m-%d') for i in range(7)]
+            sei_values = [round(0.25 + i * 0.12 + (0.05 if (i % 2 == 0) else -0.02), 2) for i in range(7)]
+            fig_demo, ax_demo = plt.subplots(figsize=(6, 3))
+            ax_demo.plot(dates, sei_values, marker='o', linewidth=2, color='tab:green', label='SEI (Demo)')
+            ax_demo.set_xlabel('Session')
+            ax_demo.set_ylabel('SEI (Score/Time Index)')
+            cat_lbl = (running_category or 'Flashcard').title()
+            ax_demo.set_title(f"{cat_lbl} — Score Efficiency Index (SEI) per Game (Demo)")
+            ax_demo.set_xticks(dates)
+            ax_demo.set_xticklabels(dates, rotation=45, ha='right', fontsize=8)
+            ax_demo.legend(loc='upper left')
+            fig_demo.tight_layout()
+            st.pyplot(fig_demo)
+            st.caption("Demo SEI trend shown for guest mode. Sign in to track your real performance.")
+        elif user_games:
             import matplotlib.pyplot as plt
             # ...
             import seaborn as sns
