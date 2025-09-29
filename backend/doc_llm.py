@@ -19,48 +19,51 @@ MODEL = os.getenv("OPENROUTER_MODEL", "gpt-4o")
 
 
 def _build_prompt(doc_text: str, count: int) -> dict:
-    system = (
-        "You are a helpful assistant that extracts key vocabulary from a document and "
-        "returns EXACT JSON—no code fences, no commentary."
-    )
     # How many hints per word to request (default 3)
     try:
         hints_per_word = int(os.getenv("FLASHCARD_HINTS_PER_WORD", "3"))
     except Exception:
         hints_per_word = 3
 
-    user = f"""You are powering a word/hint generator for a vocabulary game.
+    system = (
+        "You are powering a flash‑card generator for a comprehension game. "
+        "Always return STRICT JSON only (no markdown, no code fences, no prose)."
+    )
 
-INPUT DOCUMENT (sanitized, truncated):
----
-{doc_text}
----
+    user = (
+        "You are powering a flash-card generator for a comprehension game.\n\n"
+        "DOCUMENT CONTENT (sanitized, may be truncated):\n---\n"
+        f"{doc_text}\n"
+        "---\n\n"
+        "TASK:\n"
+        f"1. Select exactly {count} words that best capture the core meaning of the document.\n"
+        "   - Each word MUST appear in the document text itself.\n"
+        "   - Each must be 3–13 letters, A–Z only (no digits, spaces, apostrophes, or hyphens).\n"
+        "   - Choose significant content words that highlight key themes, actors, or concepts.\n"
+        "   - Avoid filler/function words (pronouns, determiners, conjunctions, prepositions, adverbs)\n"
+        "     like: the, and, very, with, which, her, she, he, they, it, you, we, this, that, these, those,\n"
+        "     a, an, some, many, most, few, more, less, any, all, none, and similar.\n"
+        f"2. For each selected word, generate EXACTLY {hints_per_word} short hints grounded in THIS document:\n"
+        "   - Do NOT include the word itself (no case-insensitive matches or substrings).\n"
+        "   - Hint A: The meaning or role of the word in the context of THIS document.\n"
+        "   - Hint B: A direct reference to how it appears or functions in THIS text.\n"
+        "   - Hint C: A related idea, effect, or consequence mentioned in the document.\n"
+        f"3. Output STRICT JSON ONLY: keys = words, values = arrays of {hints_per_word} hints.\n\n"
+        "FORMAT EXAMPLE (structure only; do not copy content):\n"
+        "{\n"
+        "  \"Equity\": [\n"
+        "    \"Fair treatment described as essential in the text.\",\n"
+        "    \"Linked to protections ensuring equal opportunity.\",\n"
+        "    \"Presented as a guiding principle in the document.\"\n"
+        "  ],\n"
+        "  \"Harass\": [\n"
+        "    \"Unwanted behavior creating an unsafe environment.\",\n"
+        "    \"Explicitly prohibited in the workplace section.\",\n"
+        "    \"Connected to procedures for reporting and remedies.\"\n"
+        "  ]\n"
+        "}"
+    )
 
-TASK:
-1) Choose exactly {count} important words that best test comprehension of the above text.
-2) Constraints for words:
-   - 3–13 letters, A–Z only (no spaces, digits, apostrophes, or hyphens)
-   - Must appear in the document
-   - Prefer nouns or proper nouns central to the passage; high‑signal content words
-   - Do NOT select function words (pronouns, determiners, conjunctions, prepositions, fillers) such as:
-     her, she, he, they, it, you, we, I, this, that, these, those, who, whom, whose,
-     a, an, the, some, many, most, few, more, less, any, all, none, one, two,
-     and, or, but, because, however, therefore, thus, with, without, from, to, into, onto,
-     over, under, across, through, during, before, after, between, against, among, about,
-     like, via, per, here, there, where, when, while, then, than, very, really, quite, maybe,
-     often, sometimes, usually, always, never, again, still
-3) For each selected word, produce EXACTLY {hints_per_word} short, simple hints:
-   - Do NOT include the word itself in any hint
-   - Hints must be diverse and grounded in the document context
-   - Keep them age-appropriate and clear
-4) Output STRICT JSON as an object mapping words to arrays of {hints_per_word} strings.
-
-OUTPUT FORMAT EXAMPLE (structure only; not actual content):
-{{
-  "WordOne": ["hint1", "hint2", "hint{hints_per_word}"],
-  "WordTwo": ["hint1", "hint2", "hint{hints_per_word}"]
-}}
-"""
     body = {
         "model": MODEL,
         "messages": [

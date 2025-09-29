@@ -2,7 +2,8 @@ from dotenv import load_dotenv
 import os
 # Updated 07/28
 # Always use the absolute path to your .env in the current project directory
-load_dotenv(dotenv_path=os.path.join(os.getcwd(), ".env"))
+# Ensure UI env follows .env even if shell has old values
+load_dotenv(dotenv_path=os.path.join(os.getcwd(), ".env"), override=True)
 import random
 import string
 import streamlit as st
@@ -3976,11 +3977,17 @@ def display_game():
                     _active_fc = get_active_flash_set_name(_uname_fc) or 'flashcard'
                     _txt_fc = (get_flash_set_text(_uname_fc, _active_fc) or '').strip()
                     _pool_fc = get_flash_set_pool(_uname_fc, _active_fc) or []
+                    # Prefer UI .env value, fallback to WordSelector default
                     try:
-                        from backend.word_selector import WordSelector
-                        _target_fc = getattr(WordSelector(), 'flash_words_count', 10)
+                        _target_fc = int(os.getenv('FLASHCARD_POOL_MAX', '').strip() or '0')
                     except Exception:
-                        _target_fc = 10
+                        _target_fc = 0
+                    if not _target_fc:
+                        try:
+                            from backend.word_selector import WordSelector
+                            _target_fc = getattr(WordSelector(), 'flash_words_count', 10)
+                        except Exception:
+                            _target_fc = 10
                     if _txt_fc and len(_pool_fc) < _target_fc:
                         st.info(f"Preparing FlashCard words and hints... ({len(_pool_fc)}/{_target_fc})")
                         # Auto-hide this notice after a short grace period to avoid appearing stuck
