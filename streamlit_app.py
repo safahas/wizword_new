@@ -1905,15 +1905,20 @@ def display_welcome():
                         user_highest_sei[user] = sei
                 top3 = sorted(user_highest_sei.items(), key=lambda x: x[1], reverse=True)[:3]
                 nice_cat = str(current_cat).replace('_',' ').title()
-                st.markdown(f"""
-                <div style='font-size:1.0em; font-weight:700; color:#fff; margin:0.5em 0 0.25em 0;'>
-                    🏆 Global Top 3 by SEI — {nice_cat}
-                </div>
-                """, unsafe_allow_html=True)
-                if top3:
-                    st.table([{ 'User': u, 'Highest SEI': round(v, 2) } for u, v in top3])
-                else:
-                    st.info("No games available yet for this category.")
+                try:
+                    _show_top3 = os.getenv('ENABLE_TOP3_LEADERBOARD', 'true').strip().lower() in ('1','true','yes','on')
+                except Exception:
+                    _show_top3 = True
+                if _show_top3:
+                    st.markdown(f"""
+                    <div style='font-size:1.0em; font-weight:700; color:#fff; margin:0.5em 0 0.25em 0;'>
+                        🏆 Global Top 3 by SEI — {nice_cat}
+                    </div>
+                    """, unsafe_allow_html=True)
+                    if top3:
+                        st.table([{ 'User': u, 'Highest SEI': round(v, 2) } for u, v in top3])
+                    else:
+                        st.info("No games available yet for this category.")
         except Exception:
             pass
         return  # Defensive: never show settings if a game is active
@@ -2091,6 +2096,7 @@ def display_welcome():
         # --- Global Top 3 by SEI for chosen category (outside form for visibility) ---
         try:
             # Use pinned display category if set, else active/running, else default, else 'any'
+            top3_rows = []
             if st.session_state.get('_active_display_category'):
                 chosen_cat = str(st.session_state['_active_display_category']).lower()
             elif 'game' in st.session_state and st.session_state.game and getattr(st.session_state.game, 'subject', None):
@@ -2099,6 +2105,23 @@ def display_welcome():
                 user_profile = st.session_state.get('user', {})
                 chosen_cat = (user_profile.get('default_category') or 'any').lower()
                 top3_rows = []
+            # Force FlashCard scoping when the running subject is FlashCard or a build is pending
+            try:
+                _running_subj = (getattr(st.session_state.get('game'), 'subject', '') or '').lower()
+            except Exception:
+                _running_subj = ''
+            if (
+                _running_subj == 'flashcard'
+                or str(st.session_state.get('_active_display_category') or '').lower() == 'flashcard'
+                or bool(st.session_state.get('_flash_pending_msg'))
+            ):
+                chosen_cat = 'flashcard'
+            # Debug logging of category decision
+            try:
+                import logging as _lg
+                _lg.getLogger('frontend.top3').info(f"[TOP3] ctx=pregame running={_running_subj} active_display={str(st.session_state.get('_active_display_category') or '')} flash_pending={bool(st.session_state.get('_flash_pending_msg'))} -> chosen_cat={chosen_cat}")
+            except Exception:
+                pass
             # If FlashCard, restrict to same token as active set
             if chosen_cat == 'flashcard':
                 try:
@@ -2127,6 +2150,11 @@ def display_welcome():
                                 item = sets.get(active) or {}
                                 if str(item.get('ref_token') or '') == str(token) or str(item.get('token') or '') == str(token):
                                     allowed.add((un or '').lower())
+                        try:
+                            import logging as _lg
+                            _lg.getLogger('frontend.top3').info(f"[TOP3] ctx=pregame token={token} allowed_count={len(allowed)}")
+                        except Exception:
+                            pass
                         # Always include the current user so their own FlashCard results appear
                         if uname:
                             allowed.add((uname or '').lower())
@@ -2158,10 +2186,15 @@ def display_welcome():
             # Do not fall back to 'any' when FlashCard is selected; enforce token scoping
             if (not top3_rows) and chosen_cat not in ('any', 'flashcard'):
                 top3_rows = get_top10_from_aggregates('any')[:3]
+                try:
+                    import logging as _lg
+                    _lg.getLogger('frontend.top3').info(f"[TOP3] ctx=pregame fallback_to_any because no rows for chosen_cat")
+                except Exception:
+                    pass
             if (not top3_rows) and 'game' in st.session_state and st.session_state.game:
                 top3_rows = get_top10_from_aggregates(getattr(st.session_state.game, 'subject', 'any')).copy()[:3]
-            # Final fallback: pick a populated category from aggregates
-            if not top3_rows:
+            # Final fallback: pick a populated category from aggregates (but never override FlashCard)
+            if (not top3_rows) and (chosen_cat != 'flashcard'):
                 try:
                     agg = _load_aggregates()
                     cat_map = agg.get('category_user_highest', {})
@@ -2236,15 +2269,20 @@ def display_welcome():
                         st.session_state.pop('_email_token_msg_ts', None)
             except Exception:
                 pass
-            st.markdown(f"""
-            <div style='font-size:1.0em; font-weight:700; color:#fff; margin:0.5em 0 0.25em 0;'>
-                🏆 Global Leaderboard (Top 3 by SEI) - <span style='color:#000; font-size:1.25em; text-shadow:0 1px 0 rgba(255,255,255,.6);'>{nice_cat}</span>{token_label}
-            </div>
-            """, unsafe_allow_html=True)
-            if top3_rows:
-                st.table(top3_rows)
-            else:
-                st.info("No games available yet for this category.")
+            try:
+                _show_top3 = os.getenv('ENABLE_TOP3_LEADERBOARD', 'true').strip().lower() in ('1','true','yes','on')
+            except Exception:
+                _show_top3 = True
+            if _show_top3:
+                st.markdown(f"""
+                <div style='font-size:1.0em; font-weight:700; color:#fff; margin:0.5em 0 0.25em 0;'>
+                    🏆 Global Leaderboard (Top 3 by SEI) - <span style='color:#000; font-size:1.25em; text-shadow:0 1px 0 rgba(255,255,255,.6);'>{nice_cat}</span>{token_label}
+                </div>
+                """, unsafe_allow_html=True)
+                if top3_rows:
+                    st.table(top3_rows)
+                else:
+                    st.info("No games available yet for this category.")
         except Exception as e:
             
             st.info("Unable to render Top 10 at the moment. Check logs for details.")
@@ -4283,6 +4321,13 @@ def display_game():
             try:
                 # Use pinned display category if set, else the running category shown in the banner
                 chosen_cat = str(st.session_state.get('_active_display_category') or (game.subject or 'any')).lower()
+                # Force FlashCard scoping when the running subject is FlashCard or a build is pending
+                try:
+                    _running_subj2 = (getattr(st.session_state.get('game'), 'subject', '') or '').lower()
+                except Exception:
+                    _running_subj2 = ''
+                if _running_subj2 == 'flashcard' or str(st.session_state.get('_active_display_category') or '').lower() == 'flashcard' or st.session_state.get('_flash_pending_msg'):
+                    chosen_cat = 'flashcard'
                 # Determine active FlashCard token (if applicable) for cache scoping
                 active_token = None
                 if chosen_cat == 'flashcard':
@@ -4294,6 +4339,11 @@ def display_game():
                         active_token = None
                 rev = st.session_state.get('top3_rev', 0)
                 cache_key = (f"{chosen_cat}:{active_token or ''}:{rev}" if chosen_cat == 'flashcard' else f"{chosen_cat}:{rev}")
+                # Respect env toggle for Top 3 visibility
+                try:
+                    _show_top3 = os.getenv('ENABLE_TOP3_LEADERBOARD', 'true').strip().lower() in ('1','true','yes','on')
+                except Exception:
+                    _show_top3 = True
                 # Pull Top 3 from cache (scoped by category+token) to avoid recomputation
                 _cache = st.session_state.get('_top3_start_cache', {})
                 if _cache.get('key') == cache_key and 'rows' in _cache:
@@ -4399,15 +4449,16 @@ def display_game():
                             token_label = f" — Token: {token}"
                     except Exception:
                         token_label = ''
-                st.markdown(f"""
-                <div style='font-size:1.0em; font-weight:700; color:#fff; margin:1em 0 0.25em 0;'>
-                    🏆 Global Leaderboard (Top 3 by SEI) - <span style='color:#000; font-size:1.25em; text-shadow:0 1px 0 rgba(255,255,255,.6);'>{nice_cat}</span>{token_label}
-                </div>
-                """, unsafe_allow_html=True)
-                if top3_rows:
-                    st.table(top3_rows)
-                else:
-                    st.info("No games available yet for this category.")
+                if _show_top3:
+                    st.markdown(f"""
+                    <div style='font-size:1.0em; font-weight:700; color:#fff; margin:1em 0 0.25em 0;'>
+                        🏆 Global Leaderboard (Top 3 by SEI) - <span style='color:#000; font-size:1.25em; text-shadow:0 1px 0 rgba(255,255,255,.6);'>{nice_cat}</span>{token_label}
+                    </div>
+                    """, unsafe_allow_html=True)
+                    if top3_rows:
+                        st.table(top3_rows)
+                    else:
+                        st.info("No games available yet for this category.")
                 # Change Category under Top 10
                 st.markdown("<div class='beat-change-cat' style='display:inline-block;margin-top:8px;'>", unsafe_allow_html=True)
                 _is_guest = (((st.session_state.get('user') or {}).get('username') or '').strip().lower() == 'guest')
@@ -4419,9 +4470,14 @@ def display_game():
                         st.session_state['start_idle_at'] = _time.time()
                     except Exception:
                         pass
-                    # Clear the cached Top 3 so it refreshes for the new category
-                    st.session_state.pop('_top3_start_cache', None)
-                    st.session_state['top3_rev'] = st.session_state.get('top3_rev', 0) + 1
+                # Clear the cached Top 3 so it refreshes for the new category
+                st.session_state.pop('_top3_start_cache', None)
+                st.session_state['top3_rev'] = st.session_state.get('top3_rev', 0) + 1
+                # Also clear pre-game cache to avoid stale 4th_grade showing after switching to FlashCard
+                try:
+                    st.session_state.pop('_top3_pregame_cache', None)
+                except Exception:
+                    pass
                     # If switching to FlashCard, show a waiting notice on next render
                     try:
                         sel = st.session_state.get('_active_display_category') or (getattr(st.session_state.get('game'), 'subject', '') or '').lower()
@@ -6535,11 +6591,16 @@ def display_game_over(game_summary):
         except Exception:
             token_label = ''
             allowed_users = None
-    st.markdown(f"""
-    <div style='font-size:1.1em; font-weight:700; color:#fff; margin-bottom:0.5em;'>
-        🏆 Global Leaderboard (Top 3 by SEI) - <span style='color:#000000; font-size:1.35em; text-shadow:0 1px 0 rgba(255,255,255,.7);'>{(leaderboard_category.title() if leaderboard_category != 'All Categories' else 'All Categories')}</span>{token_label}
-    </div>
-    """, unsafe_allow_html=True)
+    try:
+        _show_top3 = os.getenv('ENABLE_TOP3_LEADERBOARD', 'true').strip().lower() in ('1','true','yes','on')
+    except Exception:
+        _show_top3 = True
+    if _show_top3:
+        st.markdown(f"""
+        <div style='font-size:1.1em; font-weight:700; color:#fff; margin-bottom:0.5em;'>
+            🏆 Global Leaderboard (Top 3 by SEI) - <span style='color:#000000; font-size:1.35em; text-shadow:0 1px 0 rgba(255,255,255,.7);'>{(leaderboard_category.title() if leaderboard_category != 'All Categories' else 'All Categories')}</span>{token_label}
+        </div>
+        """, unsafe_allow_html=True)
     user_sei = {}
     for g in all_games:
         user = g.get('nickname', '').lower()

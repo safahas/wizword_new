@@ -546,6 +546,15 @@ TIME_OVER_PANEL_SECONDS=300
 INACTIVITY_REFRESH_MS=5000
 ```
 
+Top 3 leaderboard toggle:
+
+Add this to control whether the “🏆 Global Leaderboard (Top 3 by SEI)” sections render in the UI. Default is true if unset.
+
+```env
+# Hide all Top 3 leaderboards across the app
+ENABLE_TOP3_LEADERBOARD=false
+```
+
 Notes:
 - The pre‑game FlashCard header is pinned to the selected category to prevent visual fallback while the background worker tops up the pool.
 - The UI shows “Preparing FlashCard words and hints… (N/Target)” during top‑ups and auto‑hides the banner if it lingers.
