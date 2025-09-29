@@ -1614,12 +1614,33 @@ def display_login():
     # --- FORGOT PASSWORD FORM ---
 
     elif st.session_state['auth_mode'] == 'forgot':
+        # Forgot/Reset flow timer tied to TIME_OVER_PANEL_SECONDS
+        try:
+            _fp_panel_after = int(os.getenv('TIME_OVER_PANEL_SECONDS', os.getenv('BEAT_MODE_TIME', str(BEAT_MODE_TIMEOUT_SECONDS))))
+        except Exception:
+            _fp_panel_after = BEAT_MODE_TIMEOUT_SECONDS
+        import time as _fp_time
+        if 'forgot_start_time' not in st.session_state:
+            st.session_state['forgot_start_time'] = _fp_time.time()
+        _fp_elapsed = int(_fp_time.time() - st.session_state.get('forgot_start_time', _fp_time.time()))
+        if _fp_elapsed >= _fp_panel_after:
+            st.warning("Time over for password reset. Please start again.")
+            st.session_state['auth_mode'] = 'login'
+            st.session_state.pop('reset_code', None)
+            st.session_state.pop('reset_user', None)
+            st.session_state.pop('forgot_start_time', None)
+            st.rerun()
         st.markdown("## Forgot Password")
         forgot_username = st.text_input("Enter your username", key="forgot_username")
         if st.button("Back to Login", key="back_to_login_from_forgot"):
             st.session_state['auth_mode'] = 'login'
             st.rerun()
         if st.button("Reset Password", key="reset_password_btn"):
+            # Refresh timeout on action
+            try:
+                st.session_state['forgot_start_time'] = _fp_time.time()
+            except Exception:
+                pass
             users = st.session_state['users']
             forgot_username_lower = forgot_username.lower()
             if forgot_username_lower in users:
@@ -1636,12 +1657,33 @@ def display_login():
                 st.error("Username not found.")
 
     elif st.session_state['auth_mode'] == 'reset':
+        # Continue timer during reset step
+        try:
+            _fp_panel_after2 = int(os.getenv('TIME_OVER_PANEL_SECONDS', os.getenv('BEAT_MODE_TIME', str(BEAT_MODE_TIMEOUT_SECONDS))))
+        except Exception:
+            _fp_panel_after2 = BEAT_MODE_TIMEOUT_SECONDS
+        import time as _fp_time2
+        if 'forgot_start_time' not in st.session_state:
+            st.session_state['forgot_start_time'] = _fp_time2.time()
+        _fp_elapsed2 = int(_fp_time2.time() - st.session_state.get('forgot_start_time', _fp_time2.time()))
+        if _fp_elapsed2 >= _fp_panel_after2:
+            st.warning("Time over for password reset. Please start again.")
+            st.session_state['auth_mode'] = 'login'
+            st.session_state.pop('reset_code', None)
+            st.session_state.pop('reset_user', None)
+            st.session_state.pop('forgot_start_time', None)
+            st.rerun()
         st.markdown("## Reset Password")
         code_entered = st.text_input("Enter the reset code sent to your email", key="reset_code_input")
         new_password = st.text_input("Enter your new password", type="password", key="new_password_input")
         # Debug print
         # st.write(f"DEBUG: Expected code: {st.session_state.get('reset_code')}, Entered: {code_entered}")
         if st.button("Set New Password", key="set_new_password_btn"):
+            # Refresh timeout on action
+            try:
+                st.session_state['forgot_start_time'] = _fp_time2.time()
+            except Exception:
+                pass
             user = st.session_state.get('reset_user')
             if code_entered == st.session_state.get('reset_code'):
                 if user and user in st.session_state['users']:
