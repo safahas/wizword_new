@@ -1676,6 +1676,7 @@ def display_login():
         st.markdown("## Reset Password")
         code_entered = st.text_input("Enter the reset code sent to your email", key="reset_code_input")
         new_password = st.text_input("Enter your new password", type="password", key="new_password_input")
+        confirm_password = st.text_input("Re-enter new password", type="password", key="new_password_confirm")
         # Debug print
         # st.write(f"DEBUG: Expected code: {st.session_state.get('reset_code')}, Entered: {code_entered}")
         if st.button("Set New Password", key="set_new_password_btn"):
@@ -1685,9 +1686,15 @@ def display_login():
             except Exception:
                 pass
             user = st.session_state.get('reset_user')
-            if code_entered == st.session_state.get('reset_code'):
+            if code_entered != st.session_state.get('reset_code'):
+                st.error("Invalid reset code.")
+            elif not (new_password or '').strip() or not (confirm_password or '').strip():
+                st.error("Please enter and confirm your new password.")
+            elif (new_password or '').strip() != (confirm_password or '').strip():
+                st.error("Passwords do not match.")
+            else:
                 if user and user in st.session_state['users']:
-                    st.session_state['users'][user]['password'] = new_password
+                    st.session_state['users'][user]['password'] = (new_password or '').strip()
                     save_users(st.session_state['users'])
                     st.success("Password reset successful! Please log in.")
                     # Clean up reset state
@@ -1697,8 +1704,6 @@ def display_login():
                     st.rerun()
                 else:
                     st.error("User not found.")
-            else:
-                st.error("Invalid reset code.")
         if st.button("Back to Login", key="back_to_login_from_reset"):
             st.session_state['auth_mode'] = 'login'
             st.session_state.pop('reset_code', None)
