@@ -5211,7 +5211,14 @@ def display_game():
         # Stop rendering gameplay UI when time is over
         return
 
-    display_hint_section(game)
+    # If FlashCard and Beat hasn't started, avoid triggering any heavy hint/word flows
+    if game.mode == 'Beat' and str(game.subject).lower() == 'flashcard' and not st.session_state.get('beat_started', False):
+        try:
+            st.caption("FlashCard pool will be prepared in the background. You can start playing when ready.")
+        except Exception:
+            pass
+    else:
+        display_hint_section(game)
     # --- Early Skip handling to avoid rendering stale letter boxes/input ---
     if game.mode == 'Beat':
         try:

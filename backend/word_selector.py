@@ -3808,7 +3808,9 @@ class WordSelector:
             previous_hints = []
         word = word.lower().strip()
         subject = subject.lower().strip()
-        word_length = len(word)
+        word_length = len(word or '')
+        if word_length <= 0:
+            return "Preparing word…",
         vowel_count = sum(1 for c in word if c in 'aeiou')
         consonant_count = word_length - vowel_count
         dynamic_hints = [
