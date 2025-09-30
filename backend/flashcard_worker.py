@@ -17,8 +17,9 @@ _worker_lock = threading.Lock()
 
 
 def _improve_flashcard_hints_once() -> None:
-    """Run a single maintenance pass across users to upgrade local FlashCard hints to API hints.
-    Respects per-word attempt caps and quota warnings. Makes at most a small batch of attempts per user per pass.
+    """Run a single maintenance pass across users to (1) top up FlashCard pools to the
+    configured target size and (2) upgrade local hints to API hints where possible.
+    Respects per-word attempt caps, batch limits, and quota warnings.
     """
     try:
         # Load users_bio.json directly to iterate users
@@ -30,6 +31,18 @@ def _improve_flashcard_hints_once() -> None:
         return
 
     ws = WordSelector()
+    # Check quota once per pass to avoid log spam
+    try:
+        _quota = get_quota_warning()
+        _quota_critical = bool(_quota and _quota.get('level') == 'error')
+    except Exception:
+        _quota = None
+        _quota_critical = False
+    if _quota_critical:
+        try:
+            logger.warning("[FlashWorker] Critical quota; pausing upgrades for now.")
+        except Exception:
+            pass
     # Knobs
     try:
         max_attempts = int(os.getenv('PERSONAL_POOL_API_ATTEMPTS', '3'))
@@ -39,11 +52,77 @@ def _improve_flashcard_hints_once() -> None:
         per_user_batch = int(os.getenv('FLASHCARD_WORKER_BATCH_PER_USER', '3'))
     except Exception:
         per_user_batch = 3
+    try:
+        topup_per_user = int(os.getenv('FLASHCARD_WORKER_TOPUP_PER_USER', '5'))
+    except Exception:
+        topup_per_user = 5
+    try:
+        target_size = int(os.getenv('FLASHCARD_POOL_MAX', '10'))
+    except Exception:
+        target_size = 10
+    try:
+        enable_topup = os.getenv('ENABLE_FLASHCARD_TOPUP', 'true').strip().lower() in ('1','true','yes','on')
+    except Exception:
+        enable_topup = True
 
     for username, rec in users.items():
         try:
-            pool = rec.get('flash_pool') if isinstance(rec, dict) else None
-            if not isinstance(pool, list) or not pool:
+            # New storage is per-user named sets in users.flashcards.json
+            # Fallback to legacy structure if present
+            active_name = ''
+            pool = None
+            text = ''
+            try:
+                active_name = bio_store.get_active_flash_set_name(username)  # type: ignore[attr-defined]
+                pool = bio_store.get_flash_set_pool(username, active_name)   # type: ignore[attr-defined]
+                text = bio_store.get_flash_set_text(username, active_name)   # type: ignore[attr-defined]
+            except Exception:
+                pool = rec.get('flash_pool') if isinstance(rec, dict) else None
+            if not isinstance(pool, list):
+                pool = []
+
+            # 1) Top-up: if enabled and below target, add new words (local hints first)
+            if enable_topup and len(pool) < target_size and text:
+                added = 0
+                try:
+                    # Respect quota warnings for API attempts; still allow offline extraction
+                    use_api = not _quota_critical
+                except Exception:
+                    use_api = True
+                try:
+                    if use_api:
+                        new_items = ws._generate_flash_pool_api(text, max_items=topup_per_user)
+                    else:
+                        new_items = []
+                except Exception:
+                    new_items = []
+                # Fallback to offline extraction if API yields few
+                if len(new_items) < topup_per_user:
+                    try:
+                        candidates = ws._extract_flash_words(text, max_items=topup_per_user * 3)
+                    except Exception:
+                        candidates = []
+                    existing = {str((it.get('word') if isinstance(it, dict) else it) or '').lower() for it in pool}
+                    for w in candidates:
+                        if added >= topup_per_user or len(pool) >= target_size:
+                            break
+                        wl = (w or '').strip().lower()
+                        if not wl or wl in existing:
+                            continue
+                        hint_text = ws._make_flash_hint(w, text) or ws._first_letter_hint(w)
+                        pool.append({'word': w, 'hint': hint_text, 'hint_source': 'local', 'api_attempts': 0})
+                        existing.add(wl)
+                        added += 1
+                # Persist updated pool if anything was added
+                if added > 0:
+                    try:
+                        if active_name:
+                            bio_store.upsert_flash_set(username, active_name, text=text, pool=pool)  # type: ignore[attr-defined]
+                        else:
+                            bio_store.update_user_record(username, {'flash_pool': pool})  # type: ignore[attr-defined]
+                    except Exception:
+                        pass
+            if not pool:
                 continue
             updated_pool = []
             changed = False
@@ -70,10 +149,8 @@ def _improve_flashcard_hints_once() -> None:
                 src = item.get('hint_source', 'local')
                 tries = int(item.get('api_attempts', 0))
                 if w and src != 'api' and tries < max_attempts:
-                    # Respect quota warnings
-                    warning = get_quota_warning()
-                    if warning and warning.get('level') == 'error':
-                        logger.warning("[FlashWorker] Critical quota; pausing upgrades for now.")
+                    # Respect quota warnings (already logged once at pass start)
+                    if _quota_critical:
                         updated_pool.append(item)
                         continue
                     # One API attempt this pass

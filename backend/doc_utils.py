@@ -40,7 +40,8 @@ def sanitize_hints_map(hints: dict, desired_count: int, doc_text: str | None = N
     # Build doc token set for grounding check
     doc_tokens: set[str] = set()
     if isinstance(doc_text, str) and doc_text:
-        doc_tokens = {t.lower() for t in re.findall(r"[A-Za-z]{3,10}", doc_text)}
+        # Match the allowed key length (3–13) so we don't drop longer valid words
+        doc_tokens = {t.lower() for t in re.findall(r"[A-Za-z]{3,13}", doc_text)}
     # Broad English stopwords and function words; plus generic/unhelpful terms
     STOPWORDS = {
         # Articles / determiners / quantifiers

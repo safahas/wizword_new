@@ -90,7 +90,12 @@ async def generate_hints(file: UploadFile = File(...)):
     except Exception as e:
         raise HTTPException(status_code=400, detail=f"Failed to read file: {e}")
 
-    text = sanitize_text(text, max_chars=6000)
+    # Allow larger context via env knob to improve word coverage
+    try:
+        _doc_max_chars = int(os.getenv("DOC_MAX_CHARS", "8000"))
+    except Exception:
+        _doc_max_chars = 8000
+    text = sanitize_text(text, max_chars=_doc_max_chars)
     # Ensure API key is available (from .env or environment)
     if not os.getenv("OPENROUTER_API_KEY"):
         logger.error("[DocAPI] OPENROUTER_API_KEY not set; .env path=%s", _ENV_PATH or "[none]")
