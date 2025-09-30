@@ -469,6 +469,13 @@ BYPASS_API_WORD_SELECTION=true     # FlashCard/Personal may still use API; other
 # API‑first extraction for FlashCard (noun‑focused); falls back if API fails
 FLASHCARD_API_FIRST=false
 
+# Runtime API usage for FlashCard (gameplay/pool maintenance)
+# When false (default), runtime will NOT call the LLM for FlashCard:
+#  - Gameplay uses hints from flash_pool or local document‑grounded hints only
+#  - Pool build and maintenance pass avoid API and use local hints
+# Enable only if you want live upgrades and have quota headroom.
+FLASHCARD_RUNTIME_API=false
+
 # Document upload size (backend); default 10240 bytes (10KB)
 UPLOAD_MAX_BYTES=10240
 
@@ -484,7 +491,7 @@ FLASHCARD_WORKER_INTERVAL_SECS=180
 
 Notes on UI vs Backend environment:
 - The Streamlit UI and the FastAPI backend run as separate processes and each reads its own environment.
-- The pre‑game progress banner text “Preparing FlashCard words and hints… (N/T)” uses the UI’s `FLASHCARD_POOL_MAX` to compute T.
+- The pre‑game progress banner text “Preparing FlashCard words and hints… (N/T)” uses the UI’s `FLASHCARD_POOL_MAX` to compute T. Login and pre‑game with FlashCard default are optimized via lazy init; heavy FlashCard work runs in the background. Gameplay pulls from the existing pool. If no word is ready yet, the hint button briefly shows “Preparing word…” instead of blocking.
 - If the banner shows an unexpected T, restart Streamlit with the desired value in that shell:
   - PowerShell: `$env:FLASHCARD_POOL_MAX="20"; ./venv/Scripts/streamlit run streamlit_app.py`
 

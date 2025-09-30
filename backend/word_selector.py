@@ -2088,6 +2088,11 @@ class WordSelector:
                 except Exception:
                     _max_att = 3
                 built_words = [it.get('word') for it in lst] if lst and isinstance(lst[0], dict) and 'word' in lst[0] else words
+                # Runtime API usage toggle for FlashCard pool building (default: disabled)
+                try:
+                    _fc_runtime_api = os.getenv('FLASHCARD_RUNTIME_API', 'false').strip().lower() in ('1','true','yes','on')
+                except Exception:
+                    _fc_runtime_api = False
                 for w in built_words:
                     if not w:
                         continue
@@ -2111,8 +2116,8 @@ class WordSelector:
                                     break
                     except Exception:
                         pass
-                    # Otherwise attempt single API hint call
-                    if not hint_text:
+                    # Otherwise attempt single API hint call (only if explicitly enabled)
+                    if not hint_text and _fc_runtime_api:
                         try:
                             api_h = self.get_api_hints_force(w, 'flashcard', n=1, attempts=1)
                             hint_text = str(api_h[0]) if api_h else None
@@ -2151,7 +2156,7 @@ class WordSelector:
                 except Exception:
                     pass
                 pool = lst
-            # Maintenance pass: reattempt API hints only for words that failed previously, one-shot per call
+            # Maintenance pass: reattempt API hints only if explicitly enabled via FLASHCARD_RUNTIME_API
             try:
                 import time as _t2
                 import os as _os2
@@ -2159,6 +2164,7 @@ class WordSelector:
                 budget = getattr(self, 'flash_rebuild_max_secs', 5.0)
                 start = _t2.time()
                 max_attempts = int(_os2.getenv('PERSONAL_POOL_API_ATTEMPTS', '3'))
+                enable_runtime_api = _os2.getenv('FLASHCARD_RUNTIME_API', 'false').strip().lower() in ('1','true','yes','on')
                 new_pool = []
                 for it in (pool or []):
                     if (_t2.time() - start) >= budget:
@@ -2168,7 +2174,7 @@ class WordSelector:
                     hint = it.get('hint', '')
                     src = it.get('hint_source', 'local')
                     tries = int(it.get('api_attempts', 0))
-                    if w and (src != 'api') and (tries < max_attempts):
+                    if w and enable_runtime_api and (src != 'api') and (tries < max_attempts):
                         # one attempt this call
                         got = None
                         try:
