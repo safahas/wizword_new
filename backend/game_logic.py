@@ -63,6 +63,24 @@ class GameLogic:
         self.game_over = False
         self.guesses_made = 0
         self.show_word_penalty_applied = False
+        # Lightweight lazy-init for FlashCard on pre-game screens to avoid login delay
+        try:
+            subj_lower_lazy = str(self.subject).lower()
+            lazy_env = str(os.getenv('FLASHCARD_LAZY_INIT', 'true')).strip().lower() in ('1','true','yes','on')
+            pregame = False
+            try:
+                import streamlit as _st  # type: ignore
+                pregame = not bool(_st.session_state.get('beat_started', False))
+            except Exception:
+                pregame = True
+            if lazy_env and subj_lower_lazy == 'flashcard' and pregame:
+                # Defer heavy selection until the user actually starts the Beat run
+                self.selected_word = ''
+                self.available_hints = []
+                logger.info("[LAZY_INIT] Skipping FlashCard word selection at init; will select at start.")
+                return
+        except Exception:
+            pass
         try:
             # Use account username if available for per-user tracking, else nickname, else 'global'
             username = self._pool_username()
@@ -129,27 +147,27 @@ class GameLogic:
                     elif subj_lower == 'flashcard':
                         # Prefer pre-generated flash_pool hint first
                         try:
-                            from backend.bio_store import get_flash_pool
-                            pool_fc = get_flash_pool(self._pool_username())
+                            from backend.bio_store import get_active_flash_set_name, get_flash_set_pool, get_flash_pool
+                            _uname = self._pool_username()
+                            _active_name = get_active_flash_set_name(_uname) or 'flashcard'
+                            pool_fc = get_flash_set_pool(_uname, _active_name) or []
+                            if not isinstance(pool_fc, list) or not pool_fc:
+                                pool_fc = get_flash_pool(_uname) or []
                         except Exception:
                             pool_fc = []
-                        if pool_fc:
-                            match_fc = next((it for it in pool_fc if str(it.get('word','')).lower() == str(self.selected_word or '').lower()), None)
-                            if match_fc and match_fc.get('hint'):
-                                all_hints = [str(match_fc['hint'])]
-                        # If no saved hint, try API; else skip API to avoid extra calls
-                        if not all_hints:
+                        if isinstance(pool_fc, list) and pool_fc:
                             try:
-                                _att = int(os.getenv('PERSONAL_POOL_API_ATTEMPTS', '3'))
+                                w_lc = str(self.selected_word or '').strip().lower()
+                                # Build map once for robust lookup
+                                pool_map = { str(it.get('word','')).strip().lower(): str(it.get('hint','')) for it in pool_fc if isinstance(it, dict) }
+                                if w_lc in pool_map and pool_map[w_lc]:
+                                    all_hints = [pool_map[w_lc]]
+                                else:
+                                    import logging as _lg
+                                    _lg.getLogger(__name__).info(f"[FLASH_HINT] Pool hint not found for '{w_lc}'. Active set: {_active_name}. Pool keys sample: {list(pool_map.keys())[:5]}")
                             except Exception:
-                                _att = 3
-                            api_hints = self.word_selector.get_api_hints_force(
-                                self.selected_word,
-                                'flashcard',
-                                n=self.current_settings["max_hints"],
-                                attempts=_att
-                            )
-                        # If API still empty, generate a local contextual hint
+                                pass
+                        # Do NOT call API for FlashCard during gameplay; use local/doc-grounded fallback
                         if not all_hints and not api_hints:
                             try:
                                 from backend.bio_store import get_flash_text
@@ -347,6 +365,17 @@ class GameLogic:
         Get a semantic hint about the word.
         Returns: (hint, points_deducted)
         """
+        # Defensive: if lazy init deferred selection (e.g., FlashCard pre-game), select now on first hint request
+        if not self.selected_word:
+            try:
+                username = self._pool_username()
+                # Use a reasonable default length for selection; actual length comes from the selector
+                self.selected_word = self.word_selector.select_word(5, self.original_subject, username=username)
+            except Exception:
+                self.selected_word = None
+        if not self.selected_word:
+            logger.info("[HINT REQUEST] No word selected yet; hint unavailable until word is ready.")
+            return "Preparing word… please try again in a moment.", 0
         if self.game_over:
             logger.info("[HINT REQUEST] Game is already over, no hint provided")
             return "Game is already over!", 0
@@ -364,17 +393,41 @@ class GameLogic:
                 hint = available[0]
                 logger.info(f"[HINT REQUEST] Using pre-generated hint: {hint}")
         
-        # If no pre-generated hints available, get a new one
+        # If no pre-generated hints available, try FlashCard pool (lazy-init path), then get a new one
         if not hint:
-            logger.info("[HINT REQUEST] No pre-generated hints available, getting new hint")
-            # Always use the original subject for hint retrieval
-            hint = self.word_selector.get_semantic_hint(
-                self.selected_word,
-                self.original_subject,
-                self.hints_given,
-                max_hints=self.current_settings["max_hints"]
-            )
-            logger.info(f"[HINT REQUEST] Generated new hint: {hint}")
+            subj_lower = str(self.original_subject).lower()
+            if subj_lower == 'flashcard':
+                try:
+                    from backend.bio_store import get_active_flash_set_name, get_flash_set_pool, get_flash_pool
+                    _uname = self._pool_username()
+                    _active_name = get_active_flash_set_name(_uname) or 'flashcard'
+                    pool_fc = get_flash_set_pool(_uname, _active_name) or []
+                    if not isinstance(pool_fc, list) or not pool_fc:
+                        pool_fc = get_flash_pool(_uname) or []
+                except Exception:
+                    pool_fc = []
+                if isinstance(pool_fc, list) and pool_fc:
+                    try:
+                        w_lc = str(self.selected_word or '').strip().lower()
+                        pool_map = { str(it.get('word','')).strip().lower(): str(it.get('hint','')) for it in pool_fc if isinstance(it, dict) }
+                        if w_lc in pool_map and pool_map[w_lc]:
+                            hint = pool_map[w_lc]
+                            logger.info(f"[HINT REQUEST] Using pool hint for FlashCard word '{self.selected_word}': {hint}")
+                        else:
+                            import logging as _lg
+                            _lg.getLogger(__name__).info(f"[FLASH_HINT] Pool hint not found (lazy) for '{w_lc}'. Active set: {_active_name}. Pool keys sample: {list(pool_map.keys())[:5]}")
+                    except Exception:
+                        pass
+            if not hint:
+                logger.info("[HINT REQUEST] No pre-generated hints available, getting new hint")
+                # Always use the original subject for hint retrieval
+                hint = self.word_selector.get_semantic_hint(
+                    self.selected_word,
+                    self.original_subject,
+                    self.hints_given,
+                    max_hints=self.current_settings["max_hints"]
+                )
+                logger.info(f"[HINT REQUEST] Generated new hint: {hint}")
         
         points_deducted = 0
         if self.mode == "Beat":

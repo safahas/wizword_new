@@ -2024,12 +2024,16 @@ class WordSelector:
     def _select_word_from_flashcard(self, username: str) -> str:
         """Pick a word from the user's FlashCard pool, building it from flash_text if needed."""
         try:
-            from backend.bio_store import get_flash_text, get_flash_pool, set_flash_pool
+            from backend.bio_store import get_flash_text, get_flash_pool, set_flash_pool, get_active_flash_set_name, get_flash_set_pool
         except Exception:
             return None
         try:
             text = (get_flash_text(username) or '')[: self.flash_text_max]
-            pool = get_flash_pool(username)
+            try:
+                _active_name = get_active_flash_set_name(username) or 'flashcard'
+                pool = get_flash_set_pool(username, _active_name)
+            except Exception:
+                pool = get_flash_pool(username)
             # If pool exceeds current target size (env lowered), trim and persist
             try:
                 if pool and len(pool) > self.flash_words_count:
@@ -2200,7 +2204,14 @@ class WordSelector:
                     pool = new_pool
             except Exception:
                 pass
-            recent_key = f"{username}:flashcard"
+            # Scope recents by active FlashCard token to avoid cross-set interference
+            try:
+                from backend.bio_store import get_active_flash_set_name, get_flash_set_token
+                _active_name = get_active_flash_set_name(username) or 'flashcard'
+                _active_tok = get_flash_set_token(username, _active_name) or ''
+                recent_key = f"{username}:flashcard:{_active_tok or _active_name}"
+            except Exception:
+                recent_key = f"{username}:flashcard"
             if not hasattr(self, "_recently_used_words_by_combo"):
                 self._recently_used_words_by_combo = {}
             recent = set(self._recently_used_words_by_combo.get(recent_key, []))
@@ -3872,6 +3883,15 @@ class WordSelector:
             payload = {"model": self.primary_model, "messages": messages}
         headers = self.headers
         last_warning = None
+        # Allow tuning via env
+        try:
+            import os
+            base_delay = float(os.getenv('OPENROUTER_RETRY_BASE_DELAY_S', str(base_delay)))
+            max_delay = float(os.getenv('OPENROUTER_RETRY_MAX_DELAY_S', str(max_delay)))
+            max_retries = int(os.getenv('OPENROUTER_RETRY_MAX_ATTEMPTS', str(max_retries)))
+            cooldown_429 = float(os.getenv('OPENROUTER_429_COOLDOWN_S', '8'))
+        except Exception:
+            cooldown_429 = 8.0
         # Try primary model up to max_retries times
         for attempt in range(max_retries):
             try:
@@ -3891,6 +3911,9 @@ class WordSelector:
                         self.use_fallback = True
                         logger.error("Critical quota reached. Switching to fallback mode.")
                         raise RuntimeError(warning['message'])
+                # Special handling: if 429, observe cooldown
+                if response.status_code == 429:
+                    time.sleep(cooldown_429)
                 response.raise_for_status()
                 return response.json()
             except Exception as e:
@@ -3921,6 +3944,8 @@ class WordSelector:
                         self.use_fallback = True
                         logger.error("Critical quota reached. Switching to fallback mode.")
                         raise RuntimeError(warning['message'])
+                if response.status_code == 429:
+                    time.sleep(cooldown_429)
                 response.raise_for_status()
                 return response.json()
             except Exception as e:

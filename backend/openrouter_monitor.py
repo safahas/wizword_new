@@ -16,6 +16,13 @@ class QuotaMonitor:
             "warning_threshold": 0.1,  # Warn when 10% quota remains
             "critical_threshold": 0.05,  # Critical when 5% quota remains
         }
+        # Debounce for warning logs
+        try:
+            import os
+            self.warning_min_interval_s = float(os.getenv('OPENROUTER_WARNING_MIN_INTERVAL_S', '30'))
+        except Exception:
+            self.warning_min_interval_s = 30.0
+        self._last_warning_log_ts = 0.0
         
         # Rate limiting
         self.rate_limits = {
@@ -103,24 +110,32 @@ class QuotaMonitor:
         
         # Check critical threshold
         if self.quota_info["remaining"] <= self.quota_info["critical_threshold"]:
-            return {
-                "level": "error",
-                "message": (
-                    f"⚠️ Critical: Only {self.quota_info['remaining']} API calls remaining! "
-                    f"Quota resets in {minutes_until_reset} minutes. "
-                    "Consider using offline mode."
-                )
-            }
+            now_ts = time.time()
+            if now_ts - self._last_warning_log_ts >= self.warning_min_interval_s:
+                self._last_warning_log_ts = now_ts
+                return {
+                    "level": "error",
+                    "message": (
+                        f"⚠️ Critical: Only {self.quota_info['remaining']} API calls remaining! "
+                        f"Quota resets in {minutes_until_reset} minutes. "
+                        "Consider using offline mode."
+                    )
+                }
+            return None
         
         # Check warning threshold
         if self.quota_info["remaining"] <= self.quota_info["warning_threshold"]:
-            return {
-                "level": "warning",
-                "message": (
-                    f"⚠️ Warning: {self.quota_info['remaining']} API calls remaining. "
-                    f"Quota resets in {minutes_until_reset} minutes."
-                )
-            }
+            now_ts = time.time()
+            if now_ts - self._last_warning_log_ts >= self.warning_min_interval_s:
+                self._last_warning_log_ts = now_ts
+                return {
+                    "level": "warning",
+                    "message": (
+                        f"⚠️ Warning: {self.quota_info['remaining']} API calls remaining. "
+                        f"Quota resets in {minutes_until_reset} minutes."
+                    )
+                }
+            return None
         
         return None
     
