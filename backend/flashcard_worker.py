@@ -182,7 +182,15 @@ def _improve_flashcard_hints_once() -> None:
 
 
 def _improve_personal_hints_once() -> None:
-    """Upgrade Personal pool items' hints to API-generated where missing, similar to FlashCard."""
+    """Upgrade Personal pool items' hints to API-generated where missing, similar to FlashCard.
+    Obeys ENABLE_PERSONAL_BACKGROUND; returns immediately if disabled.
+    """
+    try:
+        enabled_bg = os.getenv('ENABLE_PERSONAL_BACKGROUND', 'true').strip().lower() in ('1','true','yes','on')
+    except Exception:
+        enabled_bg = True
+    if not enabled_bg:
+        return
     try:
         users: Dict[str, Any] = bio_store._read_all()  # type: ignore[attr-defined]
     except Exception:

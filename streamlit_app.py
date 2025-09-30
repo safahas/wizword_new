@@ -3212,9 +3212,13 @@ def display_game():
                     set_bio(username_lower, bio_to_save)
                 except Exception:
                     st.session_state['users'][username_lower]['bio'] = bio_to_save
-                # If Bio changed, rebuild Personal pool (API first, with time budget)
+                # If Bio changed, rebuild Personal pool only when Personal is enabled
                 try:
-                    if (bio_to_save or '').strip() != (_bio_init_profile or '').strip():
+                    _personal_enabled = os.getenv('ENABLE_PERSONAL_CATEGORY', 'true').strip().lower() in ('1','true','yes','on')
+                except Exception:
+                    _personal_enabled = True
+                try:
+                    if _personal_enabled and (bio_to_save or '').strip() != (_bio_init_profile or '').strip():
                         import time as _t
                         from backend.bio_store import set_personal_pool, get_personal_pool
                         from backend.word_selector import WordSelector
