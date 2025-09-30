@@ -2222,6 +2222,25 @@ class WordSelector:
                 return None
             import random as _rnd
             choice = _rnd.choice(candidates)
+            # Soft-mark selection into the recents for FlashCard using token-scoped key
+            try:
+                if str(self.current_category).strip().lower() == 'flashcard':
+                    from backend.bio_store import get_active_flash_set_name, get_flash_set_token
+                    _active_name2 = get_active_flash_set_name(username) or 'flashcard'
+                    _active_tok2 = get_flash_set_token(username, _active_name2) or ''
+                    rk2 = f"{username}:flashcard:{_active_tok2 or _active_name2}"
+                    if not hasattr(self, "_recently_used_words_by_combo"):
+                        self._recently_used_words_by_combo = {}
+                    lst2 = self._recently_used_words_by_combo.get(rk2, [])
+                    w_lc2 = str(choice.get('word') or '').strip().lower()
+                    if w_lc2 and w_lc2 not in lst2:
+                        lst2.insert(0, w_lc2)
+                        self._recently_used_words_by_combo[rk2] = lst2[: self._max_recent_words]
+                    if not hasattr(self, "_last_word_by_combo"):
+                        self._last_word_by_combo = {}
+                    self._last_word_by_combo[rk2] = w_lc2
+            except Exception:
+                pass
             return str(choice.get('word') or '')
         except Exception:
             return None
@@ -3266,6 +3285,15 @@ class WordSelector:
 
     def _add_recent_word_combo(self, word: str, username: str, subject: str):
         recent_key = f"{username}:{subject}"
+        # For FlashCard, scope recents by active set token to avoid cross-set repetition
+        try:
+            if str(subject).strip().lower() == 'flashcard':
+                from backend.bio_store import get_active_flash_set_name, get_flash_set_token
+                _active_name = get_active_flash_set_name(username) or 'flashcard'
+                _active_tok = get_flash_set_token(username, _active_name) or ''
+                recent_key = f"{username}:flashcard:{_active_tok or _active_name}"
+        except Exception:
+            pass
         if not hasattr(self, "_recently_used_words_by_combo"):
             self._recently_used_words_by_combo = {}
         if recent_key not in self._recently_used_words_by_combo:
