@@ -2294,7 +2294,7 @@ def display_welcome():
             if chosen_cat == 'flashcard':
                 if st.session_state.get('_flash_pending_msg'):
                     try:
-                        st.info("Preparing FlashCard words and hints. This may take a moment…")
+                        st.info("Done with FlashCard words and hints... (progress updating)")
                     except Exception:
                         pass
                 # Also show if API-first is enabled or worker is active, to cover retry loops/quota waits
@@ -2323,10 +2323,11 @@ def display_welcome():
                 _show_top3 = True
             if _show_top3:
                 st.markdown(f"""
-                <div style='font-size:1.0em; font-weight:700; color:#fff; margin:0.5em 0 0.25em 0;'>
-                    🏆 Global Leaderboard (Top 3 by SEI) - <span style='color:#000; font-size:1.25em; text-shadow:0 1px 0 rgba(255,255,255,.6);'>{nice_cat}</span>{token_label}
-                </div>
-                """, unsafe_allow_html=True)
+            <div style='display:flex; align-items:center; justify-content:center; gap:8px; font-size:1.0em; font-weight:700; color:#fff; margin:0.5em 0 0.25em 0; text-align:center;'>
+                <span>🏆 Global Leaderboard (Top 3 by SEI) -</span>
+                <span style='color:#000; font-size:1.6em; font-weight:900; text-shadow:0 1px 0 rgba(255,255,255,.85);'>{nice_cat}</span>{token_label}
+            </div>
+            """, unsafe_allow_html=True)
                 if top3_rows:
                     st.table(top3_rows)
                 else:
@@ -3993,7 +3994,7 @@ def display_game():
                         except Exception:
                             _target_fc = 10
                     if _txt_fc and len(_pool_fc) < _target_fc:
-                        st.info(f"Preparing FlashCard words and hints... ({len(_pool_fc)}/{_target_fc})")
+                        st.info(f"Done with FlashCard words and hints... ({len(_pool_fc)}/{_target_fc})")
                         # Auto-hide this notice after a short grace period to avoid appearing stuck
                         try:
                             import time as _t
@@ -4509,10 +4510,11 @@ def display_game():
                         token_label = ''
                 if _show_top3:
                     st.markdown(f"""
-                    <div style='font-size:1.0em; font-weight:700; color:#fff; margin:1em 0 0.25em 0;'>
-                        🏆 Global Leaderboard (Top 3 by SEI) - <span style='color:#000; font-size:1.25em; text-shadow:0 1px 0 rgba(255,255,255,.6);'>{nice_cat}</span>{token_label}
-                    </div>
-                    """, unsafe_allow_html=True)
+                <div style='display:flex; align-items:center; justify-content:center; gap:8px; font-size:1.0em; font-weight:700; color:#fff; margin:1em 0 0.25em 0; text-align:center;'>
+                    <span>🏆 Global Leaderboard (Top 3 by SEI) -</span>
+                    <span style='color:#000; font-size:1.6em; font-weight:900; text-shadow:0 1px 0 rgba(255,255,255,.85);'>{nice_cat}</span>{token_label}
+                </div>
+                """, unsafe_allow_html=True)
                     if top3_rows:
                         st.table(top3_rows)
                     else:
@@ -5055,10 +5057,10 @@ def display_game():
         stats_html = f"""
         <div class='wizword-banner'>
           <div class='wizword-banner-title'>WizWord <span style="font-size:0.6em; padding:0.25em 0.6em; margin-left:0.4em; border-radius:0.6em; background:rgba(255,255,255,0.18); box-shadow: inset 0 0 0 1px rgba(255,255,255,0.25);">Beat</span></div>
-          <div class='wizword-banner-stats'>
-            <span class='wizword-stat wizword-beat-category'><b>📚</b> {game.subject.replace('_', ' ').title()}</span>
-            <span class='wizword-stat wizword-beat-timer'><b>⏰</b> {time_left}s</span>
+          <div class='wizword-banner-stats' style='justify-content:center;'>
             <span class='wizword-stat wizword-beat-score'><b>🏆</b> {game.score}</span>
+            <span class='wizword-stat wizword-beat-category' style='font-size:1.35em; font-weight:900; color:#000; background:#fff7; border:2px solid #fff;'><b>📚</b> {game.subject.replace('_', ' ').title()}</span>
+            <span class='wizword-stat wizword-beat-timer'><b>⏰</b> {time_left}s</span>
             <span class='wizword-stat'><b>🔢</b> {st.session_state.get('beat_word_count', 0)}</span>
           </div>
         </div>
