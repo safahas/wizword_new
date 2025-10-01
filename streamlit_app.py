@@ -2560,6 +2560,26 @@ def display_game():
     if 'beat_total_penalty' not in st.session_state:
         st.session_state['beat_total_penalty'] = 0
 
+    # Remove top gap globally so banner/content hug the top
+    try:
+        st.markdown(
+            """
+            <style>
+            /* Aggressively remove top spacing across Streamlit containers */
+            section.main > div.block-container { padding-top: 0 !important; }
+            div.block-container { padding-top: 0 !important; }
+            [data-testid="stAppViewContainer"] .main .block-container { padding-top: 0 !important; }
+            [data-testid="stAppViewContainer"] .main { padding-top: 0 !important; margin-top: 0 !important; }
+            section.main > div.block-container > div:first-child { margin-top: 0 !important; }
+            /* Ensure our pregame banner has no offset */
+            .pregame-banner { margin-top: 0 !important; }
+            </style>
+            """,
+            unsafe_allow_html=True,
+        )
+    except Exception:
+        pass
+
     # If game is not initialized, always use user's default_category for Beat mode
     if 'game' not in st.session_state or not st.session_state.game:
         user_profile = st.session_state.get('user', {})
@@ -3602,6 +3622,9 @@ def display_game():
                 @media (max-width: 480px) {
                     .pregame-banner .wizword-banner-stats { display: none !important; }
                 }
+                /* Remove top gap so banner hugs the top in pre-game */
+                section.main > div.block-container { padding-top: 0 !important; }
+                .pregame-banner { margin-top: -100px !important; }
                 </style>
                 """,
                 unsafe_allow_html=True,
@@ -5000,7 +5023,7 @@ def display_game():
         _sticky_env = os.getenv('WIZWORD_STICKY_BANNER', 'true').strip().lower()
         _is_sticky_banner = _sticky_env in ('1', 'true', 'yes', 'on')
         _banner_position_css = (
-            "position: fixed; top: 56px; left: 0; right: 0; width: 100vw; z-index: 10000; backdrop-filter: blur(2px);"
+            "position: fixed; top: 0; left: 0; right: 0; width: 100vw; z-index: 10000; backdrop-filter: blur(2px);"
             if _is_sticky_banner else
             "position: static;"
         )
@@ -5121,6 +5144,15 @@ def display_game():
         """
         if st.session_state.get('beat_started', False):
             st.markdown(stats_html, unsafe_allow_html=True)
+            # Remove top gap above content so banner hugs the top
+            try:
+                st.markdown("""
+                <style>
+                section.main > div.block-container { padding-top: 0 !important; }
+                </style>
+                """, unsafe_allow_html=True)
+            except Exception:
+                pass
             # Override styles to reduce banner height
             st.markdown(
                 """
