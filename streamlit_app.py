@@ -3819,6 +3819,12 @@ def display_game():
                     score = g.get('score', 0)
                     words = g.get('words_solved', 1) if g.get('mode') == 'Beat' else 1
                     time_taken = g.get('time_taken', g.get('duration', None))
+                    try:
+                        # Normalize milliseconds to seconds if necessary
+                        if isinstance(time_taken, (int, float)) and time_taken > 1000:
+                            time_taken = time_taken / 1000.0
+                    except Exception:
+                        pass
                     date = g.get('timestamp') or g.get('date')
                     if time_taken is not None and date:
                         total_score += score
@@ -3839,6 +3845,12 @@ def display_game():
                     ax.set_title(f"{category_label.title()} — Your SEI per Game")
                     ax.set_xticks(game_dates)
                     ax.set_xticklabels(game_dates, rotation=45, ha='right', fontsize=8)
+                    try:
+                        import matplotlib.ticker as mticker
+                        ax.yaxis.set_major_formatter(mticker.FormatStrFormatter('%.2f'))
+                        ax.set_ylim(bottom=0)
+                    except Exception:
+                        pass
                     fig.tight_layout()
                     st.pyplot(fig)
                 else:
