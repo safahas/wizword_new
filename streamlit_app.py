@@ -3629,6 +3629,58 @@ def display_game():
                 """,
                 unsafe_allow_html=True,
             )
+            # My SEI performance collapsible above Start button
+            if 'show_sei_perf' not in st.session_state:
+                st.session_state['show_sei_perf'] = False
+            _sei_btn_cols = st.columns([1,2,1])
+            with _sei_btn_cols[1]:
+                if st.button("My SEI performance", key="btn_toggle_sei_perf"):
+                    st.session_state['show_sei_perf'] = not st.session_state['show_sei_perf']
+            if st.session_state.get('show_sei_perf'):
+                import matplotlib.pyplot as plt
+                import matplotlib
+                matplotlib.rcParams['axes.unicode_minus'] = False
+                user = (st.session_state.get('user') or {}).get('username','guest')
+                category_label = game.subject.replace('_',' ')
+                # Use the same loader and filters as Game Over stats
+                all_games = get_all_game_results()
+                nickname = user.lower()
+                user_games = [g for g in all_games if g.get('nickname','').lower() == nickname]
+                # Filter to current category (e.g., 'flashcard')
+                curr_subject = str(game.subject).lower()
+                user_games = [g for g in user_games if str(g.get('subject','')).lower() == curr_subject]
+                # Build cumulative SEI like stats_tab
+                sei_values, game_dates = [], []
+                total_score = total_time = total_words = 0
+                for g in user_games:
+                    score = g.get('score', 0)
+                    words = g.get('words_solved', 1) if g.get('mode') == 'Beat' else 1
+                    time_taken = g.get('time_taken', g.get('duration', None))
+                    date = g.get('timestamp') or g.get('date')
+                    if time_taken is not None and date:
+                        total_score += score
+                        total_time += time_taken
+                        total_words += words
+                        denom = max(int(total_words or 0), 1)
+                        avg_score = total_score / denom
+                        avg_time = total_time / denom
+                        sei = avg_score / avg_time if avg_time > 0 else 0
+                        if isinstance(date, str):
+                            date = date.split('T')[0]
+                        game_dates.append(date)
+                        sei_values.append(sei)
+                if sei_values and game_dates:
+                    fig, ax = plt.subplots(figsize=(6, 2.8))
+                    ax.plot(game_dates, sei_values, marker='o', linewidth=2, color='tab:green')
+                    ax.set_ylabel('SEI (Score/Time Index)')
+                    ax.set_title(f"{category_label.title()} — Your SEI per Game")
+                    ax.set_xticks(game_dates)
+                    ax.set_xticklabels(game_dates, rotation=45, ha='right', fontsize=8)
+                    fig.tight_layout()
+                    st.pyplot(fig)
+                else:
+                    st.info(f"No SEI history for {user} in {category_label.title()} yet.")
+
             # Now render the Start button which follows the marker div (styled via sibling selector)
             start_btn_html = """
             <style>
