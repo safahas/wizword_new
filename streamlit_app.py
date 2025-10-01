@@ -3619,8 +3619,9 @@ def display_game():
             st.markdown(
                 """
                 <style>
+                /* Ensure stats row is visible on small screens (iPhone) */
                 @media (max-width: 480px) {
-                    .pregame-banner .wizword-banner-stats { display: none !important; }
+                    .pregame-banner .wizword-banner-stats { display: flex !important; }
                 }
                 /* Remove top gap so banner hugs the top in pre-game */
                 section.main > div.block-container { padding-top: 0 !important; }
