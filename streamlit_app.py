@@ -4766,7 +4766,21 @@ def display_game():
                 </div>
                 """, unsafe_allow_html=True)
                     if top3_rows:
-                        st.table(top3_rows)
+                        # If FlashCard, add Category and Set columns
+                        if chosen_cat == 'flashcard':
+                            try:
+                                import pandas as _pd
+                                from backend.bio_store import get_active_flash_set_name
+                                uname_fc_tbl = ((st.session_state.get('user') or {}).get('username') or '').lower()
+                                set_name_tbl = get_active_flash_set_name(uname_fc_tbl) or 'flashcard'
+                                df = _pd.DataFrame(top3_rows)
+                                df.insert(0, 'Category', ['Flashcard'] * len(df))
+                                df.insert(1, 'Set', [set_name_tbl] * len(df))
+                                st.table(df)
+                            except Exception:
+                                st.table(top3_rows)
+                        else:
+                            st.table(top3_rows)
                     else:
                         st.info("No games available yet for this category.")
                 # Change Category under Top 10
@@ -7086,6 +7100,21 @@ def display_game_over(game_summary):
     # Sort users by highest SEI
     top_users = sorted(user_sei.items(), key=lambda x: x[1], reverse=True)[:3]
     rows = []
+    # Build header label (category and set for Flashcard); do not append category inside table cells
+    try:
+        _cat_disp = (leaderboard_category or game_summary.get('subject') or '').strip().title()
+    except Exception:
+        _cat_disp = ''
+    _set_disp = ''
+    if (leaderboard_category or '').lower() == 'flashcard':
+        try:
+            from backend.bio_store import get_active_flash_set_name
+            _un_tbl = (game_summary.get('nickname') or ((st.session_state.get('user') or {}).get('username') or '')).lower()
+            _set_disp = get_active_flash_set_name(_un_tbl) or 'flashcard'
+        except Exception:
+            _set_disp = ''
+    # No suffix in table rows; header below will show category/set
+    _cat_suffix = ''
     for u, v in top_users:
         dates = []
         for gg in all_games:
@@ -7103,7 +7132,22 @@ def display_game_over(game_summary):
             if sei_u is not None and abs(sei_u - v) < 1e-9:
                 dates.append(str(gg.get('timestamp') or gg.get('end_time') or '')[:10])
         last = sorted([d for d in dates if d], reverse=True)[0] if dates else ''
-        rows.append({'User': u, 'Highest SEI': round(v,2), 'Date': last})
+        row = {'User': u, 'Highest SEI': f"{round(v,4)}{_cat_suffix}", 'Date': last}
+        rows.append(row)
+    # Heading above the Top 3 table: "<Category> Top SEI"
+    try:
+        _hdr_cat = (leaderboard_category or game_summary.get('subject') or 'All Categories').title()
+    except Exception:
+        _hdr_cat = 'All Categories'
+    # Category header above table; include set name for FlashCard
+    _hdr = _hdr_cat
+    if (leaderboard_category or '').lower() == 'flashcard' and _set_disp:
+        _hdr = f"{_hdr_cat} — {_set_disp}"
+    st.markdown(f"""
+    <div style='font-weight:900; font-size:1.15em; color:#111; margin:6px 0 4px 0;'>
+        {_hdr} Top SEI
+    </div>
+    """, unsafe_allow_html=True)
     st.table(rows)
     # After all tabs (summary_tab, stats_tab, share_tab, stats_leader_tab), restore the play again and restart buttons
     col1, col2 = st.columns(2)
