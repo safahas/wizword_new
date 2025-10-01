@@ -3630,7 +3630,152 @@ def display_game():
                 """,
                 unsafe_allow_html=True,
             )
-            # My SEI performance collapsible above Start button
+            # Now render the Start button which follows the marker div (styled via sibling selector)
+            start_btn_html = """
+            <style>
+            @keyframes flash-pulse {
+                0% { transform: scale(1); filter: brightness(1); }
+                50% { transform: scale(1.06); filter: brightness(1.25); }
+                100% { transform: scale(1); filter: brightness(1); }
+            }
+            /* Stronger flashing animation to draw attention */
+            @keyframes start-flash {
+                0% {
+                    transform: scale(1);
+                    filter: brightness(1);
+                    box-shadow: 0 10px 20px rgba(255, 217, 61, 0.35), 0 2px 8px rgba(0,0,0,0.18);
+                }
+                50% {
+                    transform: scale(1.10);
+                    filter: brightness(1.35) saturate(1.15);
+                    box-shadow: 0 16px 36px rgba(255, 107, 107, 0.55), 0 4px 14px rgba(0,0,0,0.25);
+                }
+                100% {
+                    transform: scale(1);
+                    filter: brightness(1);
+                    box-shadow: 0 10px 20px rgba(255, 217, 61, 0.35), 0 2px 8px rgba(0,0,0,0.18);
+                }
+            }
+            /* Target the Start button robustly across wrappers (Streamlit DOM varies on mobile) */
+            .beat-start-btn + div button,
+            .beat-start-btn + div .stButton button,
+            .beat-start-btn ~ div button,
+            .beat-start-btn ~ div .stButton button,
+            .beat-start-btn ~ * button {
+                background: linear-gradient(90deg, #FFD93D 0%, #FF6B6B 35%, #4ECDC4 70%, #8EC5FF 100%) !important;
+                color: #222 !important;
+                font-weight: 900 !important;
+                font-size: 2.4em !important; /* 100% larger */
+                border-radius: 9999px !important;
+                border: none !important;
+                padding: 1.2em 3.2em !important; /* 100% larger */
+                margin: 0 0.2em !important;
+                box-shadow: 0 14px 30px rgba(0,0,0,0.22) !important;
+                animation: start-flash 1.2s ease-in-out infinite, flash-pulse 2.4s ease-in-out infinite !important;
+                transition: transform 0.15s ease, filter 0.15s ease, box-shadow 0.15s ease;
+            }
+            .beat-start-btn + div button:hover,
+            .beat-start-btn + div .stButton button:hover,
+            .beat-start-btn ~ div button:hover,
+            .beat-start-btn ~ div .stButton button:hover,
+            .beat-start-btn ~ * button:hover {
+                background: linear-gradient(90deg, #FFED8A 0%, #FF8A8A 35%, #70E6CD 70%, #A6D5FF 100%) !important;
+                color: #fff !important;
+                box-shadow: 0 12px 28px rgba(0,0,0,0.24) !important;
+            }
+            /* Ignore prefers-reduced-motion for this specific CTA */
+            @media (prefers-reduced-motion: reduce) {
+                .beat-start-btn ~ * button { animation-duration: 1.6s; }
+            }
+            /* Direct class to force flashing via JS */
+            .flash-start {
+                animation: start-flash 1.2s ease-in-out infinite, flash-pulse 2.4s ease-in-out infinite !important;
+                will-change: transform, filter, box-shadow;
+            }
+            /* Smaller, white Change Category button */
+            .beat-change-cat button {
+                background: #ffffff !important;
+                color: #333 !important;
+                font-weight: 600 !important;
+                font-size: 0.45em !important; /* 50% smaller */
+                border-radius: 6px !important;
+                border: 1px solid #e5e7eb !important; /* light gray */
+                padding: 0.125em 0.4em !important; /* halved padding */
+                margin-left: 0.2em !important;
+                box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+                transform: scale(1); /* ensure no inherited scaling */
+            }
+            .beat-change-cat button:hover {
+                background: #f9fafb !important;
+                color: #111 !important;
+                border-color: #d1d5db !important;
+            }
+            </style>
+            <div class='beat-start-btn' style='display:inline-block;'></div>
+            <script>
+            (function(){
+              function styleStart(){
+                try{
+                  var anchor=document.querySelector('.beat-start-btn');
+                  if(!anchor) return;
+                  var containers=[anchor.nextElementSibling, anchor.parentElement && anchor.parentElement.nextElementSibling, anchor.closest('div') && anchor.closest('div').nextElementSibling];
+                  var target=null;
+                  for(var i=0;i<containers.length;i++){
+                    var c=containers[i];
+                    if(c){ var b=c.querySelector('button'); if(b){ target=b; break; } }
+                  }
+                  if(!target){
+                    var btns=Array.from(document.querySelectorAll('div .stButton button'));
+                    target=btns.find(function(b){ return /start/i.test(b.innerText || ''); }) || btns[0];
+                  }
+                  if(target){ target.classList.add('flash-start'); }
+                }catch(e){ }
+              }
+              styleStart();
+              var id=setInterval(styleStart, 600);
+              setTimeout(function(){ try{ clearInterval(id); }catch(e){} }, 8000);
+              try{ new MutationObserver(styleStart).observe(document.body,{childList:true,subtree:true}); }catch(e){}
+            })();
+            </script>
+            """
+            st.markdown(start_btn_html, unsafe_allow_html=True)
+            _uname = (
+                (st.session_state.get('user') or {}).get('username')
+                or st.session_state.get('nickname')
+                or 'Player'
+            )
+            _start_label = "Click to Start Game"
+            # Render primary Start button here (before SEI panel)
+            if st.button(_start_label, key='beat_start_btn'):
+                # If user was idle too long on start screen, force logout instead of starting
+                try:
+                    _idle_limit = int(os.getenv('INACTIVITY_LOGOUT_SECONDS', '0'))
+                except Exception:
+                    _idle_limit = 0
+                try:
+                    import time as _time
+                    _idle_elapsed = (_time.time() - float(st.session_state.get('start_idle_at', _time.time())))
+                except Exception:
+                    _idle_elapsed = 0
+                if _idle_limit > 0 and _idle_elapsed >= _idle_limit:
+                    keys_to_keep = ['users']
+                    for key in list(st.session_state.keys()):
+                        if key not in keys_to_keep:
+                            del st.session_state[key]
+                    st.rerun()
+                # Clear any lingering time-over flags before (re)starting timer
+                st.session_state.pop('time_over', None)
+                st.session_state.pop('time_over_at', None)
+                try:
+                    import time as _time
+                    st.session_state.pop('start_idle_at', None)
+                    st.session_state['beat_started'] = True
+                    st.session_state['beat_start_time'] = _time.time()
+                except Exception:
+                    st.session_state['beat_started'] = True
+                st.rerun()
+            st.session_state['_pregame_start_rendered'] = True
+            # My SEI performance collapsible below Start button
             if 'show_sei_perf' not in st.session_state:
                 st.session_state['show_sei_perf'] = False
             _sei_btn_cols = st.columns([1,2,1])
@@ -3690,7 +3835,30 @@ def display_game():
                 50% { transform: scale(1.06); filter: brightness(1.25); }
                 100% { transform: scale(1); filter: brightness(1); }
             }
-            .beat-start-btn + div button {
+            /* Stronger flashing animation to draw attention */
+            @keyframes start-flash {
+                0% {
+                    transform: scale(1);
+                    filter: brightness(1);
+                    box-shadow: 0 10px 20px rgba(255, 217, 61, 0.35), 0 2px 8px rgba(0,0,0,0.18);
+                }
+                50% {
+                    transform: scale(1.10);
+                    filter: brightness(1.35) saturate(1.15);
+                    box-shadow: 0 16px 36px rgba(255, 107, 107, 0.55), 0 4px 14px rgba(0,0,0,0.25);
+                }
+                100% {
+                    transform: scale(1);
+                    filter: brightness(1);
+                    box-shadow: 0 10px 20px rgba(255, 217, 61, 0.35), 0 2px 8px rgba(0,0,0,0.18);
+                }
+            }
+            /* Target the Start button robustly across wrappers (Streamlit DOM varies on mobile) */
+            .beat-start-btn + div button,
+            .beat-start-btn + div .stButton button,
+            .beat-start-btn ~ div button,
+            .beat-start-btn ~ div .stButton button,
+            .beat-start-btn ~ * button {
                 background: linear-gradient(90deg, #FFD93D 0%, #FF6B6B 35%, #4ECDC4 70%, #8EC5FF 100%) !important;
                 color: #222 !important;
                 font-weight: 900 !important;
@@ -3700,13 +3868,26 @@ def display_game():
                 padding: 1.2em 3.2em !important; /* 100% larger */
                 margin: 0 0.2em !important;
                 box-shadow: 0 14px 30px rgba(0,0,0,0.22) !important;
-                animation: flash-pulse 1.3s ease-in-out infinite;
+                animation: start-flash 1.2s ease-in-out infinite, flash-pulse 2.4s ease-in-out infinite !important;
                 transition: transform 0.15s ease, filter 0.15s ease, box-shadow 0.15s ease;
             }
-            .beat-start-btn + div button:hover {
+            .beat-start-btn + div button:hover,
+            .beat-start-btn + div .stButton button:hover,
+            .beat-start-btn ~ div button:hover,
+            .beat-start-btn ~ div .stButton button:hover,
+            .beat-start-btn ~ * button:hover {
                 background: linear-gradient(90deg, #FFED8A 0%, #FF8A8A 35%, #70E6CD 70%, #A6D5FF 100%) !important;
                 color: #fff !important;
                 box-shadow: 0 12px 28px rgba(0,0,0,0.24) !important;
+            }
+            /* Ignore prefers-reduced-motion for this specific CTA */
+            @media (prefers-reduced-motion: reduce) {
+                .beat-start-btn ~ * button { animation-duration: 1.6s; }
+            }
+            /* Direct class to force flashing via JS */
+            .flash-start {
+                animation: start-flash 1.2s ease-in-out infinite, flash-pulse 2.4s ease-in-out infinite !important;
+                will-change: transform, filter, box-shadow;
             }
             /* Smaller, white Change Category button */
             .beat-change-cat button {
@@ -3728,6 +3909,31 @@ def display_game():
             }
             </style>
             <div class='beat-start-btn' style='display:inline-block;'></div>
+            <script>
+            (function(){
+              function styleStart(){
+                try{
+                  var anchor=document.querySelector('.beat-start-btn');
+                  if(!anchor) return;
+                  var containers=[anchor.nextElementSibling, anchor.parentElement && anchor.parentElement.nextElementSibling, anchor.closest('div') && anchor.closest('div').nextElementSibling];
+                  var target=null;
+                  for(var i=0;i<containers.length;i++){
+                    var c=containers[i];
+                    if(c){ var b=c.querySelector('button'); if(b){ target=b; break; } }
+                  }
+                  if(!target){
+                    var btns=Array.from(document.querySelectorAll('div .stButton button'));
+                    target=btns.find(function(b){ return /start/i.test(b.innerText || ''); }) || btns[0];
+                  }
+                  if(target){ target.classList.add('flash-start'); }
+                }catch(e){ }
+              }
+              styleStart();
+              var id=setInterval(styleStart, 600);
+              setTimeout(function(){ try{ clearInterval(id); }catch(e){} }, 8000);
+              try{ new MutationObserver(styleStart).observe(document.body,{childList:true,subtree:true}); }catch(e){}
+            })();
+            </script>
             """
             st.markdown(start_btn_html, unsafe_allow_html=True)
             _uname = (
@@ -4044,7 +4250,7 @@ def display_game():
                             st.error('Failed to save FlashCard text.')
                 else:
                     st.info('FlashCard category is disabled by configuration.')
-            elif st.button(_start_label, key='beat_start_btn'):
+            elif not st.session_state.get('_pregame_start_rendered') and st.button(_start_label, key='beat_start_btn'):
                 # If user was idle too long on start screen, force logout instead of starting
                 try:
                     _idle_limit = int(os.getenv('INACTIVITY_LOGOUT_SECONDS', '0'))
