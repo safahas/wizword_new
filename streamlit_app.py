@@ -3578,8 +3578,9 @@ def display_game():
             except Exception:
                 pass
             stats_html = f"""
-            <div class='wizword-banner'>
+            <div class='wizword-banner pregame-banner'>
               <div class='wizword-banner-title'>WizWord</div>
+              <div class='wizword-banner-subtitle' style='margin-top:2px;margin-bottom:6px;'>{(st.session_state.get('user') or {}).get('username','').title()},  Wellcome back</div>
               <div class='wizword-banner-stats' style='display:flex;align-items:center;gap:18px;'>
                 <span class='wizword-stat wizword-beat-category'><b>📚</b> {game.subject.replace('_', ' ').title()}</span>
                 <span class='wizword-stat wizword-beat-timer'><b>⏰</b> --s</span>
@@ -3594,6 +3595,17 @@ def display_game():
             """
             # Render the banner (contains a marker div where the button sits)
             st.markdown(stats_html, unsafe_allow_html=True)
+            # On small screens, hide the pre-game stats row to avoid duplicate icon rows with sticky banner
+            st.markdown(
+                """
+                <style>
+                @media (max-width: 480px) {
+                    .pregame-banner .wizword-banner-stats { display: none !important; }
+                }
+                </style>
+                """,
+                unsafe_allow_html=True,
+            )
             # Now render the Start button which follows the marker div (styled via sibling selector)
             start_btn_html = """
             <style>
@@ -3647,7 +3659,7 @@ def display_game():
                 or st.session_state.get('nickname')
                 or 'Player'
             )
-            _start_label = f"{_uname} .. Click to Start Game"
+            _start_label = "Click to Start Game"
             # If session already expired due to idle, block the button and offer logout
             _idle_block = bool(st.session_state.get('session_expired'))
             if _idle_block:
@@ -4995,7 +5007,7 @@ def display_game():
         # Normal banner and timer logic follows as before
         stats_html = f"""
         <div class='wizword-banner'>
-          <div class='wizword-banner-title'>WizWord <span style="font-size:0.6em; padding:0.25em 0.6em; margin-left:0.4em; border-radius:0.6em; background:rgba(255,255,255,0.18); box-shadow: inset 0 0 0 1px rgba(255,255,255,0.25);">Beat</span></div>
+          <div class='wizword-banner-title'>WizWord <span style="font-size:0.6em; padding:0.25em 0.6em; margin-left:0.4em; border-radius:0.6em; background:rgba(255,255,255,0.18); box-shadow: inset 0 0 0 1px rgba(255,255,255,0.25);">{(st.session_state.get('user') or {}).get('username','').title()},  Wellcome back</span></div>
           <div class='wizword-banner-stats' style='justify-content:center;'>
             <span class='wizword-stat wizword-beat-score'><b>🏆</b> {game.score}</span>
             <span class='wizword-stat wizword-beat-category' style='font-size:1.35em; font-weight:900; color:#000; background:#fff7; border:2px solid #fff;'><b>📚</b> {game.subject.replace('_', ' ').title()}</span>
@@ -5107,29 +5119,30 @@ def display_game():
         }}
         </style>
         """
-        st.markdown(stats_html, unsafe_allow_html=True)
-        # Override styles to reduce banner height
-        st.markdown(
-            """
-            <style>
-            .wizword-banner { padding: 4px 12px !important; }
-            .wizword-banner-title { font-size: 1.2em !important; white-space: nowrap !important; }
-            .wizword-banner-stats { gap: 8px !important; font-size: 0.95em !important; flex-wrap: wrap !important; }
-            .wizword-stat { padding: 2px 8px !important; min-width: auto !important; max-width: 44vw !important; }
-            .wizword-beat-timer { font-size: 1.5em !important; border-width: 2px !important; }
-            .wizword-beat-score { font-size: 1.5em !important; border-width: 2px !important; }
-            @media (max-width: 420px) {
-              .wizword-banner { padding: 4px 8px !important; }
-              .wizword-banner-title { font-size: 1.05em !important; }
-              .wizword-banner-stats { gap: 6px !important; font-size: 0.9em !important; }
-              .wizword-stat { padding: 2px 6px !important; max-width: 46vw !important; }
-            }
-            </style>
-            """,
-            unsafe_allow_html=True,
-        )
-        # Add a spacer to prevent content from hiding under the fixed banner
-        st.markdown("<div style='height: 16px;'></div>", unsafe_allow_html=True)
+        if st.session_state.get('beat_started', False):
+            st.markdown(stats_html, unsafe_allow_html=True)
+            # Override styles to reduce banner height
+            st.markdown(
+                """
+                <style>
+                .wizword-banner { padding: 4px 12px !important; }
+                .wizword-banner-title { font-size: 1.2em !important; white-space: nowrap !important; }
+                .wizword-banner-stats { gap: 8px !important; font-size: 0.95em !important; flex-wrap: wrap !important; }
+                .wizword-stat { padding: 2px 8px !important; min-width: auto !important; max-width: 44vw !important; }
+                .wizword-beat-timer { font-size: 1.5em !important; border-width: 2px !important; }
+                .wizword-beat-score { font-size: 1.5em !important; border-width: 2px !important; }
+                @media (max-width: 420px) {
+                  .wizword-banner { padding: 4px 8px !important; }
+                  .wizword-banner-title { font-size: 1.05em !important; }
+                  .wizword-banner-stats { gap: 6px !important; font-size: 0.9em !important; }
+                  .wizword-stat { padding: 2px 6px !important; max-width: 46vw !important; }
+                }
+                </style>
+                """,
+                unsafe_allow_html=True,
+            )
+            # Add a spacer to prevent content from hiding under the fixed banner
+            st.markdown("<div style='height: 16px;'></div>", unsafe_allow_html=True)
     else:
         stats_html = f"""
         <div class='wizword-banner'>
