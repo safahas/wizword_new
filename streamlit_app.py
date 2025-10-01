@@ -3597,12 +3597,28 @@ def display_game():
                 )
             except Exception:
                 pass
+            # Build category label; include FlashCard set name if applicable
+            try:
+                _disp_cat = game.subject.replace('_', ' ').title()
+                if str(game.subject).lower() == 'flashcard':
+                    try:
+                        _uname_fc_lbl = ((st.session_state.get('user') or {}).get('username') or '').lower()
+                    except Exception:
+                        _uname_fc_lbl = ''
+                    try:
+                        from backend.bio_store import get_active_flash_set_name
+                        _set_name_lbl = get_active_flash_set_name(_uname_fc_lbl) or 'default'
+                        _disp_cat = f"Flashcard — {_set_name_lbl}"
+                    except Exception:
+                        pass
+            except Exception:
+                _disp_cat = game.subject
             stats_html = f"""
             <div class='wizword-banner pregame-banner'>
               <div class='wizword-banner-title'>WizWord</div>
               <div class='wizword-banner-subtitle' style='margin-top:2px;margin-bottom:6px;'>{(st.session_state.get('user') or {}).get('username','').title()},  Wellcome back</div>
               <div class='wizword-banner-stats' style='display:flex;align-items:center;gap:18px;'>
-                <span class='wizword-stat wizword-beat-category'><b>📚</b> {game.subject.replace('_', ' ').title()}</span>
+                <span class='wizword-stat wizword-beat-category'><b>📚</b> {_disp_cat}</span>
                 <span class='wizword-stat wizword-beat-timer'><b>⏰</b> --s</span>
                 <span class='wizword-stat wizword-beat-score'><b>🏆</b> {game.score}</span>
                 <span class='wizword-stat'><b>🔢</b> {st.session_state.get('beat_word_count', 0)}</span>
@@ -3779,8 +3795,9 @@ def display_game():
             if 'show_sei_perf' not in st.session_state:
                 st.session_state['show_sei_perf'] = False
             _sei_btn_cols = st.columns([1,2,1])
+            _sei_label = "My SEI performance"
             with _sei_btn_cols[1]:
-                if st.button("My SEI performance", key="btn_toggle_sei_perf"):
+                if st.button(_sei_label, key="btn_toggle_sei_perf"):
                     st.session_state['show_sei_perf'] = not st.session_state['show_sei_perf']
             if st.session_state.get('show_sei_perf'):
                 import matplotlib.pyplot as plt
