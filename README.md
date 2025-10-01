@@ -255,6 +255,7 @@ Your **Favorite Category** is the word category (such as Tech, Brands, Science, 
 
 - Storage: Kept in-memory inside the `WordSelector` singleton. Not written to disk.
 - Scope: Tracked per user and per user+subject to avoid immediate repeats.
+- FlashCard token scoping: For FlashCard, recents are tracked per user + FlashCard + active token (or set name if no token). This prevents repeats bleeding across different shared sets.
 - Capacity: Controlled by env `RECENT_WORDS_LIMIT` (default 50).
 - Persistence: Persists across logout (same server process), resets on server restart or when cleared explicitly.
 - Updates:
@@ -487,11 +488,19 @@ EMAIL_NOTICE_TTL_SECONDS=45
 
 # Background worker cadence for FlashCard maintenance (top‑ups, API retries)
 FLASHCARD_WORKER_INTERVAL_SECS=180
+# OpenRouter quota & retry behavior (logging/backoff)
+# Debounce warning logs and slow retries when quota is exhausted
+OPENROUTER_WARNING_MIN_INTERVAL_S=30  # Min seconds between quota warning logs
+OPENROUTER_RETRY_BASE_DELAY_S=1.5     # Base backoff seconds
+OPENROUTER_RETRY_MAX_DELAY_S=12       # Max backoff seconds
+OPENROUTER_RETRY_MAX_ATTEMPTS=2       # Attempts per phase (primary/fallback)
+OPENROUTER_429_COOLDOWN_S=8           # Extra cooldown when HTTP 429 is received
 ```
 
 Notes on UI vs Backend environment:
 - The Streamlit UI and the FastAPI backend run as separate processes and each reads its own environment.
 - The pre‑game progress banner text “Preparing FlashCard words and hints… (N/T)” uses the UI’s `FLASHCARD_POOL_MAX` to compute T. Login and pre‑game with FlashCard default are optimized via lazy init; heavy FlashCard work runs in the background. Gameplay pulls from the existing pool. If no word is ready yet, the hint button briefly shows “Preparing word…” instead of blocking.
+- FlashCard hint lookup during gameplay first checks the active set’s saved pool for the exact word (case‑insensitive). If not found, it generates a document‑grounded local hint (no runtime LLM calls unless `FLASHCARD_RUNTIME_API=true`). This applies both at init and the lazy‑init hint path.
 - If the banner shows an unexpected T, restart Streamlit with the desired value in that shell:
   - PowerShell: `$env:FLASHCARD_POOL_MAX="20"; ./venv/Scripts/streamlit run streamlit_app.py`
 

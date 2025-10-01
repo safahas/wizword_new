@@ -2032,6 +2032,13 @@ class WordSelector:
             try:
                 _active_name = get_active_flash_set_name(username) or 'flashcard'
                 pool = get_flash_set_pool(username, _active_name)
+                # If this is an imported/reference set, the per-set pool may be empty.
+                # Fall back to the active set's resolved pool (which dereferences ref_token).
+                if not isinstance(pool, list) or not pool:
+                    try:
+                        pool = get_flash_pool(username)
+                    except Exception:
+                        pool = []
             except Exception:
                 pool = get_flash_pool(username)
             # If pool exceeds current target size (env lowered), trim and persist
