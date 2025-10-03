@@ -4798,7 +4798,8 @@ def display_game():
                 # Change Category under Top 10
                 st.markdown("<div class='beat-change-cat' style='display:inline-block;margin-top:8px;'>", unsafe_allow_html=True)
                 _is_guest = (((st.session_state.get('user') or {}).get('username') or '').strip().lower() == 'guest')
-                if st.button('Change Category', key='change_category_btn_beat_start', disabled=_is_guest):
+                # Allow category changes even in guest mode
+                if st.button('Change Category', key='change_category_btn_beat_start', disabled=False):
                     st.session_state['change_category'] = True
                     # Refresh TIME_OVER panel timer on user action
                     try:
@@ -4823,8 +4824,7 @@ def display_game():
                         pass
                     st.rerun()
                 st.markdown("</div>", unsafe_allow_html=True)
-                if _is_guest:
-                    st.caption("Category changes are disabled in guest mode. Please sign in to change category.")
+                # Guest users can now change category; no caption needed
                 # FlashCard Settings button placed directly below Change Category
                 # Toggleable FlashCard Settings button (expand/collapse), blocked for 'guest'
                 _uname_cur = ((st.session_state.get('user') or {}).get('username') or '').strip().lower()
