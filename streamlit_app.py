@@ -506,7 +506,23 @@ import sys
 
 
 
-BEAT_MODE_TIMEOUT_SECONDS = int(os.getenv("BEAT_MODE_TIME", 300))
+try:
+    _beat_env = os.getenv("BEAT_MODE_TIME", "300")
+    try:
+        BEAT_MODE_TIMEOUT_SECONDS = int(str(_beat_env).strip())
+    except Exception:
+        # Attempt to salvage first integer found; otherwise default to 300
+        try:
+            _nums = re.findall(r"\d+", str(_beat_env))
+            BEAT_MODE_TIMEOUT_SECONDS = int(_nums[0]) if _nums else 300
+        except Exception:
+            BEAT_MODE_TIMEOUT_SECONDS = 300
+        try:
+            print(f"[WARN] Invalid BEAT_MODE_TIME='{_beat_env}', using {BEAT_MODE_TIMEOUT_SECONDS}", file=sys.stderr)
+        except Exception:
+            pass
+except Exception:
+    BEAT_MODE_TIMEOUT_SECONDS = 300
 # print(f"[DEBUG] BEAT_MODE_TIMEOUT_SECONDS = {BEAT_MODE_TIMEOUT_SECONDS}")
 RECENT_WORDS_LIMIT = 50
 
@@ -2864,23 +2880,24 @@ def display_game():
                     except Exception:
                         pass
                 # FlashCard info removed per request
-                min_birthday = datetime.date(1900, 1, 1)
+                import datetime as _dt
+                min_birthday = _dt.date(1900, 1, 1)
                 raw_birthday = user.get('birthday', None)
                 birthday_value = None
-                if isinstance(raw_birthday, datetime.date):
+                if isinstance(raw_birthday, _dt.date):
                     birthday_value = raw_birthday
-                elif isinstance(raw_birthday, datetime.datetime):
+                elif isinstance(raw_birthday, _dt.datetime):
                     birthday_value = raw_birthday.date()
                 elif isinstance(raw_birthday, str) and raw_birthday:
                     try:
-                        birthday_value = datetime.date.fromisoformat(raw_birthday)
+                        birthday_value = _dt.date.fromisoformat(raw_birthday)
                     except Exception:
                         try:
-                            birthday_value = datetime.datetime.fromisoformat(raw_birthday).date()
+                            birthday_value = _dt.datetime.fromisoformat(raw_birthday).date()
                         except Exception:
                             birthday_value = None
                 if not birthday_value:
-                    birthday_value = datetime.date.today()
+                    birthday_value = _dt.date.today()
                 birthday = st.date_input('Birthday', value=birthday_value, min_value=min_birthday, key='profile_birthday_inline')
                 # Save button
                 if is_guest:
@@ -3812,49 +3829,67 @@ def display_game():
                 # Filter to current category (e.g., 'flashcard')
                 curr_subject = str(game.subject).lower()
                 user_games = [g for g in user_games if str(g.get('subject','')).lower() == curr_subject]
-                # Build cumulative SEI like stats_tab
-                sei_values, game_dates = [], []
-                total_score = total_time = total_words = 0
-                for g in user_games:
-                    score = g.get('score', 0)
-                    words = g.get('words_solved', 1) if g.get('mode') == 'Beat' else 1
-                    time_taken = g.get('time_taken', g.get('duration', None))
-                    try:
-                        # Normalize milliseconds to seconds if necessary
-                        if isinstance(time_taken, (int, float)) and time_taken > 1000:
-                            time_taken = time_taken / 1000.0
-                    except Exception:
-                        pass
-                    date = g.get('timestamp') or g.get('date')
-                    if time_taken is not None and date:
-                        total_score += score
-                        total_time += time_taken
-                        total_words += words
-                        denom = max(int(total_words or 0), 1)
-                        avg_score = total_score / denom
-                        avg_time = total_time / denom
-                        sei = avg_score / avg_time if avg_time > 0 else 0
-                        if isinstance(date, str):
-                            date = date.split('T')[0]
-                        game_dates.append(date)
-                        sei_values.append(sei)
-                if sei_values and game_dates:
-                    fig, ax = plt.subplots(figsize=(6, 2.8))
-                    ax.plot(game_dates, sei_values, marker='o', linewidth=2, color='tab:green')
-                    ax.set_ylabel('SEI (Score/Time Index)')
-                    ax.set_title(f"{category_label.title()} — Your SEI per Game")
-                    ax.set_xticks(game_dates)
-                    ax.set_xticklabels(game_dates, rotation=45, ha='right', fontsize=8)
-                    try:
-                        import matplotlib.ticker as mticker
-                        ax.yaxis.set_major_formatter(mticker.FormatStrFormatter('%.2f'))
-                        ax.set_ylim(bottom=0)
-                    except Exception:
-                        pass
-                    fig.tight_layout()
-                    st.pyplot(fig)
+                # Guest demo graph (mirrors Game Over Statistics behavior)
+                _is_guest_user_pg = ((st.session_state.get('user') or {}).get('username', '').strip().lower() == 'guest') or st.session_state.get('guest_mode', False)
+                if _is_guest_user_pg:
+                    from datetime import datetime, timedelta
+                    dates = [(datetime.now() - timedelta(days=(6 - i))).strftime('%Y-%m-%d') for i in range(7)]
+                    sei_values_demo = [round(0.25 + i * 0.12 + (0.05 if (i % 2 == 0) else -0.02), 2) for i in range(7)]
+                    fig_demo, ax_demo = plt.subplots(figsize=(6, 3))
+                    ax_demo.plot(dates, sei_values_demo, marker='o', linewidth=2, color='tab:green', label='SEI (Demo)')
+                    ax_demo.set_xlabel('Session')
+                    ax_demo.set_ylabel('SEI (Score/Time Index)')
+                    ax_demo.set_title(f"{category_label.title()} — Score Efficiency Index (SEI) per Game (Demo)")
+                    ax_demo.set_xticks(dates)
+                    ax_demo.set_xticklabels(dates, rotation=45, ha='right', fontsize=8)
+                    ax_demo.legend(loc='upper left')
+                    fig_demo.tight_layout()
+                    st.pyplot(fig_demo)
+                    st.caption("Demo SEI trend shown for guest mode. Sign in to track your real performance.")
                 else:
-                    st.info(f"No SEI history for {user} in {category_label.title()} yet.")
+                    # Build cumulative SEI like stats_tab
+                    sei_values, game_dates = [], []
+                    total_score = total_time = total_words = 0
+                    for g in user_games:
+                        score = g.get('score', 0)
+                        words = g.get('words_solved', 1) if g.get('mode') == 'Beat' else 1
+                        time_taken = g.get('time_taken', g.get('duration', None))
+                        try:
+                            # Normalize milliseconds to seconds if necessary
+                            if isinstance(time_taken, (int, float)) and time_taken > 1000:
+                                time_taken = time_taken / 1000.0
+                        except Exception:
+                            pass
+                        date = g.get('timestamp') or g.get('date')
+                        if time_taken is not None and date:
+                            total_score += score
+                            total_time += time_taken
+                            total_words += words
+                            denom = max(int(total_words or 0), 1)
+                            avg_score = total_score / denom
+                            avg_time = total_time / denom
+                            sei = avg_score / avg_time if avg_time > 0 else 0
+                            if isinstance(date, str):
+                                date = date.split('T')[0]
+                            game_dates.append(date)
+                            sei_values.append(sei)
+                    if sei_values and game_dates:
+                        fig, ax = plt.subplots(figsize=(6, 2.8))
+                        ax.plot(game_dates, sei_values, marker='o', linewidth=2, color='tab:green')
+                        ax.set_ylabel('SEI (Score/Time Index)')
+                        ax.set_title(f"{category_label.title()} — Your SEI per Game")
+                        ax.set_xticks(game_dates)
+                        ax.set_xticklabels(game_dates, rotation=45, ha='right', fontsize=8)
+                        try:
+                            import matplotlib.ticker as mticker
+                            ax.yaxis.set_major_formatter(mticker.FormatStrFormatter('%.2f'))
+                            ax.set_ylim(bottom=0)
+                        except Exception:
+                            pass
+                        fig.tight_layout()
+                        st.pyplot(fig)
+                    else:
+                        st.info(f"No SEI history for {user} in {category_label.title()} yet.")
 
             # Now render the Start button which follows the marker div (styled via sibling selector)
             start_btn_html = """
@@ -4798,8 +4833,13 @@ def display_game():
                 # Change Category under Top 10
                 st.markdown("<div class='beat-change-cat' style='display:inline-block;margin-top:8px;'>", unsafe_allow_html=True)
                 _is_guest = (((st.session_state.get('user') or {}).get('username') or '').strip().lower() == 'guest')
-                # Allow category changes even in guest mode
-                if st.button('Change Category', key='change_category_btn_beat_start', disabled=False):
+                # Control guest ability via env ALLOW_GUEST_CHANGE_CATEGORY (default: false)
+                try:
+                    _allow_guest_change = os.getenv('ALLOW_GUEST_CHANGE_CATEGORY', 'false').strip().lower() in ('1','true','yes','on')
+                except Exception:
+                    _allow_guest_change = False
+                _disabled_btn = (_is_guest and (not _allow_guest_change))
+                if st.button('Change Category', key='change_category_btn_beat_start', disabled=_disabled_btn):
                     st.session_state['change_category'] = True
                     # Refresh TIME_OVER panel timer on user action
                     try:
@@ -4824,7 +4864,9 @@ def display_game():
                         pass
                     st.rerun()
                 st.markdown("</div>", unsafe_allow_html=True)
-                # Guest users can now change category; no caption needed
+                # If guest change is disabled by env, show caption
+                if _is_guest and (not _allow_guest_change):
+                    st.caption("Category changes are disabled in guest mode. Please sign in to change category.")
                 # FlashCard Settings button placed directly below Change Category
                 # Toggleable FlashCard Settings button (expand/collapse), blocked for 'guest'
                 _uname_cur = ((st.session_state.get('user') or {}).get('username') or '').strip().lower()
