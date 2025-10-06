@@ -1805,6 +1805,52 @@ def display_login():
             st.rerun()
 def main():
     """Main application entry point."""
+    # Maintenance mode landing page (env-gated)
+    try:
+        _maint = os.getenv('MAINTENANCE_MODE', 'false').strip().lower() in ('1','true','yes','on')
+    except Exception:
+        _maint = False
+    if _maint:
+        try:
+            _msg = os.getenv('MAINTENANCE_MESSAGE', 'Under maintenance')
+        except Exception:
+            _msg = 'Under maintenance'
+        try:
+            _contact = os.getenv('MAINTENANCE_CONTACT', 'admin@wizword.org')
+        except Exception:
+            _contact = 'admin@wizword.org'
+        st.set_page_config(page_title='WizWord -- AI powered word game', layout='centered')
+        # Headline banner
+        st.markdown(
+            """
+            <style>
+              .maint-banner {
+                display:flex; align-items:center; justify-content:center;
+                background: linear-gradient(270deg, #FFD93D, #FF6B6B, #4ECDC4, #8EC5FF);
+                background-size: 600% 600%;
+                animation: maintGradient 8s ease infinite;
+                color:#fff; padding: 24px 12px; border-radius: 16px; border: 2px solid #fff7c2;
+                box-shadow: 0 3px 16px rgba(255, 217, 61, 0.13), 0 1px 4px rgba(0,0,0,0.09);
+                margin: 8px 0 18px 0;
+              }
+              .maint-title { font-family: 'Poppins','Baloo 2',sans-serif; font-size: 2.0em; font-weight:900; letter-spacing:.06em; }
+              @keyframes maintGradient { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
+            </style>
+            <div class='maint-banner'><div class='maint-title'>WizWord -- AI powered word game</div></div>
+            """,
+            unsafe_allow_html=True,
+        )
+        # Body message
+        st.markdown(
+            f"""
+            <div style='text-align:center; padding: 2.0em 1em;'>
+              <div style='font-size:2.0em; font-weight:900; margin-bottom:0.2em;'>🛠️ {_msg}</div>
+              <div style='font-size:1.1em;'>Please contact <a href=\"mailto:{_contact}\">{_contact}</a> for any questions.</div>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+        return
     # Bootstrap aggregates on first run
     try:
         ensure_aggregates_bootstrap()
