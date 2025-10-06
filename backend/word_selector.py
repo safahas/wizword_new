@@ -3326,8 +3326,10 @@ class WordSelector:
             if word:
                 return word
 
+        # Personal category: honor ENABLE_PERSONAL_CATEGORY gate
+        _enable_personal = os.getenv('ENABLE_PERSONAL_CATEGORY', 'true').strip().lower() in ('1','true','yes','on')
         # Personal category: prefer user's saved personal_pool; fallback to generating a batch
-        if self.current_category == "personal":
+        if self.current_category == "personal" and _enable_personal:
             try:
                 pool = self.get_user_personal_pool(username or 'global')
                 # Auto top-up: if pool exists but < max, add batch more (API or offline) avoiding duplicates
@@ -3405,7 +3407,12 @@ class WordSelector:
                             pass
                         return chosen
                 # If pool empty, try to generate a new batch offline (or API if available)
-                batch = self.generate_personal_pool(username or 'global', n=self.personal_pool_batch_size, avoid=[it.get('word') for it in pool] if pool else [])
+                # Re-check gate before any generation
+                _enable_personal2 = os.getenv('ENABLE_PERSONAL_CATEGORY', 'true').strip().lower() in ('1','true','yes','on')
+                if not _enable_personal2:
+                    batch = []
+                else:
+                    batch = self.generate_personal_pool(username or 'global', n=self.personal_pool_batch_size, avoid=[it.get('word') for it in pool] if pool else [])
                 if batch:
                     self.set_user_personal_pool(username or 'global', (pool or []) + batch)
                     # Pick best from new batch
