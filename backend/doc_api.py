@@ -73,9 +73,21 @@ async def generate_hints(file: UploadFile = File(...)):
     try:
         if ext == "pdf":
             from io import BytesIO
-            from pypdf import PdfReader
-            reader = PdfReader(BytesIO(raw))
-            text = "\n".join([(p.extract_text() or "") for p in reader.pages])
+            # Prefer pypdf if available; fall back to PyPDF2 for broader compatibility
+            try:
+                from pypdf import PdfReader as _PdfReader  # type: ignore
+            except Exception:
+                try:
+                    from PyPDF2 import PdfReader as _PdfReader  # type: ignore
+                except Exception as _imp_err:
+                    raise RuntimeError(f"PDF parser not available: {_imp_err}")
+            reader = _PdfReader(BytesIO(raw))
+            try:
+                pages = reader.pages
+            except Exception:
+                # PyPDF2 older API
+                pages = getattr(reader, "pages", [])
+            text = "\n".join([(getattr(p, "extract_text", lambda: "")() or "") for p in pages])
         elif ext == "docx":
             from io import BytesIO
             from docx import Document
