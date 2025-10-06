@@ -5904,7 +5904,17 @@ def display_game():
                 import time as _t
                 st.session_state['skip_pending'] = True
                 st.session_state['skip_word'] = getattr(game, 'selected_word', '')
-                st.session_state['skip_show_until'] = _t.time() + 2.0  # show word for 2 seconds
+                # Control overlay duration via env: SKIP_SHOW_SECONDS (default 2.0s)
+                try:
+                    _skip_secs = float(os.getenv('SKIP_SHOW_SECONDS', '2.0'))
+                except Exception:
+                    _skip_secs = 2.0
+                # Clamp to a sensible range
+                if _skip_secs < 0.2:
+                    _skip_secs = 0.2
+                if _skip_secs > 10.0:
+                    _skip_secs = 10.0
+                st.session_state['skip_show_until'] = _t.time() + _skip_secs
                 # Track the round we initiated skip on, so we can stop showing after the round changes
                 st.session_state['skip_round_id'] = st.session_state.get('current_round_id')
                 st.session_state['_skip_btn_rendered'] = True
