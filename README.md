@@ -85,7 +85,7 @@ Backend .env precedence and debugging:
 - Choose a mode:
   - Fun: No timer, unlimited practice
   - Wiz: Track stats and leaderboards
-  - Beat: Timed sprint — default {int(os.getenv('BEAT_MODE_TIME', 300)) if False else 300}s
+- Beat: Timed sprint — default 300s (override with `BEAT_MODE_TIME`)
 - Pick a category or any for random
 - Interact during play:
 - FlashCard Settings quick guide:
@@ -303,6 +303,26 @@ Environment variables:
 - `GAME_RESULTS_PATH` (default: `game_results.json`) — full games log (append-only)
 - `AGGREGATES_PATH` (default: `game_data/aggregates.json`) — derived data for fast UI queries
 
+### Core app knobs
+
+```env
+# Gameplay timing
+BEAT_MODE_TIME=300             # seconds; default 300 if malformed
+SKIP_SHOW_SECONDS=2.0          # how long to show skipped word before loading next (0.2–10.0)
+
+# Categories and features
+ENABLE_PERSONAL_CATEGORY=true  # disable to hide Personal and prevent personal pool generation
+BYPASS_API_WORD_SELECTION=false# offline mode for non‑Personal categories
+
+# No‑repeat recents
+RECENT_WORDS_LIMIT=50          # max recent words tracked per user+subject (and per token for FlashCard)
+
+# Maintenance landing page
+MAINTENANCE_MODE=false
+MAINTENANCE_MESSAGE=Under maintenance
+MAINTENANCE_CONTACT=admin@wizword.org
+```
+
 Docker/AWS paths (WORKDIR=/app):
 - `/app/game_data/aggregates.json` (mount this directory for persistence)
 
@@ -413,6 +433,10 @@ USERS_BIO_FILE=users_bio.json
 - Upload PDF/DOCX/TXT in FlashCard Settings to build the pool from the file’s text.
 - The backend enforces size via `UPLOAD_MAX_BYTES` (default 10240 = 10KB). Increase if your files are larger.
 - On success, the UI shows item count and the FlashCard token. If SMTP is configured, the token is emailed to you with the uploaded file attached. The email subject includes the set name, and the body lists the source file name.
+  
+Extraction and LLM notes:
+- PDF parsing falls back between `pypdf` and `PyPDF2` for compatibility.
+- The LLM prompt selects only document‑specific terms that appear in the text, avoids generic academic words (results, method, study, etc.), and avoids noun/plural near‑duplicates. Output is strict JSON.
 
 #### Managing FlashCard sets (Create, Use, Delete)
 

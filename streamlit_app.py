@@ -504,6 +504,15 @@ import string
 import streamlit.components.v1 as components
 import sys
 
+# Load .env for the UI process (override existing env for deterministic config)
+try:
+    from dotenv import load_dotenv, find_dotenv
+    _UI_ENV_PATH = find_dotenv(usecwd=True)
+    if _UI_ENV_PATH:
+        load_dotenv(_UI_ENV_PATH, override=True)
+except Exception:
+    pass
+
 
 
 try:
