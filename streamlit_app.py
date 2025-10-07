@@ -1,6 +1,6 @@
 from dotenv import load_dotenv
 import os
-# Updated 07/28
+# Updated 10/07/2025
 # Always use the absolute path to your .env in the current project directory
 # Ensure UI env follows .env even if shell has old values
 load_dotenv(dotenv_path=os.path.join(os.getcwd(), ".env"), override=True)
