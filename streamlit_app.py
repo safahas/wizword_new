@@ -509,7 +509,8 @@ try:
     from dotenv import load_dotenv, find_dotenv
     _UI_ENV_PATH = find_dotenv(usecwd=True)
     if _UI_ENV_PATH:
-        load_dotenv(_UI_ENV_PATH, override=True)
+        # Prefer runtime/container environment over baked .env
+        load_dotenv(_UI_ENV_PATH, override=False)
 except Exception:
     pass
 
