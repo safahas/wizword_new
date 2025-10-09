@@ -7851,7 +7851,9 @@ def send_miss_you_email(to_email: str, username: str) -> bool:
     try:
         msg = MIMEText(body)
         msg["Subject"] = subject
-        msg["From"] = (os.environ.get("ADMIN_EMAIL") or SMTP_USER or "")
+        _from_email = (os.environ.get("ADMIN_EMAIL") or SMTP_USER or "")
+        _from_name = os.environ.get("WIZWORD_FROM_NAME", "WizWord")
+        msg["From"] = (f"{_from_name} <{_from_email}>" if _from_email else _from_name)
         msg["To"] = to_email
         with smtplib.SMTP(SMTP_SERVER, SMTP_PORT) as server:
             server.starttls()
