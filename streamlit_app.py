@@ -3045,6 +3045,7 @@ def display_game():
                                                     f"Your FlashCard set has been saved.\n"
                                                     f"Set name: {_active_title}\n"
                                                     f"Token: {token}\n\n"
+                                                    f"Visit <{os.getenv('WIZWORD_SITE','https://wizword.org')}> to import this set with your token.\n"
                                                     f"Share this token with your group so they can import this set."
                                                 )
                                                 _ok = _send_basic_email(recipient, subject, body)
@@ -4263,6 +4264,7 @@ def display_game():
                                                         f"Set name: {active_title}\n"
                                                         f"Token: {share_token}\n\n"
                                                         f"Source file: {safe_name}\n\n"
+                                                        f"Visit <{_os.getenv('WIZWORD_SITE','https://wizword.org')}> to import this set with your token.\n"
                                                         f"Share this token with your group so they can import this set.\n"
                                                     )
                                                     # Write uploaded file to a temp path for attachment
@@ -4306,6 +4308,7 @@ def display_game():
                                                         f"Your FlashCard set has been saved from document.\n"
                                                         f"Set name: {active_title}\n"
                                                         f"Token: {share_token}\n\n"
+                                                        f"Visit <{os.getenv('WIZWORD_SITE','https://wizword.org')}> to import this set with your token.\n"
                                                         f"Share this token with your group so they can import this set."
                                                     )
                                                     _send_basic_email(recipient, subject, body)
@@ -4716,6 +4719,7 @@ def display_game():
                                         f"Your FlashCard set has been saved.\n"
                                         f"Set name: {_active_title}\n"
                                         f"Token: {_share_token}\n\n"
+                                        f"Visit <{os.getenv('WIZWORD_SITE','https://wizword.org')}> to import this set with your token.\n"
                                         f"Share this token with your group so they can import this set."
                                     )
                                     _send_basic_email(recipient, subject, body)
@@ -5056,6 +5060,7 @@ def display_game():
                                                 f"Your FlashCard set has been saved.\n"
                                                 f"Set name: {_active_title}\n"
                                                 f"Token: {_share_token}\n\n"
+                                                f"Visit <{os.getenv('WIZWORD_SITE','https://wizword.org')}> to import this set with your token.\n"
                                                 f"Share this token with your group so they can import this set."
                                             )
                                             _send_basic_email(recipient, subject, body)
@@ -5303,6 +5308,7 @@ def display_game():
                                                             f"Set name: {active_title}\n"
                                                             f"Token: {share_token}\n\n"
                                                             f"Source file: {safe_name2}\n\n"
+                                                            f"Visit <{os.getenv('WIZWORD_SITE','https://wizword.org')}> to import this set with your token.\n"
                                                             f"Share this token with your group so they can import this set.\n"
                                                         )
                                                         try:
@@ -6251,6 +6257,7 @@ def display_game():
                                     f"Your FlashCard set has been saved.\n"
                                     f"Set name: {_active_title}\n"
                                     f"Token: {_share_token}\n\n"
+                                    f"Visit <{os.getenv('WIZWORD_SITE','https://wizword.org')}> to import this set with your token.\n"
                                     f"Share this token with your group so they can import this set."
                                 )
                                 _send_basic_email(recipient, subject, body)
