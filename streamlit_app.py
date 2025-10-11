@@ -3696,7 +3696,7 @@ def display_game():
             stats_html = f"""
             <div class='wizword-banner pregame-banner'>
               <div class='wizword-banner-title'>WizWord</div>
-              <div class='wizword-banner-subtitle' style='margin-top:2px;margin-bottom:6px;'>{(st.session_state.get('user') or {}).get('username','').title()},  Wellcome back</div>
+              <div class='wizword-banner-subtitle' style='margin-top:2px;margin-bottom:6px;'>{(st.session_state.get('user') or {}).get('username','').title()},  Welcome back</div>
               <div class='wizword-banner-stats' style='display:flex;align-items:center;gap:18px;'>
                 <span class='wizword-stat wizword-beat-category'><b>📚</b> {_disp_cat}</span>
                 <span class='wizword-stat wizword-beat-timer'><b>⏰</b> --s</span>
@@ -5442,7 +5442,7 @@ def display_game():
         # Normal banner and timer logic follows as before
         stats_html = f"""
         <div class='wizword-banner'>
-          <div class='wizword-banner-title'>WizWord <span style="font-size:0.6em; padding:0.25em 0.6em; margin-left:0.4em; border-radius:0.6em; background:rgba(255,255,255,0.18); box-shadow: inset 0 0 0 1px rgba(255,255,255,0.25);">{(st.session_state.get('user') or {}).get('username','').title()},  Wellcome back</span></div>
+          <div class='wizword-banner-title'>WizWord <span style="font-size:0.6em; padding:0.25em 0.6em; margin-left:0.4em; border-radius:0.6em; background:rgba(255,255,255,0.18); box-shadow: inset 0 0 0 1px rgba(255,255,255,0.25);">{(st.session_state.get('user') or {}).get('username','').title()},  Welcome back</span></div>
           <div class='wizword-banner-stats' style='justify-content:center;'>
             <span class='wizword-stat wizword-beat-score'><b>🏆</b> {game.score}</span>
             <span class='wizword-stat wizword-beat-category' style='font-size:1.35em; font-weight:900; color:#000; background:#fff7; border:2px solid #fff;'><b>📚</b> {game.subject.replace('_', ' ').title()}</span>
@@ -7847,7 +7847,12 @@ def send_miss_you_email(to_email: str, username: str) -> bool:
         return False
     subject = "We miss you at WizWord!"
     _site_url = os.getenv('WIZWORD_SITE') or os.getenv('APP_BASE_URL', 'https://example.com')
-    body = f"Hi {username},\n\nIt's been a while since your last game. Come back and beat your best SEI!\n\nPlay now: {_site_url}\n\n— WizWord Team"
+    body = (
+        f"Hi {username},\n\n"
+        "It's been a while since your last game. Come back and beat your best SEI!\n\n"
+        f"Visit <{_site_url}> to play now.\n\n"
+        "— WizWord Team"
+    )
     try:
         msg = MIMEText(body)
         msg["Subject"] = subject
@@ -7855,6 +7860,12 @@ def send_miss_you_email(to_email: str, username: str) -> bool:
         _from_name = os.environ.get("WIZWORD_FROM_NAME", "WizWord")
         msg["From"] = (f"{_from_name} <{_from_email}>" if _from_email else _from_name)
         msg["To"] = to_email
+        try:
+            _reply = (os.environ.get("ADMIN_EMAIL") or SMTP_USER or "")
+            if _reply:
+                msg["Reply-To"] = _reply
+        except Exception:
+            pass
         with smtplib.SMTP(SMTP_SERVER, SMTP_PORT) as server:
             server.starttls()
             server.login(SMTP_USER, SMTP_PASSWORD)
