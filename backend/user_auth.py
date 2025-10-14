@@ -126,7 +126,9 @@ def send_temp_password_email(email: str, temp_password: str) -> bool:
     body = f"Your temporary password is: {temp_password}\n\nIt will expire in 5 minutes. Please use it to log in and reset your password immediately."
     msg = MIMEText(body)
     msg['Subject'] = subject
-    msg['From'] = from_addr
+    from_email = os.getenv('ADMIN_EMAIL') or smtp_user or ''
+    from_name = os.getenv('WIZWORD_FROM_NAME', 'WizWordAi')
+    msg['From'] = (f"{from_name} <{from_email}>" if from_email else from_name)
     msg['To'] = to_addr
     try:
         with smtplib.SMTP(smtp_host, smtp_port) as server:
@@ -157,10 +159,14 @@ def send_share_card_email(email: str, subject: str, body: str, image_path: str) 
     from_addr = smtp_user
     to_addr = email
     msg = MIMEMultipart()
-    msg['From'] = from_addr
+    from_email = os.getenv('ADMIN_EMAIL') or smtp_user or ''
+    from_name = os.getenv('WIZWORD_FROM_NAME', 'WizWordAi')
+    msg['From'] = (f"{from_name} <{from_email}>" if from_email else from_name)
     msg['To'] = to_addr
     msg['Subject'] = subject
-    msg.attach(MIMEText(body, 'plain'))
+    site = os.getenv('WIZWORD_SITE', 'https://wizword.org')
+    body_final = f"{body}\n\nVisit <{site}> to view or share your results."
+    msg.attach(MIMEText(body_final, 'plain'))
     # Attach image
     try:
         with open(image_path, 'rb') as f:

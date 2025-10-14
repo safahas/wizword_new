@@ -256,7 +256,7 @@ def send_reset_email(to_email, reset_code):
     msg = MIMEText(body)
     msg["Subject"] = subject
     _from_email = (os.environ.get("ADMIN_EMAIL") or SMTP_USER or "")
-    _from_name = os.environ.get("WIZWORD_FROM_NAME", "WizWord")
+    _from_name = os.environ.get("WIZWORD_FROM_NAME", "WizWordAi")
     msg["From"] = (f"{_from_name} <{_from_email}>" if _from_email else _from_name)
     msg["To"] = to_email
 
@@ -283,7 +283,7 @@ def send_email_with_attachment(to_emails, subject, body, attachment_path=None, c
     try:
         msg = MIMEMultipart()
         _from_email = (os.environ.get("ADMIN_EMAIL") or SMTP_USER or "")
-        _from_name = os.environ.get("WIZWORD_FROM_NAME", "WizWord")
+        _from_name = os.environ.get("WIZWORD_FROM_NAME", "WizWordAi")
         msg["From"] = (f"{_from_name} <{_from_email}>" if _from_email else _from_name)
         msg["To"] = ", ".join([e for e in to_emails if e])
         if cc_emails:
@@ -339,7 +339,7 @@ def _send_basic_email(to_email: str, subject: str, body: str) -> bool:
         msg = MIMEText(body)
         msg["Subject"] = subject
         _from_email = (os.environ.get("ADMIN_EMAIL") or SMTP_USER or "")
-        _from_name = os.environ.get("WIZWORD_FROM_NAME", "WizWord")
+        _from_name = os.environ.get("WIZWORD_FROM_NAME", "WizWordAi")
         msg["From"] = (f"{_from_name} <{_from_email}>" if _from_email else _from_name)
         msg["To"] = to_email
         with smtplib.SMTP(SMTP_SERVER, SMTP_PORT) as server:
@@ -7871,7 +7871,7 @@ def send_miss_you_email(to_email: str, username: str) -> bool:
         msg = MIMEText(body)
         msg["Subject"] = subject
         _from_email = (os.environ.get("ADMIN_EMAIL") or SMTP_USER or "")
-        _from_name = os.environ.get("WIZWORD_FROM_NAME", "WizWord")
+        _from_name = os.environ.get("WIZWORD_FROM_NAME", "WizWordAi")
         msg["From"] = (f"{_from_name} <{_from_email}>" if _from_email else _from_name)
         msg["To"] = to_email
         try:
