@@ -3887,11 +3887,11 @@ def display_game():
                 if st.button(_sei_label, key="btn_toggle_sei_perf"):
                     st.session_state['show_sei_perf'] = not st.session_state['show_sei_perf']
             if st.session_state.get('show_sei_perf'):
-                    import matplotlib.pyplot as plt
-                    import matplotlib
-                    matplotlib.rcParams['axes.unicode_minus'] = False
-                    user = (st.session_state.get('user') or {}).get('username','guest')
-                    category_label = game.subject.replace('_',' ')
+                import matplotlib.pyplot as plt
+                import matplotlib
+                matplotlib.rcParams['axes.unicode_minus'] = False
+                user = (st.session_state.get('user') or {}).get('username','guest')
+                category_label = game.subject.replace('_',' ')
                 # Use the same loader and filters as Game Over stats
                 all_games = get_all_game_results()
                 nickname = user.lower()
@@ -3928,7 +3928,7 @@ def display_game():
                             # Normalize milliseconds to seconds if necessary
                             if isinstance(time_taken, (int, float)) and time_taken > 1000:
                                 time_taken = time_taken / 1000.0
-                                except Exception:
+                        except Exception:
                             pass
                         date = g.get('timestamp') or g.get('date')
                         if time_taken is not None and date:
@@ -4900,7 +4900,7 @@ def display_game():
                             except Exception:
                                 st.table(top3_rows)
                         else:
-                        st.table(top3_rows)
+                            st.table(top3_rows)
                     else:
                         st.info("No games available yet for this category.")
                 # Change Category under Top 10
