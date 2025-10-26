@@ -7903,11 +7903,13 @@ def run_daily_miss_you_check() -> None:
                 last_run = None
         if last_run == today_str:
             return
-        # Threshold: 7 days without a game
+        # Thresholds
         threshold_days = int(os.getenv("MISS_YOU_THRESHOLD_DAYS", "7"))
+        resend_days = int(os.getenv("MISS_YOU_RESEND_DAYS", "7"))
         now = datetime.datetime.now(datetime.UTC)
         # Load from users.json each day to ensure we use on-disk data
         users = load_users()
+        changed = False
         for uname, u in (users or {}).items():
             try:
                 email = (u or {}).get("email")
@@ -7922,11 +7924,37 @@ def run_daily_miss_you_check() -> None:
                         last_dt = last_dt.replace(tzinfo=datetime.UTC)
                 except Exception:
                     continue
+                # Respect per-user resend cooldown
+                last_sent = None
+                try:
+                    _ls = (u or {}).get("last_miss_you_sent")
+                    if _ls:
+                        last_sent = datetime.datetime.fromisoformat(str(_ls))
+                        if last_sent.tzinfo is None:
+                            last_sent = last_sent.replace(tzinfo=datetime.UTC)
+                except Exception:
+                    last_sent = None
+                cool_ok = True
+                if last_sent is not None:
+                    cool_ok = ((now - last_sent).days >= resend_days)
                 days = (now - last_dt).days
-                if days >= threshold_days:
-                    send_miss_you_email(email, uname)
+                if days >= threshold_days and cool_ok:
+                    if send_miss_you_email(email, uname):
+                        # Update per-user last send timestamp
+                        try:
+                            users[uname] = dict(u or {})
+                            users[uname]["last_miss_you_sent"] = now.isoformat()
+                            changed = True
+                        except Exception:
+                            pass
             except Exception:
                 continue
+        # Persist any updated last_miss_you_sent stamps
+        try:
+            if changed:
+                save_users(users)
+        except Exception:
+            pass
         with open(stamp_path, "w", encoding="utf-8") as f:
             json.dump({"last_run": today_str}, f)
     except Exception:
