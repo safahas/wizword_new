@@ -2126,7 +2126,7 @@ def display_welcome():
                 _enable_flashcard = os.getenv('ENABLE_FLASHCARD_CATEGORY', 'true').strip().lower() in ('1','true','yes','on')
                 category_options = [
                     "any", "4th_grade", "8th_grade", "anatomy", "animals", "brands", "cities", "food",
-                    "general", "gre", "medicines", "places", "psat", "sat", "science", "sports", "tech"
+                    "general", "gre", "medicines", "places", "psat", "sat", "science", "spanish", "sports", "tech"
                 ]
                 if _enable_flashcard:
                     category_options.append("flashcard")
@@ -2167,7 +2167,7 @@ def display_welcome():
                     subject = 'general' if str(subject).lower() == 'personal' else subject
                 st.session_state['original_category_choice'] = subject
                 # Now resolve the effective subject for this run
-                resolved_subject = random.choice(["general", "animals", "food", "places", "science", "tech", "sports", "brands", "4th_grade", "8th_grade", "cities", "medicines", "anatomy", "psat", "sat", "gre"]) if subject == "any" else subject
+                resolved_subject = random.choice(["general", "animals", "food", "places", "science", "spanish", "tech", "sports", "brands", "4th_grade", "8th_grade", "cities", "medicines", "anatomy", "psat", "sat", "gre"]) if subject == "any" else subject
                 # --- Global Top 3 by SEI for chosen category (start page) ---
                 try:
                     all_games = get_all_game_results()
@@ -3407,7 +3407,7 @@ def display_game():
         enable_flashcard = os.getenv('ENABLE_FLASHCARD_CATEGORY', 'true').strip().lower() in ('1', 'true', 'yes', 'on')
         # Build categories with FlashCard at the top of the list
         # Personal is intentionally hidden from the change-category dropdown
-        base_cats = ["any", "anatomy", "animals", "aviation", "brands", "cities", "food", "general", "gre", "history", "law", "medicines", "movies", "music", "places", "psat", "sat", "science", "sports", "tech", "4th_grade", "8th_grade"]
+        base_cats = ["any", "anatomy", "animals", "aviation", "brands", "cities", "food", "general", "gre", "history", "law", "medicines", "movies", "music", "places", "psat", "sat", "science", "spanish", "sports", "tech", "4th_grade", "8th_grade"]
         categories = []
         if enable_flashcard:
             categories.append("flashcard")
