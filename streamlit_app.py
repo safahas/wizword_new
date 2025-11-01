@@ -1580,6 +1580,9 @@ def display_login():
             'Student', 'High School', 'Bachelor', 'Master', 'PhD', 'Other'
         ]
         education = st.selectbox('Education (required)', education_options, key="register_education")
+        # Hints language preference
+        hints_language_options = ['english', 'spanish']
+        hints_language = st.selectbox('Hints language', hints_language_options, index=0, key='register_hints_language')
         bio = st.text_area(
             f"Bio (optional – up to {BIO_MAX_CHARS} characters)",
             key="register_bio_v2",
@@ -1640,7 +1643,8 @@ def display_login():
                         'email': u_email,
                         'birthday': str(birthday),
                         'education': u_edu,
-                        'bio': u_bio
+                        'bio': u_bio,
+                        'hints_language': (hints_language or 'english').strip().lower()
                     }
                     st.session_state['users'] = users
                     save_users(users)
@@ -2826,6 +2830,10 @@ def display_game():
                 if occupation == 'Other':
                     occupation_other = st.text_input('Please specify your occupation', value=user.get('occupation', '') if user.get('occupation', '') not in occupation_options else '', key='profile_occupation_other_inline')
                 address = st.text_input('Address', value=user.get('address', ''), key='profile_address_inline')
+                # Hints language preference
+                _hints_lang_curr_inline = (user.get('hints_language') or 'english').strip().lower()
+                hints_language_options_inline = ['english', 'spanish']
+                hints_language_inline = st.selectbox('Hints language', hints_language_options_inline, index=(hints_language_options_inline.index(_hints_lang_curr_inline) if _hints_lang_curr_inline in hints_language_options_inline else 0), key='profile_hints_language_inline')
                 try:
                     from backend.bio_store import get_bio
                     _bio_init_inline = get_bio(user.get('username',''))
@@ -2980,6 +2988,11 @@ def display_game():
                     if username_lower and 'users' in st.session_state and username_lower in st.session_state['users']:
                         st.session_state['users'][username_lower]['education'] = final_education
                         st.session_state['users'][username_lower]['address'] = address
+                        st.session_state['users'][username_lower]['hints_language'] = (hints_language_inline or 'english').strip().lower()
+                        try:
+                            st.session_state['user']['hints_language'] = st.session_state['users'][username_lower]['hints_language']
+                        except Exception:
+                            pass
                         try:
                             from backend.bio_store import set_bio
                             set_bio(username_lower, bio_to_save)
@@ -3264,6 +3277,10 @@ def display_game():
         if occupation == 'Other':
             occupation_other = st.text_input('Please specify your occupation', value=user.get('occupation', '') if user.get('occupation', '') not in occupation_options else '')
         address = st.text_input('Address', value=user.get('address', ''))
+        # Hints language preference
+        _hints_lang_curr = (user.get('hints_language') or 'english').strip().lower()
+        hints_language_options = ['english', 'spanish']
+        hints_language = st.selectbox('Hints language', hints_language_options, index=(hints_language_options.index(_hints_lang_curr) if _hints_lang_curr in hints_language_options else 0))
         try:
             from backend.bio_store import get_bio
             _bio_init_profile = get_bio(user.get('username',''))
@@ -3322,6 +3339,11 @@ def display_game():
             if username_lower and 'users' in st.session_state and username_lower in st.session_state['users']:
                 st.session_state['users'][username_lower]['education'] = final_education
                 st.session_state['users'][username_lower]['address'] = address
+                st.session_state['users'][username_lower]['hints_language'] = (hints_language or 'english').strip().lower()
+                try:
+                    st.session_state['user']['hints_language'] = st.session_state['users'][username_lower]['hints_language']
+                except Exception:
+                    pass
                 try:
                     from backend.bio_store import set_bio
                     set_bio(username_lower, bio_to_save)

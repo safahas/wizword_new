@@ -1976,8 +1976,8 @@ class WordSelector:
 
     def _select_word_from_dictionary(self, word_length: int = 5, subject: str = "general", username: str = "global") -> str:
         logger.debug(f"Entered _select_word_from_dictionary with subject='{subject}', word_length='{word_length}', username='{username}' (length will be ignored)")
-        # Get all possible words from hints.json for the subject
-        hints_file = os.path.join('backend', 'data', 'hints.json')
+        # Get all possible words from the appropriate hints file for the subject
+        hints_file = self._get_hints_file_for_user(username)
         try:
             with open(hints_file, 'r', encoding='utf-8') as f:
                 hints_data = json.load(f)
@@ -2656,6 +2656,28 @@ class WordSelector:
         except Exception:
             pass
 
+    def _get_hints_file_for_user(self, username: str) -> str:
+        """Return the appropriate hints JSON file path based on user's hints_language.
+        Order: explicit Spanish alias → standard Spanish filename → default English.
+        """
+        try:
+            uname = (username or 'global').strip().lower()
+            users = self._load_users_db()
+            prefs = users.get(uname) if isinstance(users, dict) else None
+            lang = str((prefs or {}).get('hints_language', 'english')).strip().lower()
+        except Exception:
+            lang = 'english'
+        base_dir = os.path.join('backend', 'data')
+        if lang == 'spanish':
+            # Try requested path name first (as specified), then common filename
+            cand1 = os.path.join(base_dir, 'hints_es_json')
+            cand2 = os.path.join(base_dir, 'hints_es.json')
+            if os.path.exists(cand1):
+                return cand1
+            if os.path.exists(cand2):
+                return cand2
+        return os.path.join(base_dir, 'hints.json')
+
     def _infer_role_for_name(self, word: str, bio_text: str) -> str:
         try:
             w = (word or '').strip()
@@ -3206,9 +3228,10 @@ class WordSelector:
         if subject in ["tech", "movies", "music", "brands", "history"]:
             subject = "general"
         
-        # Try hints.json first
+        # Try preferred hints file first
         try:
-            hints_file = os.path.join('backend', 'data', 'hints.json')
+            uname = getattr(self, 'current_username', None) or 'global'
+            hints_file = self._get_hints_file_for_user(uname)
             logger.info(f"[HINT SOURCE] Looking for hints in: {hints_file}")
             with open(hints_file, 'r', encoding='utf-8') as f:
                 hints_data = json.load(f)
@@ -3233,11 +3256,11 @@ class WordSelector:
                 else:
                     logger.warning(f"[HINT SOURCE] Word '{word}' not found in hints.json templates for category '{subject}' or 'general'")
         except FileNotFoundError:
-            logger.warning(f"[HINT SOURCE] hints.json file not found at {hints_file}")
+            logger.warning(f"[HINT SOURCE] hints file not found at {hints_file}")
         except json.JSONDecodeError:
-            logger.warning("[HINT SOURCE] Error decoding hints.json")
+            logger.warning("[HINT SOURCE] Error decoding hints file")
         except Exception as e:
-            logger.warning(f"[HINT SOURCE] Error reading hints.json: {e}")
+            logger.warning(f"[HINT SOURCE] Error reading hints file: {e}")
         
         
         # If no hints in hints.json, try word-specific hints from WORD_HINTS
@@ -3319,6 +3342,10 @@ class WordSelector:
     def select_word(self, word_length: int = 5, subject: str = "general", username: str = "global") -> str:
         """Select a word based on subject, using per-user recent word tracking. Ignores word length for repeat logic. Blocks immediate repeats."""
         self.current_category = subject.lower()
+        try:
+            self.current_username = (username or 'global').strip().lower()
+        except Exception:
+            self.current_username = 'global'
 
         # FlashCard category: pull from user's flash text pool
         if self.current_category == "flashcard":

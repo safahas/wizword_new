@@ -986,3 +986,549 @@
 {"category": "animals", "word": "dugong", "hints_es": ["Un gran mamífero marino relacionado con los manatíes.", "Se alimenta de pasto marino.", "Vive en aguas costeras cálidas."]}
 {"category": "animals", "word": "eland", "hints_es": ["Una gran antílope africano.", "Puede saltar grandes alturas a pesar de su tamaño.", "Valorado por su carne y pieles."]}
 {"category": "animals", "word": "ermine", "hints_es": ["Una pequeña especie de comadreja.", "Tiene un abrigo blanco en invierno.", "El pelaje se ha utilizado históricamente en prendas reales."]}
+{"category": "animals", "word": "galah", "hints_es": ["Un cacatúa rosa y gris.", "Común en Australia.", "Conocido por su comportamiento juguetón."]}
+{"category": "animals", "word": "gar", "hints_es": ["Un pez largo y estrecho con dientes afilados.", "Se encuentra en ríos y lagos de agua dulce.", "Cazador depredador."]}
+{"category": "animals", "word": "gannet", "hints_es": ["Una gran ave marina que se zambulle para pescar.", "Tiene alas largas y puntiagudas.", "Cría en grandes colonias."]}
+{"category": "animals", "word": "gavial", "hints_es": ["Un cocodrilo con un hocico largo y estrecho.", "Se alimenta principalmente de peces.", "Nativo de los ríos en el subcontinente indio."]}
+{"category": "animals", "word": "gerbil", "hints_es": ["Un pequeño roedor que a menudo se tiene como mascota.", "Tiene patas traseras largas para saltar.", "Nativo de regiones desérticas."]}
+{"category": "animals", "word": "gnat", "hints_es": ["Un pequeño insecto volador.", "A menudo se encuentra en enjambres.", "Puede morder o chupar sangre."]}
+{"category": "animals", "word": "gnu", "hints_es": ["También llamado ñu.", "Una gran antílope africano.", "Migra en enormes manadas."]}
+{"category": "animals", "word": "guppy", "hints_es": ["Un pequeño pez de agua dulce colorido.", "Popular en acuarios.", "Nativo de América del Sur."]}
+{"category": "animals", "word": "hermit", "hints_es": ["Un tipo de cangrejo que usa conchas vacías.", "Protege su cuerpo blando dentro de la concha.", "Común en áreas costeras."]}
+{"category": "animals", "word": "hoopoe", "hints_es": ["Un pájaro con una corona distintiva de plumas.", "Tiene un pico largo y curvado.", "Conocido por su canto único."]}
+{"category": "animals", "word": "ibex", "hints_es": ["Una cabra salvaje con grandes cuernos curvados.", "Vive en terrenos montañosos.", "Excelente escaladora."]}
+{"category": "animals", "word": "indigo", "hints_es": ["Un pequeño pájaro con plumas azules brillantes.", "Canta canciones melodiosas.", "Migra estacionalmente."]}
+{"category": "animals", "word": "jerboa", "hints_es": ["Un pequeño roedor del desierto.", "Tiene largas patas traseras para saltar.", "Se alimenta de noche."]}
+{"category": "animals", "word": "kestrel", "hints_es": ["Un pequeño halcón.", "Puede flotar mientras caza.", "Se encuentra en todo el mundo."]}
+{"category": "animals", "word": "kingfisher", "hints_es": ["Un pájaro colorido que caza peces.", "Tiene un pico afilado para bucear.", "Vive cerca de ríos y lagos."]}
+{"category": "animals", "word": "kiwi", "hints_es": ["Un ave que no vuela de Nueva Zelanda.", "Tiene un pico largo y un agudo sentido del olfato.", "Símbolo nacional de Nueva Zelanda."]}
+{"category": "animals", "word": "lamprey", "hints_es": ["Un pez sin mandíbula con una boca redonda de succión.", "Parásito de otros peces.", "Vive tanto en agua dulce como en agua salada."]}
+{"category": "animals", "word": "linnet", "hints_es": ["Un pequeño pájaro cantor.", "Canta una agradable canción trina.", "Se encuentra en Europa y Asia."]}
+{"category": "animals", "word": "manakin", "hints_es": ["Un pequeño pájaro tropical.", "Los machos realizan danzas elaboradas.", "Se encuentra en América Central y del Sur."]}
+{"category": "animals", "word": "manatee", "hints_es": ["Un gran mamífero marino gentil.", "Se alimenta de pasto marino.", "Apodado 'vaca marina.'"]}
+{"category": "animals", "word": "mara", "hints_es": ["Un gran roedor nativo de Argentina.", "Se parece a un ciervo pequeño.", "Vive en praderas abiertas."]}
+{"category": "animals", "word": "markhor", "hints_es": ["Una cabra salvaje con cuernos retorcidos.", "Animal nacional de Pakistán.", "Excelente escalador en montañas."]}
+{"category": "animals", "word": "myna", "hints_es": ["Un pájaro de tamaño mediano.", "Puede imitar el habla humana.", "Nativo de Asia."]}
+{"category": "animals", "word": "okapi", "hints_es": ["Un pariente que vive en el bosque de la jirafa.", "Tiene patas rayadas similares a las de las cebras.", "Nativo del Congo."]}
+{"category": "animals", "word": "oryx", "hints_es": ["Una gran antílope con cuernos largos y rectos.", "Adaptado a la vida en el desierto.", "Puede sobrevivir sin agua durante largos períodos."]}
+{"category": "food", "word": "apple", "hints_es": ["Una fruta dulce con piel suave y un mordisco crujiente.", "A menudo se come cruda o se hornea en pasteles.", "Viene en variedades como rojo, verde y amarillo."]}
+{"category": "food", "word": "apricot", "hints_es": ["Una fruta pequeña y suave con piel y pulpa naranja.", "Se usa fresca, seca o en mermeladas.", "Rica en vitaminas A y C."]}
+{"category": "food", "word": "avocado", "hints_es": ["Una fruta de textura cremosa con una semilla grande.", "A menudo se aplasta para hacer guacamole.", "Alta en grasas saludables."]}
+{"category": "food", "word": "banana", "hints_es": ["Una fruta larga y curva con pulpa suave.", "Comúnmente se come cruda o mezclada en batidos.", "Madura de verde a amarillo."]}
+{"category": "food", "word": "barley", "hints_es": ["Un grano de cereal utilizado en sopas y pan.", "También se elabora en cerveza.", "Uno de los granos cultivados más antiguos."]}
+{"category": "food", "word": "beans", "hints_es": ["Semillas comestibles de plantas leguminosas.", "Comunes en chiles, sopas y ensaladas.", "Ricas en proteínas y fibra."]}
+{"category": "food", "word": "beef", "hints_es": ["Carne de ganado.", "Usada en filetes, hamburguesas y guisos.", "Se puede cocinar poco hecho, a punto o bien hecho."]}
+{"category": "food", "word": "beet", "hints_es": ["Una verdura de raíz con pulpa roja profunda.", "A menudo se asa, se hierve o se encurta.", "Contiene pigmentos naturales usados para colorear."]}
+{"category": "food", "word": "berry", "hints_es": ["Una fruta pequeña y jugosa que a menudo se come fresca.", "Incluye fresas, arándanos y frambuesas.", "Llena de antioxidantes."]}
+{"category": "food", "word": "bread", "hints_es": ["Un alimento horneado hecho de harina y agua.", "Se sirve en forma de panes, bollos o panes planos.", "Alimento básico en muchas culturas."]}
+{"category": "food", "word": "broccoli", "hints_es": ["Una verdura verde con forma de árbol.", "A menudo se cocina al vapor o salteada.", "Rica en vitamina C y fibra."]}
+{"category": "food", "word": "butter", "hints_es": ["Un producto lácteo hecho de crema batida.", "Usado en la cocina, repostería y untar.", "Puede ser salado o sin sal."]}
+{"category": "food", "word": "cabbage", "hints_es": ["Una verdura de hojas con hojas apretadas.", "Se usa en ensaladas, sopas y platos fermentados.", "Ingrediente clave en la ensalada de repollo."]}
+{"category": "food", "word": "cake", "hints_es": ["Un dulce postre horneado.", "A menudo se presenta en capas con glaseado o crema.", "Se sirve para celebraciones."]}
+{"category": "food", "word": "carrot", "hints_es": ["Una verdura de raíz naranja.", "Se come cruda, cocida o en jugo.", "Rica en beta caroteno."]}
+{"category": "food", "word": "cashew", "hints_es": ["Una nuez en forma de riñón.", "Se come cruda, tostada o en postres.", "Crece en un árbol tropical."]}
+{"category": "food", "word": "celery", "hints_es": ["Una verdura verde con tallos crujientes.", "Común en sopas y ensaladas.", "A menudo se combina con mantequilla de maní."]}
+{"category": "food", "word": "cheese", "hints_es": ["Un producto lácteo hecho de cuajada de leche.", "Viene en variedades como cheddar y brie.", "Madurado para el desarrollo del sabor."]}
+{"category": "food", "word": "cherry", "hints_es": ["Una fruta pequeña y redonda con un hueso.", "Se usa fresca, seca o en pasteles.", "Viene en tipos dulces y ácidos."]}
+{"category": "food", "word": "chicken", "hints_es": ["Carne de un ave de granja común.", "Cocida asada, a la parrilla o frita.", "Una de las proteínas más populares en todo el mundo."]}
+{"category": "food", "word": "chili", "hints_es": ["Un pimiento picante usado en la cocina.", "Puede ser fresco, seco o en polvo.", "Agrega picante a los platillos."]}
+{"category": "food", "word": "chives", "hints_es": ["Una pequeña hierba verde con un sabor suave a cebolla.", "Se usa para adornar sopas y ensaladas.", "Pertenece a la familia de las cebollas."]}
+{"category": "food", "word": "choco", "hints_es": ["Un producto dulce hecho de granos de cacao.", "Se usa en dulces, pasteles y bebidas.", "Viene en variedades de leche, oscuro y blanco."]}
+{"category": "food", "word": "clove", "hints_es": ["Un pequeño brote de especia aromática.", "Usado en repostería y platos salados.", "Popular en recetas de festividades."]}
+{"category": "food", "word": "cocoa", "hints_es": ["Un polvo hecho de granos de cacao tostados.", "Usado en repostería y bebidas calientes.", "Rico en antioxidantes."]}
+{"category": "food", "word": "coconut", "hints_es": ["Una fruta tropical grande con una cáscara dura.", "Contiene agua dulce y pulpa blanca.", "Se usa en bebidas, postres y curries."]}
+{"category": "food", "word": "coffee", "hints_es": ["Una bebida preparada a partir de granos tostados.", "Se consume caliente o fría.", "Contiene cafeína para energía."]}
+{"category": "food", "word": "corn", "hints_es": ["Un grano con granos amarillos.", "Se come fresco, reventado o molido en harina.", "Se cultiva en todo el mundo como un cultivo básico."]}
+{"category": "food", "word": "crab", "hints_es": ["Un crustáceo con un caparazón duro.", "Se come al vapor, hervido o en pasteles.", "Se encuentra en océanos y aguas dulces."]}
+{"category": "food", "word": "cream", "hints_es": ["Un producto lácteo rico de la leche.", "Se usa en salsas, postres y café.", "Se puede batir para hacer un topping."]}
+{"category": "food", "word": "cucumber", "hints_es": ["Una verdura verde con pulpa acuosa.", "Se come fresca en ensaladas o en escabeche.", "Baja en calorías e hidratante."]}
+{"category": "food", "word": "currant", "hints_es": ["Una pequeña baya ácida.", "Se usa en mermeladas, jarabes y productos horneados.", "Viene en tipos rojo, negro y blanco."]}
+{"category": "food", "word": "date", "hints_es": ["Una fruta dulce de la palmera datilera.", "Común en la cocina de Oriente Medio.", "Alta en azúcares naturales."]}
+{"category": "food", "word": "duck", "hints_es": ["Un tipo de ave con carne rica.", "Asado, a la parrilla o utilizado en sopas.", "Popular en la cocina china."]}
+{"category": "food", "word": "egg", "hints_es": ["Un alimento con una cáscara dura que contiene yema y clara.", "Cocido, hervido, frito o revuelto.", "Común en la repostería."]}
+{"category": "food", "word": "fig", "hints_es": ["Una fruta pequeña y dulce con pulpa suave.", "Se come fresca o seca.", "Rica en fibra."]}
+{"category": "food", "word": "fish", "hints_es": ["Un animal que vive en el agua y se come como alimento.", "A la parrilla, frito o al horno.", "Alto en proteínas y omega-3."]}
+{"category": "food", "word": "flour", "hints_es": ["Un polvo hecho al moler granos.", "Usado en pan, pasteles y pasta.", "Viene en variedades de trigo y sin gluten."]}
+{"category": "food", "word": "garlic", "hints_es": ["Un bulbo fuerte usado para dar sabor.", "Común en platos salados en todo el mundo.", "Conocido por sus beneficios para la salud."]}
+{"category": "food", "word": "ginger", "hints_es": ["Una raíz picante utilizada en la cocina.", "Añade sabor a platos dulces y salados.", "También se usa en tés de hierbas."]}
+{"category": "food", "word": "grape", "hints_es": ["Una fruta pequeña y jugosa que crece en racimos.", "Se come fresca o se hace vino.", "Viene en verde, rojo y púrpura."]}
+{"category": "food", "word": "ham", "hints_es": ["Carne curada de la pata de un cerdo.", "Se sirve en rebanadas o asada.", "Popular en sándwiches."]}
+{"category": "food", "word": "honey", "hints_es": ["Un líquido dulce hecho por las abejas.", "Usado como un endulzante natural.", "Contiene antioxidantes y enzimas."]}
+{"category": "food", "word": "jam", "hints_es": ["Una dulce mermelada hecha de fruta y azúcar.", "Se sirve en pan o pasteles.", "Puede ser casera o comprada en la tienda."]}
+{"category": "food", "word": "kale", "hints_es": ["Una verdura de hojas verdes.", "Se come cruda, salteada o horneada en forma de chips.", "Rica en vitaminas K y C."]}
+{"category": "food", "word": "kiwi", "hints_es": ["Una fruta pequeña con pulpa verde y semillas pequeñas.", "Tiene una piel marrón peluda.", "Rica en vitamina C."]}
+{"category": "food", "word": "lamb", "hints_es": ["Carne de un cordero joven.", "A la parrilla, asada o guisada.", "Tierna con un sabor suave."]}
+{"category": "food", "word": "leek", "hints_es": ["Una verdura con un sabor suave a cebolla.", "Se usa en sopas y guisos.", "Tiene tallos largos y blancos y hojas verdes."]}
+{"category": "food", "word": "lemon", "hints_es": ["Una fruta cítrica amarilla ácida.", "Usada en bebidas, postres y cocina.", "Alta en vitamina C."]}
+{"category": "food", "word": "lentil", "hints_es": ["Una pequeña semilla de legumbre.", "Cocinado en sopas, guisos y curries.", "Viene en variedades verde, roja y marrón."]}
+{"category": "food", "word": "lettuce", "hints_es": ["Una verdura de hojas que a menudo se come cruda.", "Se usa en ensaladas y sándwiches.", "Viene en tipos de cabeza crujiente y de hojas."]}
+{"category": "food", "word": "lime", "hints_es": ["Una pequeña fruta cítrica verde.", "Se usa en bebidas, salsas y postres.", "Agrega un sabor ácido."]}
+{"category": "food", "word": "mango", "hints_es": ["Una fruta tropical con pulpa dulce y naranja.", "Se come fresca o se mezcla en batidos.", "Tiene una gran semilla central."]}
+{"category": "food", "word": "melon", "hints_es": ["Una fruta grande con pulpa dulce y jugosa.", "Incluye melón y melón dulce.", "A menudo se come en verano."]}
+{"category": "food", "word": "milk", "hints_es": ["Un líquido blanco de los mamíferos.", "Consumido fresco o procesado en productos lácteos.", "Rico en calcio."]}
+{"category": "food", "word": "mint", "hints_es": ["Una hierba fragante con un sabor fresco.", "Se usa en tés, postres y ensaladas.", "Tiene un aroma refrescante."]}
+{"category": "food", "word": "mushroom", "hints_es": ["Un hongo comestible con un tallo y un sombrero.", "Se usa en sopas, salsas y salteados.", "Viene en muchas variedades."]}
+{"category": "food", "word": "mustard", "hints_es": ["Un condimento hecho de semillas trituradas.", "Se sirve con carnes y sándwiches.", "Viene en tipos amarillo y picante."]}
+{"category": "food", "word": "noodle", "hints_es": ["Una tira o hebra de masa cocida en agua.", "Usada en pasta y platos asiáticos.", "Hecha de trigo, arroz u otras harinas."]}
+{"category": "food", "word": "oats", "hints_es": ["Un tipo de grano de cereal.", "Comúnmente se come como gachas o en granola.", "Conocido por sus beneficios para la salud del corazón."]}
+{"category": "food", "word": "octopus", "hints_es": ["Una criatura marina con ocho brazos.", "Cocinado a la parrilla, hervido o en ensaladas de mariscos.", "Conocido por su inteligencia y camuflaje."]}
+{"category": "food", "word": "olive", "hints_es": ["Una pequeña fruta ovalada con un hueso.", "Se come entera o se prensa para obtener aceite.", "Común en la cocina mediterránea."]}
+{"category": "food", "word": "onion", "hints_es": ["Una verdura redonda con carne en capas.", "Se usa cruda o cocida en muchos platos.", "Puede provocar lágrimas al ser picada."]}
+{"category": "food", "word": "orange", "hints_es": ["Una fruta cítrica redonda con jugo dulce.", "Comúnmente se come fresca o exprimida.", "Rica en vitamina C."]}
+{"category": "food", "word": "oyster", "hints_es": ["Un marisco con un cuerpo blando.", "Se come crudo, al vapor o frito.", "Puede producir perlas."]}
+{"category": "food", "word": "papaya", "hints_es": ["Una fruta tropical con pulpa naranja y semillas negras.", "Se come cruda o se mezcla en batidos.", "Rica en enzimas digestivas."]}
+{"category": "food", "word": "parsley", "hints_es": ["Una hierba verde con sabor fresco.", "Se usa como adorno o condimento.", "Viene en variedades de hoja plana y rizada."]}
+{"category": "food", "word": "pasta", "hints_es": ["Un alimento básico hecho de harina de trigo.", "Hervido y servido con salsas.", "Incluye espagueti, penne y fusilli."]}
+{"category": "food", "word": "pea", "hints_es": ["Una pequeña semilla verde de una vaina de legumbre.", "Se come fresca, congelada o seca.", "Se usa en sopas, ensaladas y guarniciones."]}
+{"category": "food", "word": "peach", "hints_es": ["Una fruta jugosa con piel peluda.", "Se come fresca, al horno o enlatada.", "Tiene un gran hueso central."]}
+{"category": "food", "word": "pear", "hints_es": ["Una fruta dulce con pulpa suave.", "Se come fresca o pochada.", "Viene en tipos verde, amarillo y rojo."]}
+{"category": "food", "word": "pecan", "hints_es": ["Una nuez dulce y rica.", "Usada en pasteles, galletas y bocadillos.", "Nativa de América del Norte."]}
+{"category": "food", "word": "pepper", "hints_es": ["Una verdura que viene en variedades dulces y picantes.", "Se usa fresca, asada o seca.", "Incluye tipos pimiento y chile."]}
+{"category": "food", "word": "perch", "hints_es": ["Una especie de pez de agua dulce.", "Cocinado a la parrilla, al horno o frito.", "Conocido por su sabor suave."]}
+{"category": "food", "word": "pickle", "hints_es": ["Una verdura conservada en vinagre o salmuera.", "A menudo hecha de pepinos.", "Se sirve como condimento o bocadillo."]}
+{"category": "food", "word": "pine", "hints_es": ["Un tipo de árbol cuyas semillas son comestibles.", "Los piñones se usan en la cocina.", "Las semillas son comunes en el pesto."]}
+{"category": "food", "word": "pizza", "hints_es": ["Un plato horneado con masa, salsa y ingredientes.", "A menudo cubierto con queso, carnes y verduras.", "Se originó en Italia."]}
+{"category": "food", "word": "plum", "hints_es": ["Una fruta pequeña y dulce con piel suave.", "Se come fresca o seca en forma de ciruelas pasas.", "Viene en muchos colores."]}
+{"category": "food", "word": "pork", "hints_es": ["Carne de cerdo.", "Usada en asados, chuletas y salchichas.", "Una proteína básica en muchas cocinas."]}
+{"category": "food", "word": "potato", "hints_es": ["Un tubérculo vegetal rico en almidón.", "Hervido, al horno, frito o en puré.", "Alimento básico en muchas dietas alrededor del mundo."]}
+{"category": "food", "word": "prawn", "hints_es": ["Un tipo de camarón grande.", "Cocinado a la parrilla, hervido o en curries.", "Común en las cocinas costeras."]}
+{"category": "food", "word": "prune", "hints_es": ["Una ciruela seca.", "Se come como un bocadillo o en postres.", "Conocida por ayudar a la digestión."]}
+{"category": "food", "word": "pumpkin", "hints_es": ["Una calabaza grande y redonda con piel naranja.", "Se usa en pasteles, sopas y decoraciones.", "Rica en vitamina A."]}
+{"category": "food", "word": "quince", "hints_es": ["Una fruta amarilla con pulpa firme.", "Generalmente se cocina antes de comer.", "A menudo se usa en mermeladas y gelatinas."]}
+{"category": "food", "word": "radish", "hints_es": ["Una pequeña hortaliza de raíz con sabor picante.", "Se come cruda en ensaladas o en escabeche.", "Viene en variedades roja, blanca y negra."]}
+{"category": "food", "word": "raisin", "hints_es": ["Una uva seca.", "Se come como un bocadillo o en productos horneados.", "Agrega dulzura natural."]}
+{"category": "food", "word": "rapini", "hints_es": ["Una verdura de hojas verdes con sabor amargo.", "A menudo se saltea con ajo y aceite.", "También se llama brócoli rabe."]}
+{"category": "food", "word": "rice", "hints_es": ["Un grano básico en muchas culturas.", "Cocido al vapor, frito o en sopas.", "Viene en variedades blanca, marrón y salvaje."]}
+{"category": "food", "word": "roll", "hints_es": ["Una pequeña porción de pan.", "Se sirve como guarnición o base para sándwiches.", "Puede ser blando o crujiente."]}
+{"category": "food", "word": "romaine", "hints_es": ["Una variedad de lechuga con hojas largas.", "Se usa en ensaladas César.", "Tiene una textura crujiente."]}
+{"category": "food", "word": "rosemary", "hints_es": ["Una hierba verde fragante.", "Se usa para asar carnes y verduras.", "Tiene hojas en forma de aguja."]}
+{"category": "food", "word": "sage", "hints_es": ["Una hierba con hojas suaves de color gris-verde.", "Se usa en aves y rellenos.", "Tiene un sabor ligeramente picante."]}
+{"category": "food", "word": "salmon", "hints_es": ["Un pez de carne rosada.", "A la parrilla, al horno o ahumado.", "Rico en ácidos grasos omega-3."]}
+{"category": "food", "word": "salt", "hints_es": ["Un mineral usado para sazonar.", "Esencial en la cocina y para conservar alimentos.", "Viene en formas de mar, roca y mesa."]}
+{"category": "food", "word": "sardine", "hints_es": ["Un pequeño pez aceitoso.", "Se come a la parrilla o enlatado.", "A menudo se conserva en aceite o salsa."]}
+{"category": "food", "word": "sausage", "hints_es": ["Carne molida envuelta en piel.", "Cocida a la parrilla, frita o al horno.", "Viene en variedades picantes y suaves."]}
+{"category": "food", "word": "scallop", "hints_es": ["Un marisco con un sabor dulce.", "Cocido a la plancha, a la parrilla o al horno.", "Conocido por su textura tierna."]}
+{"category": "food", "word": "seaweed", "hints_es": ["Algas marinas comestibles.", "Usadas en sushi y sopas.", "Ricas en minerales."]}
+{"category": "food", "word": "sesame", "hints_es": ["Semillas pequeñas con sabor a nuez.", "Usadas en panes, ensaladas y tahini.", "Ricas en grasas saludables."]}
+{"category": "food", "word": "shallot", "hints_es": ["Una pequeña verdura parecida a una cebolla.", "Se usa en salsas y aderezos.", "Más suave que las cebollas normales."]}
+{"category": "food", "word": "shrimp", "hints_es": ["Un pequeño crustáceo utilizado en la cocina.", "Hervido, a la parrilla o frito.", "Popular en platos de mariscos."]}
+{"category": "food", "word": "snapper", "hints_es": ["Un tipo de pez de agua salada.", "Cocinado a la parrilla, al horno o frito.", "Valorado por su sabor suave y dulce."]}
+{"category": "food", "word": "sorrel", "hints_es": ["Una hoja verde con sabor ácido.", "Usado en sopas y ensaladas.", "Rico en vitamina C."]}
+{"category": "food", "word": "soy", "hints_es": ["Una legumbre utilizada en muchos productos alimenticios.", "Hecha en leche, salsa y tofu.", "Rica en proteínas."]}
+{"category": "food", "word": "spinach", "hints_es": ["Una verdura de hojas verdes.", "Se come cruda en ensaladas o cocida en platillos.", "Rica en hierro y vitaminas."]}
+{"category": "food", "word": "squash", "hints_es": ["Una verdura con muchas variedades.", "Incluye calabacín y calabaza.", "Se puede asar, hervir o hornear."]}
+{"category": "food", "word": "steak", "hints_es": ["Una rebanada gruesa de carne.", "A la parrilla, frita en sartén o asada.", "A menudo se sirve a término medio o poco hecha."]}
+{"category": "food", "word": "stew", "hints_es": ["Un plato de carne y verduras cocidos a fuego lento en líquido.", "Cocinado lentamente para una textura tierna.", "Servido caliente."]}
+{"category": "food", "word": "sugar", "hints_es": ["Una sustancia cristalina dulce.", "Usada en la repostería y postres.", "Derivada de plantas de caña o remolacha."]}
+{"category": "food", "word": "sushi", "hints_es": ["Un plato japonés con arroz avinagrado y rellenos.", "Incluye pescado crudo, verduras o huevos.", "Se sirve con salsa de soya y wasabi."]}
+{"category": "food", "word": "sweetcorn", "hints_es": ["Una variedad de maíz con alto contenido de azúcar.", "Se come hervido, a la parrilla o en ensaladas.", "A menudo se sirve con mantequilla."]}
+{"category": "food", "word": "taco", "hints_es": ["Un plato mexicano con una tortilla doblada.", "Rellena de carne, frijoles y verduras.", "Se sirve suave o crujiente."]}
+{"category": "food", "word": "tahini", "hints_es": ["Una pasta hecha de semillas de sésamo molidas.", "Usada en hummus y salsas.", "Rica en grasas saludables."]}
+{"category": "food", "word": "taro", "hints_es": ["Un vegetal raíz rico en almidón.", "Hervido, hecho puré o en forma de papas fritas.", "Común en las cocinas asiática y del Pacífico."]}
+{"category": "food", "word": "tea", "hints_es": ["Una bebida hecha al infusionar hojas en agua caliente.", "Se sirve caliente o fría.", "Viene en tipos negro, verde y de hierbas."]}
+{"category": "food", "word": "thyme", "hints_es": ["Una hierba pequeña con hojas aromáticas.", "Usada en sopas, carnes y guisos.", "Popular en la cocina mediterránea."]}
+{"category": "food", "word": "toast", "hints_es": ["Pan dorado por el calor.", "Se sirve con mantequilla o untar.", "Común en el desayuno."]}
+{"category": "food", "word": "tomato", "hints_es": ["Una fruta roja o amarilla utilizada en la cocina.", "Se come fresca o se hace en salsas.", "Rica en licopeno."]}
+{"category": "food", "word": "tuna", "hints_es": ["Un gran pez de agua salada.", "Se come fresco o enlatado.", "Popular en sushi y ensaladas."]}
+{"category": "food", "word": "turkey", "hints_es": ["Un ave grande criada para carne.", "Comúnmente asada para las fiestas.", "Tiene carne clara y oscura."]}
+{"category": "food", "word": "turnip", "hints_es": ["Una raíz vegetal redonda.", "Se come hervida, asada o hecha puré.", "Tiene pulpa blanca y piel morada."]}
+{"category": "food", "word": "udon", "hints_es": ["Un fideo de trigo japonés grueso.", "Se sirve en sopas calientes o en platos salteados.", "Con una textura masticable."]}
+{"category": "food", "word": "vanilla", "hints_es": ["Un saborizante de las vainas de semillas de orquídea.", "Se usa en postres, bebidas y perfumes.", "Viene en forma de extracto, grano o polvo."]}
+{"category": "food", "word": "veal", "hints_es": ["Carne de ganado joven.", "Tierna y clara en color.", "Usada en asados y chuletas."]}
+{"category": "food", "word": "vinegar", "hints_es": ["Un líquido ácido de alcohol fermentado.", "Se usa en aderezos y marinadas.", "Incluye tipos de sidra de manzana y balsámico."]}
+{"category": "food", "word": "walnut", "hints_es": ["Una nuez con una cáscara arrugada.", "Se come cruda, tostada o en repostería.", "Rica en ácidos grasos omega-3."]}
+{"category": "food", "word": "wasabi", "hints_es": ["Un condimento japonés verde y picante.", "Se sirve con sushi y sashimi.", "Hecho de una planta raíz."]}
+{"category": "food", "word": "water", "hints_es": ["Un líquido claro esencial para la vida.", "Se consume como bebida o en alimentos.", "Cubre la mayor parte de la superficie de la Tierra."]}
+{"category": "food", "word": "wheat", "hints_es": ["Un grano utilizado para harina.", "Horneado en pan y pasteles.", "Uno de los principales cultivos del mundo."]}
+{"category": "food", "word": "wine", "hints_es": ["Una bebida alcohólica de uvas fermentadas.", "Viene en variedades roja, blanca y rosada.", "A menudo se envejece en barricas."]}
+{"category": "food", "word": "yam", "hints_es": ["Un vegetal raíz rico en almidón.", "Hervido, al horno o hecho puré.", "A menudo se confunde con las batatas."]}
+{"category": "food", "word": "yogurt", "hints_es": ["Un producto lácteo cremoso de leche fermentada.", "Se come solo o con sabor.", "Contiene probióticos."]}
+{"category": "food", "word": "zucchini", "hints_es": ["Una calabaza verde de verano.", "Asada, salteada o horneada en pan.", "Suave en sabor."]}
+{"category": "food", "word": "anchovy", "hints_es": ["Un pez pequeño y salado.", "Usado en pizzas, salsas y ensaladas.", "A menudo conservado en aceite."]}
+{"category": "food", "word": "bacon", "hints_es": ["Carne curada de la panceta o el lomo de un cerdo.", "Frita o asada hasta que esté crujiente.", "Popular en el desayuno."]}
+{"category": "food", "word": "bagel", "hints_es": ["Un pan redondo con un agujero en el centro.", "Hervido antes de hornear para una textura masticable.", "A menudo cubierto con semillas."]}
+{"category": "food", "word": "basil", "hints_es": ["Una hierba fragante con hojas verdes.", "Se usa fresca en ensaladas y salsas.", "Esencial en el pesto."]}
+{"category": "food", "word": "biscuit", "hints_es": ["Un pequeño pan o galleta horneada.", "Se sirve con té o como guarnición.", "La textura varía según el país."]}
+{"category": "food", "word": "brandy", "hints_es": ["Una bebida alcohólica destilada de vino.", "Se sirve como digestivo.", "Se usa en la cocina y en postres."]}
+{"category": "food", "word": "brie", "hints_es": ["Un queso suave y cremoso de Francia.", "Se come con pan o galletas saladas.", "Tiene una corteza blanca comestible."]}
+{"category": "food", "word": "burrito", "hints_es": ["Una tortilla envuelta alrededor de un relleno.", "A menudo contiene frijoles, carne y arroz.", "Popular en la cocina mexicana."]}
+{"category": "food", "word": "cantaloupe", "hints_es": ["Un melón con pulpa naranja.", "Se come fresco en rebanadas o cubos.", "Alto en vitamina A."]}
+{"category": "food", "word": "chai", "hints_es": ["Una bebida de té especiado.", "Hecho con leche, té y especias.", "Popular en el sur de Asia."]}
+{"category": "food", "word": "cheddar", "hints_es": ["Un queso duro con un sabor fuerte.", "Varía de suave a extra maduro.", "Se originó en Inglaterra."]}
+{"category": "food", "word": "chilipep", "hints_es": ["Una verdura picante que se usa para añadir calor.", "Se come fresca, seca o en polvo.", "Viene en muchas variedades."]}
+{"category": "food", "word": "clam", "hints_es": ["Un marisco con un cuerpo blando por dentro.", "Se come al vapor, horneado o crudo.", "Se encuentra en océanos y ríos."]}
+{"category": "food", "word": "couscous", "hints_es": ["Un plato de grano del norte de África.", "Hecho de sémola de trigo triturada.", "Se sirve con verduras o carne."]}
+{"category": "food", "word": "custard", "hints_es": ["Un dulce postre hecho de leche y huevos.", "Horneado, al vapor o revuelto en la estufa.", "Se puede saborizar con vainilla."]}
+{"category": "food", "word": "donut", "hints_es": ["Un dulce anillo o bola de masa frita.", "A menudo glaseado o relleno de crema.", "Popular como un bocadillo para el desayuno."]}
+{"category": "food", "word": "edamame", "hints_es": ["Jóvenes sojas en la vaina.", "Hervidas o al vapor y saladas.", "Servidas como un bocadillo o aperitivo."]}
+{"category": "food", "word": "feta", "hints_es": ["Un queso blanco desmenuzable.", "Proviene de Grecia.", "Hecho de leche de oveja o cabra."]}
+{"category": "food", "word": "gelato", "hints_es": ["Un helado al estilo italiano.", "Más denso y cremoso que el helado regular.", "Viene en muchos sabores."]}
+{"category": "food", "word": "gnocchi", "hints_es": ["Pequeñas empanadas hechas de papa o harina.", "Hervidas y servidas con salsa.", "De origen italiano."]}
+{"category": "food", "word": "granola", "hints_es": ["Una mezcla de avena, nueces y endulzantes.", "Se come con yogur o leche.", "A menudo se hornea hasta que esté crujiente."]}
+{"category": "food", "word": "gyro", "hints_es": ["Un plato griego con carne y pan plano.", "A menudo se sirve con salsa tzatziki.", "La carne se cocina en un asador vertical."]}
+{"category": "food", "word": "hazelnut", "hints_es": ["Una nuez redonda con sabor dulce.", "Usada en untar chocolate y postres.", "Rica en grasas saludables."]}
+{"category": "food", "word": "hummus", "hints_es": ["Una crema suave de garbanzos y tahini.", "A menudo se sirve con pan o verduras.", "Popular en la cocina de Oriente Medio."]}
+{"category": "food", "word": "iceberg", "hints_es": ["Un tipo de lechuga crujiente.", "Se usa en ensaladas y sándwiches.", "Tiene hojas de color verde pálido."]}
+{"category": "food", "word": "jelly", "hints_es": ["Una crema dulce hecha de jugo de fruta.", "Se sirve en pan o en postres.", "Similar a la mermelada pero más suave."]}
+{"category": "food", "word": "kabob", "hints_es": ["Carne y verduras en un pincho.", "Asado sobre una llama abierta.", "Popular en la cocina de Oriente Medio y Asia."]}
+{"category": "food", "word": "latte", "hints_es": ["Una bebida de café con leche vaporizada.", "A menudo decorada con espuma o arte.", "Popular en cafeterías de todo el mundo."]}
+{"category": "food", "word": "lobster", "hints_es": ["Un gran marisco con garras.", "Hervido, a la parrilla o al horno.", "Considerado una delicadeza."]}
+{"category": "food", "word": "macaron", "hints_es": ["Una galleta dulce a base de merengue.", "Viene en muchos colores y sabores.", "Popular en las pastelerías francesas."]}
+{"category": "food", "word": "margarine", "hints_es": ["Un sustituto de mantequilla hecho de aceites vegetales.", "Usado para untar y hornear.", "A menudo enriquecido con vitaminas."]}
+{"category": "food", "word": "marzipan", "hints_es": ["Una pasta dulce de almendras y azúcar.", "Formada en caramelos o decoraciones.", "Usada en pasteles y bollería."]}
+{"category": "food", "word": "mocha", "hints_es": ["Una bebida de café con sabor a chocolate.", "Se sirve caliente o fría.", "Nombrada así por un puerto en Yemen."]}
+{"category": "food", "word": "muesli", "hints_es": ["Una mezcla de avena, nueces y frutas secas.", "Se come con leche o yogur.", "A menudo se sirve sin cocinar."]}
+{"category": "food", "word": "okra", "hints_es": ["Una verdura verde con semillas comestibles.", "Usado en sopas, guisos y frituras.", "Conocido por su textura pegajosa."]}
+{"category": "food", "word": "paella", "hints_es": ["Un plato de arroz español.", "A menudo se hace con mariscos, carne y verduras.", "Sazonado con azafrán."]}
+{"category": "food", "word": "pancake", "hints_es": ["Un pastel plano y redondo cocido en una plancha.", "Se sirve con jarabe o coberturas.", "Se come en el desayuno o de postre."]}
+{"category": "food", "word": "pesto", "hints_es": ["Una salsa hecha de albahaca, nueces y queso.", "Mezclada con pasta o usada como un untable.", "Se originó en Italia."]}
+{"category": "food", "word": "pierogi", "hints_es": ["Un dumpling relleno de Europa del Este.", "Hervido o frito antes de servir.", "A menudo relleno de papas o queso."]}
+{"category": "food", "word": "popcorn", "hints_es": ["Granos de maíz reventados.", "Comidos solos, salados o endulzados.", "Populares en los cines."]}
+{"category": "food", "word": "ramen", "hints_es": ["Una sopa de fideos japonesa.", "Se sirve con caldo, carne y verduras.", "Las versiones instantáneas son comunes."]}
+{"category": "food", "word": "risotto", "hints_es": ["Un plato de arroz italiano cremoso.", "Cocinado lentamente con caldo.", "A menudo incluye queso y verduras."]}
+{"category": "food", "word": "salsa", "hints_es": ["Una salsa de tomates, cebollas y chile.", "Se sirve con totopos o platos mexicanos.", "Puede ser suave o picante."]}
+{"category": "food", "word": "scone", "hints_es": ["Un pequeño pan o pastelería horneada.", "Se sirve con té, mermelada o crema.", "Popular en el Reino Unido."]}
+{"category": "food", "word": "sorbet", "hints_es": ["Un postre helado hecho de fruta y azúcar.", "Sin lácteos y refrescante.", "Se sirve entre platos o como postre."]}
+{"category": "food", "word": "spaghetti", "hints_es": ["Una pasta larga y delgada.", "Se sirve con varias salsas.", "Popular en la cocina italiana."]}
+{"category": "food", "word": "tamale", "hints_es": ["Un plato tradicional de América Latina.", "Masa de maíz rellena y envuelta en hojas.", "Cocida al vapor hasta que esté lista."]}
+{"category": "food", "word": "tiramisu", "hints_es": ["Un postre italiano con capas empapadas en café.", "Hecho con queso mascarpone.", "Cubierto con cacao en polvo."]}
+{"category": "food", "word": "toffee", "hints_es": ["Un dulce hecho de azúcar y mantequilla.", "Masticable o duro dependiendo del tiempo de cocción.", "A menudo se mezcla con nueces."]}
+{"category": "food", "word": "udonbro", "hints_es": ["Una sopa con fideos japoneses gruesos.", "Servida en un caldo sabroso con ingredientes adicionales.", "Comida reconfortante en Japón."]}
+{"category": "places", "word": "Africa", "hints_es": ["Un gran continente al sur de Europa.", "Conocido por sus vastos desiertos, vida salvaje y culturas diversas.", "Hogar del desierto del Sahara y el río Nilo."]}
+{"category": "places", "word": "Alps", "hints_es": ["Una importante cordillera en Europa.", "Se extiende por países como Francia, Suiza e Italia.", "Popular para esquiar y hacer montañismo."]}
+{"category": "places", "word": "Amazon", "hints_es": ["La región de selva tropical más grande del mundo.", "Cubre partes de varios países de América del Sur.", "Conocida por su increíble biodiversidad."]}
+{"category": "places", "word": "Andes", "hints_es": ["La cadena montañosa continental más larga.", "Se extiende a lo largo de la costa occidental de América del Sur.", "Contiene ciudades de gran altitud y la historia inca."]}
+{"category": "places", "word": "Arctic", "hints_es": ["Una región polar en el norte de la Tierra.", "Cubierta de hielo y hogar de osos polares.", "Incluye partes de varios países."]}
+{"category": "places", "word": "Asia", "hints_es": ["El continente más grande por área y población.", "Incluye países como China e India.", "Hogar de los Himalayas."]}
+{"category": "places", "word": "Australia", "hints_es": ["Un país y continente en el hemisferio sur.", "Conocido por su fauna única y el Outback.", "Hogar de la Gran Barrera de Coral."]}
+{"category": "places", "word": "Bali", "hints_es": ["Una isla indonesia famosa por sus playas.", "Conocida por sus templos, surf y terrazas de arroz.", "Destino turístico popular."]}
+{"category": "places", "word": "Belgium", "hints_es": ["Un pequeño país europeo.", "Famoso por el chocolate, los gofres y la cerveza.", "Aloja la sede de la UE."]}
+{"category": "places", "word": "Brazil", "hints_es": ["El país más grande de América del Sur.", "Famoso por el Amazonas y el Carnaval.", "Hogar de las Cataratas del Iguazú."]}
+{"category": "places", "word": "Canada", "hints_es": ["Un país grande en América del Norte.", "Conocido por sus parques naturales y jarabe de arce.", "Tiene la costa más larga del mundo."]}
+{"category": "places", "word": "Chile", "hints_es": ["Un país largo y estrecho en América del Sur.", "Se extiende a lo largo de los Andes y la costa del Pacífico.", "Conocido por la producción de vino."]}
+{"category": "places", "word": "China", "hints_es": ["Un gran país en Asia Oriental.", "Famoso por la Gran Muralla y su rica historia.", "El país más poblado del mundo."]}
+{"category": "places", "word": "Colosseum", "hints_es": ["Un anfiteatro romano histórico.", "Ubicado en la capital de Italia.", "Albergó batallas de gladiadores en tiempos antiguos."]}
+{"category": "places", "word": "Congo", "hints_es": ["Un río importante y un país en África.", "Conocido por sus selvas tropicales y vida salvaje.", "Segunda selva tropical más grande después del Amazonas."]}
+{"category": "places", "word": "Croatia", "hints_es": ["Un país en el sureste de Europa.", "Conocido por su costa adriática.", "Popular por sus pueblos medievales e islas."]}
+{"category": "places", "word": "Cuba", "hints_es": ["Una nación insular en el Caribe.", "Famosa por los puros, la música y los autos clásicos.", "La capital es La Habana."]}
+{"category": "places", "word": "Cyprus", "hints_es": ["Un país insular en el Mediterráneo.", "Conocido por sus playas y ruinas antiguas.", "Tiene influencias tanto griegas como turcas."]}
+{"category": "places", "word": "Denmark", "hints_es": ["Un país escandinavo.", "Famoso por su diseño, pasteles e historia vikinga.", "Conectado a Suecia por un puente."]}
+{"category": "places", "word": "Desert", "hints_es": ["Una región seca con poca lluvia.", "Puede ser caliente o fría.", "Ejemplos incluyen el Sahara y el Gobi."]}
+{"category": "places", "word": "Eiffel", "hints_es": ["Una famosa torre de hierro.", "Ubicada en la capital de Francia.", "Construida para la Feria Mundial de 1889."]}
+{"category": "places", "word": "Egypt", "hints_es": ["Un país en el norte de África.", "Famoso por las pirámides y el río Nilo.", "Una de las civilizaciones más antiguas del mundo."]}
+{"category": "places", "word": "England", "hints_es": ["Un país dentro del Reino Unido.", "Conocido por su historia, castillos y cultura del té.", "Hogar de Stonehenge."]}
+{"category": "places", "word": "Everest", "hints_es": ["La montaña más alta del mundo.", "Ubicada en el Himalaya.", "Atrae a escaladores de todo el mundo."]}
+{"category": "places", "word": "Fiji", "hints_es": ["Una nación insular en el océano Pacífico.", "Conocida por sus playas y arrecifes de coral.", "Destino popular para lunas de miel."]}
+{"category": "places", "word": "Finland", "hints_es": ["Un país nórdico en el norte de Europa.", "Conocido por sus saunas y miles de lagos.", "Tiene inviernos largos y sol de medianoche."]}
+{"category": "places", "word": "France", "hints_es": ["Un país europeo.", "Famoso por el vino, el queso y el arte.", "Hogar del Museo del Louvre."]}
+{"category": "places", "word": "Gambia", "hints_es": ["Un pequeño país de África Occidental.", "Tiene costa atlántica y valles fluviales.", "Rodeado por Senegal."]}
+{"category": "places", "word": "Ganges", "hints_es": ["Un río importante en el sur de Asia.", "Considerado sagrado en el hinduismo.", "Fluye a través de varios países."]}
+{"category": "places", "word": "Germany", "hints_es": ["Un gran país europeo.", "Famoso por la ingeniería, la cerveza y los castillos.", "Hogar de la Selva Negra."]}
+{"category": "places", "word": "Gobi", "hints_es": ["Un vasto desierto en Asia.", "Cubre partes de China y Mongolia.", "Conocido por cambios extremos de temperatura."]}
+{"category": "places", "word": "Greece", "hints_es": ["Un país del sureste de Europa.", "Conocido por sus islas, ruinas y aceitunas.", "Lugar de nacimiento de la democracia."]}
+{"category": "places", "word": "Greenland", "hints_es": ["La isla más grande del mundo.", "Mayormente cubierta de hielo.", "Un territorio autónomo de Dinamarca."]}
+{"category": "places", "word": "Hawaii", "hints_es": ["Un estado de EE. UU. en el océano Pacífico.", "Conocido por sus volcanes y playas.", "Popular para el surf."]}
+{"category": "places", "word": "Iceland", "hints_es": ["Una nación insular nórdica.", "Famosa por géiseres y volcanes.", "Tiene aguas termales geotérmicas."]}
+{"category": "places", "word": "India", "hints_es": ["Un país grande en el sur de Asia.", "Conocido por sus especias, templos y festivales.", "Hogar del Taj Mahal."]}
+{"category": "places", "word": "Iran", "hints_es": ["Un país en el Medio Oriente.", "Conocido por su cultura e historia persas.", "Tiene desiertos y montañas."]}
+{"category": "places", "word": "Iraq", "hints_es": ["Un país en el Medio Oriente.", "Hogar histórico de Mesopotamia.", "Conocido por los ríos Tigris y Éufrates."]}
+{"category": "places", "word": "Ireland", "hints_es": ["Una nación insular en Europa.", "Conocida por sus paisajes verdes y castillos.", "Famosa por el Día de San Patricio."]}
+{"category": "places", "word": "Israel", "hints_es": ["Un país de Oriente Medio.", "Conocido por sus sitios religiosos e históricos.", "Limita con el mar Mediterráneo."]}
+{"category": "places", "word": "Italy", "hints_es": ["Un país del sur de Europa.", "Famoso por la pasta, el arte y la historia.", "Hogar de antiguas ruinas romanas."]}
+{"category": "places", "word": "Japan", "hints_es": ["Una nación insular en Asia Oriental.", "Conocida por su tecnología y tradición.", "Hogar del Monte Fuji."]}
+{"category": "places", "word": "Jordan", "hints_es": ["Un país de Oriente Medio.", "Famoso por la antigua ciudad de Petra.", "Limita con el Mar Muerto."]}
+{"category": "places", "word": "Kenya", "hints_es": ["Un país de África Oriental.", "Conocido por safaris y parques de vida silvestre.", "Limita con el océano Índico."]}
+{"category": "places", "word": "Kilimanjaro", "hints_es": ["Una montaña en Tanzania.", "El pico más alto de África.", "Un destino popular para escalar."]}
+{"category": "places", "word": "Kuwait", "hints_es": ["Un pequeño país de Oriente Medio.", "Conocido por sus reservas de petróleo.", "Tiene un clima desértico."]}
+{"category": "places", "word": "Laos", "hints_es": ["Un país sin salida al mar en el sudeste asiático.", "Conocido por sus templos y montañas.", "Limita con el río Mekong."]}
+{"category": "places", "word": "Libya", "hints_es": ["Un país en el norte de África.", "Tiene paisajes desérticos y costa mediterránea.", "Conocido por sus ruinas romanas."]}
+{"category": "places", "word": "Luxor", "hints_es": ["Una zona histórica en Egipto.", "Famosa por templos y tumbas.", "Antes conocida como Tebas."]}
+{"category": "places", "word": "MachuPic", "hints_es": ["Un antiguo sitio inca.", "Ubicado en lo alto de los Andes.", "Un sitio del Patrimonio Mundial de la UNESCO."]}
+{"category": "places", "word": "Madagascar", "hints_es": ["Una nación insular frente a la costa de África.", "Conocida por su fauna única.", "La isla más grande del océano Índico."]}
+{"category": "places", "word": "Malawi", "hints_es": ["Un país en el sureste de África.", "Tiene el lago Malawi a lo largo de su frontera.", "Conocido por su gente amable."]}
+{"category": "places", "word": "Maldives", "hints_es": ["Una nación insular en el océano Índico.", "Conocida por sus resorts de lujo y arrecifes de coral.", "Compuesta por más de 1,000 islas."]}
+{"category": "places", "word": "Mali", "hints_es": ["Un país sin acceso al mar en África Occidental.", "Las ciudades históricas incluyen Tombuctú.", "Hogar del río Níger."]}
+{"category": "places", "word": "Malta", "hints_es": ["Un país insular en el Mediterráneo.", "Conocido por sus fortalezas históricas.", "Pequeño pero estratégicamente ubicado."]}
+{"category": "places", "word": "Mekong", "hints_es": ["Un río importante en el sureste de Asia.", "Fluye a través de varios países.", "Vital para la agricultura y la pesca."]}
+{"category": "places", "word": "Mexico", "hints_es": ["Un país en América del Norte.", "Famoso por su cocina y ruinas antiguas.", "Hogar de Chichén Itzá."]}
+{"category": "places", "word": "Monaco", "hints_es": ["Un pequeño principado europeo.", "Conocido por sus lujosos casinos.", "Aloja una famosa carrera de Fórmula 1."]}
+{"category": "places", "word": "Mongolia", "hints_es": ["Un país asiático sin acceso al mar.", "Conocido por su cultura nómada.", "Limita con Rusia y China."]}
+{"category": "places", "word": "Morocco", "hints_es": ["Un país del norte de África.", "Conocido por sus mercados y paisajes desérticos.", "Limita con el Atlántico y el Mediterráneo."]}
+{"category": "places", "word": "Namibia", "hints_es": ["Un país en el sur de África.", "Conocido por el desierto de Namib y los safaris de vida silvestre.", "Tiene una larga costa atlántica."]}
+{"category": "places", "word": "Nepal", "hints_es": ["Un país en el sur de Asia.", "Hogar de gran parte del Himalaya.", "Famoso por el monte Everest."]}
+{"category": "places", "word": "Niger", "hints_es": ["Un país sin salida al mar en África Occidental.", "Nombrado por un río importante.", "Mayormente cubierto por el desierto del Sahara."]}
+{"category": "places", "word": "Nigeria", "hints_es": ["Un país poblado en África Occidental.", "Conocido por su petróleo y diversas culturas.", "La economía más grande de África."]}
+{"category": "places", "word": "Nile", "hints_es": ["Un río importante en África.", "Fluye a través de Egipto y Sudán.", "Considerado el río más largo del mundo."]}
+{"category": "places", "word": "Norway", "hints_es": ["Un país nórdico en el norte de Europa.", "Conocido por sus fiordos y luces del norte.", "Tiene una larga costa atlántica."]}
+{"category": "places", "word": "Oman", "hints_es": ["Un país en la Península Arábiga.", "Conocido por sus paisajes desérticos y fortalezas.", "Limita con el mar Arábigo."]}
+{"category": "places", "word": "Pacific", "hints_es": ["El océano más grande del mundo.", "Limita con Asia, Oceanía y las Américas.", "Cubre más área que toda la tierra combinada."]}
+{"category": "places", "word": "Panama", "hints_es": ["Un país de América Central.", "Famoso por su canal que conecta dos océanos.", "Tiene selvas tropicales."]}
+{"category": "places", "word": "Paraguay", "hints_es": ["Un país sin salida al mar en América del Sur.", "Limita con Brasil, Argentina y Bolivia.", "Tiene bosques subtropicales y ríos."]}
+{"category": "places", "word": "Peru", "hints_es": ["Un país en América del Sur.", "Conocido por Machu Picchu y los Andes.", "Rico en herencia inca."]}
+{"category": "places", "word": "Poland", "hints_es": ["Un país en Europa Central.", "Conocido por sus ciudades medievales y bosques.", "Limita con Alemania, Chequia y más."]}
+{"category": "places", "word": "Portugal", "hints_es": ["Un país en el suroeste de Europa.", "Famoso por su vino y puertos históricos.", "Limita con España y el Atlántico."]}
+{"category": "places", "word": "Qatar", "hints_es": ["Un pequeño país de Oriente Medio.", "Rico en petróleo y gas natural.", "Alojó un importante evento mundial de fútbol."]}
+{"category": "places", "word": "Rhine", "hints_es": ["Un río importante en Europa.", "Fluye a través de Alemania y los Países Bajos.", "Importante para el comercio y el transporte."]}
+{"category": "places", "word": "Rome", "hints_es": ["Una antigua ciudad capital y región histórica.", "Conocida por el Coliseo y el Vaticano.", "Centro del Imperio Romano."]}
+{"category": "places", "word": "Russia", "hints_es": ["El país más grande del mundo.", "Se extiende por Europa y Asia.", "Conocido por sus vastos bosques y Siberia."]}
+{"category": "places", "word": "Sahara", "hints_es": ["El desierto cálido más grande del mundo.", "Cubre gran parte del norte de África.", "Tiene temperaturas extremas de día y de noche."]}
+{"category": "places", "word": "Samoa", "hints_es": ["Una nación insular en el océano Pacífico.", "Conocida por sus playas y la cultura polinesia.", "Tiene orígenes volcánicos."]}
+{"category": "places", "word": "Scotland", "hints_es": ["Una parte del Reino Unido.", "Conocido por castillos, lagos y whisky.", "Hogar de las Tierras Altas."]}
+{"category": "places", "word": "Senegal", "hints_es": ["Un país en África Occidental.", "Limita con el océano Atlántico.", "Conocido por su música y sus islas costeras."]}
+{"category": "places", "word": "Serbia", "hints_es": ["Un país en los Balcanes.", "Tiene ríos, montañas y sitios históricos.", "La capital es Belgrado."]}
+{"category": "places", "word": "Seychelles", "hints_es": ["Una nación insular en el océano Índico.", "Conocida por sus playas y arrecifes de coral.", "Compuesta por más de 100 islas."]}
+{"category": "places", "word": "Siberia", "hints_es": ["Una vasta región en Rusia.", "Conocida por sus fríos inviernos y bosques de taiga.", "Rica en recursos naturales."]}
+{"category": "places", "word": "Singapore", "hints_es": ["Un pequeño país insular en el sudeste asiático.", "Conocido por su moderno horizonte y limpieza.", "Importante centro financiero global."]}
+{"category": "places", "word": "Slovakia", "hints_es": ["Un país sin salida al mar en Europa Central.", "Conocido por sus castillos y montañas.", "Limita con Austria y Polonia."]}
+{"category": "places", "word": "Slovenia", "hints_es": ["Un país europeo junto al mar Adriático.", "Conocido por sus lagos y cuevas.", "Tiene tanto montañas como costa."]}
+{"category": "places", "word": "Somalia", "hints_es": ["Un país en el Cuerno de África.", "Limita con el océano Índico.", "Conocido por su larga costa y desiertos."]}
+{"category": "places", "word": "Spain", "hints_es": ["Un país en el suroeste de Europa.", "Famoso por el flamenco, las tapas y los festivales.", "Hogar de los montes Pirineos."]}
+{"category": "places", "word": "Sudan", "hints_es": ["Un país en el noreste de África.", "Limita con el mar Rojo.", "Se dividió en Sudán y Sudán del Sur en 2011."]}
+{"category": "places", "word": "Suriname", "hints_es": ["Un pequeño país en América del Sur.", "Cubierto mayormente por selva tropical.", "Limita con Brasil, Guyana y Guayana Francesa."]}
+{"category": "places", "word": "Sweden", "hints_es": ["Un país nórdico en el norte de Europa.", "Conocido por sus bosques, lagos e innovación.", "Tiene una larga costa báltica."]}
+{"category": "places", "word": "Switzerland", "hints_es": ["Un país europeo sin acceso al mar.", "Famoso por los Alpes, el chocolate y la banca.", "Tiene múltiples idiomas oficiales."]}
+{"category": "places", "word": "Syria", "hints_es": ["Un país en el Medio Oriente.", "Conocido por sus ruinas antiguas y su historia.", "Limita con el mar Mediterráneo."]}
+{"category": "places", "word": "Tahiti", "hints_es": ["Una isla en Polinesia Francesa.", "Conocida por sus playas y bungalows sobre el agua.", "Formada por actividad volcánica."]}
+{"category": "places", "word": "Tanzania", "hints_es": ["Un país de África Oriental.", "Hogar del Kilimanjaro y el Serengeti.", "Limita con el océano Índico."]}
+{"category": "places", "word": "Thailand", "hints_es": ["Un país en el sureste de Asia.", "Famoso por sus templos, playas y cocina.", "La capital es Bangkok."]}
+{"category": "places", "word": "Tibet", "hints_es": ["Una región de meseta alta en Asia.", "Conocida por sus monasterios budistas.", "A menudo llamada el 'Techo del Mundo'."]}
+{"category": "places", "word": "Tonga", "hints_es": ["Una nación insular en el océano Pacífico.", "Conocida por sus arrecifes de coral y tradiciones.", "Compuesta por muchas islas pequeñas."]}
+{"category": "places", "word": "Tunisia", "hints_es": ["Un país del norte de África.", "Limita con el mar Mediterráneo.", "Conocido por sus ruinas romanas y escenas del desierto."]}
+{"category": "places", "word": "Turkey", "hints_es": ["Un país que se extiende entre Europa y Asia.", "Conocido por sus mercados, mezquitas y cocina.", "Limita con los mares Mediterráneo y Negro."]}
+{"category": "places", "word": "Uganda", "hints_es": ["Un país en el este de África.", "Hogar del lago Victoria y parques de vida silvestre.", "Conocido por los gorilas de montaña."]}
+{"category": "places", "word": "Ukraine", "hints_es": ["Un país en Europa del Este.", "Conocido por sus llanuras fértiles y su historia.", "Limita con el Mar Negro."]}
+{"category": "places", "word": "Uruguay", "hints_es": ["Un país en América del Sur.", "Conocido por sus playas y el té de mate.", "Limita con Argentina y Brasil."]}
+{"category": "places", "word": "Uzbekistan", "hints_es": ["Un país de Asia Central.", "Conocido por las ciudades de la Ruta de la Seda.", "Limita con Kazajistán y Turkmenistán."]}
+{"category": "places", "word": "Vatican", "hints_es": ["Una pequeña ciudad-estado independiente.", "Centro de la Iglesia Católica Romana.", "Hogar de la Basílica de San Pedro."]}
+{"category": "places", "word": "Venice", "hints_es": ["Una famosa ciudad lagunar en Italia.", "Conocida por sus canales y góndolas.", "Construida sobre más de 100 pequeñas islas."]}
+{"category": "places", "word": "Victoria", "hints_es": ["Un estado en el sureste de Australia.", "Conocido por su paisaje costero y regiones vinícolas.", "La capital es Melbourne."]}
+{"category": "places", "word": "Vietnam", "hints_es": ["Un país del sudeste asiático.", "Conocido por sus terrazas de arroz y playas.", "Limita con China, Laos y Camboya."]}
+{"category": "places", "word": "Wales", "hints_es": ["Una parte del Reino Unido.", "Conocida por sus castillos y su costa escarpada.", "Tiene su propio idioma distinto."]}
+{"category": "places", "word": "Yangtze", "hints_es": ["El río más largo de Asia.", "Fluye completamente dentro de China.", "Importante para el transporte y la agricultura."]}
+{"category": "places", "word": "Yemen", "hints_es": ["Un país en el Medio Oriente.", "Conocido por sus ciudades antiguas y su historia del café.", "Limita con el mar Rojo y el mar Arábigo."]}
+{"category": "places", "word": "Zambia", "hints_es": ["Un país en el sur de África.", "Conocido por las Cataratas Victoria y los parques de vida silvestre.", "Limita con ocho otros países."]}
+{"category": "places", "word": "Zanzibar", "hints_es": ["Una región insular de Tanzania.", "Conocida por sus mercados de especias y playas.", "Tiene una rica historia comercial."]}
+{"category": "places", "word": "Zion", "hints_es": ["Un famoso parque nacional en los EE. UU.", "Conocido por sus acantilados de arenisca y senderos para caminar.", "Ubicado en Utah."]}
+{"category": "places", "word": "Acropolis", "hints_es": ["Una antigua ciudadela en una colina rocosa.", "Contiene templos históricos y ruinas.", "Ubicada en la capital de Grecia."]}
+{"category": "places", "word": "Aegean", "hints_es": ["Un mar entre Grecia y Turquía.", "Conocido por sus islas y aguas claras.", "Parte del mar Mediterráneo."]}
+{"category": "places", "word": "Alcatraz", "hints_es": ["Una isla con una prisión histórica.", "Ubicada en una bahía de EE. UU.", "Famosa por intentos de escape."]}
+{"category": "places", "word": "Alhambra", "hints_es": ["Un palacio histórico y complejo de fortaleza.", "Construido durante el periodo musulmán en España.", "Conocido por su arquitectura intrincada."]}
+{"category": "places", "word": "Antarctic", "hints_es": ["El continente más al sur.", "Cubierto principalmente de hielo.", "Hogar de pingüinos y estaciones de investigación."]}
+{"category": "places", "word": "Arches", "hints_es": ["Un parque nacional de EE. UU.", "Conocido por formaciones rocosas naturales.", "Ubicado en Utah."]}
+{"category": "places", "word": "Athabasca", "hints_es": ["Un gran río en Canadá.", "Fluye a través de Alberta.", "Conectado a lagos alimentados por glaciares."]}
+{"category": "places", "word": "Aurora", "hints_es": ["Una exhibición de luz natural en el cielo.", "Ocurre cerca de las regiones polares.", "Causada por partículas solares en la atmósfera."]}
+{"category": "places", "word": "Ayutthaya", "hints_es": ["Un antiguo reino y sitio histórico.", "Ubicado en Tailandia.", "Conocido por las ruinas de templos."]}
+{"category": "places", "word": "Bering", "hints_es": ["Un mar y un estrecho entre dos continentes.", "Separa Asia y América del Norte.", "Llamado así por un explorador danés."]}
+{"category": "places", "word": "BigBen", "hints_es": ["Una famosa torre del reloj.", "Ubicada en la capital del Reino Unido.", "Conocida por su gran campana."]}
+{"category": "places", "word": "BlueHole", "hints_es": ["Un profundo sumidero submarino.", "Popular para bucear.", "Ubicado en el Caribe."]}
+{"category": "places", "word": "BoraBora", "hints_es": ["Una isla tropical en el océano Pacífico.", "Conocida por sus resorts de lujo.", "Parte de la Polinesia Francesa."]}
+{"category": "places", "word": "Bryce", "hints_es": ["Un parque nacional de EE. UU.", "Conocido por sus singulares agujas de roca.", "Ubicado en Utah."]}
+{"category": "places", "word": "Canyon", "hints_es": ["Un valle profundo con lados empinados.", "A menudo formado por la erosión de ríos.", "Ejemplos famosos incluyen el Grand."]}
+{"category": "places", "word": "Capri", "hints_es": ["Una isla italiana en el Mediterráneo.", "Conocida por sus grutas azules y acantilados.", "Destino turístico popular."]}
+{"category": "places", "word": "Caspian", "hints_es": ["El cuerpo de agua interior más grande del mundo.", "Limita con Europa y Asia.", "Contiene características tanto de agua salada como de agua dulce."]}
+{"category": "places", "word": "Cayman", "hints_es": ["Un grupo de islas en el Caribe.", "Famoso por sus playas y su banca.", "Territorio británico de ultramar."]}
+{"category": "places", "word": "Cliffs", "hints_es": ["Acantilados empinados a lo largo de costas o montañas.", "Formados por la erosión.", "Existen ejemplos famosos en Irlanda."]}
+{"category": "places", "word": "Crater", "hints_es": ["Una depresión en forma de cuenco en el suelo.", "Puede ser volcánica o por impacto.", "Algunas están llenas de lagos."]}
+{"category": "places", "word": "DeadSea", "hints_es": ["Un lago salado bordeado por dos países.", "Contenido de sal extremadamente alto.", "Punto más bajo de la superficie de la Tierra."]}
+{"category": "places", "word": "Delta", "hints_es": ["Una forma de tierra en la desembocadura de un río.", "Formada por depósitos de sedimentos.", "Un ejemplo famoso está en Egipto."]}
+{"category": "places", "word": "Dover", "hints_es": ["Una zona costera conocida por sus acantilados blancos.", "Ubicada en el Reino Unido.", "Da al Canal de la Mancha."]}
+{"category": "places", "word": "Easter", "hints_es": ["Una isla con estatuas de piedra.", "Ubicada en el océano Pacífico.", "Parte de Chile."]}
+{"category": "places", "word": "Elbrus", "hints_es": ["La montaña más alta de Europa.", "Ubicada en Rusia.", "Parte de la cordillera del Cáucaso."]}
+{"category": "places", "word": "Etna", "hints_es": ["Un volcán activo.", "Ubicado en una isla italiana.", "Uno de los más activos del mundo."]}
+{"category": "places", "word": "Falkland", "hints_es": ["Un grupo de islas en el Atlántico Sur.", "Conocido por su vida silvestre e historia.", "Un territorio británico de ultramar."]}
+{"category": "places", "word": "Fuji", "hints_es": ["Una montaña sagrada y volcán.", "Ubicada en Japón.", "Popular entre los escaladores."]}
+{"category": "places", "word": "Galapagos", "hints_es": ["Una cadena de islas en el océano Pacífico.", "Conocida por su fauna única.", "Parte de Ecuador."]}
+{"category": "places", "word": "Glacier", "hints_es": ["Una gran masa de hielo que se mueve lentamente.", "Se forma durante siglos a partir de nieve compactada.", "Se derrite en ríos y lagos."]}
+{"category": "places", "word": "GrandCanyon", "hints_es": ["Una enorme garganta natural.", "Tallada por un río durante millones de años.", "Ubicada en los Estados Unidos."]}
+{"category": "places", "word": "GreatBarrier", "hints_es": ["El sistema de arrecifes de coral más grande del mundo.", "Ubicado frente a la costa de Australia.", "Visible desde el espacio."]}
+{"category": "places", "word": "GreatWall", "hints_es": ["Una estructura defensiva histórica.", "Se extiende a través del norte de China.", "Construida a lo largo de los siglos."]}
+{"category": "places", "word": "Hagia", "hints_es": ["Una famosa estructura con cúpula.", "Ubicada en Turquía.", "Sirvió como iglesia, mezquita y museo."]}
+{"category": "places", "word": "Himalaya", "hints_es": ["La cordillera más alta del mundo.", "Incluye el Monte Everest.", "Se extiende por varios países."]}
+{"category": "places", "word": "Iguazu", "hints_es": ["Un sistema de cascadas masivo.", "Ubicado en la frontera de dos países sudamericanos.", "Consiste en cientos de caídas."]}
+{"category": "places", "word": "IncaTrail", "hints_es": ["Una ruta de senderismo histórica.", "Conduce a ruinas antiguas.", "Ubicada en Perú."]}
+{"category": "places", "word": "JordanRiver", "hints_es": ["Un río con significado bíblico.", "Desemboca en un lago salado.", "Pasa por varios países."]}
+{"category": "places", "word": "Kalahari", "hints_es": ["Un gran desierto en el sur de África.", "Cubre partes de varios países.", "Conocido por sus dunas de arena roja."]}
+{"category": "places", "word": "Kremlin", "hints_es": ["Un complejo fortificado.", "Ubicado en la capital de Rusia.", "Sirve como sede del gobierno."]}
+{"category": "places", "word": "Loire", "hints_es": ["Un río importante en Francia.", "Fluye a través de regiones vinícolas.", "Conocido por los castillos a lo largo de sus orillas."]}
+{"category": "places", "word": "Matterhorn", "hints_es": ["Una famosa cima montañosa.", "Ubicada en los Alpes.", "Se extiende por la frontera de dos países."]}
+{"category": "places", "word": "Mayan", "hints_es": ["Una región cultural de una civilización.", "Ubicada en América Central.", "Conocida por sus pirámides y ruinas."]}
+{"category": "places", "word": "MesaVerde", "hints_es": ["Un parque nacional de EE. UU.", "Conocido por sus viviendas en acantilados.", "Preserva la cultura antigua de los nativos americanos."]}
+{"category": "places", "word": "Niagara", "hints_es": ["Un grupo de cascadas.", "Ubicado entre dos países.", "Popular por el turismo y la energía hidroeléctrica."]}
+{"category": "places", "word": "Olympus", "hints_es": ["Una montaña en la mitología griega.", "Considerada hogar de los dioses.", "Ubicada en la Grecia moderna."]}
+{"category": "places", "word": "Petra", "hints_es": ["Una ciudad antigua tallada en roca.", "Ubicada en Jordania.", "Conocida como la Ciudad Rosa."]}
+{"category": "places", "word": "Pyramids", "hints_es": ["Estructuras masivas de tumbas de piedra.", "Construidas por una civilización antigua.", "Ubicadas en el norte de África."]}
+{"category": "places", "word": "RedSea", "hints_es": ["Un cuerpo de agua entre África y Asia.", "Importante para las rutas comerciales.", "Rico en arrecifes de coral."]}
+{"category": "places", "word": "Rockies", "hints_es": ["Una importante cadena montañosa en América del Norte.", "Se extiende a través de varios países.", "Conocida por el senderismo y el esquí."]}
+{"category": "places", "word": "Serengeti", "hints_es": ["Un vasto ecosistema africano.", "Conocido por la migración anual de ñus.", "Ubicado en Tanzania."]}
+{"category": "places", "word": "Stonehenge", "hints_es": ["Un monumento de piedra prehistórico.", "Ubicado en el Reino Unido.", "El propósito sigue siendo un misterio."]}
+{"category": "places", "word": "TajMahal", "hints_es": ["Un mausoleo de mármol blanco.", "Construido en memoria de la esposa de un emperador.", "Ubicado en India."]}
+{"category": "places", "word": "Uluru", "hints_es": ["Una gran formación de roca de arenisca.", "Ubicada en el centro de Australia.", "Sagrada para los pueblos indígenas."]}
+{"category": "places", "word": "VictoriaFalls", "hints_es": ["Una cascada masiva en un río.", "Ubicada en África entre dos países.", "Una de las más grandes del mundo."]}
+{"category": "places", "word": "Yellowstone", "hints_es": ["Un parque nacional de EE. UU.", "Conocido por géiseres y aguas termales.", "Ubicado principalmente en Wyoming."]}
+{"category": "places", "word": "Yosemite", "hints_es": ["Un parque nacional de EE. UU.", "Conocido por sus acantilados y cascadas.", "Ubicado en California."]}
+{"category": "places", "word": "Zambezi", "hints_es": ["Un río importante en África.", "Fluye a través de varios países.", "Alimenta las Cataratas Victoria."]}
+{"category": "science", "word": "Atom", "hints_es": ["La unidad más pequeña de materia que retiene propiedades químicas.", "Estudiada en química y física.", "Primer concepto propuesto en la antigua Grecia."]}
+{"category": "science", "word": "Cell", "hints_es": ["La unidad estructural y funcional básica de la vida.", "Estudiada en biología.", "Primero observada por Robert Hooke en 1665."]}
+{"category": "science", "word": "Force", "hints_es": ["Una fuerza que empuja o tira de un objeto.", "Concepto central en física.", "Se mide en newtons."]}
+{"category": "science", "word": "Acid", "hints_es": ["Una sustancia con un pH menor que 7.", "Común en experimentos de química.", "Puede saber ácido en forma diluida."]}
+{"category": "science", "word": "Moon", "hints_es": ["Un satélite natural que orbita un planeta.", "Estudiado en astronomía.", "El ejemplo de la Tierra afecta las mareas."]}
+{"category": "science", "word": "Star", "hints_es": ["Una esfera luminosa de plasma sostenida por la gravedad.", "Estudiada en astronomía.", "Nuestro Sol es un ejemplo."]}
+{"category": "science", "word": "Rock", "hints_es": ["Un sólido que ocurre de manera natural y está hecho de minerales.", "Se estudia en geología.", "Puede formarse a través de procesos volcánicos, sedimentarios o metamórficos."]}
+{"category": "science", "word": "Lens", "hints_es": ["Un trozo curvado de vidrio o plástico que dobla la luz.", "Usado en microscopios y cámaras.", "Inventado para herramientas ópticas en tiempos antiguos."]}
+{"category": "science", "word": "Magma", "hints_es": ["Roca fundida debajo de la superficie de la Tierra.", "Estudiada en geología.", "Se convierte en lava cuando erupciona."]}
+{"category": "science", "word": "Ozone", "hints_es": ["Una molécula hecha de tres átomos de oxígeno.", "Estudiada en química y ciencias de la tierra.", "Forma una capa que protege la vida de la radiación UV."]}
+{"category": "science", "word": "Neon", "hints_es": ["Un gas noble utilizado en letreros brillantes.", "Parte de la tabla periódica de la química.", "Brilla en color rojo-anaranjado en descarga eléctrica."]}
+{"category": "science", "word": "Fungi", "hints_es": ["Un reino de organismos que incluye hongos y mohos.", "Estudiado en biología.", "Pueden ser descomponedores en los ecosistemas."]}
+{"category": "science", "word": "Comet", "hints_es": ["Un cuerpo helado que libera gas y polvo.", "Estudiado en astronomía.", "Los famosos incluyen el de Halley."]}
+{"category": "science", "word": "Orbit", "hints_es": ["La trayectoria curva de un objeto alrededor de un punto en el espacio.", "Estudiado en astronomía y física.", "La trayectoria de la Tierra alrededor del Sol toma un año."]}
+{"category": "science", "word": "Plant", "hints_es": ["Un organismo vivo que fotosintetiza.", "Estudiado en biología.", "Incluye flores, pastos y árboles."]}
+{"category": "science", "word": "Light", "hints_es": ["Una forma de radiación electromagnética visible para el ojo humano.", "Estudiada en física.", "Viaja a aproximadamente 300,000 km por segundo."]}
+{"category": "science", "word": "DNA", "hints_es": ["La molécula que lleva instrucciones genéticas.", "Estudiada en biología y genética.", "Significa ácido desoxirribonucleico."]}
+{"category": "science", "word": "Bone", "hints_es": ["Un órgano rígido que forma parte del esqueleto.", "Estudiado en biología y anatomía.", "Proporciona soporte y protección para el cuerpo."]}
+{"category": "science", "word": "Heat", "hints_es": ["Energía transferida entre sistemas debido a la diferencia de temperatura.", "Estudiada en física y termodinámica.", "Medida en julios o calorías."]}
+{"category": "science", "word": "Iron", "hints_es": ["Un elemento metálico utilizado en la construcción y en la hemoglobina de la sangre.", "Estudiado en química y biología.", "Tiene el símbolo Fe en la tabla periódica."]}
+{"category": "science", "word": "Mass", "hints_es": ["Una medida de la cantidad de materia en un objeto.", "Estudiado en física.", "Medido en kilogramos o gramos."]}
+{"category": "science", "word": "Seed", "hints_es": ["Una estructura de planta capaz de crecer hasta convertirse en una nueva planta.", "Estudiada en biología y botánica.", "Contiene un embrión y alimento almacenado."]}
+{"category": "science", "word": "Vein", "hints_es": ["Un vaso sanguíneo que lleva sangre hacia el corazón.", "Estudiado en biología y anatomía.", "A menudo lleva sangre desoxigenada."]}
+{"category": "science", "word": "Wave", "hints_es": ["Una perturbación repetitiva que transfiere energía.", "Estudiada en física y ciencias de la tierra.", "Incluye ejemplos de luz, sonido y agua."]}
+{"category": "science", "word": "Acorn", "hints_es": ["La semilla de un roble.", "Estudiado en biología y botánica.", "Sirve como alimento para muchos animales del bosque."]}
+{"category": "science", "word": "Meter", "hints_es": ["La unidad base de longitud en el sistema métrico.", "Usada en física y en medidas cotidianas.", "Definida por la velocidad de la luz en el vacío."]}
+{"category": "science", "word": "Slope", "hints_es": ["Una medida de inclinación o pendiente.", "Usado en física y matemáticas.", "Relación de subida a distancia."]}
+{"category": "science", "word": "Brain", "hints_es": ["El órgano que controla el pensamiento, la memoria y el movimiento.", "Estudiado en biología y neurociencia.", "Parte del sistema nervioso central."]}
+{"category": "science", "word": "Solar", "hints_es": ["Relación con el Sol.", "Estudiado en astronomía y ciencia de la energía.", "Usado en sistemas de energía solar."]}
+{"category": "science", "word": "Mineral", "hints_es": ["Un sólido inorgánico que ocurre de forma natural con una composición específica.", "Estudiado en geología.", "Ejemplos incluyen el cuarzo y el diamante."]}
+{"category": "science", "word": "Cloud", "hints_es": ["Una masa visible de vapor de agua condensado en el cielo.", "Estudiado en meteorología.", "Puede señalar cambios en el clima."]}
+{"category": "science", "word": "Nerve", "hints_es": ["Un conjunto de fibras que transmite señales en el cuerpo.", "Estudiado en biología y anatomía.", "Parte del sistema nervioso."]}
+{"category": "science", "word": "Enzyme", "hints_es": ["Una proteína que acelera las reacciones químicas en los organismos.", "Estudiada en biología y química.", "No se consume durante la reacción."]}
+{"category": "science", "word": "Laser", "hints_es": ["Un dispositivo que emite luz concentrada.", "Usado en física, medicina y tecnología.", "El nombre significa Amplificación de Luz por Emisión Estimulada de Radiación."]}
+{"category": "science", "word": "Gas", "hints_es": ["Un estado de la materia sin una forma o volumen fijo.", "Estudiado en física y química.", "Las partículas se mueven libremente y se separan."]}
+{"category": "science", "word": "Soil", "hints_es": ["La capa superior de la tierra donde crecen las plantas.", "Estudiada en geología y agricultura.", "Formada a partir de roca desgastada y materia orgánica."]}
+{"category": "science", "word": "Water", "hints_es": ["Un líquido esencial para la vida.", "Estudiado en química, biología y ciencias de la tierra.", "Cubre aproximadamente el 71% de la superficie de la Tierra."]}
+{"category": "science", "word": "Chlorine", "hints_es": ["Un gas amarillo verdoso utilizado para limpiar y desinfectar.", "Estudiado en química.", "Tiene el símbolo Cl en la tabla periódica."]}
+{"category": "science", "word": "Helium", "hints_es": ["Un gas ligero y no reactivo.", "Usado en globos y criogenia.", "Segundo elemento más abundante en el universo."]}
+{"category": "science", "word": "Proton", "hints_es": ["Una partícula cargada positivamente en el núcleo de un átomo.", "Estudiada en física y química.", "Ayuda a determinar la identidad de un elemento."]}
+{"category": "science", "word": "Electron", "hints_es": ["Una partícula con carga negativa en un átomo.", "Estudiada en física y química.", "Se mueve en regiones alrededor del núcleo."]}
+{"category": "science", "word": "Galaxy", "hints_es": ["Un sistema masivo de estrellas, gas y polvo unido por la gravedad.", "Estudiado en astronomía.", "Nuestro ejemplo en casa es la Vía Láctea."]}
+{"category": "science", "word": "Earth", "hints_es": ["El tercer planeta del Sol.", "Estudiado en astronomía y geología.", "Único planeta conocido con vida."]}
+{"category": "science", "word": "Radar", "hints_es": ["Un sistema que utiliza ondas de radio para detectar objetos.", "Usado en meteorología, navegación y física.", "El nombre significa Detección y Medición por Radio."]}
+{"category": "science", "word": "Clouds", "hints_es": ["Masa de pequeñas gotas de agua o cristales de hielo en la atmósfera.", "Estudiados en meteorología.", "Los tipos incluyen cúmulo, cirro y estrato."]}
+{"category": "science", "word": "Erosion", "hints_es": ["El proceso de desgastar la superficie de la Tierra.", "Estudiado en geología.", "Causado por el viento, el agua y el hielo."]}
+{"category": "science", "word": "Energy", "hints_es": ["La capacidad de hacer trabajo o causar cambio.", "Estudiado en física.", "Medido en julios."]}
+{"category": "science", "word": "Virus", "hints_es": ["Un agente infeccioso microscópico.", "Estudiado en biología y medicina.", "Requiere una célula huésped para replicarse."]}
+{"category": "science", "word": "Bacteria", "hints_es": ["Microorganismos unicelulares sin núcleo.", "Estudiados en biología y microbiología.", "Pueden ser beneficiosos o causar enfermedades."]}
+{"category": "science", "word": "Climate", "hints_es": ["El patrón a largo plazo del clima en un área.", "Estudiado en ciencias de la tierra y meteorología.", "Puede ser tropical, árido, templado o polar."]}
+{"category": "science", "word": "Magnet", "hints_es": ["Un objeto que produce un campo magnético.", "Estudiado en física.", "Atrae materiales como el hierro y el níquel."]}
+{"category": "science", "word": "Tissue", "hints_es": ["Un grupo de células similares que realizan una función.", "Estudiado en biología y anatomía.", "Ejemplos incluyen tipos muscular y nervioso."]}
+{"category": "science", "word": "Fossil", "hints_es": ["Los restos preservados de organismos antiguos.", "Estudiados en paleontología.", "Pueden formarse en roca durante millones de años."]}
+{"category": "science", "word": "Geyser", "hints_es": ["Una fuente termal que erupciona agua y vapor periódicamente.", "Estudiado en geología.", "Ejemplos famosos están en el Parque Nacional Yellowstone."]}
+{"category": "science", "word": "Micron", "hints_es": ["Una unidad de longitud igual a un millonésimo de metro.", "Usada en física y biología.", "También se llama micrómetro."]}
+{"category": "science", "word": "Neuron", "hints_es": ["Una célula especializada que transmite señales nerviosas.", "Estudiada en biología y neurociencia.", "Unidad básica del sistema nervioso."]}
+{"category": "science", "word": "Vacuum", "hints_es": ["Un espacio sin materia.", "Estudiado en física.", "El espacio exterior es un ejemplo natural."]}
+{"category": "science", "word": "Crater", "hints_es": ["Una depresión en forma de cuenco a menudo causada por un impacto.", "Estudiada en geología y astronomía.", "Puede formarse por meteoritos o volcanes."]}
+{"category": "science", "word": "Quark", "hints_es": ["Una partícula fundamental que forma los protones y neutrones.", "Se estudia en la física de partículas.", "Viene en seis 'sabores' como arriba y abajo."]}
+{"category": "science", "word": "Plasma", "hints_es": ["Un estado de la materia con partículas cargadas.", "Estudiado en física y astronomía.", "Encontrado en estrellas y relámpagos."]}
+{"category": "science", "word": "Coral", "hints_es": ["Organismos marinos que construyen estructuras de arrecifes.", "Estudiados en biología y ciencia marina.", "Hechos de pequeños animales llamados pólipos."]}
+{"category": "science", "word": "Alloy", "hints_es": ["Una mezcla de metales o un metal con otro elemento.", "Estudiado en química y ciencia de materiales.", "Ejemplos incluyen acero y bronce."]}
+{"category": "science", "word": "Asteroid", "hints_es": ["Un pequeño cuerpo rocoso que orbita alrededor del Sol.", "Estudiado en astronomía.", "La mayoría se encuentra en el cinturón entre Marte y Júpiter."]}
+{"category": "science", "word": "Aurora", "hints_es": ["Una exhibición de luz natural en el cielo.", "Estudiado en ciencias de la tierra y astronomía.", "Causado por partículas cargadas que impactan la atmósfera."]}
+{"category": "science", "word": "Canopy", "hints_es": ["La capa superior de árboles en un bosque.", "Estudiado en biología y ecología.", "Proporciona hábitat para muchas especies."]}
+{"category": "science", "word": "Gamma", "hints_es": ["Un tipo de radiación electromagnética de alta energía.", "Estudiada en física y astronomía.", "A menudo producida en la desintegración radiactiva."]}
+{"category": "science", "word": "Infrared", "hints_es": ["Un tipo de radiación electromagnética invisible para el ojo.", "Estudiado en física y astronomía.", "Usado en cámaras de imagen térmica."]}
+{"category": "science", "word": "Isotope", "hints_es": ["Átomos del mismo elemento con diferentes números de neutrones.", "Estudiados en química y física.", "Algunos son estables, otros radiactivos."]}
+{"category": "science", "word": "Kelvin", "hints_es": ["Una escala de temperatura que comienza en el cero absoluto.", "Usada en física y termodinámica.", "El símbolo es K."]}
+{"category": "science", "word": "Meteor", "hints_es": ["Una rayo de luz de una roca espacial ardiendo en la atmósfera.", "Estudiado en astronomía.", "Comúnmente llamado estrella fugaz."]}
+{"category": "science", "word": "Molten", "hints_es": ["Describe una sustancia en forma líquida debido al calor.", "Usado en geología y metalurgia.", "A menudo se refiere a roca o metal."]}
+{"category": "science", "word": "Nucleus", "hints_es": ["La parte central de un átomo o una célula.", "Estudiado en química y biología.", "En los átomos, contiene protones y neutrones."]}
+{"category": "science", "word": "Photon", "hints_es": ["Una partícula de luz u otra radiación electromagnética.", "Estudiada en física.", "No tiene masa y viaja a la velocidad de la luz."]}
+{"category": "science", "word": "Prism", "hints_es": ["Un objeto transparente que refracta la luz.", "Estudiado en física y óptica.", "Separa la luz blanca en colores."]}
+{"category": "science", "word": "Sediment", "hints_es": ["Partículas de roca o material orgánico movidas por el viento o el agua.", "Estudiadas en geología.", "Pueden formar rocas sedimentarias con el tiempo."]}
+{"category": "science", "word": "Sonar", "hints_es": ["Un sistema que utiliza ondas sonoras para detectar objetos bajo el agua.", "Usado en la ciencia marina.", "El nombre significa Navegación y Localización por Sonido."]}
+{"category": "science", "word": "Spectrum", "hints_es": ["El rango de longitudes de onda de la luz u otra radiación.", "Estudiado en física y astronomía.", "Incluye luz visible, radio y rayos X."]}
+{"category": "science", "word": "Valve", "hints_es": ["Una estructura que controla el flujo de fluidos.", "Estudiado en biología e ingeniería.", "En el corazón, previene el retroceso de la sangre."]}
+{"category": "science", "word": "Volcano", "hints_es": ["Una montaña que erupciona roca fundida, ceniza y gases.", "Estudiada en geología.", "Ejemplos incluyen el Monte Fuji y el Vesubio."]}
+{"category": "science", "word": "Algae", "hints_es": ["Organismos fotosintéticos simples que se encuentran en el agua.", "Estudiados en biología y ecología.", "Incluye algas y formas microscópicas."]}
+{"category": "science", "word": "Binary", "hints_es": ["Un sistema que usa solo dos símbolos, a menudo 0 y 1.", "Usado en ciencias de la computación y matemáticas.", "También describe sistemas estelares con dos estrellas."]}
+{"category": "science", "word": "Buoy", "hints_es": ["Un marcador flotante anclado en el agua.", "Usado en oceanografía.", "Puede medir la temperatura o la altura de las olas."]}
+{"category": "science", "word": "Carbon", "hints_es": ["Un elemento no metálico esencial para la vida.", "Estudiado en química y biología.", "Puede formar diamantes y grafito."]}
+{"category": "science", "word": "Copper", "hints_es": ["Un elemento metálico de color marrón rojizo.", "Estudiado en química e ingeniería.", "Excelente conductor de electricidad."]}
+{"category": "science", "word": "Current", "hints_es": ["El flujo de carga eléctrica o agua en movimiento.", "Estudiado en física y ciencias de la tierra.", "Medido en amperios para electricidad."]}
+{"category": "science", "word": "Delta", "hints_es": ["Una forma de terreno en la desembocadura de un río.", "Estudiada en ciencias de la tierra y geografía.", "Formada por depósitos de sedimentos."]}
+{"category": "science", "word": "Drone", "hints_es": ["Un vehículo aéreo no tripulado.", "Utilizado en estudios e investigaciones ambientales.", "Puede llevar cámaras para observación."]}
+{"category": "science", "word": "Fusion", "hints_es": ["Un proceso nuclear que combina átomos ligeros para formar otros más pesados.", "Estudiado en física y astronomía.", "Alimenta al Sol."]}
+{"category": "science", "word": "Genome", "hints_es": ["Todo el material genético de un organismo.", "Estudiado en biología y genética.", "Incluye tanto ADN como ARN."]}
+{"category": "science", "word": "Habitat", "hints_es": ["El entorno natural donde vive un organismo.", "Se estudia en biología y ecología.", "Proporciona comida, agua y refugio."]}
+{"category": "science", "word": "Insect", "hints_es": ["Un pequeño artrópodo con seis patas.", "Estudiado en biología y entomología.", "Incluye escarabajos, hormigas y mariposas."]}
+{"category": "science", "word": "Lithium", "hints_es": ["Un metal suave y ligero.", "Estudiado en química y utilizado en baterías.", "El símbolo es Li."]}
+{"category": "science", "word": "Matter", "hints_es": ["Cualquier cosa que tenga masa y ocupe espacio.", "Estudiado en física y química.", "Existe como sólido, líquido, gas o plasma."]}
+{"category": "science", "word": "Nova", "hints_es": ["Un repentino brillo de una estrella.", "Estudiado en astronomía.", "Causado por una explosión nuclear en una enana blanca."]}
+{"category": "science", "word": "Oxygen", "hints_es": ["Un gas esencial para la mayoría de las formas de vida.", "Estudiado en química y biología.", "Compone aproximadamente el 21% de la atmósfera de la Tierra."]}
+{"category": "science", "word": "Pollen", "hints_es": ["Un polvo que contiene células de esperma de plantas.", "Estudiado en biología y botánica.", "Transportado por el viento o animales para la fertilización."]}
+{"category": "science", "word": "Quartz", "hints_es": ["Un mineral duro hecho de silicio y oxígeno.", "Estudiado en geología.", "Común en arena y rocas."]}
+{"category": "science", "word": "Robot", "hints_es": ["Una máquina capaz de realizar tareas automáticamente.", "Usada en ingeniería y ciencia.", "Se puede programar para diversas funciones."]}
+{"category": "science", "word": "Seismic", "hints_es": ["Relativo a los terremotos o vibraciones de la tierra.", "Estudiado en geología y sismología.", "Medido por sismógrafos."]}
+{"category": "science", "word": "Tides", "hints_es": ["El aumento y la caída del nivel del mar.", "Estudiado en oceanografía y astronomía.", "Causado por la gravedad de la Luna."]}
+{"category": "science", "word": "Ultrasound", "hints_es": ["Ondas sonoras por encima del rango de audición humana.", "Usado en imágenes médicas e industria.", "Comúnmente usado para ver un feto en desarrollo."]}
+{"category": "science", "word": "Vector", "hints_es": ["Una cantidad con magnitud y dirección.", "Usado en física y matemáticas.", "También se refiere a organismos que transmiten enfermedades."]}
+{"category": "science", "word": "Worm", "hints_es": ["Un invertebrado alargado y de cuerpo blando.", "Estudiado en biología y ecología.", "Incluye lombrices de tierra y planarias."]}
+{"category": "science", "word": "Xylem", "hints_es": ["Tejido vegetal que transporta agua desde las raíces hasta las hojas.", "Estudiado en biología y botánica.", "Parte del sistema vascular en las plantas."]}
+{"category": "science", "word": "Yeast", "hints_es": ["Un hongo unicelular utilizado en la panadería y la elaboración de cerveza.", "Estudiado en biología y microbiología.", "Convierte azúcares en alcohol y dióxido de carbono."]}
+{"category": "science", "word": "Zebra", "hints_es": ["Un mamífero herbívoro a rayas.", "Estudiado en biología y zoología.", "Nativo de África."]}
+{"category": "science", "word": "Anther", "hints_es": ["La parte de una flor que produce polen.", "Estudiado en biología y ciencias de las plantas.", "Ubicado en la punta del estambre."]}
+{"category": "science", "word": "Auricle", "hints_es": ["La parte externa del oído.", "Estudiado en biología y anatomía.", "Ayuda a dirigir el sonido hacia el canal auditivo."]}
+{"category": "science", "word": "Basalt", "hints_es": ["Una roca volcánica oscura.", "Estudiada en geología.", "Comúnmente encontrada en la corteza oceánica."]}
+{"category": "science", "word": "Cilium", "hints_es": ["Una pequeña estructura similar a un cabello en una célula.", "Estudiada en biología y microbiología.", "Ayuda con el movimiento o el transporte de fluidos."]}
+{"category": "science", "word": "Cosmos", "hints_es": ["El universo visto como un todo ordenado.", "Estudiado en astronomía.", "Incluye todo el espacio, el tiempo, la materia y la energía."]}
+{"category": "science", "word": "Crust", "hints_es": ["La capa más externa de un planeta.", "Estudiada en geología.", "Incluye tipos continentales y oceánicos."]}
+{"category": "science", "word": "Dorsal", "hints_es": ["Relativo a la parte posterior o superior de un organismo.", "Estudiado en biología y anatomía.", "Opuesto a ventral."]}
+{"category": "science", "word": "Estuary", "hints_es": ["Una zona costera donde el agua dulce se encuentra con el agua salada.", "Estudiado en ciencias de la tierra y ecología.", "Rico en biodiversidad."]}
+{"category": "science", "word": "Flora", "hints_es": ["La vida vegetal de una región.", "Estudiada en biología y ecología.", "A menudo se contrasta con la fauna."]}
+{"category": "science", "word": "Furrow", "hints_es": ["Una hendidura o surco en el suelo o tejido.", "Usado en biología, geología y agricultura.", "Puede formarse de manera natural o ser creado al arar."]}
+{"category": "science", "word": "Germ", "hints_es": ["Un microorganismo, especialmente uno que causa enfermedad.", "Estudiado en biología y microbiología.", "También puede referirse a la parte reproductiva de una semilla."]}
+{"category": "science", "word": "Glider", "hints_es": ["Una aeronave sin motor.", "Usada en física y aerodinámica.", "Se basa en corrientes de aire para mantenerse en el aire."]}
+{"category": "science", "word": "Grain", "hints_es": ["Una pequeña semilla dura o partícula.", "Estudiado en agricultura, geología y ciencia de materiales.", "También describe la textura de la madera o la roca."]}
+{"category": "science", "word": "Hybrid", "hints_es": ["Un organismo que resulta del cruce de dos especies o variedades diferentes.", "Estudiado en biología y genética.", "Común en plantas y animales."]}
+{"category": "science", "word": "Icicle", "hints_es": ["Un trozo de hielo colgante formado por agua que gotea.", "Estudiado en ciencias de la tierra y meteorología.", "Se forma en clima de congelación."]}
+{"category": "science", "word": "Joule", "hints_es": ["La unidad del SI de energía.", "Usada en física.", "Igual a un newton-metro."]}
+{"category": "science", "word": "Kelp", "hints_es": ["Una gran alga marrón.", "Estudiada en biología y ciencia marina.", "Forma bosques submarinos en mares fríos."]}
+{"category": "science", "word": "Larva", "hints_es": ["Una forma inmadura de un animal que sufre metamorfosis.", "Estudiado en biología y zoología.", "Ejemplos incluyen orugas y renacuajos."]}
+{"category": "science", "word": "Lava", "hints_es": ["Roca fundida que llega a la superficie de la Tierra.", "Se estudia en geología y volcanología.", "Puede formar nuevas masas de tierra."]}
+{"category": "science", "word": "Mantle", "hints_es": ["La gruesa capa de la Tierra entre la corteza y el núcleo.", "Estudiada en geología.", "Compuesta principalmente de minerales de silicato."]}
+{"category": "science", "word": "Mimic", "hints_es": ["Imitar de cerca a otro organismo u objeto.", "Estudiado en biología y comportamiento animal.", "Puede ayudar a la supervivencia a través del camuflaje."]}
+{"category": "science", "word": "Nectar", "hints_es": ["Un líquido dulce hecho por flores.", "Estudiado en biología y botánica.", "Atrae polinizadores como las abejas."]}
+{"category": "science", "word": "Niche", "hints_es": ["El papel que un organismo juega en su entorno.", "Estudiado en biología y ecología.", "Incluye hábitat, dieta y comportamiento."]}
+{"category": "science", "word": "Novae", "hints_es": ["Eventos de iluminación repentina en las estrellas.", "Estudiados en astronomía.", "Causados por reacciones nucleares."]}
+{"category": "science", "word": "Pangea", "hints_es": ["Un supercontinente que existió hace millones de años.", "Estudiado en geología.", "Se rompió en los continentes de hoy."]}
+{"category": "science", "word": "Pebble", "hints_es": ["Una pequeña piedra redondeada.", "Estudiada en geología.", "A menudo se encuentra en playas y lechos de ríos."]}
+{"category": "science", "word": "Pupa", "hints_es": ["Una etapa de vida entre larva y adulto en los insectos.", "Estudiada en biología y entomología.", "Ocurre durante la metamorfosis."]}
+{"category": "science", "word": "Rayon", "hints_es": ["Una fibra sintética hecha de celulosa.", "Estudiada en ciencia de materiales.", "A menudo utilizada en textiles."]}
+{"category": "science", "word": "Root", "hints_es": ["La parte de una planta que absorbe agua y nutrientes.", "Estudiada en biología y botánica.", "Ancla la planta en el suelo."]}
+{"category": "science", "word": "Sahara", "hints_es": ["Un gran desierto en el norte de África.", "Estudiado en geografía y ciencias de la tierra.", "El desierto cálido más grande del mundo."]}
+{"category": "science", "word": "Silica", "hints_es": ["Un compuesto hecho de silicio y oxígeno.", "Estudiado en geología y ciencia de materiales.", "Componente principal de la arena."]}
+{"category": "science", "word": "Slate", "hints_es": ["Una roca metamórfica de grano fino.", "Estudiada en geología.", "Usada en techos y pisos."]}
+{"category": "science", "word": "Smog", "hints_es": ["Un tipo de contaminación del aire.", "Estudiado en ciencias ambientales.", "Formado por humo y niebla."]}
+{"category": "science", "word": "Spore", "hints_es": ["Una célula reproductiva capaz de desarrollarse en un nuevo organismo.", "Estudiada en biología y micología.", "Producida por hongos, algas y algunas plantas."]}
+{"category": "science", "word": "Strata", "hints_es": ["Capas de roca o suelo.", "Estudiadas en geología.", "Usadas para interpretar la historia de la Tierra."]}
+{"category": "science", "word": "Taiga", "hints_es": ["Un bioma caracterizado por bosques de coníferas.", "Estudiado en ecología y ciencias de la tierra.", "Se encuentra en regiones frías del norte."]}
+{"category": "science", "word": "Thermal", "hints_es": ["Relación con el calor.", "Estudiado en física y ciencias de la tierra.", "Usado en la transferencia de energía y el aislamiento."]}
+{"category": "science", "word": "Titan", "hints_es": ["Una luna grande de Saturno.", "Estudiada en astronomía.", "Tiene lagos de metano y etano líquidos."]}
+{"category": "science", "word": "Trench", "hints_es": ["Una profunda depresión en el fondo del océano.", "Estudiada en geología y oceanografía.", "A menudo se encuentra en zonas de subducción."]}
+{"category": "science", "word": "Tundra", "hints_es": ["Un bioma sin árboles con suelo congelado.", "Estudiado en ecología y ciencias de la tierra.", "Se encuentra en regiones polares."]}
+{"category": "science", "word": "Ulna", "hints_es": ["Un hueso largo en el antebrazo.", "Estudiado en biología y anatomía.", "Corre paralelo al radio."]}
+{"category": "science", "word": "Vesta", "hints_es": ["Uno de los asteroides más grandes del sistema solar.", "Estudiado en astronomía.", "Orbita en el cinturón de asteroides."]}
+{"category": "science", "word": "Watt", "hints_es": ["Una unidad de potencia en el sistema métrico.", "Usada en física.", "Igual a un julio por segundo."]}
+{"category": "science", "word": "Whale", "hints_es": ["Un gran mamífero marino.", "Estudiado en biología y ciencia marina.", "Respira aire a través de un espiráculo."]}
+{"category": "science", "word": "Wind", "hints_es": ["Aire en movimiento causado por diferencias de presión.", "Estudiado en meteorología y ciencias de la tierra.", "Medido con un anemómetro."]}
+{"category": "science", "word": "Xenon", "hints_es": ["Un elemento gas noble.", "Estudiado en química y física.", "Usado en luces y propulsión iónica."]}
+{"category": "science", "word": "Yolk", "hints_es": ["La parte rica en nutrientes de un huevo.", "Estudiada en biología y nutrición.", "Alimenta al embrión en desarrollo."]}
+{"category": "science", "word": "Zinc", "hints_es": ["Un elemento metálico utilizado en aleaciones y como nutriente.", "Estudiado en química y biología.", "Tiene el símbolo Zn en la tabla periódica."]}
+{"category": "tech", "word": "app", "hints_es": ["Un programa de software diseñado para realizar tareas específicas en un dispositivo.", "Puedes descargar esto de una tienda en línea a tu teléfono.", "Hay tipos para juegos, productividad y comunicación."]}
+{"category": "tech", "word": "bot", "hints_es": ["Un programa de computadora que realiza tareas automatizadas.", "A menudo se usa en chats, juegos o para navegar por la web.", "Puede actuar como un humano para responder preguntas o realizar acciones."]}
+{"category": "tech", "word": "bug", "hints_es": ["Un error o defecto en un programa de computadora que hace que actúe de manera inesperada.", "Los desarrolladores trabajan para encontrar y corregir estos durante las pruebas.", "El término una vez se refería a un insecto real encontrado en el hardware temprano."]}
+{"category": "tech", "word": "cpu", "hints_es": ["La unidad principal de procesamiento en una computadora que ejecuta instrucciones.", "Conocida como el 'cerebro' de la computadora.", "Su velocidad se mide en gigahercios (GHz)."]}
+{"category": "tech", "word": "ram", "hints_es": ["Memoria temporal de computadora que almacena datos para tareas activas.", "Ayuda a que los programas funcionen más rápido al mantener la información a la mano.", "Pierde todos los datos cuando la computadora se apaga."]}
+{"category": "tech", "word": "rom", "hints_es": ["Un tipo de memoria de computadora que guarda datos de forma permanente.", "Almacena instrucciones para iniciar un dispositivo.", "Su contenido no se puede cambiar o borrar fácilmente."]}
+{"category": "tech", "word": "gui", "hints_es": ["Interfaz Gráfica de Usuario; permite a los usuarios interactuar con el software de manera visual.", "Utiliza íconos, ventanas y menús en lugar de comandos de texto.", "Se encuentra en sistemas operativos como Windows y macOS."]}
+{"category": "tech", "word": "tag", "hints_es": ["Una palabra clave o etiqueta utilizada para categorizar e identificar información.", "Común en publicaciones de redes sociales y páginas web.", "Ayuda a los usuarios a buscar o filtrar contenido fácilmente."]}
+{"category": "tech", "word": "key", "hints_es": ["Un dispositivo o código utilizado para obtener acceso o cifrar datos.", "Se encuentra en los teclados y se usa para escribir.", "En seguridad, es crucial para desbloquear cuentas o archivos."]}
+{"category": "tech", "word": "vpn", "hints_es": ["Un servicio que crea una conexión segura y privada a través de internet.", "Ayuda a proteger tu privacidad y datos en línea.", "A menudo se usa para acceder a sitios restringidos o trabajar de forma remota."]}
+{"category": "tech", "word": "code", "hints_es": ["Un conjunto de instrucciones escritas en un lenguaje de programación.", "Los desarrolladores usan esto para crear software y aplicaciones.", "Pueden ser scripts simples o sistemas grandes y complejos."]}
