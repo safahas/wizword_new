@@ -11,6 +11,22 @@ from backend.fallback_words import get_fallback_word
 
 logger = logging.getLogger(__name__)
 
+# Safe logging for non-ASCII content on Windows terminals
+def _log_info_safe(prefix: str, text: str) -> None:
+    # Always sanitize to ASCII with backslash escapes to avoid Windows console encoding errors
+    try:
+        combined = f"{prefix}{text}"
+    except Exception:
+        combined = str(prefix)
+    try:
+        sanitized = combined.encode('ascii', errors='backslashreplace').decode('ascii', errors='ignore')
+    except Exception:
+        sanitized = str(prefix).encode('ascii', errors='backslashreplace').decode('ascii', errors='ignore')
+    try:
+        logger.info(sanitized)
+    except Exception:
+        pass
+
 class GameLogic:
     def __init__(self, word_length: int = None, subject: str = "general", mode: str = "Fun", nickname: str = "", initial_score: int = 0, difficulty: str = "Medium"):
         
@@ -400,7 +416,7 @@ class GameLogic:
             available = [h for h in self.available_hints if h not in self.hints_given]
             if available:
                 hint = available[0]
-                logger.info(f"[HINT REQUEST] Using pre-generated hint: {hint}")
+                _log_info_safe("[HINT REQUEST] Using pre-generated hint: ", str(hint))
         
         # If no pre-generated hints available, try FlashCard pool (lazy-init path), then get a new one
         if not hint:

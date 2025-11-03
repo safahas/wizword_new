@@ -20,6 +20,16 @@ import logging
 logging.getLogger('matplotlib.font_manager').setLevel(logging.WARNING)
 logging.getLogger('matplotlib.category').setLevel(logging.WARNING)
 
+# Ensure UTF-8 console on Windows so non-ASCII (e.g., Arabic) logs don't crash
+try:
+    import sys as _sys
+    if hasattr(_sys.stdout, 'reconfigure'):
+        _sys.stdout.reconfigure(encoding='utf-8')
+    if hasattr(_sys.stderr, 'reconfigure'):
+        _sys.stderr.reconfigure(encoding='utf-8')
+except Exception:
+    pass
+
 USERS_FILE = os.environ.get("USERS_FILE", "users.json")
 BIO_MAX_CHARS = int(os.environ.get("BIO_MAX_CHARS", "10000"))
 PROFILE_BIO_KEY = "profile_bio"
