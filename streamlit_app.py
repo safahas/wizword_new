@@ -1585,9 +1585,7 @@ def display_login():
             'Student', 'High School', 'Bachelor', 'Master', 'PhD', 'Other'
         ]
         education = st.selectbox('Education (required)', education_options, key="register_education")
-        # Hints language preference
-        hints_language_options = ['english', 'spanish']
-        hints_language = st.selectbox('Hints language', hints_language_options, index=0, key='register_hints_language')
+        # Hints language moved to in-game Menu → Hints Language (session-only)
         bio = st.text_area(
             f"Bio (optional – up to {BIO_MAX_CHARS} characters)",
             key="register_bio_v2",
@@ -1648,8 +1646,7 @@ def display_login():
                         'email': u_email,
                         'birthday': str(birthday),
                         'education': u_edu,
-                        'bio': u_bio,
-                        'hints_language': (hints_language or 'english').strip().lower()
+                        'bio': u_bio
                     }
                     st.session_state['users'] = users
                     save_users(users)
@@ -1975,6 +1972,12 @@ def main():
             nickname=st.session_state.user['username'],
             difficulty='Medium'
         )
+        # Track which hints language the game was initialized with
+        try:
+            _curr_lang = st.session_state.get('hints_language', 'english')
+            st.session_state['active_hints_language'] = _curr_lang
+        except Exception:
+            st.session_state['active_hints_language'] = 'english'
         # Increment total sessions (lifetime) and current live sessions
         update_global_counters(sessions_delta=1, live_sessions_delta=1)
         # Create a stable live session id for heartbeats
@@ -2815,6 +2818,14 @@ def display_game():
                 - Personal: profile‑aware category; may show "Generating personal hints…" and a Retry button until hints are ready.
                 """ + ("- FlashCard: uses your Profile → FlashCard Text to build a pool; one hint per word; auto‑regenerates on save; API‑first with local fallback.\n" if _enable_flashcard_rules else "") + """
                 """)
+            # Hints Language (session override)
+            with st.expander('Hints Language', expanded=False):
+                _hl_prev = st.session_state.get('hints_language', 'english')
+                _hl_options = ['english', 'spanish']
+                _hl = st.selectbox('Hints language (session-only)', _hl_options, index=(_hl_options.index(_hl_prev) if _hl_prev in _hl_options else 0), key='session_hints_language_select')
+                st.session_state['hints_language'] = _hl
+                st.caption(f"Active hints file: {'backend/data/hints_es.json' if _hl == 'spanish' else 'backend/data/hints.json'}")
+
             # User Profile (expands inline)
             with st.expander('User Profile', expanded=False):
                 st.markdown('## User Profile')
@@ -2835,10 +2846,7 @@ def display_game():
                 if occupation == 'Other':
                     occupation_other = st.text_input('Please specify your occupation', value=user.get('occupation', '') if user.get('occupation', '') not in occupation_options else '', key='profile_occupation_other_inline')
                 address = st.text_input('Address', value=user.get('address', ''), key='profile_address_inline')
-                # Hints language preference
-                _hints_lang_curr_inline = (user.get('hints_language') or 'english').strip().lower()
-                hints_language_options_inline = ['english', 'spanish']
-                hints_language_inline = st.selectbox('Hints language', hints_language_options_inline, index=(hints_language_options_inline.index(_hints_lang_curr_inline) if _hints_lang_curr_inline in hints_language_options_inline else 0), key='profile_hints_language_inline')
+                # Hints language moved to Menu → Hints Language (session-only)
                 try:
                     from backend.bio_store import get_bio
                     _bio_init_inline = get_bio(user.get('username',''))
@@ -2993,11 +3001,6 @@ def display_game():
                     if username_lower and 'users' in st.session_state and username_lower in st.session_state['users']:
                         st.session_state['users'][username_lower]['education'] = final_education
                         st.session_state['users'][username_lower]['address'] = address
-                        st.session_state['users'][username_lower]['hints_language'] = (hints_language_inline or 'english').strip().lower()
-                        try:
-                            st.session_state['user']['hints_language'] = st.session_state['users'][username_lower]['hints_language']
-                        except Exception:
-                            pass
                         try:
                             from backend.bio_store import set_bio
                             set_bio(username_lower, bio_to_save)
@@ -3282,10 +3285,7 @@ def display_game():
         if occupation == 'Other':
             occupation_other = st.text_input('Please specify your occupation', value=user.get('occupation', '') if user.get('occupation', '') not in occupation_options else '')
         address = st.text_input('Address', value=user.get('address', ''))
-        # Hints language preference
-        _hints_lang_curr = (user.get('hints_language') or 'english').strip().lower()
-        hints_language_options = ['english', 'spanish']
-        hints_language = st.selectbox('Hints language', hints_language_options, index=(hints_language_options.index(_hints_lang_curr) if _hints_lang_curr in hints_language_options else 0))
+        # Hints language moved to Menu → Hints Language (session-only)
         try:
             from backend.bio_store import get_bio
             _bio_init_profile = get_bio(user.get('username',''))
@@ -3344,11 +3344,6 @@ def display_game():
             if username_lower and 'users' in st.session_state and username_lower in st.session_state['users']:
                 st.session_state['users'][username_lower]['education'] = final_education
                 st.session_state['users'][username_lower]['address'] = address
-                st.session_state['users'][username_lower]['hints_language'] = (hints_language or 'english').strip().lower()
-                try:
-                    st.session_state['user']['hints_language'] = st.session_state['users'][username_lower]['hints_language']
-                except Exception:
-                    pass
                 try:
                     from backend.bio_store import set_bio
                     set_bio(username_lower, bio_to_save)
@@ -3701,7 +3696,10 @@ def display_game():
                     """,
                     height=0,
                 )
-                # Also force focus to a hidden element at the top to guarantee scroll on some browsers
+            except Exception:
+                pass
+            # Also force focus to a hidden element at the top to guarantee scroll on some browsers
+            try:
                 components.html(
                     """
                     <div id="__top_anchor" style="position:absolute;top:0;left:0;height:1px;width:1px;"></div>
@@ -3760,6 +3758,38 @@ def display_game():
                 """,
                 unsafe_allow_html=True,
             )
+            # --- Session Hints Language selector (below banner, above Start) ---
+            try:
+                lang_cols = st.columns([2, 2, 2])
+                with lang_cols[0]:
+                    st.caption('Hints Language')
+                    _hl_prev_pg2 = st.session_state.get('hints_language', 'english')
+                    _opts_pg2 = ['english', 'spanish']
+                    _hl_pg2 = st.selectbox(' ', _opts_pg2, index=(_opts_pg2.index(_hl_prev_pg2) if _hl_prev_pg2 in _opts_pg2 else 0), key='session_hints_language_select_pregame2', label_visibility='collapsed')
+                    st.session_state['hints_language'] = _hl_pg2
+                with lang_cols[1]:
+                    st.markdown(f"**Active:** {'Spanish' if _hl_pg2 == 'spanish' else 'English'}")
+                # If language changed pre-game, re-create the game so hints/selection use the new file
+                try:
+                    _active_lang = st.session_state.get('active_hints_language', 'english')
+                    if _hl_pg2 != _active_lang:
+                        _curr = st.session_state.get('game')
+                        _subject = getattr(_curr, 'subject', 'general') if _curr else 'general'
+                        _nickname = (st.session_state.get('user') or {}).get('username', '') or st.session_state.get('nickname', '') or ''
+                        st.session_state.game = create_game_with_env_guard(
+                            word_length=5,
+                            subject=_subject,
+                            mode='Beat',
+                            nickname=_nickname,
+                            difficulty='Medium'
+                        )
+                        st.session_state['active_hints_language'] = _hl_pg2
+                        st.rerun()
+                except Exception:
+                    pass
+            except Exception:
+                pass
+
             # Now render the Start button which follows the marker div (styled via sibling selector)
             start_btn_html = """
             <style>

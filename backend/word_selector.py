@@ -2668,16 +2668,30 @@ class WordSelector:
             pass
 
     def _get_hints_file_for_user(self, username: str) -> str:
-        """Return the appropriate hints JSON file path based on user's hints_language.
-        Order: explicit Spanish alias → standard Spanish filename → default English.
+        """Return the appropriate hints JSON file path based on runtime/session or user's hints_language.
+        Priority: session override → user pref → english.
+        Then map: spanish→hints_es(.json), else→hints.json
         """
+        lang = 'english'
+        # Session override from Streamlit, if available
         try:
-            uname = (username or 'global').strip().lower()
-            users = self._load_users_db()
-            prefs = users.get(uname) if isinstance(users, dict) else None
-            lang = str((prefs or {}).get('hints_language', 'english')).strip().lower()
+            import streamlit as _st  # type: ignore
+            _sess_lang = str(_st.session_state.get('hints_language', '')).strip().lower()
+            if _sess_lang in ('english', 'spanish'):
+                lang = _sess_lang
         except Exception:
-            lang = 'english'
+            pass
+        # Fallback to user profile pref if session not set
+        if lang == 'english':
+            try:
+                uname = (username or 'global').strip().lower()
+                users = self._load_users_db()
+                prefs = users.get(uname) if isinstance(users, dict) else None
+                prof_lang = str((prefs or {}).get('hints_language', 'english')).strip().lower()
+                if prof_lang in ('english', 'spanish'):
+                    lang = prof_lang
+            except Exception:
+                pass
         base_dir = os.path.join('backend', 'data')
         if lang == 'spanish':
             # Try requested path name first (as specified), then common filename
