@@ -99,6 +99,94 @@ Backend .env precedence and debugging:
   - Skip word (−10) reveals the word then continues
 - SEI (Scoring Efficiency Index) measures efficiency; used in leaderboards/achievements.
 
+### Quick Start (Step‑by‑Step)
+
+1. Open the app and pick a Category (or Any) on the pre‑game screen.
+2. (Optional) Set Hints Language to English/Spanish/French under the banner.
+3. Choose your Game Mode (Fun/Wiz/Beat) and difficulty if prompted.
+4. Press “Click to Start Game”.
+5. Each turn:
+   - Ask a yes/no question OR tap the hint card to get a hint.
+   - Make a guess when ready, or Skip to reveal and continue.
+
+### Turn Flow
+
+- Start of a word: you’ll see a large hint card (mobile friendly).
+- Actions per turn:
+  - Ask: type a yes/no question (ends with ?). Example: “Does it contain the letter ‘a’?”
+  - Hint: click the hint card to reveal the next hint (within allowed limit).
+  - Guess: enter your full guess any time (must match word length).
+  - Skip: reveal the word and move to the next one (penalty applies).
+
+### Scoring (Beat/Wiz)
+
+- Questions: −1 (Beat) or mode/difficulty penalty in Wiz.
+- Hint: −10 (typical) per extra hint (limit depends on mode).
+- Wrong guess: −10.
+- Correct guess: adds points (based on mode/difficulty; see on‑screen rules).
+- Skip: −10 and reveals the word.
+- SEI shows efficiency (higher is better) and powers leaderboards.
+
+Examples:
+- Ask 2 questions (−2), take 1 hint (−10), then guess correctly (+points) → net score updates and your SEI reflects time+score.
+- Skip quickly when stuck in Beat mode to maximize words solved.
+
+### Tips
+
+- Start broad: ask about letters (vowels), category traits, or word length.
+- In Beat mode, avoid over‑spending on hints if you’re close to a guess.
+- Switch category pre‑game if you want a different theme; set Hints Language before pressing Start.
+- Mobile: tap the hint card area; text wraps and scales for readability.
+
+## Multi‑language Hints (English / Spanish / French)
+
+- Runtime selection:
+  - Beat pre‑game: a visible “Hints Language” selector appears under the top banner and above the Start button.
+  - In‑game Menu: open “☰ Menu” → “Hints Language”.
+  - Choices: english, spanish, french. This applies to the current session immediately.
+
+- Files used:
+  - English: `backend/data/hints.json`
+  - Spanish: `backend/data/hints_es.json`
+  - French: `backend/data/hints_fr.json`
+
+- Generate/normalize datasets:
+  - Translate to Spanish (writes full canonical file):
+    ```powershell
+    $env:OPENROUTER_API_KEY="<your_key>"
+    python -m backend.tools.translate_hints_to_spanish
+    # Offline copy (for testing only):
+    python -m backend.tools.translate_hints_to_spanish --offline
+    ```
+  - Translate to French (writes full canonical file):
+    ```powershell
+    $env:OPENROUTER_API_KEY="<your_key>"
+    python -m backend.tools.translate_hints_to_french
+    # Offline copy (for testing only):
+    python -m backend.tools.translate_hints_to_french --offline
+    ```
+  - Normalize existing line‑delimited → canonical JSON:
+    ```powershell
+    # Spanish
+    python -m backend.tools.regenerate_hints_es
+    # French
+    python -m backend.tools.regenerate_hints_fr
+    ```
+
+- Forcing JSON hints (no API):
+  - Useful to validate your language files without API calls
+  ```powershell
+  $env:BYPASS_API_WORD_SELECTION="true"
+  Remove-Item Env:OPENROUTER_API_KEY -ErrorAction SilentlyContinue
+  $env:FLASHCARD_RUNTIME_API="false"
+  $env:PERSONAL_POOL_API_ATTEMPTS="0"
+  # then restart Streamlit
+  ```
+
+- Troubleshooting:
+  - If logs show “Word '<w>' not found in hints file … for category '<cat>'”: add that word to your language file under the same category or regenerate the file.
+  - Runtime logs include which file is selected: `[HINTS_FILE_SELECT_WORD] … file='…'` and `[HINTS_FILE_GAMELOGIC] … file='…'`.
+
 ### Personal Category (profile‑aware)
 If enabled (see ENABLE_PERSONAL_CATEGORY), Personal uses your profile (Bio, Occupation, Education, Address) to request personally relevant words and tailored hints. The UI may briefly show “Generating personal hints…” until 3+ hints are ready; a Retry button appears if needed.
 
