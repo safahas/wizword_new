@@ -1318,25 +1318,38 @@ def display_login():
         ) if _enable_flashcard_htp else ""
         st.markdown(f"""
         ### How to Play
-        - Choose a mode:
-          - **Fun**: No timer, unlimited practice.
-          - **Wiz**: Track stats and leaderboards.
-          - **Beat**: Timed sprint — {int(os.getenv('BEAT_MODE_TIME', 300))} seconds.
-        - Pick a category or **any** for random.
-        - Interact:
-          - Ask yes/no questions (−1)
-          - Request up to 3 hints (−10 each)
-          - Guess the word any time (wrong −10, correct +20 × word length)
-          - Skip word (−10) to reveal and continue
-        - SEI (Scoring Efficiency Index) measures efficiency and powers leaderboards.
-        
+
+        #### Quick Start
+        1. Pick a Category (or **Any**) on the pre‑game screen.
+        2. (Optional) Set **Hints Language** (English/Spanish/French) under the banner.
+        3. Choose a mode:
+           - **Fun**: No timer, unlimited practice.
+           - **Wiz**: Track stats and leaderboards.
+           - **Beat**: Timed sprint — {int(os.getenv('BEAT_MODE_TIME', 300))} seconds.
+        4. Click **Start**.
+        5. Each turn: Ask a yes/no question, tap the hint card, guess, or skip.
+
+        #### Turn Flow
+        - Ask: type a yes/no question (ends with ?), e.g., "Does it contain the letter 'a'?".
+        - Hint: click the hint card to reveal the next hint (within your limit).
+        - Guess: enter your full guess any time (must match word length).
+        - Skip: reveal the word and move on (penalty applies).
+
+        #### Scoring (Beat/Wiz)
+        - Questions: −1 (Beat) or mode/difficulty penalty in Wiz.
+        - Hints: −10 each (typical) for extra hints.
+        - Wrong guess: −10.
+        - Correct guess: adds points (varies by mode/difficulty).
+        - Skip: −10 then continue.
+        - **SEI** (Scoring Efficiency Index) summarizes speed and accuracy for leaderboards.
+
         {personal_section}{flashcard_section}
-        
+
         #### Tips
         - Start with vowels/common letters.
         - Use questions to narrow the space before spending hints.
-        - In Beat mode, skip quickly if stuck.
-        - Personal may need a brief moment to generate tailored hints.
+        - In Beat, skip fast if stuck to maximize solved words.
+        - Personal may take a moment to prepare tailored hints.
 
         #### Account Management
         - Use Login to Register or Sign In.
@@ -2821,7 +2834,7 @@ def display_game():
             # Hints Language (session override)
             with st.expander('Hints Language', expanded=False):
                 _hl_prev = st.session_state.get('hints_language', 'english')
-                _hl_options = ['english', 'spanish', 'french']
+                _hl_options = ['english', 'spanish', 'french', 'arabic']
                 _hl = st.selectbox('Hints language (session-only)', _hl_options, index=(_hl_options.index(_hl_prev) if _hl_prev in _hl_options else 0), key='session_hints_language_select')
                 st.session_state['hints_language'] = _hl
                 _file_label = 'backend/data/hints.json'
@@ -2829,6 +2842,8 @@ def display_game():
                     _file_label = 'backend/data/hints_es.json'
                 elif _hl == 'french':
                     _file_label = 'backend/data/hints_fr.json'
+                elif _hl == 'arabic':
+                    _file_label = 'backend/data/hints_ar.json'
                 st.caption(f"Active hints file: {_file_label}")
 
             # User Profile (expands inline)
@@ -3769,7 +3784,7 @@ def display_game():
                 with lang_cols[0]:
                     st.caption('Hints Language')
                     _hl_prev_pg2 = st.session_state.get('hints_language', 'english')
-                    _opts_pg2 = ['english', 'spanish', 'french']
+                    _opts_pg2 = ['english', 'spanish', 'french', 'arabic']
                     _hl_pg2 = st.selectbox(' ', _opts_pg2, index=(_opts_pg2.index(_hl_prev_pg2) if _hl_prev_pg2 in _opts_pg2 else 0), key='session_hints_language_select_pregame2', label_visibility='collapsed')
                     st.session_state['hints_language'] = _hl_pg2
                 with lang_cols[1]:
@@ -3778,6 +3793,8 @@ def display_game():
                         _active_label = 'Spanish'
                     elif _hl_pg2 == 'french':
                         _active_label = 'French'
+                    elif _hl_pg2 == 'arabic':
+                        _active_label = 'Arabic'
                     st.markdown(f"**Active:** {_active_label}")
                 # If language changed pre-game, re-create the game so hints/selection use the new file
                 try:
