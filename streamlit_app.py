@@ -1545,6 +1545,11 @@ def display_login():
                 username_lower = (username or "").strip().lower()
                 if username_lower in users and users[username_lower]['password'] == (password or '').strip():
                     st.session_state.user = dict(users[username_lower])
+                    try:
+                        import sys as _sys
+                        print(f"[DEBUG_LOGIN] user='{username_lower}' hints_language='{st.session_state.user.get('hints_language','english')}'", file=_sys.stderr)
+                    except Exception:
+                        pass
                     st.session_state.user['username'] = username_lower
                     st.session_state.logged_in = True
                     st.session_state['login_error'] = ""

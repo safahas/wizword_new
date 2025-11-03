@@ -1979,6 +1979,7 @@ class WordSelector:
         # Get all possible words from the appropriate hints file for the subject
         hints_file = self._get_hints_file_for_user(username)
         try:
+            logger.info(f"[HINTS_FILE_SELECT_WORD] file='{hints_file}' subject='{subject}' user='{username}'")
             with open(hints_file, 'r', encoding='utf-8') as f:
                 hints_data = json.load(f)
             templates = hints_data.get('templates', {})
@@ -1988,6 +1989,7 @@ class WordSelector:
             all_words = list(templates.get(subject_key, {}).keys())
             # Normalize keys to their original displayed form but compare in lowercase
             all_words = [w for w in all_words if isinstance(w, str)]
+            logger.info(f"[HINTS_FILE_SELECT_WORD] subject_key='{subject_key}' words_in_cat={len(all_words)}")
         except Exception as e:
             logger.error(f"Error loading hints.json: {e}")
             all_words = []
@@ -2017,6 +2019,7 @@ class WordSelector:
             return None
 
         word = random.choice(candidates)
+        logger.info(f"[HINTS_FILE_SELECT_WORD] selected_word='{word}' from file='{hints_file}' for subject_key='{subject_key}'")
         logger.debug(f"Selected fallback word: {word}")
         # Do NOT update last word here
         return word
@@ -2534,12 +2537,20 @@ class WordSelector:
         
         # Try to load API key from environment
         self.api_key = os.getenv("OPENROUTER_API_KEY")
-        logger.debug(f"Loaded OPENROUTER_API_KEY from environment: {self.api_key[:8]}...{'*' * (len(self.api_key)-8) if self.api_key else ''}")
+        try:
+            _mask = (self.api_key[:8] + "..." + ("*" * (len(self.api_key)-8))) if self.api_key else "<none>"
+        except Exception:
+            _mask = "<none>"
+        logger.debug(f"Loaded OPENROUTER_API_KEY from environment: {_mask}")
         if not self.api_key:
             logger.info("Looking for .env file at: " + os.path.abspath(".env"))
             load_dotenv()
             self.api_key = os.getenv("OPENROUTER_API_KEY")
-            logger.debug(f"Loaded OPENROUTER_API_KEY from .env: {self.api_key[:8]}...{'*' * (len(self.api_key)-8) if self.api_key else ''}")
+            try:
+                _mask2 = (self.api_key[:8] + "..." + ("*" * (len(self.api_key)-8))) if self.api_key else "<none>"
+            except Exception:
+                _mask2 = "<none>"
+            logger.debug(f"Loaded OPENROUTER_API_KEY from .env: {_mask2}")
         if not self.api_key:
             logger.info("No valid API key found. Using fallback mode.")
             self.use_fallback = True
@@ -2672,10 +2683,19 @@ class WordSelector:
             # Try requested path name first (as specified), then common filename
             cand1 = os.path.join(base_dir, 'hints_es_json')
             cand2 = os.path.join(base_dir, 'hints_es.json')
+            try:
+                logger.info(f"[HINTS_LANG] user='{username}' lang='{lang}' try='{cand1}' exists={os.path.exists(cand1)}")
+                logger.info(f"[HINTS_LANG] user='{username}' lang='{lang}' try='{cand2}' exists={os.path.exists(cand2)}")
+            except Exception:
+                pass
             if os.path.exists(cand1):
                 return cand1
             if os.path.exists(cand2):
                 return cand2
+        try:
+            logger.info(f"[HINTS_LANG] user='{username}' lang='{lang}' default='{os.path.join(base_dir, 'hints.json')}'")
+        except Exception:
+            pass
         return os.path.join(base_dir, 'hints.json')
 
     def _infer_role_for_name(self, word: str, bio_text: str) -> str:
@@ -3254,7 +3274,11 @@ class WordSelector:
                         logger.info(f"[HINT SOURCE] Hint {i}: {hint} (Source: hints.json/general fallback)")
                     return hints
                 else:
-                    logger.warning(f"[HINT SOURCE] Word '{word}' not found in hints.json templates for category '{subject}' or 'general'")
+                    try:
+                        cats = list((hints_data or {}).get('templates', {}).keys())
+                    except Exception:
+                        cats = []
+                    logger.warning(f"[HINT SOURCE] Word '{word}' not found in hints file '{hints_file}' for category '{subject}'. Available categories={cats[:10]}")
         except FileNotFoundError:
             logger.warning(f"[HINT SOURCE] hints file not found at {hints_file}")
         except json.JSONDecodeError:
@@ -3346,6 +3370,10 @@ class WordSelector:
             self.current_username = (username or 'global').strip().lower()
         except Exception:
             self.current_username = 'global'
+        try:
+            logger.info(f"[SELECT_WORD] user='{self.current_username}' category='{self.current_category}'")
+        except Exception:
+            pass
 
         # FlashCard category: pull from user's flash text pool
         if self.current_category == "flashcard":
@@ -3584,6 +3612,22 @@ class WordSelector:
                                 continue  # Skip this attempt instead of using raw content
                     
                     if is_valid_word(word):
+                        # If user's language points to a specific hints file, ensure the word exists there for the subject
+                        try:
+                            hints_path = self._get_hints_file_for_user(username)
+                            with open(hints_path, 'r', encoding='utf-8') as _hf:
+                                _data = json.load(_hf)
+                            _templates = (_data or {}).get('templates', {})
+                            _ci = {k.lower(): k for k in _templates.keys()}
+                            _subj_key = _ci.get(str(self.current_category).lower()) or _ci.get('general')
+                            _ok_in_lang = bool(_subj_key and isinstance(_templates.get(_subj_key), dict) and word in _templates.get(_subj_key, {}))
+                            if not _ok_in_lang:
+                                logger.info(f"[API_WORD_FILTER] '{word}' not in '{hints_path}' under '{self.current_category}'. Retrying API/dictionary…")
+                                # Try next API attempt instead of returning an unknown word for this language file
+                                continue
+                        except Exception:
+                            # If any error reading file, accept the API word as-is
+                            pass
                         # Do NOT add to recent list here
                         logger.info(f"Selected word '{word}' from API for user '{username}'")
                         return word
@@ -3601,9 +3645,9 @@ class WordSelector:
             # Do NOT add to recent list here
             return word
 
-        # If dictionary yielded nothing but hints.json has this subject, pick from that subject explicitly
+        # If dictionary yielded nothing but the language-specific hints file has this subject, pick from that subject explicitly
         try:
-            hints_file = os.path.join('backend', 'data', 'hints.json')
+            hints_file = self._get_hints_file_for_user(username)
             with open(hints_file, 'r', encoding='utf-8') as f:
                 hints_data = json.load(f)
             templates = hints_data.get('templates', {})
