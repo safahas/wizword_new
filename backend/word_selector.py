@@ -2677,7 +2677,7 @@ class WordSelector:
         try:
             import streamlit as _st  # type: ignore
             _sess_lang = str(_st.session_state.get('hints_language', '')).strip().lower()
-            if _sess_lang in ('english', 'spanish'):
+            if _sess_lang in ('english', 'spanish', 'french'):
                 lang = _sess_lang
         except Exception:
             pass
@@ -2688,7 +2688,7 @@ class WordSelector:
                 users = self._load_users_db()
                 prefs = users.get(uname) if isinstance(users, dict) else None
                 prof_lang = str((prefs or {}).get('hints_language', 'english')).strip().lower()
-                if prof_lang in ('english', 'spanish'):
+                if prof_lang in ('english', 'spanish', 'french'):
                     lang = prof_lang
             except Exception:
                 pass
@@ -2706,6 +2706,18 @@ class WordSelector:
                 return cand1
             if os.path.exists(cand2):
                 return cand2
+        if lang == 'french':
+            cand1f = os.path.join(base_dir, 'hints_fr_json')
+            cand2f = os.path.join(base_dir, 'hints_fr.json')
+            try:
+                logger.info(f"[HINTS_LANG] user='{username}' lang='{lang}' try='{cand1f}' exists={os.path.exists(cand1f)}")
+                logger.info(f"[HINTS_LANG] user='{username}' lang='{lang}' try='{cand2f}' exists={os.path.exists(cand2f)}")
+            except Exception:
+                pass
+            if os.path.exists(cand1f):
+                return cand1f
+            if os.path.exists(cand2f):
+                return cand2f
         try:
             logger.info(f"[HINTS_LANG] user='{username}' lang='{lang}' default='{os.path.join(base_dir, 'hints.json')}'")
         except Exception:
