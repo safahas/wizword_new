@@ -2841,22 +2841,27 @@ def display_game():
                 - Personal: profile‑aware category; may show "Generating personal hints…" and a Retry button until hints are ready.
                 """ + ("- FlashCard: uses your Profile → FlashCard Text to build a pool; one hint per word; auto‑regenerates on save; API‑first with local fallback.\n" if _enable_flashcard_rules else "") + """
                 """)
-            # Hints Language (session override)
-            with st.expander('Hints Language', expanded=False):
-                _hl_prev = st.session_state.get('hints_language', 'english')
-                _hl_options = ['english', 'spanish', 'french', 'arabic', 'chinese']
-                _hl = st.selectbox('Hints language (session-only)', _hl_options, index=(_hl_options.index(_hl_prev) if _hl_prev in _hl_options else 0), key='session_hints_language_select')
-                st.session_state['hints_language'] = _hl
-                _file_label = 'backend/data/hints.json'
-                if _hl == 'spanish':
-                    _file_label = 'backend/data/hints_es.json'
-                elif _hl == 'french':
-                    _file_label = 'backend/data/hints_fr.json'
-                elif _hl == 'arabic':
-                    _file_label = 'backend/data/hints_ar.json'
-                elif _hl == 'chinese':
-                    _file_label = 'backend/data/hints_ch.json'
-                st.caption(f"Active hints file: {_file_label}")
+            # Hints Language (session override) — env-gated (default: hidden)
+            try:
+                _enable_lang_selector = os.getenv('ENABLE_HINTS_LANGUAGE_SELECTOR', 'false').strip().lower() in ('1','true','yes','on')
+            except Exception:
+                _enable_lang_selector = False
+            if _enable_lang_selector:
+                with st.expander('Hints Language', expanded=False):
+                    _hl_prev = st.session_state.get('hints_language', 'english')
+                    _hl_options = ['english', 'spanish', 'french', 'arabic', 'chinese']
+                    _hl = st.selectbox('Hints language (session-only)', _hl_options, index=(_hl_options.index(_hl_prev) if _hl_prev in _hl_options else 0), key='session_hints_language_select')
+                    st.session_state['hints_language'] = _hl
+                    _file_label = 'backend/data/hints.json'
+                    if _hl == 'spanish':
+                        _file_label = 'backend/data/hints_es.json'
+                    elif _hl == 'french':
+                        _file_label = 'backend/data/hints_fr.json'
+                    elif _hl == 'arabic':
+                        _file_label = 'backend/data/hints_ar.json'
+                    elif _hl == 'chinese':
+                        _file_label = 'backend/data/hints_ch.json'
+                    st.caption(f"Active hints file: {_file_label}")
 
             # User Profile (expands inline)
             with st.expander('User Profile', expanded=False):
@@ -3790,46 +3795,51 @@ def display_game():
                 """,
                 unsafe_allow_html=True,
             )
-            # --- Session Hints Language selector (below banner, above Start) ---
+            # --- Session Hints Language selector (below banner, above Start) — env-gated (default: hidden)
             try:
-                lang_cols = st.columns([2, 2, 2])
-                with lang_cols[0]:
-                    st.caption('Hints Language')
-                    _hl_prev_pg2 = st.session_state.get('hints_language', 'english')
-                    _opts_pg2 = ['english', 'spanish', 'french', 'arabic', 'chinese']
-                    _hl_pg2 = st.selectbox(' ', _opts_pg2, index=(_opts_pg2.index(_hl_prev_pg2) if _hl_prev_pg2 in _opts_pg2 else 0), key='session_hints_language_select_pregame2', label_visibility='collapsed')
-                    st.session_state['hints_language'] = _hl_pg2
-                with lang_cols[1]:
-                    _active_label = 'English'
-                    if _hl_pg2 == 'spanish':
-                        _active_label = 'Spanish'
-                    elif _hl_pg2 == 'french':
-                        _active_label = 'French'
-                    elif _hl_pg2 == 'arabic':
-                        _active_label = 'Arabic'
-                    elif _hl_pg2 == 'chinese':
-                        _active_label = 'Chinese'
-                    st.markdown(f"**Active:** {_active_label}")
-                # If language changed pre-game, re-create the game so hints/selection use the new file
+                _enable_lang_selector_pg = os.getenv('ENABLE_HINTS_LANGUAGE_SELECTOR', 'false').strip().lower() in ('1','true','yes','on')
+            except Exception:
+                _enable_lang_selector_pg = False
+            if _enable_lang_selector_pg:
                 try:
-                    _active_lang = st.session_state.get('active_hints_language', 'english')
-                    if _hl_pg2 != _active_lang:
-                        _curr = st.session_state.get('game')
-                        _subject = getattr(_curr, 'subject', 'general') if _curr else 'general'
-                        _nickname = (st.session_state.get('user') or {}).get('username', '') or st.session_state.get('nickname', '') or ''
-                        st.session_state.game = create_game_with_env_guard(
-                            word_length=5,
-                            subject=_subject,
-                            mode='Beat',
-                            nickname=_nickname,
-                            difficulty='Medium'
-                        )
-                        st.session_state['active_hints_language'] = _hl_pg2
-                        st.rerun()
+                    lang_cols = st.columns([2, 2, 2])
+                    with lang_cols[0]:
+                        st.caption('Hints Language')
+                        _hl_prev_pg2 = st.session_state.get('hints_language', 'english')
+                        _opts_pg2 = ['english', 'spanish', 'french', 'arabic', 'chinese']
+                        _hl_pg2 = st.selectbox(' ', _opts_pg2, index=(_opts_pg2.index(_hl_prev_pg2) if _hl_prev_pg2 in _opts_pg2 else 0), key='session_hints_language_select_pregame2', label_visibility='collapsed')
+                        st.session_state['hints_language'] = _hl_pg2
+                    with lang_cols[1]:
+                        _active_label = 'English'
+                        if _hl_pg2 == 'spanish':
+                            _active_label = 'Spanish'
+                        elif _hl_pg2 == 'french':
+                            _active_label = 'French'
+                        elif _hl_pg2 == 'arabic':
+                            _active_label = 'Arabic'
+                        elif _hl_pg2 == 'chinese':
+                            _active_label = 'Chinese'
+                        st.markdown(f"**Active:** {_active_label}")
+                    # If language changed pre-game, re-create the game so hints/selection use the new file
+                    try:
+                        _active_lang = st.session_state.get('active_hints_language', 'english')
+                        if _hl_pg2 != _active_lang:
+                            _curr = st.session_state.get('game')
+                            _subject = getattr(_curr, 'subject', 'general') if _curr else 'general'
+                            _nickname = (st.session_state.get('user') or {}).get('username', '') or st.session_state.get('nickname', '') or ''
+                            st.session_state.game = create_game_with_env_guard(
+                                word_length=5,
+                                subject=_subject,
+                                mode='Beat',
+                                nickname=_nickname,
+                                difficulty='Medium'
+                            )
+                            st.session_state['active_hints_language'] = _hl_pg2
+                            st.rerun()
+                    except Exception:
+                        pass
                 except Exception:
                     pass
-            except Exception:
-                pass
 
             # Now render the Start button which follows the marker div (styled via sibling selector)
             start_btn_html = """
