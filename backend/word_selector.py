@@ -2677,7 +2677,7 @@ class WordSelector:
         try:
             import streamlit as _st  # type: ignore
             _sess_lang = str(_st.session_state.get('hints_language', '')).strip().lower()
-            if _sess_lang in ('english', 'spanish', 'french', 'arabic'):
+            if _sess_lang in ('english', 'spanish', 'french', 'arabic', 'chinese'):
                 lang = _sess_lang
         except Exception:
             pass
@@ -2688,7 +2688,7 @@ class WordSelector:
                 users = self._load_users_db()
                 prefs = users.get(uname) if isinstance(users, dict) else None
                 prof_lang = str((prefs or {}).get('hints_language', 'english')).strip().lower()
-                if prof_lang in ('english', 'spanish', 'french', 'arabic'):
+                if prof_lang in ('english', 'spanish', 'french', 'arabic', 'chinese'):
                     lang = prof_lang
             except Exception:
                 pass
@@ -2706,7 +2706,7 @@ class WordSelector:
                 return cand1
             if os.path.exists(cand2):
                 return cand2
-        if lang == 'french':
+        elif lang == 'french':
             cand1f = os.path.join(base_dir, 'hints_fr_json')
             cand2f = os.path.join(base_dir, 'hints_fr.json')
             try:
@@ -2718,7 +2718,7 @@ class WordSelector:
                 return cand1f
             if os.path.exists(cand2f):
                 return cand2f
-        if lang == 'arabic':
+        elif lang == 'arabic':
             cand1a = os.path.join(base_dir, 'hints_ar_json')
             cand2a = os.path.join(base_dir, 'hints_ar.json')
             try:
@@ -2730,6 +2730,18 @@ class WordSelector:
                 return cand1a
             if os.path.exists(cand2a):
                 return cand2a
+        elif lang == 'chinese':
+            cand1c = os.path.join(base_dir, 'hints_ch_json')
+            cand2c = os.path.join(base_dir, 'hints_ch.json')
+            try:
+                logger.info(f"[HINTS_LANG] user='{username}' lang='{lang}' try='{cand1c}' exists={os.path.exists(cand1c)}")
+                logger.info(f"[HINTS_LANG] user='{username}' lang='{lang}' try='{cand2c}' exists={os.path.exists(cand2c)}")
+            except Exception:
+                pass
+            if os.path.exists(cand1c):
+                return cand1c
+            if os.path.exists(cand2c):
+                return cand2c
         try:
             logger.info(f"[HINTS_LANG] user='{username}' lang='{lang}' default='{os.path.join(base_dir, 'hints.json')}'")
         except Exception:

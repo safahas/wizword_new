@@ -2844,7 +2844,7 @@ def display_game():
             # Hints Language (session override)
             with st.expander('Hints Language', expanded=False):
                 _hl_prev = st.session_state.get('hints_language', 'english')
-                _hl_options = ['english', 'spanish', 'french', 'arabic']
+                _hl_options = ['english', 'spanish', 'french', 'arabic', 'chinese']
                 _hl = st.selectbox('Hints language (session-only)', _hl_options, index=(_hl_options.index(_hl_prev) if _hl_prev in _hl_options else 0), key='session_hints_language_select')
                 st.session_state['hints_language'] = _hl
                 _file_label = 'backend/data/hints.json'
@@ -2854,6 +2854,8 @@ def display_game():
                     _file_label = 'backend/data/hints_fr.json'
                 elif _hl == 'arabic':
                     _file_label = 'backend/data/hints_ar.json'
+                elif _hl == 'chinese':
+                    _file_label = 'backend/data/hints_ch.json'
                 st.caption(f"Active hints file: {_file_label}")
 
             # User Profile (expands inline)
@@ -3794,7 +3796,7 @@ def display_game():
                 with lang_cols[0]:
                     st.caption('Hints Language')
                     _hl_prev_pg2 = st.session_state.get('hints_language', 'english')
-                    _opts_pg2 = ['english', 'spanish', 'french', 'arabic']
+                    _opts_pg2 = ['english', 'spanish', 'french', 'arabic', 'chinese']
                     _hl_pg2 = st.selectbox(' ', _opts_pg2, index=(_opts_pg2.index(_hl_prev_pg2) if _hl_prev_pg2 in _opts_pg2 else 0), key='session_hints_language_select_pregame2', label_visibility='collapsed')
                     st.session_state['hints_language'] = _hl_pg2
                 with lang_cols[1]:
@@ -3805,6 +3807,8 @@ def display_game():
                         _active_label = 'French'
                     elif _hl_pg2 == 'arabic':
                         _active_label = 'Arabic'
+                    elif _hl_pg2 == 'chinese':
+                        _active_label = 'Chinese'
                     st.markdown(f"**Active:** {_active_label}")
                 # If language changed pre-game, re-create the game so hints/selection use the new file
                 try:
