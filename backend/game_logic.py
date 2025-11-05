@@ -11,6 +11,22 @@ from backend.fallback_words import get_fallback_word
 
 logger = logging.getLogger(__name__)
 
+# Safe logging for non-ASCII content on Windows terminals
+def _log_info_safe(prefix: str, text: str) -> None:
+    # Always sanitize to ASCII with backslash escapes to avoid Windows console encoding errors
+    try:
+        combined = f"{prefix}{text}"
+    except Exception:
+        combined = str(prefix)
+    try:
+        sanitized = combined.encode('ascii', errors='backslashreplace').decode('ascii', errors='ignore')
+    except Exception:
+        sanitized = str(prefix).encode('ascii', errors='backslashreplace').decode('ascii', errors='ignore')
+    try:
+        logger.info(sanitized)
+    except Exception:
+        pass
+
 class GameLogic:
     def __init__(self, word_length: int = None, subject: str = "general", mode: str = "Fun", nickname: str = "", initial_score: int = 0, difficulty: str = "Medium"):
         
@@ -93,8 +109,13 @@ class GameLogic:
             # For 'Personal' and 'FlashCard' categories, skip hints.json lookup
             if str(self.original_subject).lower() not in ('personal', 'flashcard'):
                 try:
-                    hints_file = os.path.join('backend', 'data', 'hints.json')
-                    logger.info(f"Looking for hints in: {hints_file}")
+                    # Prefer GameLogic helper if present; else use WordSelector's resolver
+                    resolver = getattr(self, '_get_hints_file_for_user', None)
+                    if callable(resolver):
+                        hints_file = resolver(self._pool_username())
+                    else:
+                        hints_file = getattr(self.word_selector, '_get_hints_file_for_user', lambda _: os.path.join('backend','data','hints.json'))(self._pool_username())
+                    logger.info(f"[HINTS_FILE_GAMELOGIC] user='{self._pool_username()}' subject='{subject}' file='{hints_file}'")
                     with open(hints_file, 'r', encoding='utf-8') as f:
                         hints_data = json.load(f)
                         # Try the original subject first (case-insensitive against hints.json keys)
@@ -112,13 +133,17 @@ class GameLogic:
                             all_hints = templates[general_key][self.selected_word]
                             logger.info(f"Using {len(all_hints)} hints from hints.json (general)")
                         else:
-                            logger.warning(f"Word '{self.selected_word}' not found in hints.json templates for category '{lookup_subject}' or 'general'")
+                            try:
+                                cats = list((hints_data or {}).get('templates', {}).keys())
+                            except Exception:
+                                cats = []
+                            logger.warning(f"Word '{self.selected_word}' not found in hints file '{hints_file}' for category '{lookup_subject}'. Available categories={cats[:10]}")
                 except FileNotFoundError:
-                    logger.warning(f"hints.json file not found at {hints_file}")
+                    logger.warning(f"Hints file not found at {hints_file}")
                 except json.JSONDecodeError:
-                    logger.warning("Error decoding hints.json")
+                    logger.warning("Error decoding hints file")
                 except Exception as e:
-                    logger.warning(f"Error reading hints.json: {e}")
+                    logger.warning(f"Error reading hints file: {e}")
             if not all_hints:
                 # Use API-generated hints if available, otherwise fallback
                 api_hints = getattr(self.word_selector, "_last_api_hints", None)
@@ -391,7 +416,7 @@ class GameLogic:
             available = [h for h in self.available_hints if h not in self.hints_given]
             if available:
                 hint = available[0]
-                logger.info(f"[HINT REQUEST] Using pre-generated hint: {hint}")
+                _log_info_safe("[HINT REQUEST] Using pre-generated hint: ", str(hint))
         
         # If no pre-generated hints available, try FlashCard pool (lazy-init path), then get a new one
         if not hint:

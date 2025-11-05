@@ -20,6 +20,16 @@ import logging
 logging.getLogger('matplotlib.font_manager').setLevel(logging.WARNING)
 logging.getLogger('matplotlib.category').setLevel(logging.WARNING)
 
+# Ensure UTF-8 console on Windows so non-ASCII (e.g., Arabic) logs don't crash
+try:
+    import sys as _sys
+    if hasattr(_sys.stdout, 'reconfigure'):
+        _sys.stdout.reconfigure(encoding='utf-8')
+    if hasattr(_sys.stderr, 'reconfigure'):
+        _sys.stderr.reconfigure(encoding='utf-8')
+except Exception:
+    pass
+
 USERS_FILE = os.environ.get("USERS_FILE", "users.json")
 BIO_MAX_CHARS = int(os.environ.get("BIO_MAX_CHARS", "10000"))
 PROFILE_BIO_KEY = "profile_bio"
@@ -1318,25 +1328,38 @@ def display_login():
         ) if _enable_flashcard_htp else ""
         st.markdown(f"""
         ### How to Play
-        - Choose a mode:
-          - **Fun**: No timer, unlimited practice.
-          - **Wiz**: Track stats and leaderboards.
-          - **Beat**: Timed sprint — {int(os.getenv('BEAT_MODE_TIME', 300))} seconds.
-        - Pick a category or **any** for random.
-        - Interact:
-          - Ask yes/no questions (−1)
-          - Request up to 3 hints (−10 each)
-          - Guess the word any time (wrong −10, correct +20 × word length)
-          - Skip word (−10) to reveal and continue
-        - SEI (Scoring Efficiency Index) measures efficiency and powers leaderboards.
-        
+
+        #### Quick Start
+        1. Pick a Category (or **Any**) on the pre‑game screen.
+        2. (Optional) Set **Hints Language** (English/Spanish/French) under the banner.
+        3. Choose a mode:
+           - **Fun**: No timer, unlimited practice.
+           - **Wiz**: Track stats and leaderboards.
+           - **Beat**: Timed sprint — {int(os.getenv('BEAT_MODE_TIME', 300))} seconds.
+        4. Click **Start**.
+        5. Each turn: Ask a yes/no question, tap the hint card, guess, or skip.
+
+        #### Turn Flow
+        - Ask: type a yes/no question (ends with ?), e.g., "Does it contain the letter 'a'?".
+        - Hint: click the hint card to reveal the next hint (within your limit).
+        - Guess: enter your full guess any time (must match word length).
+        - Skip: reveal the word and move on (penalty applies).
+
+        #### Scoring (Beat/Wiz)
+        - Questions: −1 (Beat) or mode/difficulty penalty in Wiz.
+        - Hints: −10 each (typical) for extra hints.
+        - Wrong guess: −10.
+        - Correct guess: adds points (varies by mode/difficulty).
+        - Skip: −10 then continue.
+        - **SEI** (Scoring Efficiency Index) summarizes speed and accuracy for leaderboards.
+
         {personal_section}{flashcard_section}
-        
+
         #### Tips
         - Start with vowels/common letters.
         - Use questions to narrow the space before spending hints.
-        - In Beat mode, skip quickly if stuck.
-        - Personal may need a brief moment to generate tailored hints.
+        - In Beat, skip fast if stuck to maximize solved words.
+        - Personal may take a moment to prepare tailored hints.
 
         #### Account Management
         - Use Login to Register or Sign In.
@@ -1545,6 +1568,11 @@ def display_login():
                 username_lower = (username or "").strip().lower()
                 if username_lower in users and users[username_lower]['password'] == (password or '').strip():
                     st.session_state.user = dict(users[username_lower])
+                    try:
+                        import sys as _sys
+                        print(f"[DEBUG_LOGIN] user='{username_lower}' hints_language='{st.session_state.user.get('hints_language','english')}'", file=_sys.stderr)
+                    except Exception:
+                        pass
                     st.session_state.user['username'] = username_lower
                     st.session_state.logged_in = True
                     st.session_state['login_error'] = ""
@@ -1580,6 +1608,7 @@ def display_login():
             'Student', 'High School', 'Bachelor', 'Master', 'PhD', 'Other'
         ]
         education = st.selectbox('Education (required)', education_options, key="register_education")
+        # Hints language moved to in-game Menu → Hints Language (session-only)
         bio = st.text_area(
             f"Bio (optional – up to {BIO_MAX_CHARS} characters)",
             key="register_bio_v2",
@@ -1966,6 +1995,12 @@ def main():
             nickname=st.session_state.user['username'],
             difficulty='Medium'
         )
+        # Track which hints language the game was initialized with
+        try:
+            _curr_lang = st.session_state.get('hints_language', 'english')
+            st.session_state['active_hints_language'] = _curr_lang
+        except Exception:
+            st.session_state['active_hints_language'] = 'english'
         # Increment total sessions (lifetime) and current live sessions
         update_global_counters(sessions_delta=1, live_sessions_delta=1)
         # Create a stable live session id for heartbeats
@@ -2126,7 +2161,7 @@ def display_welcome():
                 _enable_flashcard = os.getenv('ENABLE_FLASHCARD_CATEGORY', 'true').strip().lower() in ('1','true','yes','on')
                 category_options = [
                     "any", "4th_grade", "8th_grade", "anatomy", "animals", "brands", "cities", "food",
-                    "general", "gre", "medicines", "places", "psat", "sat", "science", "sports", "tech"
+                    "general", "gre", "medicines", "places", "psat", "sat", "science", "spanish", "sports", "tech"
                 ]
                 if _enable_flashcard:
                     category_options.append("flashcard")
@@ -2167,7 +2202,7 @@ def display_welcome():
                     subject = 'general' if str(subject).lower() == 'personal' else subject
                 st.session_state['original_category_choice'] = subject
                 # Now resolve the effective subject for this run
-                resolved_subject = random.choice(["general", "animals", "food", "places", "science", "tech", "sports", "brands", "4th_grade", "8th_grade", "cities", "medicines", "anatomy", "psat", "sat", "gre"]) if subject == "any" else subject
+                resolved_subject = random.choice(["general", "animals", "food", "places", "science", "spanish", "tech", "sports", "brands", "4th_grade", "8th_grade", "cities", "medicines", "anatomy", "psat", "sat", "gre"]) if subject == "any" else subject
                 # --- Global Top 3 by SEI for chosen category (start page) ---
                 try:
                     all_games = get_all_game_results()
@@ -2806,6 +2841,28 @@ def display_game():
                 - Personal: profile‑aware category; may show "Generating personal hints…" and a Retry button until hints are ready.
                 """ + ("- FlashCard: uses your Profile → FlashCard Text to build a pool; one hint per word; auto‑regenerates on save; API‑first with local fallback.\n" if _enable_flashcard_rules else "") + """
                 """)
+            # Hints Language (session override) — env-gated (default: hidden)
+            try:
+                _enable_lang_selector = os.getenv('ENABLE_HINTS_LANGUAGE_SELECTOR', 'false').strip().lower() in ('1','true','yes','on')
+            except Exception:
+                _enable_lang_selector = False
+            if _enable_lang_selector:
+                with st.expander('Hints Language', expanded=False):
+                    _hl_prev = st.session_state.get('hints_language', 'english')
+                    _hl_options = ['english', 'spanish', 'french', 'arabic', 'chinese']
+                    _hl = st.selectbox('Hints language (session-only)', _hl_options, index=(_hl_options.index(_hl_prev) if _hl_prev in _hl_options else 0), key='session_hints_language_select')
+                    st.session_state['hints_language'] = _hl
+                    _file_label = 'backend/data/hints.json'
+                    if _hl == 'spanish':
+                        _file_label = 'backend/data/hints_es.json'
+                    elif _hl == 'french':
+                        _file_label = 'backend/data/hints_fr.json'
+                    elif _hl == 'arabic':
+                        _file_label = 'backend/data/hints_ar.json'
+                    elif _hl == 'chinese':
+                        _file_label = 'backend/data/hints_ch.json'
+                    st.caption(f"Active hints file: {_file_label}")
+
             # User Profile (expands inline)
             with st.expander('User Profile', expanded=False):
                 st.markdown('## User Profile')
@@ -2826,6 +2883,7 @@ def display_game():
                 if occupation == 'Other':
                     occupation_other = st.text_input('Please specify your occupation', value=user.get('occupation', '') if user.get('occupation', '') not in occupation_options else '', key='profile_occupation_other_inline')
                 address = st.text_input('Address', value=user.get('address', ''), key='profile_address_inline')
+                # Hints language moved to Menu → Hints Language (session-only)
                 try:
                     from backend.bio_store import get_bio
                     _bio_init_inline = get_bio(user.get('username',''))
@@ -3264,6 +3322,7 @@ def display_game():
         if occupation == 'Other':
             occupation_other = st.text_input('Please specify your occupation', value=user.get('occupation', '') if user.get('occupation', '') not in occupation_options else '')
         address = st.text_input('Address', value=user.get('address', ''))
+        # Hints language moved to Menu → Hints Language (session-only)
         try:
             from backend.bio_store import get_bio
             _bio_init_profile = get_bio(user.get('username',''))
@@ -3407,7 +3466,7 @@ def display_game():
         enable_flashcard = os.getenv('ENABLE_FLASHCARD_CATEGORY', 'true').strip().lower() in ('1', 'true', 'yes', 'on')
         # Build categories with FlashCard at the top of the list
         # Personal is intentionally hidden from the change-category dropdown
-        base_cats = ["any", "anatomy", "animals", "aviation", "brands", "cities", "food", "general", "gre", "history", "law", "medicines", "movies", "music", "places", "psat", "sat", "science", "sports", "tech", "4th_grade", "8th_grade"]
+        base_cats = ["any", "anatomy", "animals", "aviation", "brands", "cities", "food", "general", "gre", "history", "law", "medicines", "movies", "music", "places", "psat", "sat", "science", "spanish", "sports", "tech", "4th_grade", "8th_grade"]
         categories = []
         if enable_flashcard:
             categories.append("flashcard")
@@ -3674,7 +3733,10 @@ def display_game():
                     """,
                     height=0,
                 )
-                # Also force focus to a hidden element at the top to guarantee scroll on some browsers
+            except Exception:
+                pass
+            # Also force focus to a hidden element at the top to guarantee scroll on some browsers
+            try:
                 components.html(
                     """
                     <div id="__top_anchor" style="position:absolute;top:0;left:0;height:1px;width:1px;"></div>
@@ -3733,6 +3795,52 @@ def display_game():
                 """,
                 unsafe_allow_html=True,
             )
+            # --- Session Hints Language selector (below banner, above Start) — env-gated (default: hidden)
+            try:
+                _enable_lang_selector_pg = os.getenv('ENABLE_HINTS_LANGUAGE_SELECTOR', 'false').strip().lower() in ('1','true','yes','on')
+            except Exception:
+                _enable_lang_selector_pg = False
+            if _enable_lang_selector_pg:
+                try:
+                    lang_cols = st.columns([2, 2, 2])
+                    with lang_cols[0]:
+                        st.caption('Hints Language')
+                        _hl_prev_pg2 = st.session_state.get('hints_language', 'english')
+                        _opts_pg2 = ['english', 'spanish', 'french', 'arabic', 'chinese']
+                        _hl_pg2 = st.selectbox(' ', _opts_pg2, index=(_opts_pg2.index(_hl_prev_pg2) if _hl_prev_pg2 in _opts_pg2 else 0), key='session_hints_language_select_pregame2', label_visibility='collapsed')
+                        st.session_state['hints_language'] = _hl_pg2
+                    with lang_cols[1]:
+                        _active_label = 'English'
+                        if _hl_pg2 == 'spanish':
+                            _active_label = 'Spanish'
+                        elif _hl_pg2 == 'french':
+                            _active_label = 'French'
+                        elif _hl_pg2 == 'arabic':
+                            _active_label = 'Arabic'
+                        elif _hl_pg2 == 'chinese':
+                            _active_label = 'Chinese'
+                        st.markdown(f"**Active:** {_active_label}")
+                    # If language changed pre-game, re-create the game so hints/selection use the new file
+                    try:
+                        _active_lang = st.session_state.get('active_hints_language', 'english')
+                        if _hl_pg2 != _active_lang:
+                            _curr = st.session_state.get('game')
+                            _subject = getattr(_curr, 'subject', 'general') if _curr else 'general'
+                            _nickname = (st.session_state.get('user') or {}).get('username', '') or st.session_state.get('nickname', '') or ''
+                            st.session_state.game = create_game_with_env_guard(
+                                word_length=5,
+                                subject=_subject,
+                                mode='Beat',
+                                nickname=_nickname,
+                                difficulty='Medium'
+                            )
+                            st.session_state['active_hints_language'] = _hl_pg2
+                            st.rerun()
+                    except Exception:
+                        pass
+                except Exception:
+                    pass
+
             # Now render the Start button which follows the marker div (styled via sibling selector)
             start_btn_html = """
             <style>
