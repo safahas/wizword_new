@@ -5885,7 +5885,7 @@ def display_game():
                                 if str(_DEFAULT_TTS_MODE).lower().startswith('server'):
                                     try:
                                         import requests as _rq
-                                        r = _rq.post(f"{_TTS_BACKEND_URL}/tts", json={"text": str(_word_to_show), "lang": st.session_state.get('hints_language','auto'), "speed": float(_DEFAULT_TTS_SPEED or 1.0)}, timeout=30)
+                                        r = _rq.post(f"{_TTS_BACKEND_URL}/tts", json={"text": str(_word_to_show), "lang": "en", "speed": float(_DEFAULT_TTS_SPEED or 1.0)}, timeout=30)
                                         r.raise_for_status()
                                         rel = r.json().get("file")
                                         if rel:
@@ -5905,8 +5905,7 @@ def display_game():
                                         pass
                                 else:
                                     # Browser TTS
-                                    bcp = _lang_to_bcp()
-                                    components.html(_tts_browser_js(str(_word_to_show), float(_DEFAULT_TTS_SPEED or 1.0), bcp), height=0)
+                                    components.html(_tts_browser_js(str(_word_to_show), float(_DEFAULT_TTS_SPEED or 1.0), "en-US"), height=0)
                         except Exception:
                             pass
                 else:
@@ -6028,7 +6027,7 @@ def display_game():
                     if str(_DEFAULT_TTS_MODE).lower().startswith('server'):
                         try:
                             import requests as _rq
-                            r = _rq.post(f"{_TTS_BACKEND_URL}/tts", json={"text": str(word), "lang": st.session_state.get('hints_language','auto'), "speed": float(_DEFAULT_TTS_SPEED or 1.0)}, timeout=30)
+                            r = _rq.post(f"{_TTS_BACKEND_URL}/tts", json={"text": str(word), "lang": "en", "speed": float(_DEFAULT_TTS_SPEED or 1.0)}, timeout=30)
                             r.raise_for_status()
                             rel = r.json().get("file")
                             if rel:
@@ -6048,8 +6047,7 @@ def display_game():
                             pass
                     else:
                         # Browser TTS
-                        bcp = _lang_to_bcp()
-                        components.html(_tts_browser_js(str(word), float(_DEFAULT_TTS_SPEED or 1.0), bcp), height=0)
+                        components.html(_tts_browser_js(str(word), float(_DEFAULT_TTS_SPEED or 1.0), "en-US"), height=0)
             except Exception:
                 pass
         # Custom big, long-lasting balloon animation
