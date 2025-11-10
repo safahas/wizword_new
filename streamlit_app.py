@@ -29,6 +29,30 @@ try:
         _sys.stderr.reconfigure(encoding='utf-8')
 except Exception:
     pass
+# --- TTS (client/server) helpers (env-gated UI) ---
+try:
+    _ENABLE_TTS_UI = os.getenv('ENABLE_TTS_UI', 'false').strip().lower() in ('1','true','yes','on')
+except Exception:
+    _ENABLE_TTS_UI = False
+try:
+    _TTS_BACKEND_URL = os.getenv('TTS_BACKEND_URL', 'http://127.0.0.1:8000').strip().rstrip('/')
+except Exception:
+    _TTS_BACKEND_URL = 'http://127.0.0.1:8000'
+def _tts_browser_js(text: str, rate: float) -> str:
+    safe = (text or "").replace("\\", "\\\\").replace("'", "\\'")
+    r = max(0.8, min(1.2, float(rate or 1.0)))
+    return f"""
+    <script>
+    (function(){{
+      try {{
+        const u = new SpeechSynthesisUtterance('{safe}');
+        u.rate = {r:.2f};
+        window.speechSynthesis.cancel();
+        window.speechSynthesis.speak(u);
+      }} catch(e) {{}}
+    }})();
+    </script>
+    """
 
 USERS_FILE = os.environ.get("USERS_FILE", "users.json")
 BIO_MAX_CHARS = int(os.environ.get("BIO_MAX_CHARS", "10000"))
@@ -7602,7 +7626,18 @@ def display_game_stats(game):
             hint_used = hint in game.hints_given
             status = "✓" if hint_used else "○"
             styled_hint = highlight_letters_in_hint(hint)
-            st.markdown(f"{status} Hint {i}: " + ("*[Used]* " if hint_used else "") + styled_hint, unsafe_allow_html=True)
+            row = st.columns([0.85, 0.15]) if _ENABLE_TTS_UI else [st]
+            with row[0]:
+                st.markdown(f"{status} Hint {i}: " + ("*[Used]* " if hint_used else "") + styled_hint, unsafe_allow_html=True)
+            if _ENABLE_TTS_UI and len(row) > 1:
+                with row[1]:
+                    # Per-hint speak (Browser TTS only for the list)
+                    if st.button(f"🔊 Speak {i}", key=f"tts_list_{i}"):
+                        try:
+                            import streamlit.components.v1 as components
+                            components.html(_tts_browser_js(str(hint), 1.0), height=0)
+                        except Exception:
+                            pass
 
 
 
@@ -7680,6 +7715,33 @@ def display_hint_section(game):
                 except Exception:
                     pass
                 st.rerun()
+    # TTS controls for current hint (below card)
+    if _ENABLE_TTS_UI:
+        tt_cols = st.columns([0.5, 0.5, 0.5])
+        with tt_cols[0]:
+            tts_mode = st.radio("TTS", ["Browser", "Server"], horizontal=True, key="tts_mode_radio")
+        with tt_cols[1]:
+            tts_speed = st.slider("Speed", 0.8, 1.2, 1.0, 0.05, key="tts_speed_slider")
+        with tt_cols[2]:
+            if st.button("🔊 Speak", key="tts_speak_btn"):
+                text_raw = game.hints_given[-1] if game.hints_given else ""
+                if tts_mode == "Browser":
+                    try:
+                        import streamlit.components.v1 as components
+                        components.html(_tts_browser_js(str(text_raw), float(tts_speed or 1.0)), height=0)
+                    except Exception:
+                        pass
+                else:
+                    # Server TTS (requires backend running)
+                    try:
+                        import requests as _rq
+                        r = _rq.post(f"{_TTS_BACKEND_URL}/tts", json={"text": str(text_raw), "lang": st.session_state.get('hints_language','auto'), "speed": float(tts_speed or 1.0)}, timeout=30)
+                        r.raise_for_status()
+                        rel = r.json().get("file")
+                        if rel:
+                            st.audio(f"{_TTS_BACKEND_URL}{rel}", format="audio/mp3")
+                    except Exception:
+                        st.info("Server TTS not available. Use Browser mode or start the backend.")
 
 def log_beat_word_count_event(event, value):
     with open("beat_word_count_debug.log", "a", encoding="utf-8") as f:
