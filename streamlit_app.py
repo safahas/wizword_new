@@ -38,6 +38,18 @@ try:
     _TTS_BACKEND_URL = os.getenv('TTS_BACKEND_URL', 'http://127.0.0.1:8000').strip().rstrip('/')
 except Exception:
     _TTS_BACKEND_URL = 'http://127.0.0.1:8000'
+try:
+    _DEFAULT_TTS_MODE = (os.getenv('DEFAULT_TTS_MODE', 'Browser') or 'Browser').strip()
+except Exception:
+    _DEFAULT_TTS_MODE = 'Browser'
+try:
+    _AUTO_TTS_ENABLE = os.getenv('AUTO_TTS_ENABLE', 'true').strip().lower() in ('1','true','yes','on')
+except Exception:
+    _AUTO_TTS_ENABLE = True
+try:
+    _DEFAULT_TTS_SPEED = float(os.getenv('DEFAULT_TTS_SPEED', '1.0'))
+except Exception:
+    _DEFAULT_TTS_SPEED = 1.0
 def _tts_browser_js(text: str, rate: float, lang_code: str) -> str:
     safe = (text or "").replace("\\", "\\\\").replace("'", "\\'")
     r = max(0.8, min(1.2, float(rate or 1.0)))
@@ -72,6 +84,15 @@ def _tts_browser_js(text: str, rate: float, lang_code: str) -> str:
     }})();
     </script>
     """
+
+def _lang_to_bcp() -> str:
+    _hl = (st.session_state.get('hints_language','en') or 'en').lower()
+    _bcp = 'en-US'
+    if _hl.startswith('es') or _hl == 'spanish': _bcp = 'es-ES'
+    elif _hl.startswith('fr') or _hl == 'french': _bcp = 'fr-FR'
+    elif _hl.startswith('ar') or _hl == 'arabic': _bcp = 'ar-SA'
+    elif _hl.startswith('zh') or _hl == 'chinese': _bcp = 'zh-CN'
+    return _bcp
 
 USERS_FILE = os.environ.get("USERS_FILE", "users.json")
 BIO_MAX_CHARS = int(os.environ.get("BIO_MAX_CHARS", "10000"))
@@ -7645,25 +7666,7 @@ def display_game_stats(game):
             hint_used = hint in game.hints_given
             status = "✓" if hint_used else "○"
             styled_hint = highlight_letters_in_hint(hint)
-            row = st.columns([0.85, 0.15]) if _ENABLE_TTS_UI else [st]
-            with row[0]:
-                st.markdown(f"{status} Hint {i}: " + ("*[Used]* " if hint_used else "") + styled_hint, unsafe_allow_html=True)
-            if _ENABLE_TTS_UI and len(row) > 1:
-                with row[1]:
-                    # Per-hint speak (Browser TTS only for the list)
-                    if st.button(f"🔊 Speak {i}", key=f"tts_list_{i}"):
-                        try:
-                            import streamlit.components.v1 as components
-                            # Map session hints_language to BCP47 code
-                            _hl = (st.session_state.get('hints_language','en') or 'en').lower()
-                            _bcp = 'en-US'
-                            if _hl.startswith('es') or _hl == 'spanish': _bcp = 'es-ES'
-                            elif _hl.startswith('fr') or _hl == 'french': _bcp = 'fr-FR'
-                            elif _hl.startswith('ar') or _hl == 'arabic': _bcp = 'ar-SA'
-                            elif _hl.startswith('zh') or _hl == 'chinese': _bcp = 'zh-CN'
-                            components.html(_tts_browser_js(str(hint), 1.0, _bcp), height=0)
-                        except Exception:
-                            pass
+            st.markdown(f"{status} Hint {i}: " + ("*[Used]* " if hint_used else "") + styled_hint, unsafe_allow_html=True)
 
 
 
@@ -7741,39 +7744,43 @@ def display_hint_section(game):
                 except Exception:
                     pass
                 st.rerun()
-    # TTS controls for current hint (below card)
-    if _ENABLE_TTS_UI:
-        tt_cols = st.columns([0.5, 0.5, 0.5])
-        with tt_cols[0]:
-            tts_mode = st.radio("TTS", ["Browser", "Server"], horizontal=True, key="tts_mode_radio")
-        with tt_cols[1]:
-            tts_speed = st.slider("Speed", 0.8, 1.2, 1.0, 0.05, key="tts_speed_slider")
-        with tt_cols[2]:
-            if st.button("🔊 Speak", key="tts_speak_btn"):
-                text_raw = game.hints_given[-1] if game.hints_given else ""
-                if tts_mode == "Browser":
-                    try:
-                        import streamlit.components.v1 as components
-                        _hl = (st.session_state.get('hints_language','en') or 'en').lower()
-                        _bcp = 'en-US'
-                        if _hl.startswith('es') or _hl == 'spanish': _bcp = 'es-ES'
-                        elif _hl.startswith('fr') or _hl == 'french': _bcp = 'fr-FR'
-                        elif _hl.startswith('ar') or _hl == 'arabic': _bcp = 'ar-SA'
-                        elif _hl.startswith('zh') or _hl == 'chinese': _bcp = 'zh-CN'
-                        components.html(_tts_browser_js(str(text_raw), float(tts_speed or 1.0), _bcp), height=0)
-                    except Exception:
-                        pass
-                else:
-                    # Server TTS (requires backend running)
+    # Auto TTS (speak current hint automatically)
+    if _ENABLE_TTS_UI and _AUTO_TTS_ENABLE:
+        try:
+            import streamlit.components.v1 as components
+            last_text = game.hints_given[-1] if game.hints_given else ""
+            last_spoken = st.session_state.get('_auto_tts_last', '')
+            if last_text and last_text != last_spoken:
+                st.session_state['_auto_tts_last'] = last_text
+                # Choose mode based on DEFAULT_TTS_MODE
+                if str(_DEFAULT_TTS_MODE).lower().startswith('server'):
+                    # Server mode
                     try:
                         import requests as _rq
-                        r = _rq.post(f"{_TTS_BACKEND_URL}/tts", json={"text": str(text_raw), "lang": st.session_state.get('hints_language','auto'), "speed": float(tts_speed or 1.0)}, timeout=30)
+                        r = _rq.post(f"{_TTS_BACKEND_URL}/tts", json={"text": str(last_text), "lang": st.session_state.get('hints_language','auto'), "speed": float(_DEFAULT_TTS_SPEED or 1.0)}, timeout=30)
                         r.raise_for_status()
                         rel = r.json().get("file")
                         if rel:
-                            st.audio(f"{_TTS_BACKEND_URL}{rel}", format="audio/mp3")
+                            components.html(f"""
+                            <audio id="tts_audio_auto" src="{_TTS_BACKEND_URL}{rel}" style="display:none;"></audio>
+                            <script>
+                            (function(){{
+                              try {{
+                                var a = document.getElementById('tts_audio_auto');
+                                a.currentTime = 0;
+                                a.play().catch(function(){{}});
+                              }} catch(e) {{}}
+                            }})();
+                            </script>
+                            """, height=0)
                     except Exception:
-                        st.info("Server TTS not available. Use Browser mode or start the backend.")
+                        pass
+                else:
+                    # Browser mode
+                    bcp = _lang_to_bcp()
+                    components.html(_tts_browser_js(str(last_text), float(_DEFAULT_TTS_SPEED or 1.0), bcp), height=0)
+        except Exception:
+            pass
 
 def log_beat_word_count_event(event, value):
     with open("beat_word_count_debug.log", "a", encoding="utf-8") as f:
