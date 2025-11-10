@@ -38,17 +38,36 @@ try:
     _TTS_BACKEND_URL = os.getenv('TTS_BACKEND_URL', 'http://127.0.0.1:8000').strip().rstrip('/')
 except Exception:
     _TTS_BACKEND_URL = 'http://127.0.0.1:8000'
-def _tts_browser_js(text: str, rate: float) -> str:
+def _tts_browser_js(text: str, rate: float, lang_code: str) -> str:
     safe = (text or "").replace("\\", "\\\\").replace("'", "\\'")
     r = max(0.8, min(1.2, float(rate or 1.0)))
+    lc = (lang_code or "en-US").replace("'", "")
     return f"""
     <script>
     (function(){{
       try {{
-        const u = new SpeechSynthesisUtterance('{safe}');
-        u.rate = {r:.2f};
-        window.speechSynthesis.cancel();
-        window.speechSynthesis.speak(u);
+        function speakNow() {{
+          const u = new SpeechSynthesisUtterance('{safe}');
+          u.rate = {r:.2f};
+          const voices = window.speechSynthesis.getVoices() || [];
+          let v = voices.find(v => (v.lang||'').toLowerCase().startsWith('{lc.lower()}'));
+          if (!v) {{
+            const prefix = '{lc.split('-')[0].lower()}';
+            v = voices.find(v => (v.lang||'').toLowerCase().startsWith(prefix));
+          }}
+          if (!v) v = voices.find(v => v.default) || voices[0];
+          if (v) u.voice = v;
+          window.speechSynthesis.cancel();
+          window.speechSynthesis.speak(u);
+        }}
+        const vs = window.speechSynthesis.getVoices();
+        if (!vs || vs.length === 0) {{
+          window.speechSynthesis.onvoiceschanged = function() {{
+            try {{ speakNow(); }} catch(e) {{}}
+          }};
+        }} else {{
+          speakNow();
+        }}
       }} catch(e) {{}}
     }})();
     </script>
@@ -7635,7 +7654,14 @@ def display_game_stats(game):
                     if st.button(f"🔊 Speak {i}", key=f"tts_list_{i}"):
                         try:
                             import streamlit.components.v1 as components
-                            components.html(_tts_browser_js(str(hint), 1.0), height=0)
+                            # Map session hints_language to BCP47 code
+                            _hl = (st.session_state.get('hints_language','en') or 'en').lower()
+                            _bcp = 'en-US'
+                            if _hl.startswith('es') or _hl == 'spanish': _bcp = 'es-ES'
+                            elif _hl.startswith('fr') or _hl == 'french': _bcp = 'fr-FR'
+                            elif _hl.startswith('ar') or _hl == 'arabic': _bcp = 'ar-SA'
+                            elif _hl.startswith('zh') or _hl == 'chinese': _bcp = 'zh-CN'
+                            components.html(_tts_browser_js(str(hint), 1.0, _bcp), height=0)
                         except Exception:
                             pass
 
@@ -7728,7 +7754,13 @@ def display_hint_section(game):
                 if tts_mode == "Browser":
                     try:
                         import streamlit.components.v1 as components
-                        components.html(_tts_browser_js(str(text_raw), float(tts_speed or 1.0)), height=0)
+                        _hl = (st.session_state.get('hints_language','en') or 'en').lower()
+                        _bcp = 'en-US'
+                        if _hl.startswith('es') or _hl == 'spanish': _bcp = 'es-ES'
+                        elif _hl.startswith('fr') or _hl == 'french': _bcp = 'fr-FR'
+                        elif _hl.startswith('ar') or _hl == 'arabic': _bcp = 'ar-SA'
+                        elif _hl.startswith('zh') or _hl == 'chinese': _bcp = 'zh-CN'
+                        components.html(_tts_browser_js(str(text_raw), float(tts_speed or 1.0), _bcp), height=0)
                     except Exception:
                         pass
                 else:

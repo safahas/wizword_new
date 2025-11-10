@@ -20,6 +20,12 @@ def hash_key(text: str, lang: str, voice: str, speed: float) -> str:
 
 def pick_voice(lang: str) -> str:
     lng = (lang or "auto").strip().lower()
+    # Chinese
+    if lng in ("zh", "zh-cn", "chinese") or lng.startswith("zh"):
+        return os.getenv("POLLY_VOICE_ZH", "Zhiyu")
+    # Arabic
+    if lng in ("ar", "ar-sa", "arabic") or lng.startswith("ar"):
+        return os.getenv("POLLY_VOICE_AR", "Zeina")
     if lng.startswith("es"):
         return os.getenv("POLLY_VOICE_ES", "Lucia")
     if lng.startswith("fr"):
