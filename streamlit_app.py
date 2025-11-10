@@ -5875,6 +5875,40 @@ def display_game():
                     # Mark overlay active and ensure input is cleared/disabled downstream
                     st.session_state['skip_overlay_active'] = True
                     st.session_state['clear_guess_field'] = True
+                    # Auto TTS for skipped word (speak once per skip round)
+                    if _ENABLE_TTS_UI and _AUTO_TTS_ENABLE and _word_to_show:
+                        try:
+                            import streamlit.components.v1 as components
+                            # Guard to avoid repeat per round
+                            if st.session_state.get('_skip_spoken_round') != st.session_state.get('skip_round_id'):
+                                st.session_state['_skip_spoken_round'] = st.session_state.get('skip_round_id')
+                                if str(_DEFAULT_TTS_MODE).lower().startswith('server'):
+                                    try:
+                                        import requests as _rq
+                                        r = _rq.post(f"{_TTS_BACKEND_URL}/tts", json={"text": str(_word_to_show), "lang": st.session_state.get('hints_language','auto'), "speed": float(_DEFAULT_TTS_SPEED or 1.0)}, timeout=30)
+                                        r.raise_for_status()
+                                        rel = r.json().get("file")
+                                        if rel:
+                                            components.html(f"""
+                                            <audio id="tts_audio_skip" src="{_TTS_BACKEND_URL}{rel}" style="display:none;"></audio>
+                                            <script>
+                                            (function(){{
+                                              try {{
+                                                var a = document.getElementById('tts_audio_skip');
+                                                a.currentTime = 0;
+                                                a.play().catch(function(){{}});
+                                              }} catch(e) {{}} 
+                                            }})();
+                                            </script>
+                                            """, height=0)
+                                    except Exception:
+                                        pass
+                                else:
+                                    # Browser TTS
+                                    bcp = _lang_to_bcp()
+                                    components.html(_tts_browser_js(str(_word_to_show), float(_DEFAULT_TTS_SPEED or 1.0), bcp), height=0)
+                        except Exception:
+                            pass
                 else:
                     # Time elapsed: load next word and clear flags BEFORE rendering boxes
                     # Do NOT mark skipped word as played.
@@ -5985,6 +6019,39 @@ def display_game():
     if st.session_state.get('show_final_word', False):
         st.markdown(f"<div style='text-align:center; margin:1.5em 0 0.5em 0;'><span style=\"display:inline-block;font-size:2.4em;font-family:'Baloo 2','Poppins','Arial Black',sans-serif;font-weight:900;letter-spacing:0.18em;background:linear-gradient(90deg,#FFD93D 0%,#FF6B6B 50%,#4ECDC4 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-shadow:2px 2px 8px rgba(0,0,0,0.13);padding:0.18em 0.7em;border-radius:0.4em;box-shadow:0 2px 8px rgba(0,0,0,0.10);\">{word.upper()}</span></div>", unsafe_allow_html=True)
         st.success("🎉 You revealed the full word!")
+        # Auto TTS for correct word (speak once per word reveal)
+        if _ENABLE_TTS_UI and _AUTO_TTS_ENABLE and word:
+            try:
+                import streamlit.components.v1 as components
+                if st.session_state.get('_auto_tts_last_word') != word:
+                    st.session_state['_auto_tts_last_word'] = word
+                    if str(_DEFAULT_TTS_MODE).lower().startswith('server'):
+                        try:
+                            import requests as _rq
+                            r = _rq.post(f"{_TTS_BACKEND_URL}/tts", json={"text": str(word), "lang": st.session_state.get('hints_language','auto'), "speed": float(_DEFAULT_TTS_SPEED or 1.0)}, timeout=30)
+                            r.raise_for_status()
+                            rel = r.json().get("file")
+                            if rel:
+                                components.html(f"""
+                                <audio id="tts_audio_correct" src="{_TTS_BACKEND_URL}{rel}" style="display:none;"></audio>
+                                <script>
+                                (function(){{
+                                  try {{
+                                    var a = document.getElementById('tts_audio_correct');
+                                    a.currentTime = 0;
+                                    a.play().catch(function(){{}});
+                                  }} catch(e) {{}} 
+                                }})();
+                                </script>
+                                """, height=0)
+                        except Exception:
+                            pass
+                    else:
+                        # Browser TTS
+                        bcp = _lang_to_bcp()
+                        components.html(_tts_browser_js(str(word), float(_DEFAULT_TTS_SPEED or 1.0), bcp), height=0)
+            except Exception:
+                pass
         # Custom big, long-lasting balloon animation
         st.markdown("""
         <style>
