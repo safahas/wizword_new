@@ -6112,82 +6112,83 @@ def display_game():
                 st.session_state['_celebration_once'] = st.session_state.get('current_round_id')
                 __horn_url_js = (_HORN_URL or '').replace("\\","\\\\").replace("\"","\\\"")
                 __horn_fb_js = (_HORN_FALLBACK_URL or '').replace("\\","\\\\").replace("\"","\\\"")
-                components.html(f"""
+                from string import Template as _StrTpl
+                _cele_tpl = _StrTpl("""
                 <div id="wiz-celebrate" style="position:relative;width:100%;height:220px;overflow:hidden;">
                   <div id="burst-layer" style="position:absolute;left:0;top:0;right:0;bottom:0;pointer-events:none;"></div>
                 </div>
                 <script>
-                (function(){{
+                (function(){
                   var layer = document.getElementById('burst-layer');
-                  function celebrateMusic() {{
-                    try {{
+                  function celebrateMusic() {
+                    try {
                       // Prefer shared, pre-unlocked horn element
                       var horn = document.getElementById('wiz_global_horn');
-                      if (horn && horn.src) {{
-                        try {{ horn.volume = {str(_POP_VOLUME)}; }} catch(_ ){{}}
+                      if (horn && horn.src) {
+                        try { horn.volume = $POP; } catch(_ ){}
                         horn.currentTime = 0;
-                        horn.play().catch(function(){{ 
+                        horn.play().catch(function(){ 
                           // Attempt fallback url once
-                          try {{
-                            if (!horn.dataset.fallbackTried) {{
+                          try {
+                            if (!horn.dataset.fallbackTried) {
                               horn.dataset.fallbackTried = '1';
-                              horn.src = "{__horn_fb_js}";
+                              horn.src = "$HORN_FB";
                               horn.load();
-                              horn.play().catch(function(){{}});
-                            }}
-                          }} catch(_ ){{}}
-                        }});
+                              horn.play().catch(function(){});
+                            }
+                          } catch(_ ){}
+                        });
                         return;
-                      }}
+                      }
                       // Fallbacks
-                      var hornUrl = "{__horn_url_js}";
-                      if (hornUrl) {{
+                      var hornUrl = "$HORN_URL";
+                      if (hornUrl) {
                         var a = document.getElementById('wiz_horn_ext_inline');
-                        if (!a) {{
+                        if (!a) {
                           a = document.createElement('audio');
                           a.id = 'wiz_horn_ext_inline';
                           a.style.display = 'none';
                           a.preload = 'auto';
                           document.body.appendChild(a);
-                        }}
+                        }
                         a.src = hornUrl;
-                        try {{ a.volume = {str(_POP_VOLUME)}; }} catch(_ ){{}}
+                        try { a.volume = $POP; } catch(_ ){}
                         a.currentTime = 0;
-                        a.play().catch(function(){{ 
-                          try {{
-                            if (!a.dataset.fallbackTried) {{
+                        a.play().catch(function(){ 
+                          try {
+                            if (!a.dataset.fallbackTried) {
                               a.dataset.fallbackTried = '1';
-                              a.src = "{__horn_fb_js}";
+                              a.src = "$HORN_FB";
                               a.load();
-                              a.play().catch(function(){{}});
-                            }}
-                          }} catch(_ ){{}}
-                        }});
+                              a.play().catch(function(){});
+                            }
+                          } catch(_ ){}
+                        });
                         return;
-                      }}
+                      }
                       // Last resort: synthetic horn
                       var AudioCtx = window.AudioContext || window.webkitAudioContext;
                       if (!AudioCtx) return;
                       window._wiz_ac2 = window._wiz_ac2 || new AudioCtx();
                       var ctx = window._wiz_ac2;
-                      if (ctx.state === 'suspended') {{ ctx.resume().catch(function(){{}}); }}
+                      if (ctx.state === 'suspended') { ctx.resume().catch(function(){}); }
                       var now = ctx.currentTime;
                       var o = ctx.createOscillator();
                       var g = ctx.createGain();
                       o.type = 'sawtooth';
                       o.frequency.setValueAtTime(440, now);
                       o.frequency.exponentialRampToValueAtTime(220, now + 0.5);
-                      g.gain.setValueAtTime({str(_POP_VOLUME)}, now);
+                      g.gain.setValueAtTime($POP, now);
                       g.gain.exponentialRampToValueAtTime(0.0001, now + 0.55);
                       o.connect(g).connect(ctx.destination);
                       o.start(now);
                       o.stop(now + 0.58);
-                    }} catch(_){{}}
-                  }}
-                  function explodeAt(x, y) {{
-                    try {{
+                    } catch(_){}
+                  }
+                  function explodeAt(x, y) {
+                    try {
                       var colors = ['#FF6B6B','#FFD93D','#4ECDC4','#7c3aed','#f59e0b','#10b981'];
-                      for (var i=0;i<18;i++) {{
+                      for (var i=0;i<18;i++) {
                         var s = document.createElement('i');
                         s.style.position='absolute';
                         s.style.width='8px'; s.style.height='8px';
@@ -6200,26 +6201,28 @@ def display_game():
                         var dx = Math.cos(ang)*dist;
                         var dy = Math.sin(ang)*dist - 60;
                         s.animate([
-                          {{ transform:'translate(0,0) scale(1)', opacity: 1 }},
-                          {{ transform:'translate('+dx+'px,'+dy+'px) scale(0.8)', opacity: 0 }}
-                        ], {{ duration: 700, easing: 'ease-out', fill: 'forwards' }});
+                          { transform:'translate(0,0) scale(1)', opacity: 1 },
+                          { transform:'translate('+dx+'px,'+dy+'px) scale(0.8)', opacity: 0 }
+                        ], { duration: 700, easing: 'ease-out', fill: 'forwards' });
                         layer.appendChild(s);
-                        (function(el){{ setTimeout(function(){{ if(el&&el.parentNode) el.parentNode.removeChild(el); }}, 740); }})(s);
-                      }}
+                        (function(el){ setTimeout(function(){ if(el&&el.parentNode) el.parentNode.removeChild(el); }, 740); })(s);
+                      }
                       celebrateMusic();
-                    }} catch(_){{}}
-                  }}
+                    } catch(_){}
+                  }
                   // Center burst and two side bursts (delayed for visibility)
-                  setTimeout(function(){{
+                  setTimeout(function(){
                     var rect = layer.getBoundingClientRect();
                     var midx = rect.width/2; var topy = 30;
                     explodeAt(midx, topy);
-                    setTimeout(function(){{ explodeAt(midx-120, topy+20); }}, 250);
-                    setTimeout(function(){{ explodeAt(midx+120, topy+20); }}, 500);
-                  }}, 1000);
-                }})();
+                    setTimeout(function(){ explodeAt(midx-120, topy+20); }, 250);
+                    setTimeout(function(){ explodeAt(midx+120, topy+20); }, 500);
+                  }, 1000);
+                })();
                 </script>
-                """, height=240, scrolling=False)
+                """)
+                _cele_html = _cele_tpl.substitute(POP=str(_POP_VOLUME), HORN_URL=__horn_url_js, HORN_FB=__horn_fb_js)
+                components.html(_cele_html, height=240, scrolling=False)
         except Exception:
             pass
         # Auto TTS for correct word (speak once per word reveal)
