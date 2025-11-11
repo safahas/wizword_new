@@ -2671,7 +2671,10 @@ def display_game():
         import streamlit.components.v1 as components
         if _ENABLE_TTS_UI and not st.session_state.get('_audio_unlocker_injected', False):
             st.session_state['_audio_unlocker_injected'] = True
-            _horn_src = (_HORN_URL or '').replace("\\","\\\\").replace("\"","\\\"")
+            _horn_src_raw = (_HORN_URL or '')
+            _horn_fb_raw = (_HORN_FALLBACK_URL or '')
+            _horn_src_js = _horn_src_raw.replace("\\","\\\\").replace("\"","\\\"")
+            _horn_fb_js = _horn_fb_raw.replace("\\","\\\\").replace("\"","\\\"")
             components.html(f"""
             <script>
             (function(){{
@@ -2684,14 +2687,14 @@ def display_game():
                 horn.id = 'wiz_global_horn';
                 horn.style.display = 'none';
                 horn.preload = 'auto';
-                horn.src = "{_horn_src}" || "{_HORN_FALLBACK_URL.replace("\\","\\\\").replace("\"","\\\"")}";
+                horn.src = "{_horn_src_js}" || "{_horn_fb_js}";
                 try {{ horn.volume = {str(_POP_VOLUME)}; }} catch(_){{}}
                 // If primary URL fails, fallback to known good URL once
                 horn.addEventListener('error', function onErr() {{
                   try {{
                     if (!horn.dataset.fallbackTried) {{
                       horn.dataset.fallbackTried = '1';
-                      horn.src = "{_HORN_FALLBACK_URL.replace("\\","\\\\").replace("\"","\\\"")}";
+                      horn.src = "{_horn_fb_js}";
                       horn.load();
                     }}
                   }} catch(_ ) {{ }}
@@ -2713,7 +2716,7 @@ def display_game():
                       try {{
                         if (!horn.dataset.fallbackTried) {{
                           horn.dataset.fallbackTried = '1';
-                          horn.src = "{_HORN_FALLBACK_URL.replace("\\","\\\\").replace("\"","\\\"")}";
+                          horn.src = "{_horn_fb_js}";
                           horn.load();
                           horn.play().then(function(){{ try {{ horn.pause(); }} catch(_ ){{}} window._wiz_sound_unlocked = true; }}).catch(function(){{}});
                         }}
@@ -6107,6 +6110,8 @@ def display_game():
             import streamlit.components.v1 as components
             if st.session_state.get('_celebration_once') != st.session_state.get('current_round_id'):
                 st.session_state['_celebration_once'] = st.session_state.get('current_round_id')
+                __horn_url_js = (_HORN_URL or '').replace("\\","\\\\").replace("\"","\\\"")
+                __horn_fb_js = (_HORN_FALLBACK_URL or '').replace("\\","\\\\").replace("\"","\\\"")
                 components.html(f"""
                 <div id="wiz-celebrate" style="position:relative;width:100%;height:220px;overflow:hidden;">
                   <div id="burst-layer" style="position:absolute;left:0;top:0;right:0;bottom:0;pointer-events:none;"></div>
@@ -6135,7 +6140,7 @@ def display_game():
                         return;
                       }}
                       // Fallbacks
-                      var hornUrl = "{(_HORN_URL or '').replace('\\','\\\\').replace('\"','\\\"')}";
+                      var hornUrl = "{__horn_url_js}";
                       if (hornUrl) {{
                         var a = document.getElementById('wiz_horn_ext_inline');
                         if (!a) {{
@@ -6152,7 +6157,7 @@ def display_game():
                           try {{
                             if (!a.dataset.fallbackTried) {{
                               a.dataset.fallbackTried = '1';
-                              a.src = "{_HORN_FALLBACK_URL.replace("\\","\\\\").replace("\"","\\\"")}";
+                              a.src = "{__horn_fb_js}";
                               a.load();
                               a.play().catch(function(){{}});
                             }}
