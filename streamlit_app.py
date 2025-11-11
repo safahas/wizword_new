@@ -50,6 +50,20 @@ try:
     _DEFAULT_TTS_SPEED = float(os.getenv('DEFAULT_TTS_SPEED', '1.0'))
 except Exception:
     _DEFAULT_TTS_SPEED = 1.0
+try:
+    _POP_VOLUME = float(os.getenv('POP_VOLUME', '0.18'))
+    if _POP_VOLUME < 0.0: _POP_VOLUME = 0.0
+    if _POP_VOLUME > 1.0: _POP_VOLUME = 1.0
+except Exception:
+    _POP_VOLUME = 0.18
+try:
+    _HORN_URL = (os.getenv('HORN_SOUND_URL', '') or '').strip()
+except Exception:
+    _HORN_URL = ''
+try:
+    _HORN_FALLBACK_URL = (os.getenv('HORN_FALLBACK_URL', 'https://cdn.pixabay.com/download/audio/2022/03/15/audio_3b4d19f7b0.mp3?filename=game-win-1-6295.mp3') or '').strip()
+except Exception:
+    _HORN_FALLBACK_URL = 'https://cdn.pixabay.com/download/audio/2022/03/15/audio_3b4d19f7b0.mp3?filename=game-win-1-6295.mp3'
 def _tts_browser_js(text: str, rate: float, lang_code: str) -> str:
     safe = (text or "").replace("\\", "\\\\").replace("'", "\\'")
     r = max(0.8, min(1.2, float(rate or 1.0)))
@@ -2652,6 +2666,76 @@ def display_welcome():
             - Questions are cheaper than wrong guesses
             """)
 def display_game():
+    # One-time audio unlocker to satisfy browser autoplay policies
+    try:
+        import streamlit.components.v1 as components
+        if _ENABLE_TTS_UI and not st.session_state.get('_audio_unlocker_injected', False):
+            st.session_state['_audio_unlocker_injected'] = True
+            _horn_src = (_HORN_URL or '').replace("\\","\\\\").replace("\"","\\\"")
+            components.html(f"""
+            <script>
+            (function(){{
+              if (window._wiz_unlocker_installed) return;
+              window._wiz_unlocker_installed = true;
+              // Create a shared audio element for the celebration horn
+              var horn = document.getElementById('wiz_global_horn');
+              if (!horn) {{
+                horn = document.createElement('audio');
+                horn.id = 'wiz_global_horn';
+                horn.style.display = 'none';
+                horn.preload = 'auto';
+                horn.src = "{_horn_src}" || "{_HORN_FALLBACK_URL.replace("\\","\\\\").replace("\"","\\\"")}";
+                try {{ horn.volume = {str(_POP_VOLUME)}; }} catch(_){{}}
+                // If primary URL fails, fallback to known good URL once
+                horn.addEventListener('error', function onErr() {{
+                  try {{
+                    if (!horn.dataset.fallbackTried) {{
+                      horn.dataset.fallbackTried = '1';
+                      horn.src = "{_HORN_FALLBACK_URL.replace("\\","\\\\").replace("\"","\\\"")}";
+                      horn.load();
+                    }}
+                  }} catch(_ ) {{ }}
+                }}, {{ once: true }});
+                document.body.appendChild(horn);
+              }}
+              function unlockAudioOnce() {{
+                try {{
+                  var AudioCtx = window.AudioContext || window.webkitAudioContext;
+                  if (AudioCtx) {{
+                    window._wiz_ac_unlock = window._wiz_ac_unlock || new AudioCtx();
+                    if (window._wiz_ac_unlock.state === 'suspended') {{ window._wiz_ac_unlock.resume().catch(function(){{}}); }}
+                  }}
+                  // Prime horn playback (play then pause immediately)
+                  if (horn && horn.src) {{
+                    horn.currentTime = 0;
+                    horn.play().then(function(){{ try {{ horn.pause(); }} catch(_ ){{}} window._wiz_sound_unlocked = true; }}).catch(function(){{ 
+                      // Try fallback immediately on failure
+                      try {{
+                        if (!horn.dataset.fallbackTried) {{
+                          horn.dataset.fallbackTried = '1';
+                          horn.src = "{_HORN_FALLBACK_URL.replace("\\","\\\\").replace("\"","\\\"")}";
+                          horn.load();
+                          horn.play().then(function(){{ try {{ horn.pause(); }} catch(_ ){{}} window._wiz_sound_unlocked = true; }}).catch(function(){{}});
+                        }}
+                      }} catch(_ ) {{}}
+                    }});
+                  }} else {{
+                    window._wiz_sound_unlocked = true;
+                  }}
+                }} catch(_) {{}}
+                // Remove listeners after first unlock
+                try {{
+                  document.removeEventListener('pointerdown', unlockAudioOnce, true);
+                  document.removeEventListener('keydown', unlockAudioOnce, true);
+                }} catch(_ ){{}}
+              }}
+              document.addEventListener('pointerdown', unlockAudioOnce, true);
+              document.addEventListener('keydown', unlockAudioOnce, true);
+            }})();
+            </script>
+            """, height=0)
+    except Exception:
+        pass
     # Early debug: confirm we entered display_game and show Beat state
     try:
         import logging, os
@@ -6018,6 +6102,121 @@ def display_game():
     if st.session_state.get('show_final_word', False):
         st.markdown(f"<div style='text-align:center; margin:1.5em 0 0.5em 0;'><span style=\"display:inline-block;font-size:2.4em;font-family:'Baloo 2','Poppins','Arial Black',sans-serif;font-weight:900;letter-spacing:0.18em;background:linear-gradient(90deg,#FFD93D 0%,#FF6B6B 50%,#4ECDC4 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-shadow:2px 2px 8px rgba(0,0,0,0.13);padding:0.18em 0.7em;border-radius:0.4em;box-shadow:0 2px 8px rgba(0,0,0,0.10);\">{word.upper()}</span></div>", unsafe_allow_html=True)
         st.success("🎉 You revealed the full word!")
+        # Inline celebration (visible area + guaranteed JS+sound inside a component)
+        try:
+            import streamlit.components.v1 as components
+            if st.session_state.get('_celebration_once') != st.session_state.get('current_round_id'):
+                st.session_state['_celebration_once'] = st.session_state.get('current_round_id')
+                components.html(f"""
+                <div id="wiz-celebrate" style="position:relative;width:100%;height:220px;overflow:hidden;">
+                  <div id="burst-layer" style="position:absolute;left:0;top:0;right:0;bottom:0;pointer-events:none;"></div>
+                </div>
+                <script>
+                (function(){{
+                  var layer = document.getElementById('burst-layer');
+                  function celebrateMusic() {{
+                    try {{
+                      // Prefer shared, pre-unlocked horn element
+                      var horn = document.getElementById('wiz_global_horn');
+                      if (horn && horn.src) {{
+                        try {{ horn.volume = {str(_POP_VOLUME)}; }} catch(_ ){{}}
+                        horn.currentTime = 0;
+                        horn.play().catch(function(){{ 
+                          // Attempt fallback url once
+                          try {{
+                            if (!horn.dataset.fallbackTried) {{
+                              horn.dataset.fallbackTried = '1';
+                              horn.src = "{_HORN_FALLBACK_URL.replace("\\","\\\\").replace("\"","\\\"")}";
+                              horn.load();
+                              horn.play().catch(function(){{}});
+                            }}
+                          }} catch(_ ){{}}
+                        }});
+                        return;
+                      }}
+                      // Fallbacks
+                      var hornUrl = "{(_HORN_URL or '').replace('\\','\\\\').replace('\"','\\\"')}";
+                      if (hornUrl) {{
+                        var a = document.getElementById('wiz_horn_ext_inline');
+                        if (!a) {{
+                          a = document.createElement('audio');
+                          a.id = 'wiz_horn_ext_inline';
+                          a.style.display = 'none';
+                          a.preload = 'auto';
+                          document.body.appendChild(a);
+                        }}
+                        a.src = hornUrl;
+                        try {{ a.volume = {str(_POP_VOLUME)}; }} catch(_ ){{}}
+                        a.currentTime = 0;
+                        a.play().catch(function(){{ 
+                          try {{
+                            if (!a.dataset.fallbackTried) {{
+                              a.dataset.fallbackTried = '1';
+                              a.src = "{_HORN_FALLBACK_URL.replace("\\","\\\\").replace("\"","\\\"")}";
+                              a.load();
+                              a.play().catch(function(){{}});
+                            }}
+                          }} catch(_ ){{}}
+                        }});
+                        return;
+                      }}
+                      // Last resort: synthetic horn
+                      var AudioCtx = window.AudioContext || window.webkitAudioContext;
+                      if (!AudioCtx) return;
+                      window._wiz_ac2 = window._wiz_ac2 || new AudioCtx();
+                      var ctx = window._wiz_ac2;
+                      if (ctx.state === 'suspended') {{ ctx.resume().catch(function(){{}}); }}
+                      var now = ctx.currentTime;
+                      var o = ctx.createOscillator();
+                      var g = ctx.createGain();
+                      o.type = 'sawtooth';
+                      o.frequency.setValueAtTime(440, now);
+                      o.frequency.exponentialRampToValueAtTime(220, now + 0.5);
+                      g.gain.setValueAtTime({str(_POP_VOLUME)}, now);
+                      g.gain.exponentialRampToValueAtTime(0.0001, now + 0.55);
+                      o.connect(g).connect(ctx.destination);
+                      o.start(now);
+                      o.stop(now + 0.58);
+                    }} catch(_){{}}
+                  }}
+                  function explodeAt(x, y) {{
+                    try {{
+                      var colors = ['#FF6B6B','#FFD93D','#4ECDC4','#7c3aed','#f59e0b','#10b981'];
+                      for (var i=0;i<18;i++) {{
+                        var s = document.createElement('i');
+                        s.style.position='absolute';
+                        s.style.width='8px'; s.style.height='8px';
+                        s.style.borderRadius='50%';
+                        s.style.background=colors[i%colors.length];
+                        s.style.left=x+'px'; s.style.top=y+'px';
+                        s.style.opacity='0.95';
+                        var ang = (Math.PI*2)*(i/18);
+                        var dist = 90 + Math.random()*60;
+                        var dx = Math.cos(ang)*dist;
+                        var dy = Math.sin(ang)*dist - 60;
+                        s.animate([
+                          {{ transform:'translate(0,0) scale(1)', opacity: 1 }},
+                          {{ transform:'translate('+dx+'px,'+dy+'px) scale(0.8)', opacity: 0 }}
+                        ], {{ duration: 700, easing: 'ease-out', fill: 'forwards' }});
+                        layer.appendChild(s);
+                        (function(el){{ setTimeout(function(){{ if(el&&el.parentNode) el.parentNode.removeChild(el); }}, 740); }})(s);
+                      }}
+                      celebrateMusic();
+                    }} catch(_){{}}
+                  }}
+                  // Center burst and two side bursts (delayed for visibility)
+                  setTimeout(function(){{
+                    var rect = layer.getBoundingClientRect();
+                    var midx = rect.width/2; var topy = 30;
+                    explodeAt(midx, topy);
+                    setTimeout(function(){{ explodeAt(midx-120, topy+20); }}, 250);
+                    setTimeout(function(){{ explodeAt(midx+120, topy+20); }}, 500);
+                  }}, 1000);
+                }})();
+                </script>
+                """, height=240, scrolling=False)
+        except Exception:
+            pass
         # Auto TTS for correct word (speak once per word reveal)
         if _ENABLE_TTS_UI and _AUTO_TTS_ENABLE and word:
             try:
@@ -6072,7 +6271,7 @@ def display_game():
             width: 90px; height: 120px;
             border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
             opacity: 0.85;
-            animation: big-balloons 5.5s cubic-bezier(.17,.67,.83,.67) forwards;
+            animation: big-balloons 2.2s cubic-bezier(.17,.67,.83,.67) forwards;
         }
         .custom-balloon1 { left: 12vw; background: linear-gradient(120deg,#FFD93D,#FF6B6B); }
         .custom-balloon2 { left: 32vw; background: linear-gradient(120deg,#4ECDC4,#FFD93D); }
@@ -6080,6 +6279,27 @@ def display_game():
         .custom-balloon4 { left: 72vw; background: linear-gradient(120deg,#FFD93D,#4ECDC4); }
         .custom-balloon5 { left: 22vw; background: linear-gradient(120deg,#FF6B6B,#FFD93D); }
         .custom-balloon6 { left: 62vw; background: linear-gradient(120deg,#4ECDC4,#FF6B6B); }
+
+        /* Explosion layer and shards */
+        .explosion-layer {
+            position: fixed;
+            left: 0; top: 0; right: 0; bottom: 0;
+            pointer-events: none;
+            z-index: 100000;
+        }
+        .shard {
+            position: absolute;
+            width: 8px; height: 8px;
+            border-radius: 50%;
+            background: currentColor;
+            opacity: 0.95;
+            transform: translate(-50%, -50%);
+            animation: shard-move 600ms ease-out forwards;
+        }
+        @keyframes shard-move {
+            0% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+            100% { opacity: 0; transform: translate(var(--dx), var(--dy)) scale(0.8); }
+        }
         </style>
         <div class='custom-balloons'>
             <div class='custom-balloon custom-balloon1'></div>
@@ -6090,87 +6310,213 @@ def display_game():
             <div class='custom-balloon custom-balloon6'></div>
         </div>
         <script>
-        setTimeout(function() {
-            var el = document.querySelector('.custom-balloons');
-            if (el) el.remove();
-        }, 5400);
+        (function() {
+          // Ensure one shared explosion layer
+          var layer = document.querySelector('.explosion-layer');
+          if (!layer) {
+            layer = document.createElement('div');
+            layer.className = 'explosion-layer';
+            document.body.appendChild(layer);
+          }
+
+          function celebrateMusic() {
+            try {
+              // Prefer shared, pre-unlocked horn element
+              var horn = document.getElementById('wiz_global_horn');
+              if (horn && horn.src) {
+                try { horn.volume = """ + str(_POP_VOLUME) + """; } catch(_ ) {}
+                horn.currentTime = 0;
+                horn.play().catch(function(){});
+                return;
+              }
+              var hornUrl = """ + ('"{}"'.format((_HORN_URL or '').replace('\\','\\\\').replace('"','\\"'))) + """;
+              if (hornUrl) {
+                var a = document.getElementById('wiz_horn_ext_overlay');
+                if (!a) {
+                  a = document.createElement('audio');
+                  a.id = 'wiz_horn_ext_overlay';
+                  a.style.display = 'none';
+                  a.preload = 'auto';
+                  document.body.appendChild(a);
+                }
+                a.src = hornUrl;
+                a.volume = """ + str(_POP_VOLUME) + """;
+                a.currentTime = 0;
+                a.play().catch(function(){});
+                return;
+              }
+              var AudioCtx = window.AudioContext || window.webkitAudioContext;
+              if (!AudioCtx) return;
+              // Reuse a singleton to reduce iOS autoplay friction
+              window._wiz_ac = window._wiz_ac || new AudioCtx();
+              var ctx = window._wiz_ac;
+              if (ctx.state === 'suspended') { ctx.resume().catch(function(){}); }
+              // Fallback: simple horn gliss
+              var now = ctx.currentTime;
+              var o = ctx.createOscillator();
+              var g = ctx.createGain();
+              o.type = 'sawtooth';
+              o.frequency.setValueAtTime(440, now);
+              o.frequency.exponentialRampToValueAtTime(220, now + 0.5);
+              g.gain.setValueAtTime(""" + str(_POP_VOLUME) + """, now);
+              g.gain.exponentialRampToValueAtTime(0.0001, now + 0.55);
+              o.connect(g).connect(ctx.destination);
+              o.start(now);
+              o.stop(now + 0.58);
+            } catch (_) {}
+          }
+
+          function explodeAt(x, y) {
+            try {
+              var colors = ['#FF6B6B','#FFD93D','#4ECDC4','#7c3aed','#f59e0b','#10b981'];
+              for (var i = 0; i < 14; i++) {
+                var shard = document.createElement('i');
+                shard.className = 'shard';
+                shard.style.left = x + 'px';
+                shard.style.top = y + 'px';
+                shard.style.color = colors[i % colors.length];
+                var angle = (Math.PI * 2) * (i / 14);
+                var dist = 80 + Math.random() * 50;
+                var dx = Math.cos(angle) * dist;
+                var dy = (Math.sin(angle) * dist) - 120; // bias upward to top
+                shard.style.setProperty('--dx', (dx).toFixed(1) + 'px');
+                shard.style.setProperty('--dy', (dy).toFixed(1) + 'px');
+                layer.appendChild(shard);
+                (function(s){ setTimeout(function(){ if (s && s.parentNode) s.parentNode.removeChild(s); }, 650); })(shard);
+              }
+              celebrateMusic();
+            } catch (_) {}
+          }
+
+          // Trigger explosion when each balloon reaches the top (animationend)
+          var balloons = document.querySelectorAll('.custom-balloons .custom-balloon');
+          balloons.forEach(function(b){
+            b.addEventListener('animationend', function(e){
+              try {
+                if (b.dataset.exploded === '1') return;
+                b.dataset.exploded = '1';
+                var rect = b.getBoundingClientRect();
+                var vw = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+                var vh = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+                // Clamp inside viewport so shards are visible even if the balloon ends off-screen
+                var x = Math.min(Math.max(rect.left + rect.width/2, 20), vw - 20);
+                var y = Math.max(24, Math.min(rect.top + 10, vh - 24));
+                explodeAt(x, y);
+                // remove balloon element after explosion triggers
+                if (b && b.parentNode) b.parentNode.removeChild(b);
+              } catch (_) {}
+            }, { once: true });
+          });
+
+          // Fallback: if animationend didn't fire (browser quirks), explode after a delay
+          setTimeout(function() {
+            try {
+              balloons.forEach(function(b){
+                if (!b || b.dataset.exploded === '1') return;
+                b.dataset.exploded = '1';
+                var rect = b.getBoundingClientRect();
+                var vw = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+                var vh = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+                var x = Math.min(Math.max(rect.left + rect.width/2, 20), vw - 20);
+                // Force explosion near top bar for visibility
+                var y = 28;
+                explodeAt(x, y);
+                if (b && b.parentNode) b.parentNode.removeChild(b);
+              });
+            } catch(_) {}
+          }, 2100);
+
+          // Delayed mini explosion near top-center to guarantee visible/sound feedback
+          setTimeout(function(){
+            try {
+              var vw = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+              explodeAt(Math.floor(vw/2), 30);
+            } catch(_) {}
+          }, 1000);
+
+          // Safety cleanup for the container after animation window
+          setTimeout(function() {
+              var el = document.querySelector('.custom-balloons');
+              if (el) el.remove();
+          }, 2600);
+        })();
         </script>
         """, unsafe_allow_html=True)
         import time as _wait_time
+        # Let the celebration animation complete without tearing the DOM on reruns
         if 'final_word_time' not in st.session_state:
             st.session_state['final_word_time'] = time.time()
-        elif time.time() - st.session_state['final_word_time'] > 3.0:
-            st.session_state['show_final_word'] = False
-            st.session_state['final_word_time'] = 0
-            # Now proceed to win logic
-            is_correct, message, points = game.make_guess(game.selected_word)
-            # Sync penalties to session after final scoring
-            try:
-                if hasattr(game, 'total_penalty_points'):
-                    st.session_state['beat_total_points'] = int(getattr(game, 'total_penalty_points', 0))
-                # If points were negative on last action, accumulate
-                if isinstance(points, (int, float)) and points < 0:
-                    st.session_state['beat_total_penalty'] = int(st.session_state.get('beat_total_penalty', 0)) + abs(points)
-            except Exception:
-                pass
-            st.session_state['feedback'] = message
-            if game.mode == 'Beat':
-                # Clear show_word and feedback before loading new word
-                st.session_state['show_word'] = False
-                st.session_state['feedback'] = ''
-                st.session_state.beat_word_count += 1
-                orig_length = st.session_state.get('original_word_length_choice', None)
-                orig_category = st.session_state.get('original_category_choice', game.subject)
-                # Always ensure word_length is an int between 3 and 10
-                if orig_length == "any" or orig_length is None:
-                    new_word_length = random.randint(3, 10)
-                else:
-                    try:
-                        new_word_length = int(orig_length)
-                        if new_word_length < 3 or new_word_length > 10:
-                            new_word_length = 5
-                    except Exception:
-                        new_word_length = 5
-                categories = ["general", "animals", "food", "places", "science", "tech", "sports", "brands", "4th_grade", "cities", "medicines", "anatomy"]
-                new_subject = random.choice(categories) if orig_category == "any" else game.subject
-                # Enforce env gate when rolling next word too
-                _enable_personal_round = os.getenv('ENABLE_PERSONAL_CATEGORY', 'true').strip().lower() in ('1','true','yes','on')
-                if not _enable_personal_round and str(new_subject).lower() == 'personal':
-                    new_subject = 'general'
-
-                # Reset time-over flags on next-round create as we are continuing play
-                st.session_state.pop('time_over', None)
-                st.session_state.pop('time_over_at', None)
-                st.session_state.game = create_game_with_env_guard(
-                    word_length=new_word_length,
-                    subject=new_subject,
-                    mode=game.mode,
-                    nickname=game.nickname,
-                    difficulty=game.difficulty,
-                    initial_score=game.score
-                )
-                st.session_state['current_round_id'] = str(uuid.uuid4())
-                st.session_state['feedback'] = ''
-                st.session_state['show_word'] = False
-                st.session_state['show_word_round_id'] = None
-                st.session_state['show_prev_questions'] = False
-                st.session_state['yes_no_question_input'] = ''
-                if hasattr(st.session_state.game, 'questions_asked'):
-                    st.session_state.game.questions_asked.clear()
-                st.session_state['revealed_letters'] = set()
-                st.session_state['used_letters'] = set()
-                st.session_state['clear_guess_field'] = True
-                st.rerun()
+        # Target celebration duration (seconds)
+        try:
+            _celebrate_secs = float(os.getenv('CELEBRATION_SECONDS', '2.4'))
+        except Exception:
+            _celebrate_secs = 2.4
+        if _celebrate_secs < 0.5:
+            _celebrate_secs = 0.5
+        # Sleep the remaining time so the CSS/JS animations can finish
+        _elapsed = time.time() - st.session_state.get('final_word_time', time.time())
+        if _elapsed < _celebrate_secs:
+            _wait_time.sleep(_celebrate_secs - _elapsed)
+        # Proceed to win logic after celebration
+        st.session_state['show_final_word'] = False
+        st.session_state['final_word_time'] = 0
+        is_correct, message, points = game.make_guess(game.selected_word)
+        try:
+            if hasattr(game, 'total_penalty_points'):
+                st.session_state['beat_total_points'] = int(getattr(game, 'total_penalty_points', 0))
+            if isinstance(points, (int, float)) and points < 0:
+                st.session_state['beat_total_penalty'] = int(st.session_state.get('beat_total_penalty', 0)) + abs(points)
+        except Exception:
+            pass
+        st.session_state['feedback'] = message
+        if game.mode == 'Beat':
+            st.session_state['show_word'] = False
+            st.session_state['feedback'] = ''
+            st.session_state.beat_word_count += 1
+            orig_length = st.session_state.get('original_word_length_choice', None)
+            orig_category = st.session_state.get('original_category_choice', game.subject)
+            if orig_length == "any" or orig_length is None:
+                new_word_length = random.randint(3, 10)
             else:
-                st.session_state['last_mode'] = st.session_state.game.mode
-                st.session_state['game_over'] = True
-                st.session_state['game_summary'] = game.get_game_summary()
-                save_game_to_user_profile(st.session_state['game_summary'])
-                st.session_state['clear_guess_field'] = True
-                st.rerun()
+                try:
+                    new_word_length = int(orig_length)
+                    if new_word_length < 3 or new_word_length > 10:
+                        new_word_length = 5
+                except Exception:
+                    new_word_length = 5
+            categories = ["general", "animals", "food", "places", "science", "tech", "sports", "brands", "4th_grade", "cities", "medicines", "anatomy"]
+            new_subject = random.choice(categories) if orig_category == "any" else game.subject
+            _enable_personal_round = os.getenv('ENABLE_PERSONAL_CATEGORY', 'true').strip().lower() in ('1','true','yes','on')
+            if not _enable_personal_round and str(new_subject).lower() == 'personal':
+                new_subject = 'general'
+            st.session_state.pop('time_over', None)
+            st.session_state.pop('time_over_at', None)
+            st.session_state.game = create_game_with_env_guard(
+                word_length=new_word_length,
+                subject=new_subject,
+                mode=game.mode,
+                nickname=game.nickname,
+                difficulty=game.difficulty,
+                initial_score=game.score
+            )
+            st.session_state['current_round_id'] = str(uuid.uuid4())
+            st.session_state['feedback'] = ''
+            st.session_state['show_word'] = False
+            st.session_state['show_word_round_id'] = None
+            st.session_state['show_prev_questions'] = False
+            st.session_state['yes_no_question_input'] = ''
+            if hasattr(st.session_state.game, 'questions_asked'):
+                st.session_state.game.questions_asked.clear()
+            st.session_state['revealed_letters'] = set()
+            st.session_state['used_letters'] = set()
+            st.session_state['clear_guess_field'] = True
+            st.rerun()
         else:
-            import time as _wait_time
-            _wait_time.sleep(0.1)
+            st.session_state['last_mode'] = st.session_state.game.mode
+            st.session_state['game_over'] = True
+            st.session_state['game_summary'] = game.get_game_summary()
+            save_game_to_user_profile(st.session_state['game_summary'])
+            st.session_state['clear_guess_field'] = True
             st.rerun()
     elif guess:
         guess = guess.lower()

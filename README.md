@@ -58,12 +58,15 @@ ADMIN_EMAIL=admin@example.com  # optional; falls back to SMTP_USER if not set
 # Controls visibility and usage of the profile‑aware Personal category
 ENABLE_PERSONAL_CATEGORY=true  # set false to hide Personal and force General instead
 
-# Text‑to‑Speech (Sound)
+# Text‑to‑Speech (Sound) and Celebration
 ENABLE_TTS_UI=true                 # enables sound features in the UI
 AUTO_TTS_ENABLE=true               # auto‑play each hint when it appears
 DEFAULT_TTS_MODE=Server            # or Browser
 DEFAULT_TTS_SPEED=1.0              # 0.8–1.2
 TTS_BACKEND_URL=http://127.0.0.1:8000
+POP_VOLUME=0.18                    # 0.0–1.0 celebration horn loudness
+HORN_SOUND_URL=                    # optional: custom horn mp3 URL
+HORN_FALLBACK_URL=https://cdn.pixabay.com/download/audio/2022/03/15/audio_3b4d19f7b0.mp3?filename=game-win-1-6295.mp3
 
 # AWS Polly (required for Server mode)
 AWS_REGION=us-west-2
@@ -147,7 +150,7 @@ Backend .env precedence and debugging:
   - Guess: enter your full guess any time (must match word length).
   - Skip: reveal the word and move to the next one (penalty applies).
 
-### Sound (Text‑to‑Speech)
+### Sound (Text‑to‑Speech) and Celebration
 
 - Playback:
   - Hints speak automatically when shown (no button).
@@ -163,6 +166,13 @@ Backend .env precedence and debugging:
     - Voice/engine not available in region → set `POLLY_ENGINE=standard` or pick another voice/region.
     - Ensure `TTS_CACHE_DIR` exists and is writable.
   - To keep playing while you fix the backend, set `DEFAULT_TTS_MODE=Browser` and restart Streamlit.
+
+Celebration effects:
+- When you reveal the full word correctly, balloons rise and “explode” with a celebratory horn.
+- Audio logic:
+  - Uses `HORN_SOUND_URL` if set, else `HORN_FALLBACK_URL` (built‑in), else a synthetic horn.
+  - Auto‑play is primed on first tap/keypress; if silent initially, click once and try again.
+  - Control volume via `POP_VOLUME` (0.0–1.0). Default 0.18.
 
 ### Scoring (Beat/Wiz)
 
