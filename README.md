@@ -10,6 +10,7 @@ WizWord is an AI-powered word guessing game where players try to guess a hidden 
 - Optional nickname-based leaderboard
 - Local and cloud storage support
 - Mobile and desktop friendly UI
+- Audio hints (TTS): browser or AWS Polly; auto‑play per hint; language‑aware
 - New: Category Top SEI achievements with email + share card + in‑app celebration
 - Registration with password confirmation
 - Guest demo mode (Try as Guest) — no data is written to user files
@@ -56,12 +57,43 @@ ADMIN_EMAIL=admin@example.com  # optional; falls back to SMTP_USER if not set
 # Feature flags
 # Controls visibility and usage of the profile‑aware Personal category
 ENABLE_PERSONAL_CATEGORY=true  # set false to hide Personal and force General instead
+
+# Text‑to‑Speech (Sound) and Celebration
+ENABLE_TTS_UI=true                 # enables sound features in the UI
+AUTO_TTS_ENABLE=true               # auto‑play each hint when it appears
+DEFAULT_TTS_MODE=Server            # or Browser
+DEFAULT_TTS_SPEED=1.0              # 0.8–1.2
+TTS_BACKEND_URL=http://127.0.0.1:8000
+POP_VOLUME=0.18                    # 0.0–1.0 celebration horn loudness
+HORN_SOUND_URL=                    # optional: custom horn mp3 URL
+HORN_FALLBACK_URL=https://cdn.pixabay.com/download/audio/2022/03/15/audio_3b4d19f7b0.mp3?filename=game-win-1-6295.mp3
+
+# AWS Polly (required for Server mode)
+AWS_REGION=us-west-2
+AWS_ACCESS_KEY_ID=your_aws_access_key_id
+AWS_SECRET_ACCESS_KEY=your_aws_secret_access_key
+POLLY_VOICE_EN=Joanna
+POLLY_VOICE_ES=Lucia
+POLLY_VOICE_FR=Celine
+POLLY_VOICE_AR=Zeina
+POLLY_VOICE_ZH=Zhiyu
+POLLY_ENGINE=neural               # set standard if neural unsupported
+TTS_CACHE_DIR=./audio             # ensure this directory exists and is writable
 ```
 
 5. Run the game:
 ```bash
 streamlit run streamlit_app.py
 ```
+
+### Optional: run the TTS backend (Server mode)
+
+```bash
+# New terminal, from project root
+export PYTHONPATH="$PWD"             # PowerShell: $env:PYTHONPATH="$PWD"
+uvicorn backend.main:app --host 127.0.0.1 --port 8000 --reload
+```
+The UI will call `POST /tts` on `TTS_BACKEND_URL` and stream audio from `GET /tts/{hash}.mp3`. If `DEFAULT_TTS_MODE=Browser`, the app uses the Web Speech API instead (no AWS needed).
 
 ### Optional: run the document‑hint backend (for FlashCard uploads)
 The FastAPI service parses PDF/DOCX/TXT and asks the LLM for grounded hints.
@@ -102,11 +134,11 @@ Backend .env precedence and debugging:
 ### Quick Start (Step‑by‑Step)
 
 1. Open the app and pick a Category (or Any) on the pre‑game screen.
-2. (Optional) Set Hints Language to English/Spanish/French under the banner.
+2. (Optional) Set Hints Language to English/Spanish/French/Arabic/Chinese under the banner. The speaker uses the native language.
 3. Choose your Game Mode (Fun/Wiz/Beat) and difficulty if prompted.
 4. Press “Click to Start Game”.
 5. Each turn:
-   - Ask a yes/no question OR tap the hint card to get a hint.
+   - Ask a yes/no question OR tap the hint card to get a hint. The hint audio plays automatically.
    - Make a guess when ready, or Skip to reveal and continue.
 
 ### Turn Flow
@@ -117,6 +149,30 @@ Backend .env precedence and debugging:
   - Hint: click the hint card to reveal the next hint (within allowed limit).
   - Guess: enter your full guess any time (must match word length).
   - Skip: reveal the word and move to the next one (penalty applies).
+
+### Sound (Text‑to‑Speech) and Celebration
+
+- Playback:
+  - Hints speak automatically when shown (no button).
+  - Mode: `DEFAULT_TTS_MODE` controls “Server” (AWS Polly) or “Browser” (Web Speech API).
+  - Speed: `DEFAULT_TTS_SPEED` (0.8–1.2). 
+  - Language: matches the selected Hints Language for native‑style speech.
+- iPhone/iPad:
+  - First user interaction may be required before audio can auto‑play.
+  - “Server” mode is recommended on iOS for the most reliable playback.
+- Troubleshooting:
+  - If Server mode fails with 500, check the backend console; common issues:
+    - UnrecognizedClientException → invalid/expired AWS credentials or missing session token.
+    - Voice/engine not available in region → set `POLLY_ENGINE=standard` or pick another voice/region.
+    - Ensure `TTS_CACHE_DIR` exists and is writable.
+  - To keep playing while you fix the backend, set `DEFAULT_TTS_MODE=Browser` and restart Streamlit.
+
+Celebration effects:
+- When you reveal the full word correctly, balloons rise and “explode” with a celebratory horn.
+- Audio logic:
+  - Uses `HORN_SOUND_URL` if set, else `HORN_FALLBACK_URL` (built‑in), else a synthetic horn.
+  - Auto‑play is primed on first tap/keypress; if silent initially, click once and try again.
+  - Control volume via `POP_VOLUME` (0.0–1.0). Default 0.18.
 
 ### Scoring (Beat/Wiz)
 
