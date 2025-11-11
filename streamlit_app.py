@@ -6131,7 +6131,7 @@ def display_game():
                           try {{
                             if (!horn.dataset.fallbackTried) {{
                               horn.dataset.fallbackTried = '1';
-                              horn.src = "{_HORN_FALLBACK_URL.replace("\\","\\\\").replace("\"","\\\"")}";
+                              horn.src = "{__horn_fb_js}";
                               horn.load();
                               horn.play().catch(function(){{}});
                             }}
